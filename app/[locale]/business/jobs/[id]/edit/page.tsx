@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { JobForm } from "@/components/business/job-form";
 import { getBusiness } from "@/lib/business";
 import { currencyFor } from "@/lib/currency";
+import type { JobQuestion } from "@/lib/data/types";
 
 export const instant = false;
 
@@ -36,7 +37,11 @@ export default async function EditJobPage({ params }: PageProps<"/[locale]/busin
           payCurrency: job.pay_currency ?? currencyFor(location.country),
           payPeriod: job.pay_period ?? "hour",
           description: job.description,
-          question: job.question ?? "",
+          responsibilities: (job.responsibilities ?? []).join("\n"),
+          requirements: (job.requirements ?? []).join("\n"),
+          offers: (job.offers ?? []).join("\n"),
+          applyMode: job.apply_mode ?? "quick",
+          questions: (job.questions ?? []) as JobQuestion[],
           closesAt: job.closes_at ?? "",
         }}
       />

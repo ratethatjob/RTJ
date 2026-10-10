@@ -30,7 +30,11 @@ export default async function NewJobPage({ params, searchParams }: PageProps<"/[
           payCurrency: currencyFor(location.country),
           payPeriod: location.country === "HU" ? "month" : "hour",
           description: "",
-          question: "",
+          responsibilities: "",
+          requirements: "",
+          offers: "",
+          applyMode: "quick",
+          questions: [],
           closesAt: "",
         }}
       />

@@ -17,7 +17,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const { locale } = await params;
   const sp = await searchParams;
   const t = await getTranslations({ locale, namespace: "Jobs" });
-  const filtered = Boolean(sp.q || sp.where || sp.category);
+  const filtered = Boolean(sp.q || sp.where || sp.category || sp.quick);
   return {
     title: `${t("metaTitle")} | RateThatJob`,
     description: t("metaDescription"),
@@ -34,11 +34,17 @@ export default async function JobsPage({ params, searchParams }: Props) {
   const q = typeof sp.q === "string" ? sp.q.slice(0, 100) : "";
   const where = typeof sp.where === "string" ? sp.where.slice(0, 100) : "";
   const category = isCategory(sp.category) ? sp.category : null;
+  const quick = sp.quick === "1";
   const t = await getTranslations("Jobs");
   const th = await getTranslations("Home");
   const tc = await getTranslations("Categories");
-  const jobs = await findJobs(q, where, category);
-  const query = (c: string | null) => ({ ...(q && { q }), ...(where && { where }), ...(c && { category: c }) });
+  const jobs = await findJobs(q, where, category, quick);
+  const query = (c: string | null, quickOnly = quick) => ({
+    ...(q && { q }),
+    ...(where && { where }),
+    ...(c && { category: c }),
+    ...(quickOnly && { quick: "1" }),
+  });
 
   return (
     <>
@@ -65,12 +71,27 @@ export default async function JobsPage({ params, searchParams }: Props) {
             />
           </label>
           {category && <input type="hidden" name="category" value={category} />}
+          {quick && <input type="hidden" name="quick" value="1" />}
           <button type="submit" className="mt-2 rounded-2xl bg-ink px-8 py-4 text-lg font-black text-paper sm:mt-0">
             {th("search")}
           </button>
         </form>
 
         <ul className="-mx-4 flex gap-2 overflow-x-auto px-4">
+          <li className="shrink-0">
+            <Link
+              href={{ pathname: "/jobs", query: query(category, !quick) }}
+              aria-pressed={quick}
+              className={`inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 font-black ${
+                quick ? "bg-ink text-signal" : "border border-ink"
+              }`}
+            >
+              <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden="true">
+                <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
+              </svg>
+              {t("quickOnly")}
+            </Link>
+          </li>
           {[null, ...CATEGORIES].map((c) => (
             <li key={c ?? "all"} className="shrink-0">
               <Link

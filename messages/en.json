@@ -773,7 +773,32 @@
     "metaJobDescription": "{title} at {company}, {address}. {pay}. Apply without a CV and see reviews from people who worked there.",
     "allJobs": "All jobs",
     "browseJobs": "Browse jobs",
-    "searchLabel": "Job or company"
+    "searchLabel": "Job or company",
+    "quickApply": "Quick apply",
+    "quickOnly": "Quick apply only",
+    "facts": {
+      "pay": "Pay",
+      "hours": "Hours",
+      "contract": "Contract",
+      "where": "Where"
+    },
+    "applyQuick": "Quick apply",
+    "applyCv": "Apply with CV",
+    "quickHint": "No CV. {count, plural, =0 {A few taps} one {# yes/no question} other {# quick questions}} – about 1 minute.",
+    "cvHint": "This employer asks for a CV (PDF or Word).",
+    "sections": {
+      "responsibilities": "What you'll do",
+      "requirements": "What they're looking for",
+      "offers": "What they offer"
+    },
+    "questionsTitle": "The employer asks",
+    "questionsQuick": "You answer these instead of sending a CV.",
+    "questionsCv": "You answer these along with your CV.",
+    "mustBe": "Must be: {answer}",
+    "yes": "Yes",
+    "no": "No",
+    "yesNo": "Yes / No",
+    "shortAnswer": "Short answer"
   },
   "Apply": {
     "title": "Apply: {title}",
@@ -805,8 +830,21 @@
       "required": "Fill in your name, an email or phone, and answer the questions.",
       "closed": "This job is no longer open.",
       "exists": "You have already applied for this job.",
-      "generic": "Something went wrong. Please try again."
-    }
+      "generic": "Something went wrong. Please try again.",
+      "cv": "Add your CV (PDF or Word, max 5 MB)."
+    },
+    "introQuick": "Quick apply: answer a few questions, no CV needed.",
+    "introCv": "This employer asks for a CV.",
+    "quickBadge": "Quick apply",
+    "stepOf": "Step {step} of {total}",
+    "next": "Next",
+    "nextOrSkip": "Next (or skip)",
+    "back": "Back",
+    "mismatch": "Some of your answers don't match what {company} is looking for. You can still apply.",
+    "cv": "Your CV",
+    "cvPick": "Choose file",
+    "cvHint": "PDF or Word, max 5 MB",
+    "cvTooBig": "The file is too large (max 5 MB)."
   },
   "Applications": {
     "title": "My applications",
@@ -872,8 +910,6 @@
     "payHint": "Jobs that show pay get more applicants.",
     "description": "Description",
     "descriptionPlaceholder": "What the work is, hours and shifts, what you offer.",
-    "question": "Your own question",
-    "questionPlaceholder": "e.g. Do you have a food handler card?",
     "optional": "optional",
     "closesAt": "Apply by",
     "saveDraft": "Save as draft",
@@ -905,7 +941,68 @@
       "withdrawn": "Withdrawn"
     },
     "replyNote": "Contact candidates by email or phone. Every decision you mark here counts as a reply in your ghosting meter, and the candidate sees it.",
-    "appliedOn": "Applied {date}"
+    "appliedOn": "Applied {date}",
+    "lists": {
+      "responsibilities": "What they'll do",
+      "responsibilitiesPlaceholder": "Prepare dishes on the line\nKeep the station clean",
+      "requirements": "What you're looking for",
+      "requirementsPlaceholder": "Kitchen experience\nCan work weekends",
+      "offers": "What you offer",
+      "offersPlaceholder": "Paid every 2 weeks\nStaff meal every shift",
+      "hint": "One item per line."
+    },
+    "applyMode": {
+      "title": "How candidates apply",
+      "quick": "Quick apply",
+      "recommended": "Recommended",
+      "quickBody": "No CV. Candidates answer your yes/no questions in about a minute. The job gets a Quick apply badge and more applicants.",
+      "cv": "CV-based",
+      "cvBody": "Candidates upload a CV (PDF or Word) and answer your questions."
+    },
+    "questions": {
+      "title": "Questions for candidates",
+      "hintQuick": "Yes/no questions are fastest. Mark must-haves – candidates who don't match are shown last, but can still apply.",
+      "hintCv": "Optional questions answered along with the CV.",
+      "text": "Question",
+      "textPlaceholder": "e.g. Can you work on weekends?",
+      "remove": "Remove question",
+      "types": {
+        "yes_no": "Yes / No",
+        "text": "Short answer"
+      },
+      "must": "Must be:",
+      "mustOptions": {
+        "any": "Any",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "required": "Required",
+      "presets": "Add a common question",
+      "addCustom": "+ Your own question",
+      "max": "You can ask up to {count} questions.",
+      "preset": {
+        "weekends": "Can you work on weekends?",
+        "nights": "Can you work night shifts?",
+        "shifts": "Can you work in rotating shifts?",
+        "startSoon": "Can you start within 2 weeks?",
+        "workPermit": "Do you have the right to work here?",
+        "foodCard": "Do you have a valid food handler / health card?",
+        "driving": "Do you have a driving licence?",
+        "lifting": "Can you lift up to 20 kg?",
+        "standing": "Are you fine standing for a full shift?",
+        "experience": "Do you have at least 1 year of similar experience?",
+        "language": "Do you speak English at a conversational level?",
+        "student": "Are you a student (student work scheme)?"
+      }
+    },
+    "yes": "Yes",
+    "no": "No",
+    "answers": {
+      "allMet": "Meets all must-haves",
+      "unmet": "{count, plural, one {Misses # must-have} other {Misses # must-haves}}",
+      "miss": "doesn't match",
+      "cv": "Open CV"
+    }
   },
   "Report": {
     "report": "Report",

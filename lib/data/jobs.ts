@@ -2,7 +2,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { supabaseKey, supabaseUrl } from "@/lib/supabase/env";
 import { sampleJobs } from "./sample-jobs";
 import { publicClient } from "./supabase";
-import type { Category, Job, JobSchedule, PayPeriod, WorkType } from "./types";
+import type { ApplyMode, Category, Job, JobQuestion, JobSchedule, PayPeriod, WorkType } from "./types";
 
 // Open jobs from the public_jobs view (sample data without Supabase).
 const useSupabase = Boolean(supabaseUrl && supabaseKey);
@@ -18,6 +18,11 @@ type JobRow = {
   pay_period: PayPeriod | null;
   description: string;
   question: string | null;
+  apply_mode?: ApplyMode | null;
+  questions?: JobQuestion[] | null;
+  responsibilities?: string[] | null;
+  requirements?: string[] | null;
+  offers?: string[] | null;
   published_at: string;
   closes_at: string | null;
   updated_at: string;
@@ -45,6 +50,11 @@ function toJob(r: JobRow): Job {
     payPeriod: r.pay_period,
     description: r.description,
     question: r.question,
+    applyMode: r.apply_mode ?? "quick",
+    questions: r.questions ?? [],
+    responsibilities: r.responsibilities ?? [],
+    requirements: r.requirements ?? [],
+    offers: r.offers ?? [],
     publishedAt: r.published_at,
     closesAt: r.closes_at,
     updatedAt: r.updated_at,
@@ -90,8 +100,13 @@ export async function getJob(id: string): Promise<Job | null> {
   return data && toJob(data);
 }
 
-/** /jobs listing: title/company and where (city or street). */
-export async function findJobs(q: string, where: string, category: Category | null): Promise<Job[]> {
+/** /jobs listing: title/company and where (city or street), optionally quick apply only. */
+export async function findJobs(
+  q: string,
+  where: string,
+  category: Category | null,
+  quickOnly = false,
+): Promise<Job[]> {
   "use cache";
   cacheLife("minutes");
   cacheTag("jobs");
@@ -102,7 +117,8 @@ export async function findJobs(q: string, where: string, category: Category | nu
       (j) =>
         (!term || `${j.title} ${j.location.companyName}`.toLowerCase().includes(term)) &&
         (!place || `${j.location.address} ${j.location.city}`.toLowerCase().includes(place)) &&
-        (!category || j.location.category === category),
+        (!category || j.location.category === category) &&
+        (!quickOnly || j.applyMode === "quick"),
     );
   }
   const safe = (s: string) => s.replace(/[%_\\,()]/g, " ");
@@ -110,6 +126,7 @@ export async function findJobs(q: string, where: string, category: Category | nu
   if (term) query = query.or(`title.ilike.%${safe(term)}%,company_name.ilike.%${safe(term)}%`);
   if (place) query = query.or(`city.ilike.%${safe(place)}%,address.ilike.%${safe(place)}%`);
   if (category) query = query.eq("category", category);
+  if (quickOnly) query = query.eq("apply_mode", "quick");
   const { data, error } = await query.order("published_at", { ascending: false }).limit(50);
   if (error) throw error;
   return data.map(toJob);

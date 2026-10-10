@@ -37,12 +37,17 @@ export default async function ApplyPage({ params }: PageProps<"/[locale]/app/app
               {job.location.name} · {job.location.address}, {job.location.city}
             </p>
             <h1 className="mt-1 text-4xl font-black tracking-brand">{t("title", { title: job.title })}</h1>
-            <p className="mt-2 text-slate">{t("intro", { company: job.location.companyName })}</p>
+            <p className="mt-2 text-slate">
+              {job.applyMode === "quick" ? t("introQuick") : t("introCv")}{" "}
+              {t("intro", { company: job.location.companyName })}
+            </p>
           </header>
           <ApplyForm
             jobId={job.id}
+            userId={user.id}
             company={job.location.companyName}
-            question={job.question}
+            mode={job.applyMode}
+            questions={job.questions}
             defaultEmail={user.email ?? ""}
             defaultPhone={user.phone ? `+${user.phone.replace(/^\+/, "")}` : ""}
           />

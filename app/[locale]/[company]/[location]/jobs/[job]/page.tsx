@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { formatPay } from "@/components/jobs/pay";
+import { QuickBadge } from "@/components/jobs/quick-badge";
 import { FactBars, GhostingMeter, ScoreTile } from "@/components/scores";
 import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
@@ -62,7 +63,6 @@ export default async function JobPage({ params }: Props) {
   const workplace = await getLocationById(job.location.id);
   const t = await getTranslations("Jobs");
   const tr = await getTranslations("Review");
-  const tc = await getTranslations("Categories");
   const tl = await getTranslations("Location");
   const format = await getFormatter();
   const pay = formatPay(job, locale, t);
@@ -71,6 +71,7 @@ export default async function JobPage({ params }: Props) {
     workplace?.ghosting ??
     (s?.replyRate != null ? { replyRate: s.replyRate, avgReplyDays: s.avgReplyDays, applications: 0 } : null);
   const applyHref = `/app/apply/${job.id}`;
+  const quick = job.applyMode === "quick";
   const date = (d: string) => format.dateTime(new Date(d), { dateStyle: "medium" });
 
   return (
@@ -79,36 +80,108 @@ export default async function JobPage({ params }: Props) {
       <main className="mx-auto w-full max-w-6xl px-4 pb-8 pt-4 sm:px-6 lg:pt-6">
         <JsonLd job={job} locale={locale} />
         <div className="grid gap-6 lg:grid-cols-[1fr_380px] lg:items-start">
-          <article className="flex flex-col gap-6">
-            <header>
+          <article className="flex flex-col gap-4">
+            <header className="rounded-[2rem] bg-white p-6 sm:p-8">
               <Link
                 href={workplace ? locationPath(workplace) : "/jobs"}
-                className="font-black text-slate underline-offset-4 hover:underline"
+                className="flex items-center gap-3 underline-offset-4 hover:underline"
               >
-                {job.location.name} · {job.location.address}, {job.location.city}
+                <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-ink text-xl font-black text-signal">
+                  {job.location.companyName.slice(0, 1).toUpperCase()}
+                </span>
+                <span>
+                  <span className="block font-black">{job.location.companyName}</span>
+                  <span className="text-sm text-slate">
+                    {job.location.address}, {job.location.city}
+                  </span>
+                </span>
               </Link>
-              <h1 className="mt-2 text-4xl font-black leading-tight tracking-brand lg:text-6xl">{job.title}</h1>
-              <p className="mt-4 flex flex-wrap gap-2 font-black">
-                {pay && <span className="rounded-xl bg-signal px-3 py-1.5">{pay}</span>}
-                <span className="rounded-xl border border-mist px-3 py-1.5">{t(`schedule.${job.schedule}`)}</span>
-                <span className="rounded-xl border border-mist px-3 py-1.5">{tr(`workType.${job.workType}`)}</span>
-                <span className="rounded-xl border border-mist px-3 py-1.5">{tc(job.location.category)}</span>
-              </p>
-              <p className="mt-3 text-slate">
+              <h1 className="mt-5 text-4xl font-black leading-tight tracking-brand lg:text-6xl">{job.title}</h1>
+              <div className="mt-4 flex flex-wrap gap-2 font-black">
+                {quick && <QuickBadge label={t("quickApply")} large />}
+                {pay && <span className="rounded-lg bg-signal px-3 py-1.5">{pay}</span>}
+                <span className="rounded-lg border border-mist px-3 py-1.5">{t(`schedule.${job.schedule}`)}</span>
+                <span className="rounded-lg border border-mist px-3 py-1.5">{tr(`workType.${job.workType}`)}</span>
+              </div>
+              <p className="mt-3 text-sm text-slate">
                 {t("posted", { date: date(job.publishedAt) })}
                 {job.closesAt && ` · ${t("closes", { date: date(job.closesAt) })}`}
               </p>
-              <Link
-                href={applyHref}
-                className="mt-6 hidden rounded-2xl bg-ink px-8 py-4 text-lg font-black text-paper lg:inline-block"
-              >
-                {t("apply")}
-              </Link>
+
+              <dl className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {(
+                  [
+                    [t("facts.pay"), pay ?? t("payNotListed")],
+                    [t("facts.hours"), t(`schedule.${job.schedule}`)],
+                    [t("facts.contract"), tr(`workType.${job.workType}`)],
+                    [t("facts.where"), job.location.city],
+                  ] as const
+                ).map(([label, value]) => (
+                  <div key={label} className="rounded-2xl bg-paper p-4">
+                    <dt className="text-xs font-black uppercase tracking-tagline text-slate">{label}</dt>
+                    <dd className="mt-1 font-black">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div className="mt-6 hidden flex-wrap items-center gap-4 lg:flex">
+                <Link href={applyHref} className="rounded-2xl bg-ink px-8 py-4 text-lg font-black text-paper">
+                  {quick ? t("applyQuick") : t("applyCv")}
+                </Link>
+                <span className="text-slate">
+                  {quick ? t("quickHint", { count: job.questions.length }) : t("cvHint")}
+                </span>
+              </div>
             </header>
-            <section className="rounded-3xl bg-white p-6">
+
+            <section className="rounded-[2rem] bg-white p-6 sm:p-8">
               <h2 className="text-sm font-black uppercase tracking-tagline text-slate">{t("aboutJob")}</h2>
               <p className="mt-3 whitespace-pre-line text-lg leading-relaxed">{job.description}</p>
             </section>
+
+            {(
+              [
+                ["responsibilities", job.responsibilities, "•"],
+                ["requirements", job.requirements, "•"],
+                ["offers", job.offers, "✓"],
+              ] as const
+            ).map(([key, items, mark]) =>
+              items.length ? (
+                <section key={key} className="rounded-[2rem] bg-white p-6 sm:p-8">
+                  <h2 className="text-2xl font-black tracking-brand">{t(`sections.${key}`)}</h2>
+                  <ul className="mt-4 flex flex-col gap-2.5 text-lg">
+                    {items.map((item) => (
+                      <li key={item} className="flex gap-3">
+                        <span className="font-black" aria-hidden="true">
+                          {mark}
+                        </span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null,
+            )}
+
+            {job.questions.length > 0 && (
+              <section className="rounded-[2rem] bg-ink p-6 text-paper sm:p-8">
+                <h2 className="text-2xl font-black tracking-brand">{t("questionsTitle")}</h2>
+                <p className="mt-1 text-mist">{quick ? t("questionsQuick") : t("questionsCv")}</p>
+                <ol className="mt-5 flex flex-col gap-2">
+                  {job.questions.map((q, i) => (
+                    <li key={q.id} className="flex items-start justify-between gap-3 rounded-2xl bg-white/5 p-4">
+                      <span className="flex gap-3">
+                        <span className="font-black text-mist">{i + 1}.</span>
+                        <span className="font-black">{q.text}</span>
+                      </span>
+                      <span className="shrink-0 text-sm text-mist">
+                        {q.must ? t("mustBe", { answer: t(q.must) }) : q.type === "yes_no" ? t("yesNo") : t("shortAnswer")}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )}
           </article>
 
           <aside className="flex flex-col gap-4">
@@ -141,7 +214,7 @@ export default async function JobPage({ params }: Props) {
 
         <div className="fixed inset-x-0 bottom-0 bg-paper/95 p-4 backdrop-blur lg:hidden">
           <Link href={applyHref} className="block rounded-2xl bg-ink py-4 text-center text-lg font-black text-paper">
-            {t("apply")}
+            {quick ? t("applyQuick") : t("applyCv")}
           </Link>
         </div>
       </main>
@@ -205,6 +278,9 @@ function JsonLd({ job, locale }: { job: Job; locale: string }) {
         },
       },
     }),
+    ...(job.responsibilities.length && { responsibilities: job.responsibilities.join("\n") }),
+    ...(job.requirements.length && { qualifications: job.requirements.join("\n") }),
+    ...(job.offers.length && { jobBenefits: job.offers.join("\n") }),
     directApply: true,
     url: `${SITE_URL}${prefix}${path(job)}`,
   };

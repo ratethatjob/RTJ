@@ -2,7 +2,10 @@ import { notFound } from "next/navigation";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { ApplicationDecision, JobStatusButton } from "@/components/business/job-actions";
 import { Link } from "@/i18n/navigation";
+import { QuickBadge } from "@/components/jobs/quick-badge";
 import { getBusiness } from "@/lib/business";
+import type { JobQuestion } from "@/lib/data/types";
+import { type Answers, unmetMusts } from "@/lib/job-questions";
 
 export const instant = false;
 
@@ -11,9 +14,11 @@ type Application = {
   full_name: string;
   email: string | null;
   phone: string | null;
-  start_when: string;
-  experience: boolean;
+  start_when: string | null;
+  experience: boolean | null;
   answer: string | null;
+  answers: Answers;
+  cv_path: string | null;
   message: string | null;
   status: string;
   created_at: string;
@@ -27,14 +32,27 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const { data: job } = await supabase
     .from("jobs")
-    .select("id, title, status, location_id, question")
+    .select("id, title, status, location_id, apply_mode, questions")
     .eq("id", id)
     .maybeSingle();
   const location = job && org.locations.find((l) => l.id === job.location_id);
   if (!job || !location) notFound();
 
-  const { data } = await supabase.rpc("job_applications_for", { p_job_id: job.id });
-  const applications = (data ?? []) as Application[];
+  const questions = (job.questions ?? []) as JobQuestion[];
+  const { data } = await supabase.rpc("job_application_list", { p_job_id: job.id });
+  // Applicants who meet every must-have first (the list is newest first already).
+  const applications = ((data ?? []) as Application[])
+    .map((a) => {
+      // Answers to the old single question live in `answer`.
+      const answers = a.answer && a.answers.q1 == null ? { ...a.answers, q1: a.answer } : a.answers;
+      return { ...a, answers, unmet: unmetMusts(questions, answers).length };
+    })
+    .sort((a, b) => Number(a.unmet > 0) - Number(b.unmet > 0));
+  const cvPaths = applications.flatMap((a) => (a.cv_path ? [a.cv_path] : []));
+  const { data: signed } = cvPaths.length
+    ? await supabase.storage.from("cvs").createSignedUrls(cvPaths, 60 * 60)
+    : { data: [] };
+  const cvUrl = new Map((signed ?? []).flatMap((x) => (x.path && x.signedUrl ? [[x.path, x.signedUrl] as const] : [])));
   if (applications.some((a) => a.status === "submitted")) {
     await supabase.rpc("mark_applications_viewed", { p_job_id: job.id });
   }
@@ -57,6 +75,9 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
           >
             {t(`status.${status}`)}
           </span>
+          {job.apply_mode === "quick" ? <QuickBadge label={t("applyMode.quick")} /> : (
+            <span className="rounded-lg border border-mist px-2.5 py-1 text-sm font-black">{t("applyMode.cv")}</span>
+          )}
         </div>
         <p className="text-slate">
           {location.name} · {location.address}
@@ -111,14 +132,42 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
                   </span>
                 </div>
                 <p className="mt-2 text-slate">
-                  {t(`start.${a.start_when}`)} · {a.experience ? t("experienced") : t("notExperienced")} ·{" "}
+                  {a.start_when && `${t(`start.${a.start_when}`)} · `}
+                  {a.experience != null && `${a.experience ? t("experienced") : t("notExperienced")} · `}
                   {t("appliedOn", { date: format.dateTime(new Date(a.created_at), { dateStyle: "medium" }) })}
                 </p>
-                {a.answer && job.question && (
-                  <p className="mt-3 rounded-2xl bg-paper p-4">
-                    <span className="block text-sm font-black text-slate">{job.question}</span>
-                    {a.answer}
+                {questions.some((q) => q.must) && (
+                  <p className={`mt-3 inline-block rounded-lg px-2.5 py-1 text-sm font-black ${a.unmet ? "border-2 border-ink" : "bg-signal"}`}>
+                    {a.unmet ? t("answers.unmet", { count: a.unmet }) : t("answers.allMet")}
                   </p>
+                )}
+                {questions.some((q) => a.answers[q.id] != null) && (
+                  <dl className="mt-3 flex flex-col gap-1.5 rounded-2xl bg-paper p-4">
+                    {questions.map((q) => {
+                      const v = a.answers[q.id];
+                      if (v == null) return null;
+                      const miss = q.must != null && v !== (q.must === "yes");
+                      return (
+                        <div key={q.id} className="flex flex-wrap justify-between gap-x-4">
+                          <dt className="text-slate">{q.text}</dt>
+                          <dd className={`font-black ${miss ? "underline decoration-2 underline-offset-4" : ""}`}>
+                            {typeof v === "boolean" ? `${v ? "✓" : "✗"} ${v ? t("yes") : t("no")}` : v}
+                            {miss && <span className="ml-2 text-sm">({t("answers.miss")})</span>}
+                          </dd>
+                        </div>
+                      );
+                    })}
+                  </dl>
+                )}
+                {a.cv_path && cvUrl.get(a.cv_path) && (
+                  <a
+                    href={cvUrl.get(a.cv_path)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-block rounded-2xl border-2 border-ink px-4 py-2 font-black"
+                  >
+                    {t("answers.cv")}
+                  </a>
                 )}
                 {a.message && <p className="mt-3 whitespace-pre-line">{a.message}</p>}
                 <ApplicationDecision id={a.id} status={a.status} />

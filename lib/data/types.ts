@@ -84,6 +84,16 @@ export type Review = {
 export type ReviewFilter = "all" | "verified" | "permanent" | "temporary" | "applicants";
 
 export type JobSchedule = "full_time" | "part_time" | "shifts" | "flexible";
+export type ApplyMode = "quick" | "cv";
+
+/** One question of an employer's question set. `must` marks a must-have yes/no answer. */
+export type JobQuestion = {
+  id: string;
+  text: string;
+  type: "yes_no" | "text";
+  required: boolean;
+  must: "yes" | "no" | null;
+};
 export type PayPeriod = "hour" | "day" | "week" | "month" | "year";
 
 /** An open job post as the public sees it. */
@@ -98,6 +108,11 @@ export type Job = {
   payPeriod: PayPeriod | null;
   description: string;
   question: string | null;
+  applyMode: ApplyMode;
+  questions: JobQuestion[];
+  responsibilities: string[];
+  requirements: string[];
+  offers: string[];
   publishedAt: string;
   closesAt: string | null;
   updatedAt: string;

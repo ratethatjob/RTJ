@@ -773,7 +773,32 @@
     "metaJobDescription": "{title} – {company}, {address}. {pay}. Jelentkezz önéletrajz nélkül, és nézd meg, mit mondanak, akik ott dolgoztak.",
     "allJobs": "Összes állás",
     "browseJobs": "Állások",
-    "searchLabel": "Munkakör vagy cég"
+    "searchLabel": "Munkakör vagy cég",
+    "quickApply": "Gyors jelentkezés",
+    "quickOnly": "Csak gyors jelentkezés",
+    "facts": {
+      "pay": "Bér",
+      "hours": "Munkaidő",
+      "contract": "Szerződés",
+      "where": "Hol"
+    },
+    "applyQuick": "Gyors jelentkezés",
+    "applyCv": "Jelentkezés önéletrajzzal",
+    "quickHint": "Önéletrajz nélkül. {count, plural, =0 {Pár koppintás} other {# rövid kérdés}} – kb. 1 perc.",
+    "cvHint": "A munkáltató önéletrajzot kér (PDF vagy Word).",
+    "sections": {
+      "responsibilities": "Feladatok",
+      "requirements": "Akit keresnek",
+      "offers": "Amit kínálnak"
+    },
+    "questionsTitle": "A munkáltató kérdései",
+    "questionsQuick": "Ezekre válaszolsz önéletrajz helyett.",
+    "questionsCv": "Ezekre az önéletrajz mellett válaszolsz.",
+    "mustBe": "Elvárt: {answer}",
+    "yes": "Igen",
+    "no": "Nem",
+    "yesNo": "Igen / Nem",
+    "shortAnswer": "Rövid válasz"
   },
   "Apply": {
     "title": "Jelentkezés: {title}",
@@ -805,8 +830,21 @@
       "required": "Add meg a neved, egy e-mailt vagy telefonszámot, és válaszolj a kérdésekre.",
       "closed": "Ez az állás már nem nyitott.",
       "exists": "Erre az állásra már jelentkeztél.",
-      "generic": "Valami hiba történt. Próbáld újra."
-    }
+      "generic": "Valami hiba történt. Próbáld újra.",
+      "cv": "Csatold az önéletrajzod (PDF vagy Word, max. 5 MB)."
+    },
+    "introQuick": "Gyors jelentkezés: válaszolj pár kérdésre, önéletrajz nem kell.",
+    "introCv": "Ez a munkáltató önéletrajzot kér.",
+    "quickBadge": "Gyors jelentkezés",
+    "stepOf": "{step}. lépés / {total}",
+    "next": "Tovább",
+    "nextOrSkip": "Tovább (vagy kihagyom)",
+    "back": "Vissza",
+    "mismatch": "Néhány válaszod nem egyezik azzal, amit a(z) {company} keres. Ettől még jelentkezhetsz.",
+    "cv": "Önéletrajzod",
+    "cvPick": "Fájl kiválasztása",
+    "cvHint": "PDF vagy Word, max. 5 MB",
+    "cvTooBig": "A fájl túl nagy (max. 5 MB)."
   },
   "Applications": {
     "title": "Jelentkezéseim",
@@ -872,8 +910,6 @@
     "payHint": "A bért feltüntető állásokra többen jelentkeznek.",
     "description": "Leírás",
     "descriptionPlaceholder": "Mi a munka, milyen a beosztás és a műszakok, mit kínálsz.",
-    "question": "Saját kérdésed",
-    "questionPlaceholder": "pl. Van egészségügyi kiskönyved?",
     "optional": "nem kötelező",
     "closesAt": "Jelentkezési határidő",
     "saveDraft": "Mentés piszkozatként",
@@ -905,7 +941,68 @@
       "withdrawn": "Visszavonta"
     },
     "replyNote": "A jelölteket e-mailben vagy telefonon keresd. Minden itt jelölt döntés válasznak számít a ghosting mérőben, és a jelölt is látja.",
-    "appliedOn": "Jelentkezett: {date}"
+    "appliedOn": "Jelentkezett: {date}",
+    "lists": {
+      "responsibilities": "Feladatok",
+      "responsibilitiesPlaceholder": "Ételek elkészítése a soron\nA munkaállomás tisztán tartása",
+      "requirements": "Akit keresel",
+      "requirementsPlaceholder": "Konyhai tapasztalat\nHétvégi munkavállalás",
+      "offers": "Amit kínálsz",
+      "offersPlaceholder": "Kéthetente fizetés\nSzemélyzeti étkezés minden műszakban",
+      "hint": "Soronként egy tétel."
+    },
+    "applyMode": {
+      "title": "Hogyan jelentkeznek a jelöltek",
+      "quick": "Gyors jelentkezés",
+      "recommended": "Ajánlott",
+      "quickBody": "Önéletrajz nélkül. A jelöltek kb. egy perc alatt válaszolnak az igen/nem kérdéseidre. Az állás Gyors jelentkezés jelvényt kap, és több jelentkezőt.",
+      "cv": "Önéletrajzos",
+      "cvBody": "A jelöltek önéletrajzot töltenek fel (PDF vagy Word), és válaszolnak a kérdéseidre."
+    },
+    "questions": {
+      "title": "Kérdések a jelölteknek",
+      "hintQuick": "Az igen/nem kérdések a leggyorsabbak. Jelöld az elvárásokat – akik nem felelnek meg, a lista végére kerülnek, de jelentkezhetnek.",
+      "hintCv": "Opcionális kérdések az önéletrajz mellé.",
+      "text": "Kérdés",
+      "textPlaceholder": "pl. Tudsz hétvégén dolgozni?",
+      "remove": "Kérdés törlése",
+      "types": {
+        "yes_no": "Igen / Nem",
+        "text": "Rövid válasz"
+      },
+      "must": "Elvárt:",
+      "mustOptions": {
+        "any": "Bármelyik",
+        "yes": "Igen",
+        "no": "Nem"
+      },
+      "required": "Kötelező",
+      "presets": "Gyakori kérdés hozzáadása",
+      "addCustom": "+ Saját kérdés",
+      "max": "Legfeljebb {count} kérdést tehetsz fel.",
+      "preset": {
+        "weekends": "Tudsz hétvégén dolgozni?",
+        "nights": "Tudsz éjszakai műszakban dolgozni?",
+        "shifts": "Tudsz váltott műszakban dolgozni?",
+        "startSoon": "Tudsz 2 héten belül kezdeni?",
+        "workPermit": "Jogosult vagy itt munkát vállalni?",
+        "foodCard": "Van érvényes egészségügyi kiskönyved?",
+        "driving": "Van jogosítványod?",
+        "lifting": "Meg tudsz emelni 20 kg-ot?",
+        "standing": "Bírod az egész műszakos állómunkát?",
+        "experience": "Van legalább 1 év hasonló tapasztalatod?",
+        "language": "Beszélsz angolul társalgási szinten?",
+        "student": "Diák vagy (diákszövetkezeten keresztül)?"
+      }
+    },
+    "yes": "Igen",
+    "no": "Nem",
+    "answers": {
+      "allMet": "Minden elvárásnak megfelel",
+      "unmet": "{count} elvárásnak nem felel meg",
+      "miss": "nem egyezik",
+      "cv": "Önéletrajz megnyitása"
+    }
   },
   "Report": {
     "report": "Jelentés",

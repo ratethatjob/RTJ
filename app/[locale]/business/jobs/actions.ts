@@ -2,6 +2,8 @@
 
 import { revalidateTag } from "next/cache";
 import { getUser } from "@/lib/auth";
+import type { ApplyMode, JobQuestion } from "@/lib/data/types";
+import { parseQuestions } from "@/lib/job-questions";
 
 export type JobInput = {
   locationId: string;
@@ -13,7 +15,11 @@ export type JobInput = {
   payCurrency: string;
   payPeriod: string;
   description: string;
-  question: string;
+  responsibilities: string;
+  requirements: string;
+  offers: string;
+  applyMode: ApplyMode;
+  questions: JobQuestion[];
   closesAt: string;
 };
 
@@ -34,14 +40,23 @@ function parse(input: JobInput) {
   const payMax = num(input.payMax);
   const title = input.title.trim();
   const description = input.description.trim();
-  const question = input.question.trim();
+  const questions = parseQuestions(input.questions);
+  // One item per line.
+  const lines = (v: string) =>
+    v
+      .split("\n")
+      .map((l) => l.replace(/^[-•*]\s*/, "").trim())
+      .filter(Boolean);
+  const lists = [lines(input.responsibilities), lines(input.requirements), lines(input.offers)];
   const hasPay = payMin != null || payMax != null;
   if (
     title.length < 2 ||
     title.length > 120 ||
     !description ||
     description.length > 8000 ||
-    question.length > 300 ||
+    !questions ||
+    !["quick", "cv"].includes(input.applyMode) ||
+    lists.some((l) => l.length > 15 || l.some((item) => item.length > 300)) ||
     !WORK.includes(input.workType) ||
     !SCHEDULE.includes(input.schedule) ||
     Number.isNaN(payMin) ||
@@ -61,7 +76,12 @@ function parse(input: JobInput) {
     pay_currency: hasPay ? input.payCurrency : null,
     pay_period: hasPay ? input.payPeriod : null,
     description,
-    question: question || null,
+    responsibilities: lists[0],
+    requirements: lists[1],
+    offers: lists[2],
+    apply_mode: input.applyMode,
+    questions,
+    question: null,
     closes_at: input.closesAt || null,
   };
 }

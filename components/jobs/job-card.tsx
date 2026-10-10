@@ -2,6 +2,7 @@ import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Job } from "@/lib/data/types";
 import { formatPay } from "./pay";
+import { QuickBadge } from "./quick-badge";
 
 export function jobPath(job: Job) {
   return `/${job.location.companySlug}/${job.location.slug}/jobs/${job.id}`;
@@ -23,9 +24,9 @@ export async function JobCard({ job, showPlace = true }: { job: Job; showPlace?:
         </span>
       )}
       <span className="mt-2 flex flex-wrap gap-2 text-sm font-black">
+        {job.applyMode === "quick" && <QuickBadge label={t("quickApply")} />}
         {pay && <span className="rounded-lg bg-signal px-2.5 py-1">{pay}</span>}
         <span className="rounded-lg border border-mist px-2.5 py-1">{t(`schedule.${job.schedule}`)}</span>
-        <span className="rounded-lg border border-mist px-2.5 py-1">{t("noCv")}</span>
       </span>
       <span className="mt-1 text-sm text-slate">
         {t("posted", { date: format.dateTime(new Date(job.publishedAt), { dateStyle: "medium" }) })}
