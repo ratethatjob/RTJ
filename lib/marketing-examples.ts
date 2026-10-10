@@ -46,5 +46,6 @@ export async function exampleBadges(locale: string) {
     compact: renderBadge("compact-dark", data, labels),
     strip: renderBadge("strip", data, labels),
     seal: renderSeal(data, labels),
+    sealLight: renderSeal(data, labels, "light"),
   };
 }

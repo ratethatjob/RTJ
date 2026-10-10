@@ -264,11 +264,13 @@ export async function getSitemapLocations(): Promise<SitemapLocation[]> {
   for (let from = 0; ; from += 1000) {
     const { data, error } = await publicClient()
       .from("public_locations")
-      .select("company_slug, slug, city, city_slug, category, review_count, is_seeded, updated_at, scores_updated_at")
+      .select("*")
       .order("id")
       .range(from, from + 999);
     if (error) throw error;
     for (const r of data) {
+      // Demo data stays out of sitemaps.
+      if (r.is_demo) continue;
       rows.push({
         companySlug: r.company_slug,
         slug: r.slug,

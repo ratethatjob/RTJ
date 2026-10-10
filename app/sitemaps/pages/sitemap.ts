@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
     return [...map];
   };
-  const jobs = await getAllJobs();
+  const jobs = (await getAllJobs()).filter((j) => !j.isDemo);
   return [
     entry("/"),
     entry("/employers"),

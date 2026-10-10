@@ -62,6 +62,8 @@ export type LocationSummary = {
   updatedAt?: string | null;
   /** Pro (trial or paid) is on, so embeds show the Index. Sample data leaves it out (= on). */
   indexActive?: boolean;
+  /** Made-up demo data: labelled, noindex, not in sitemaps. */
+  isDemo?: boolean;
 };
 
 export type Review = {
@@ -117,6 +119,8 @@ export type Job = {
   offers: string[];
   /** Pro package: shown first in job search. */
   featured: boolean;
+  /** Made-up demo data. */
+  isDemo?: boolean;
   publishedAt: string;
   closesAt: string | null;
   updatedAt: string;

@@ -212,34 +212,50 @@ function wrap(text: string, max: number) {
   return lines;
 }
 
-export function renderSeal(data: NonNullable<Awaited<ReturnType<typeof getIndexLocation>>>, l: BadgeLabels) {
+/** Top Rated Employer seal: a rounded square, dark or light. Without Pro it says the Index is unavailable. */
+export function renderSeal(
+  data: NonNullable<Awaited<ReturnType<typeof getIndexLocation>>>,
+  l: BadgeLabels,
+  theme: "dark" | "light" = "dark",
+) {
   const size = 168;
   const c = size / 2;
+  const dark = theme === "dark";
+  const bg = dark ? INK : "#FFFFFF";
+  const fg = dark ? PAPER : INK;
+  const sub = dark ? MIST : SLATE;
+  const frame =
+    `<rect x="1" y="1" width="${size - 2}" height="${size - 2}" rx="26" fill="${bg}"${dark ? "" : ` stroke="#E3E1DC" stroke-width="2"`}/>` +
+    `<rect x="9" y="9" width="${size - 18}" height="${size - 18}" rx="19" fill="none" stroke="${SIGNAL}" stroke-width="2"/>`;
   if (!data.active) {
     return svg(
       size,
       size,
       `${data.location.name}: ${l.unavailable} ${l.unavailableHint}`,
-      `<circle cx="${c}" cy="${c}" r="${c - 2}" fill="${INK}"/>` +
+      frame +
         icon(c - 14, 22, 26) +
         wrap(l.unavailable, 20)
-          .map((line, i) => `<text x="${c}" y="${70 + i * 14}" font-size="11" font-weight="800" text-anchor="middle" fill="${PAPER}">${esc(line)}</text>`)
+          .map((line, i) => `<text x="${c}" y="${72 + i * 14}" font-size="11" font-weight="800" text-anchor="middle" fill="${fg}">${esc(line)}</text>`)
           .join("") +
-        wrap(l.unavailableHint, 24)
-          .map((line, i) => `<text x="${c}" y="${112 + i * 12}" font-size="9" text-anchor="middle" fill="${MIST}">${esc(line)}</text>`)
+        wrap(l.unavailableHint, 26)
+          .map((line, i) => `<text x="${c}" y="${116 + i * 12}" font-size="9" text-anchor="middle" fill="${sub}">${esc(line)}</text>`)
           .join(""),
     );
   }
+  const label = wrap(l.topRated.toUpperCase(), 12);
   return svg(
     size,
     size,
     `${l.topRated} ${l.year} – ${data.location.name}`,
-    `<circle cx="${c}" cy="${c}" r="${c - 2}" fill="${INK}"/>` +
-      `<circle cx="${c}" cy="${c}" r="${c - 10}" fill="none" stroke="${SIGNAL}" stroke-width="2"/>` +
-      icon(c - 18, 26, 34) +
-      `<text x="${c}" y="82" font-size="9.5" font-weight="800" letter-spacing="1" text-anchor="middle" fill="${MIST}">${esc(l.topRated.toUpperCase())}</text>` +
-      `<text x="${c}" y="118" font-size="34" font-weight="900" letter-spacing="-1" text-anchor="middle" fill="${SIGNAL}">${esc(l.year)}</text>` +
-      `<text x="${c}" y="140" font-size="13" font-weight="900" text-anchor="middle" fill="${PAPER}">RateThatJob</text>`,
+    frame +
+      icon(c - 15, 22, 28) +
+      label
+        .map((line, i) => `<text x="${c}" y="${70 + i * 13}" font-size="10.5" font-weight="800" letter-spacing="1.2" text-anchor="middle" fill="${sub}">${esc(line)}</text>`)
+        .join("") +
+      // Green text only on dark; on light the year is ink with a green bar.
+      `<text x="${c}" y="${120 + (label.length - 2) * 6}" font-size="34" font-weight="900" letter-spacing="-1" text-anchor="middle" fill="${dark ? SIGNAL : INK}">${esc(l.year)}</text>` +
+      (dark ? "" : `<rect x="${c - 22}" y="${127 + (label.length - 2) * 6}" width="44" height="4" rx="2" fill="${SIGNAL}"/>`) +
+      `<text x="${c}" y="147" font-size="13" font-weight="900" text-anchor="middle" fill="${fg}">RateThatJob</text>`,
   );
 }
 

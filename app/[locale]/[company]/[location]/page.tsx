@@ -9,6 +9,7 @@ import {
   GhostingMeter,
   ScoreTile,
 } from "@/components/scores";
+import { DemoBanner } from "@/components/demo-badge";
 import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
 import { FollowButton } from "@/components/follow-button";
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!data) return {};
   const meta = await locationMetadata(data, locale, locationPath(data));
   // Thin pages without reviews or seeded data stay out of the index.
-  return data.scores ? meta : { ...meta, robots: { index: false } };
+  return data.scores && !data.isDemo ? meta : { ...meta, robots: { index: false } };
 }
 
 // Blocking (not streamed) so unknown slugs get a real 404 status.
@@ -75,7 +76,7 @@ export default async function LocationPage({ params }: Props) {
     <>
     <SiteHeader withSearch />
     <main className="mx-auto w-full max-w-6xl px-4 pb-8 pt-4 sm:px-6 lg:pt-6">
-      <JsonLd location={data} locale={locale} />
+      {data.isDemo ? <DemoBanner /> : <JsonLd location={data} locale={locale} />}
 
       <section className="flex flex-col gap-6 lg:flex-row lg:items-center">
         <div className="flex flex-1 flex-row-reverse items-start justify-between gap-4 lg:flex-row lg:items-center lg:justify-start lg:gap-7">

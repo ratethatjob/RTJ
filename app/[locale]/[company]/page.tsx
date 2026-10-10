@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { formatScore } from "@/components/scores";
+import { DemoBanner } from "@/components/demo-badge";
 import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
 import { getCompany, getLocationPaths } from "@/lib/data";
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await getCompany(company);
   if (!data) return {};
   const t = await getTranslations({ locale, namespace: "Company" });
-  const rated = data.locations.some((l) => l.scores);
+  const rated = data.locations.some((l) => l.scores && !l.isDemo);
   return {
     title: `${t("metaTitle", { company: data.name })} | RateThatJob`,
     alternates: localeAlternates(`/${data.slug}`, locale),
@@ -48,6 +49,7 @@ export default async function CompanyPage({ params }: Props) {
     <>
       <SiteHeader withSearch />
       <main className="mx-auto w-full max-w-6xl px-4 pb-8 pt-6 sm:px-6 lg:pt-10">
+        {data.locations.every((l) => l.isDemo) && <DemoBanner />}
         <h1 className="text-4xl font-black tracking-brand lg:text-6xl">{data.name}</h1>
         <p className="mt-2 text-lg text-slate">{t("locations", { count: data.locations.length })}</p>
         <ul className="mt-8 grid gap-3 lg:grid-cols-2">

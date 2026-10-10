@@ -138,3 +138,13 @@ export async function decidePlanOrder(id: string, paid: boolean): Promise<Result
   revalidateTag("locations", "max");
   return { ok: true };
 }
+
+/** Deletes every demo row (companies, reviews, jobs, plans, demo users). */
+export async function purgeDemo(): Promise<Result> {
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("admin_purge_demo");
+  if (error) return { error: true };
+  revalidateTag("locations", "max");
+  revalidateTag("jobs", "max");
+  return { ok: true };
+}

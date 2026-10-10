@@ -132,7 +132,10 @@ export default async function IndexMarketingPage({ params }: Props) {
 
         <section className="grid items-center gap-8 rounded-[2rem] bg-white p-8 sm:grid-cols-[auto_1fr] lg:p-12">
           <figure className="flex flex-col items-center gap-3">
-            {svg(badges.seal, t("exampleLabel"))}
+            <div className="flex flex-wrap justify-center gap-3">
+              {svg(badges.seal, t("exampleLabel"))}
+              {svg(badges.sealLight, t("exampleLabel"))}
+            </div>
             <figcaption className="rounded-lg border-2 border-dashed border-mist px-3 py-1 text-sm font-black text-slate">
               {t("exampleLabel")}
             </figcaption>

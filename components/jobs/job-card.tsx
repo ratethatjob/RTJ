@@ -2,6 +2,7 @@ import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Job } from "@/lib/data/types";
 import { formatPay } from "./pay";
+import { DemoChip } from "@/components/demo-badge";
 import { QuickBadge } from "./quick-badge";
 
 export function jobPath(job: Job) {
@@ -20,6 +21,11 @@ export async function JobCard({ job, showPlace = true }: { job: Job; showPlace?:
       href={jobPath(job)}
       className={`flex h-full flex-col gap-1 rounded-3xl bg-white p-5 sm:p-6 ${job.featured ? "ring-2 ring-ink" : ""}`}
     >
+      {job.isDemo && (
+        <span>
+          <DemoChip />
+        </span>
+      )}
       {job.featured && <span className="text-xs font-black uppercase tracking-tagline text-slate">{t("featured")}</span>}
       <span className="text-2xl font-black tracking-brand">{job.title}</span>
       {showPlace && (

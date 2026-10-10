@@ -18,6 +18,8 @@
 - [ ] `RESEND_API_KEY` + `EMAIL_FROM` a Vercelen (üzenet e-mailben is a jelöltnek)
 - [ ] Jogi szövegek átnézése: `content/legal/` (ÁSZF, adatvédelem, sütik, impresszum – HU és EN). Az adatfeldolgozók (Stripe, Resend, Anthropic jelentkezés-összefoglaló) felvéve
 
+- [ ] Élesítés előtt: demó adatok törlése (admin → Demó adatok → „Minden demó adat törlése”, vagy `select private.purge_demo();`)
+
 ## Fejlesztés
 - [ ] E-mailes meghívók (Resend) – kulcs kell
 - [ ] Stripe: Pro előfizetés (helyszínenként, havi/éves; most 30 nap próba, utána `plan_orders` + kézi számla, admin „Előfizetések” fül) és álláscsomagok fizetése (most `job_orders` + kézi számla) – kulcsok kellenek

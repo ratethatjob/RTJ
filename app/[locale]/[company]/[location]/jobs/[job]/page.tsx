@@ -4,6 +4,7 @@ import { getFormatter, getTranslations, setRequestLocale } from "next-intl/serve
 import { formatPay } from "@/components/jobs/pay";
 import { QuickBadge } from "@/components/jobs/quick-badge";
 import { FactBars, GhostingMeter, ScoreTile } from "@/components/scores";
+import { DemoBanner } from "@/components/demo-badge";
 import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
 import { getLocationById } from "@/lib/data";
@@ -48,6 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: localeAlternates(path(job), locale),
     openGraph: { title, description, type: "website" },
+    ...(job.isDemo && { robots: { index: false } }),
   };
 }
 
@@ -78,7 +80,7 @@ export default async function JobPage({ params }: Props) {
     <>
       <SiteHeader withSearch />
       <main className="mx-auto w-full max-w-6xl px-4 pb-8 pt-4 sm:px-6 lg:pt-6">
-        <JsonLd job={job} locale={locale} />
+        {job.isDemo ? <DemoBanner /> : <JsonLd job={job} locale={locale} />}
         <div className="grid gap-6 lg:grid-cols-[1fr_380px] lg:items-start">
           <article className="flex flex-col gap-4">
             <header className="rounded-[2rem] bg-white p-6 sm:p-8">

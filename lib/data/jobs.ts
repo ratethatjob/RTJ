@@ -24,6 +24,7 @@ type JobRow = {
   requirements?: string[] | null;
   offers?: string[] | null;
   featured?: boolean | null;
+  is_demo?: boolean | null;
   published_at: string;
   closes_at: string | null;
   updated_at: string;
@@ -57,6 +58,7 @@ function toJob(r: JobRow): Job {
     requirements: r.requirements ?? [],
     offers: r.offers ?? [],
     featured: r.featured ?? false,
+    isDemo: r.is_demo ?? false,
     publishedAt: r.published_at,
     closesAt: r.closes_at,
     updatedAt: r.updated_at,

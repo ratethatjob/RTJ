@@ -12,7 +12,7 @@
   "use strict";
   var script = document.currentScript;
   var origin = script && script.src ? new URL(script.src).origin : "https://ratethatjob.com";
-  var STYLES = ["compact-light", "compact-dark", "wide-light", "wide-dark", "strip", "seal"];
+  var STYLES = ["compact-light", "compact-dark", "wide-light", "wide-dark", "strip", "seal", "seal-light"];
 
   function render(el) {
     if (el.getAttribute("data-rtj-done")) return;
@@ -25,7 +25,7 @@
     locale = locale.slice(0, 2).toLowerCase();
     var fallback = el.querySelector("a");
     var src =
-      origin + "/embed/" + id + (style === "seal" ? "/seal.svg" : ".svg") +
+      origin + "/embed/" + id + (style.indexOf("seal") === 0 ? "/seal.svg" : ".svg") +
       "?style=" + encodeURIComponent(style) + "&locale=" + encodeURIComponent(locale);
 
     fetch(src)

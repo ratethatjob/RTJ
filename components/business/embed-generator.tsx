@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-const VARIANTS = ["compact-light", "compact-dark", "wide-light", "wide-dark", "strip", "seal"] as const;
+const VARIANTS = ["compact-light", "compact-dark", "wide-light", "wide-dark", "strip", "seal", "seal-light"] as const;
 type Variant = (typeof VARIANTS)[number];
 
 type Props = {
@@ -18,7 +18,8 @@ type Props = {
 export function EmbedGenerator({ origin, locationId, locationName, profileUrl, locale, sealEarned }: Props) {
   const t = useTranslations("Index");
   const [variant, setVariant] = useState<Variant>("compact-light");
-  const svgPath = variant === "seal" ? `/embed/${locationId}/seal.svg` : `/embed/${locationId}.svg`;
+  const seal = variant.startsWith("seal");
+  const svgPath = seal ? `/embed/${locationId}/seal.svg` : `/embed/${locationId}.svg`;
   const src = `${origin}${svgPath}?style=${variant}&locale=${locale}`;
   const alt = `${locationName} – RateThatJob`;
 
@@ -35,7 +36,7 @@ export function EmbedGenerator({ origin, locationId, locationName, profileUrl, l
             <button
               key={v}
               type="button"
-              disabled={v === "seal" && !sealEarned}
+              disabled={v.startsWith("seal") && !sealEarned}
               onClick={() => setVariant(v)}
               aria-pressed={v === variant}
               className={`rounded-full px-4 py-2.5 font-black disabled:opacity-40 ${

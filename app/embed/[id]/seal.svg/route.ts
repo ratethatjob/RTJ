@@ -15,14 +15,16 @@ import {
 // Without Pro (trial or paid) the seal stays but says the Index is unavailable.
 export async function GET(request: Request, { params }: RouteContext<"/embed/[id]/seal.svg">) {
   const { id } = await params;
-  const requested = new URL(request.url).searchParams.get("locale");
+  const url = new URL(request.url);
+  const requested = url.searchParams.get("locale");
+  const theme = url.searchParams.get("style")?.includes("light") ? "light" : "dark";
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
   const data = await getIndexLocation(id);
   if (!data || (data.active && !isTopRated(data.location))) {
     return new Response("Not found", { status: 404, headers: PUBLIC_HEADERS });
   }
   after(() => recordEmbed(request, data.location.id));
-  return new Response(renderSeal(data, await badgeLabels(locale, data)), {
+  return new Response(renderSeal(data, await badgeLabels(locale, data), theme), {
     headers: { ...EMBED_HEADERS, "Content-Type": "image/svg+xml; charset=utf-8" },
   });
 }

@@ -1,6 +1,7 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { CsvImport, EntityForm, SlugEditor, UnverifyEntity } from "@/components/admin/tools";
 import { Decision } from "@/components/admin/decision";
+import { PurgeDemo } from "@/components/admin/purge-demo";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { jobPricing, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
@@ -8,7 +9,7 @@ import { jobPricing, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
 export const instant = false;
 
 const TABS = ["claims", "moderation", "verifications", "disputes", "reports", "orders", "plans"] as const;
-const TOOLS = ["metrics", "workplaces", "entities", "import"] as const;
+const TOOLS = ["metrics", "workplaces", "entities", "import", "demo"] as const;
 type Queue = (typeof TABS)[number];
 type Tab = Queue | (typeof TOOLS)[number];
 
@@ -310,6 +311,10 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     embeds: number;
   };
   const metrics = tab === "metrics" ? ((await supabase.rpc("admin_metrics")).data as Metrics | null) : null;
+  const demo =
+    tab === "demo"
+      ? ((await supabase.rpc("admin_demo_summary")).data as Record<"companies" | "locations" | "reviews" | "jobs" | "users", number> | null)
+      : null;
   const pct = (a: number, b: number) => (b ? `${Math.round((100 * a) / b)}%` : "–");
 
   return (
@@ -395,6 +400,21 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
             </div>
           </section>
         )
+      ) : tab === "demo" ? (
+        <section className="flex flex-col gap-4 rounded-3xl bg-white p-6">
+          <h2 className="text-2xl font-black tracking-brand">{t("demo.title")}</h2>
+          <p className="text-slate">{t("demo.body")}</p>
+          <ul className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+            {(["companies", "locations", "reviews", "jobs", "users"] as const).map((k) => (
+              <li key={k} className="rounded-2xl bg-paper p-4">
+                <span className="block text-3xl font-black tracking-brand">{demo?.[k] ?? 0}</span>
+                <span className="text-sm text-slate">{t(`demo.counts.${k}`)}</span>
+              </li>
+            ))}
+          </ul>
+          <PurgeDemo disabled={!demo || Object.values(demo).every((n) => !n)} />
+          <p className="text-sm text-slate">{t("demo.sql")}</p>
+        </section>
       ) : tab === "import" ? (
         <CsvImport />
       ) : tab === "workplaces" || tab === "entities" ? (

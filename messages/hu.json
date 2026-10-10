@@ -596,7 +596,8 @@
       "entities": "Jogi személyek",
       "metrics": "Mutatók",
       "orders": "Rendelések",
-      "plans": "Előfizetések"
+      "plans": "Előfizetések",
+      "demo": "Demó adatok"
     },
     "empty": "Nincs teendő.",
     "approve": "Jóváhagyom",
@@ -663,7 +664,23 @@
     },
     "orderUpgrade": "bővítés erről: {from}",
     "markPaid": "Fizetve",
-    "cancelOrder": "Törlés"
+    "cancelOrder": "Törlés",
+    "demo": {
+      "title": "Demó adatok",
+      "body": "Kitalált cégek, értékelések, állások és demó felhasználók, hogy látszódjon, hogyan működik az oldal. Meg vannak jelölve, noindex, és nincsenek a sitemapben. Élesítés előtt mind töröld.",
+      "counts": {
+        "companies": "cég",
+        "locations": "telephely",
+        "reviews": "értékelés",
+        "jobs": "állás",
+        "users": "demó felhasználó"
+      },
+      "purge": "Minden demó adat törlése",
+      "purging": "Törlés…",
+      "confirm": "Törlöd az ÖSSZES demó adatot (cégek, értékelések, állások, demó felhasználók)? Nem vonható vissza.",
+      "error": "Nem sikerült törölni. Próbáld újra.",
+      "sql": "SQL-ben ugyanez: select private.purge_demo(); (supabase/demo/purge_demo.sql). Újratöltés: supabase/demo/seed_demo.sql."
+    }
   },
   "Search": {
     "title": "Munkahely keresése",
@@ -689,7 +706,8 @@
       "wide-light": "Széles kártya · világos",
       "wide-dark": "Széles kártya · sötét",
       "strip": "Csík · álláshirdetés",
-      "seal": "Top Rated pecsét"
+      "seal": "Top Rated pecsét · sötét",
+      "seal-light": "Top Rated pecsét · világos"
     },
     "imageCode": "Képes jelvény (mindenhol működik)",
     "scriptCode": "Élő widget (karrieroldal)",
@@ -1517,5 +1535,9 @@
       "statsTitle": "A statisztika a Pro része",
       "statsBody": "Kapcsold be a Prót ennél a telephelynél, hogy lásd a havi számokat, pontszámokat és a kategóriák alakulását."
     }
+  },
+  "Demo": {
+    "label": "Demó adat",
+    "banner": "Ez a munkahely, az értékelései és az állásai kitaláltak, csak azt mutatják, hogyan működik a RateThatJob. Nem valódiak."
   }
 }

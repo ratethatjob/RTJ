@@ -596,7 +596,8 @@
       "entities": "Legal entities",
       "metrics": "Metrics",
       "orders": "Orders",
-      "plans": "Subscriptions"
+      "plans": "Subscriptions",
+      "demo": "Demo data"
     },
     "empty": "Nothing waiting.",
     "approve": "Approve",
@@ -663,7 +664,23 @@
     },
     "orderUpgrade": "upgrade from {from}",
     "markPaid": "Mark as paid",
-    "cancelOrder": "Cancel"
+    "cancelOrder": "Cancel",
+    "demo": {
+      "title": "Demo data",
+      "body": "Made-up companies, reviews, jobs and demo users for showing how the site works. They are labelled, noindex and kept out of sitemaps. Remove them all before going live.",
+      "counts": {
+        "companies": "companies",
+        "locations": "locations",
+        "reviews": "reviews",
+        "jobs": "jobs",
+        "users": "demo users"
+      },
+      "purge": "Delete all demo data",
+      "purging": "Deleting…",
+      "confirm": "Delete ALL demo data (companies, reviews, jobs, demo users)? This can't be undone.",
+      "error": "Couldn't delete. Please try again.",
+      "sql": "Same in SQL: select private.purge_demo(); (supabase/demo/purge_demo.sql). Load it again with supabase/demo/seed_demo.sql."
+    }
   },
   "Search": {
     "title": "Find a workplace",
@@ -689,7 +706,8 @@
       "wide-light": "Wide card · light",
       "wide-dark": "Wide card · dark",
       "strip": "Inline strip · job ads",
-      "seal": "Top Rated seal"
+      "seal": "Top Rated seal · dark",
+      "seal-light": "Top Rated seal · light"
     },
     "imageCode": "Image badge (works anywhere)",
     "scriptCode": "Live widget (careers page)",
@@ -1517,5 +1535,9 @@
       "statsTitle": "Statistics are part of Pro",
       "statsBody": "Activate Pro for this location to see monthly volume, scores and category trends."
     }
+  },
+  "Demo": {
+    "label": "Demo data",
+    "banner": "This workplace, its reviews and jobs are made up to show how RateThatJob works. They are not real."
   }
 }

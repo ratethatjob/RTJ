@@ -1,3 +1,4 @@
+import { DemoChip } from "@/components/demo-badge";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
@@ -171,6 +172,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                       className="flex items-center justify-between gap-4 rounded-3xl bg-white p-6"
                     >
                       <div>
+                        {l.isDemo && <DemoChip />}
                         <p className="text-2xl font-black tracking-brand">
                           {l.name}
                         </p>

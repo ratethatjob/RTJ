@@ -206,7 +206,7 @@ Goal: employers show their score on their careers page / job ads; every embed is
 - **Compact badge** – light / dark: icon, score, "RateThatJob Index", verified review count.
 - **Wide card** – for careers pages: score tile, location name, 2 facts with bars (paid on time, replies to applicants), "RateThatJob.com · Know before you go".
 - **Inline strip** – one line for job ads: "4.2 on RateThatJob · Paid on time 82% · Replies to 64% of applicants".
-- **Top Rated Employer {year} seal** – earned at score ≥ 4.0 with ≥ 10 verified reviews in the last 12 months; renewed yearly; endpoint `GET /embed/{location_id}/seal.svg`, returns 404/placeholder if not earned.
+- **Top Rated Employer {year} seal** – rounded square, dark or light (`?style=light`); earned at score ≥ 4.0 with ≥ 10 verified reviews in the last 12 months; renewed yearly; endpoint `GET /embed/{location_id}/seal.svg`, returns 404/placeholder if not earned.
 - **Fewer than 5 reviews** – "Rate us on RateThatJob / Worked here? Share your experience." links to the review flow for that location.
 
 ### 8.2 Embed methods (offer all three)

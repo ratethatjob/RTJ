@@ -48,6 +48,7 @@ type LocationRow = {
   updated_at?: string | null;
   application_count?: number | null;
   index_active?: boolean | null;
+  is_demo?: boolean | null;
 };
 
 export function toLocation(row: LocationRow): LocationSummary {
@@ -66,6 +67,7 @@ export function toLocation(row: LocationRow): LocationSummary {
     claimed: row.claimed,
     updatedAt: row.scores_updated_at ?? row.updated_at ?? null,
     indexActive: row.index_active ?? false,
+    isDemo: row.is_demo ?? false,
     ghosting:
       row.reply_rate_pct == null
         ? null

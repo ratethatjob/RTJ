@@ -62,6 +62,6 @@ export async function cityMetadata(locale: string, city: string, category: Categ
     title: category
       ? t("metaTitleCategory", { category: tc(`${category}Plural`), city: data.name })
       : t("metaTitle", { city: data.name }),
-    rated: data.locations.some((l) => l.scores),
+    rated: data.locations.some((l) => l.scores && !l.isDemo),
   };
 }

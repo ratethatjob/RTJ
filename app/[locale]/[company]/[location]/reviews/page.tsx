@@ -3,6 +3,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ChevronLeftIcon } from "@/components/icons";
 import { ReviewCard } from "@/components/review-card";
+import { DemoBanner } from "@/components/demo-badge";
 import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
 import { getLocation, getLocationPaths, getReviews, REVIEWS_PER_PAGE } from "@/lib/data";
@@ -27,6 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${t("metaTitle", { company: data.companyName, location: data.address })} | RateThatJob`,
     alternates: localeAlternates(`${locationPath(data)}/reviews`, locale),
+    ...(data.isDemo && { robots: { index: false } }),
   };
 }
 
@@ -69,6 +71,7 @@ export default async function ReviewsPage({ params, searchParams }: Props) {
       <SiteHeader withSearch />
     </div>
     <main className="mx-auto w-full max-w-3xl px-4 pb-16 pt-6 sm:px-6">
+      {data.isDemo && <DemoBanner />}
       <header className="flex items-center gap-3">
         <Link href={path} aria-label={tn("back")} className="-ml-2 p-2">
           <ChevronLeftIcon className="size-7" />
