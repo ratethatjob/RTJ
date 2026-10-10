@@ -34,7 +34,7 @@ A RateThatJob munkahelyekről szóló értékeléseket, tényeket (bérfizetés,
 - Minden telephely egyszer 30 napos ingyenes Pro próbát kap, bankkártya nélkül. A próba automatikusan indul, amikor jóváhagyjuk az átvételt.
 - A próba után a Pro telephelyenként, havi vagy éves díjjal fizetős, az [Árak](/pricing) oldalon szereplő áron. Amíg nincs online fizetés, számlát küldünk, és a befizetés után kapcsoljuk be a Prót.
 - Aktív próba vagy kifizetett Pro nélkül a kitett Index-jelvények nem tűnnek el a weboldaladról, de pontszám helyett azt mutatják, hogy az Index jelenleg nem elérhető, és továbbra is a nyilvános profilodra visznek. A nyilvános profilod, az értékelések és a pontszámok a RateThatJobon csomagtól függetlenül mindig láthatók.
-- A karrieroldal widget (az állásaid a weboldaladon) ingyenes, nem kell hozzá Pro. Az álláshirdetések díja hirdetésenként fizetendő.
+- A RateThatJob Careers Hub (az állásaid a weboldaladon) ingyenes, nem kell hozzá Pro. Az álláshirdetések díja hirdetésenként fizetendő.
 
 ## 6. Állások és jelentkezés
 

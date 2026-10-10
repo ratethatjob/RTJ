@@ -714,10 +714,10 @@
     "lastSeen": "last seen {date}",
     "tabs": {
       "index": "Index badge",
-      "jobs": "Jobs"
+      "jobs": "Careers Hub"
     },
     "jobs": {
-      "body": "Show your open jobs on your own website. Applicants apply on RateThatJob, in a new tab, and can return to your site afterwards.",
+      "body": "RateThatJob Careers Hub: show your open jobs on your own website. Applicants apply on RateThatJob, in a new tab, and can return to your site afterwards.",
       "scope": "What to show",
       "scopes": {
         "job": "One job",
@@ -735,7 +735,7 @@
         "en": "English",
         "hu": "Magyar"
       },
-      "indexNote": "Featured (Pro) jobs come first. The RateThatJob Index is always shown under the jobs: with Pro or the trial your score, otherwise \"currently unavailable\". The widget itself is free.",
+      "indexNote": "Featured (Pro) jobs come first. The RateThatJob Index is always shown under the jobs: with Pro or the trial your score, otherwise \"currently unavailable\". Careers Hub itself is free.",
       "code": "Code for your website",
       "codeHint": "Paste it where the jobs should appear. Without JavaScript the link inside still works.",
       "fallback": "Jobs at {name} on RateThatJob"
@@ -1204,7 +1204,7 @@
     "cookies": "Cookies",
     "about": "Verified reviews and hard facts about frontline workplaces: pay, hours, managers and how they treat applicants.",
     "noAds": "Reviews can’t be bought or removed.",
-    "careerPage": "Careers page widget"
+    "careersHub": "Careers Hub"
   },
   "About": {
     "metaTitle": "About RateThatJob",
@@ -1249,7 +1249,7 @@
         "inviteLink": "Shareable invite link for your team",
         "jobs": "Job ads from a low posting fee",
         "profileBasic": "Team members and roles",
-        "careerWidget": "Careers page widget for your website"
+        "careersHub": "RateThatJob Careers Hub: your jobs on your website"
       },
       "cta": "Claim for free"
     },
@@ -1404,12 +1404,12 @@
     "bottomBody": "Claim your workplace for free and try the Index on your careers page for 30 days, no card.",
     "trialNote": "Part of Pro · 30 days free, no card"
   },
-  "CareerPage": {
-    "metaTitle": "Embeddable careers page – your jobs on your website",
-    "metaDescription": "Show your open jobs on your own website with one short snippet. Candidates apply on RateThatJob, and your RateThatJob Index sits underneath as a sign of trust.",
-    "eyebrow": "Careers page widget",
-    "title": "Your jobs, on your own website.",
-    "intro": "Paste one short snippet and your open jobs appear on your site, always up to date. Candidates apply on RateThatJob, and your RateThatJob Index shows them what your people say.",
+  "CareersHub": {
+    "metaTitle": "RateThatJob Careers Hub – your jobs on your website",
+    "metaDescription": "RateThatJob Careers Hub: your jobs, on your website, backed by your Index. Paste one short snippet; candidates apply on RateThatJob, and your RateThatJob Index sits underneath as a sign of trust.",
+    "eyebrow": "RateThatJob Careers Hub",
+    "title": "Your jobs, on your website. Backed by your Index.",
+    "intro": "Careers Hub puts your open jobs on your site with one short snippet, always up to date. Candidates apply on RateThatJob, and your RateThatJob Index shows them what your people say.",
     "ctaGet": "Get the code",
     "ctaEmployers": "For employers",
     "exampleLabel": "Example · sample data",
@@ -1435,7 +1435,7 @@
       "scopeTitle": "One job, a location or the whole company",
       "scopeBody": "Show a single job, every job at one location, or all jobs across your company.",
       "looksTitle": "Light or dark, English or Hungarian",
-      "looksBody": "Pick the theme and language that fit your site. The widget keeps its own styling, so your site's CSS can't break it.",
+      "looksBody": "Pick the theme and language that fit your site. Careers Hub keeps its own styling, so your site's CSS can't break it.",
       "featuredTitle": "Pro jobs first",
       "featuredBody": "Jobs posted with the Pro package are marked as featured and shown at the top."
     },
@@ -1446,7 +1446,7 @@
       "postTitle": "Post your jobs",
       "postBody": "Choose quick apply or CV, add your questions and pick a package.",
       "embedTitle": "Copy the code",
-      "embedBody": "In your dashboard, open RateThatJob Index → Jobs, choose what to show, preview it and copy the code to your site."
+      "embedBody": "In your dashboard, open RateThatJob Index → Careers Hub, choose what to show, preview it and copy the code to your site."
     },
     "codeTitle": "The code looks like this",
     "codeBody": "Paste it where your jobs should appear. Your own code, with your IDs, is waiting in your dashboard.",
@@ -1467,19 +1467,19 @@
     "pricingLink": "See job ad packages and prices",
     "faqTitle": "Questions",
     "faq": {
-      "costQ": "Does the widget cost anything?",
-      "costA": "No. The careers page widget is free for every employer who has claimed their workplace, with or without Pro. Job ads are priced per ad – see Pricing.",
+      "costQ": "Does Careers Hub cost anything?",
+      "costA": "No. Careers Hub is free for every employer who has claimed their workplace, with or without Pro. Job ads are priced per ad – see Pricing.",
       "whereQ": "Where can I put it?",
       "whereA": "On any website where you can add HTML: your careers page, website builders that allow custom code, landing pages.",
       "noJobsQ": "What if we have no open jobs?",
-      "noJobsA": "The widget says there are no open jobs right now and still shows your RateThatJob Index.",
+      "noJobsA": "Careers Hub says there are no open jobs right now and still shows your RateThatJob Index.",
       "indexQ": "Can we hide the Index?",
-      "indexA": "No. The RateThatJob Index is always shown under the jobs. With Pro or the free trial it shows your score; otherwise it says the Index is currently unavailable.",
+      "indexA": "No. The RateThatJob Index is always shown under the jobs in Careers Hub. With Pro or the free trial it shows your score; otherwise it says the Index is currently unavailable.",
       "dataQ": "Does it track our visitors?",
-      "dataA": "No cookies. We only record which websites show the widget (the domain), so you can see where you're embedded."
+      "dataA": "No cookies. We only record which websites show Careers Hub (the domain), so you can see where you're embedded."
     },
     "bottomTitle": "Put your jobs where your candidates already look.",
-    "bottomBody": "Claim your workplace for free, post a job and copy the code from your dashboard."
+    "bottomBody": "Claim your workplace for free, post a job and copy your Careers Hub code from your dashboard."
   },
   "Plan": {
     "status": "Status",
@@ -1506,7 +1506,7 @@
     "endedBody": "Your embedded RateThatJob Index now says \"currently unavailable\" instead of your score. Activate Pro to show it again.",
     "gate": {
       "indexTitle": "The RateThatJob Index is part of Pro",
-      "indexBody": "Activate Pro for this location to put your Index on your website. The careers page widget is free – see the Jobs tab.",
+      "indexBody": "Activate Pro for this location to put your Index on your website. Careers Hub is free – see the Careers Hub tab.",
       "statsTitle": "Statistics are part of Pro",
       "statsBody": "Activate Pro for this location to see monthly volume, scores and category trends."
     }

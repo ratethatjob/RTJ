@@ -714,10 +714,10 @@
     "lastSeen": "utoljára: {date}",
     "tabs": {
       "index": "Index jelvény",
-      "jobs": "Állások"
+      "jobs": "Careers Hub"
     },
     "jobs": {
-      "body": "Mutasd a nyitott állásaidat a saját weboldaladon. A jelöltek a RateThatJobon jelentkeznek, új lapon, utána visszatérhetnek az oldaladra.",
+      "body": "RateThatJob Careers Hub: mutasd a nyitott állásaidat a saját weboldaladon. A jelöltek a RateThatJobon jelentkeznek, új lapon, utána visszatérhetnek az oldaladra.",
       "scope": "Mit mutasson",
       "scopes": {
         "job": "Egy állás",
@@ -735,7 +735,7 @@
         "en": "English",
         "hu": "Magyar"
       },
-      "indexNote": "A kiemelt (Pro) állások kerülnek előre. A RateThatJob Index mindig látszik az állások alatt: Pro csomaggal vagy próbával a pontszámod, különben „jelenleg nem elérhető”. Maga a widget ingyenes.",
+      "indexNote": "A kiemelt (Pro) állások kerülnek előre. A RateThatJob Index mindig látszik az állások alatt: Pro csomaggal vagy próbával a pontszámod, különben „jelenleg nem elérhető”. Maga a Careers Hub ingyenes.",
       "code": "Kód a weboldaladra",
       "codeHint": "Illeszd be oda, ahol az állásokat mutatni szeretnéd. JavaScript nélkül is működik a benne lévő link.",
       "fallback": "{name} állásai a RateThatJobon"
@@ -1204,7 +1204,7 @@
     "cookies": "Sütik",
     "about": "Igazolt értékelések és tények a frontvonalbeli munkahelyekről: bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel.",
     "noAds": "Értékelést nem lehet megvenni vagy eltávolítani.",
-    "careerPage": "Karrieroldal widget"
+    "careersHub": "Careers Hub"
   },
   "About": {
     "metaTitle": "Rólunk",
@@ -1249,7 +1249,7 @@
         "inviteLink": "Megosztható meghívó link a csapatnak",
         "jobs": "Álláshirdetés alacsony feladási díjjal",
         "profileBasic": "Csapattagok és szerepkörök",
-        "careerWidget": "Karrieroldal widget a weboldaladra"
+        "careersHub": "RateThatJob Careers Hub: az állásaid a weboldaladon"
       },
       "cta": "Ingyenes átvétel"
     },
@@ -1404,12 +1404,12 @@
     "bottomBody": "Vedd át ingyen a munkahelyed, és próbáld ki az Indexet a karrieroldaladon 30 napig, bankkártya nélkül.",
     "trialNote": "A Pro része · 30 nap ingyen, bankkártya nélkül"
   },
-  "CareerPage": {
-    "metaTitle": "Beágyazható karrieroldal – az állásaid a saját weboldaladon",
-    "metaDescription": "Mutasd a nyitott állásaidat a saját weboldaladon egy rövid kódrészlettel. A jelöltek a RateThatJobon jelentkeznek, alatta pedig ott a RateThatJob Indexed, mint bizalmi jel.",
-    "eyebrow": "Karrieroldal widget",
-    "title": "Az állásaid, a saját weboldaladon.",
-    "intro": "Illessz be egy rövid kódrészletet, és a nyitott állásaid megjelennek az oldaladon, mindig naprakészen. A jelöltek a RateThatJobon jelentkeznek, a RateThatJob Indexed pedig megmutatja nekik, mit mondanak a dolgozóid.",
+  "CareersHub": {
+    "metaTitle": "RateThatJob Careers Hub – az állásaid a saját weboldaladon",
+    "metaDescription": "RateThatJob Careers Hub: az állásaid a saját weboldaladon, mellettük az Indexed. Egy rövid kódrészlet; a jelöltek a RateThatJobon jelentkeznek, alatta pedig ott a RateThatJob Indexed, mint bizalmi jel.",
+    "eyebrow": "RateThatJob Careers Hub",
+    "title": "Az állásaid a saját weboldaladon. Mellettük az Indexed.",
+    "intro": "A Careers Hub egy rövid kódrészlettel kiteszi a nyitott állásaidat az oldaladra, mindig naprakészen. A jelöltek a RateThatJobon jelentkeznek, a RateThatJob Indexed pedig megmutatja nekik, mit mondanak a dolgozóid.",
     "ctaGet": "Kérem a kódot",
     "ctaEmployers": "Munkáltatóknak",
     "exampleLabel": "Példa · mintaadatok",
@@ -1435,7 +1435,7 @@
       "scopeTitle": "Egy állás, egy telephely vagy az egész cég",
       "scopeBody": "Mutathatsz egyetlen állást, egy telephely összes állását, vagy a céged összes állását.",
       "looksTitle": "Világos vagy sötét, angol vagy magyar",
-      "looksBody": "Válaszd az oldaladhoz illő témát és nyelvet. A widget saját stílussal fut, így az oldalad CSS-e nem tudja elrontani.",
+      "looksBody": "Válaszd az oldaladhoz illő témát és nyelvet. A Careers Hub saját stílussal fut, így az oldalad CSS-e nem tudja elrontani.",
       "featuredTitle": "Elöl a Pro állások",
       "featuredBody": "A Pro csomaggal feladott állások kiemelést kapnak, és a lista elején állnak."
     },
@@ -1446,7 +1446,7 @@
       "postTitle": "Add fel az állásaidat",
       "postBody": "Válassz gyors vagy önéletrajzos jelentkezést, add meg a kérdéseidet, és válassz csomagot.",
       "embedTitle": "Másold ki a kódot",
-      "embedBody": "A vezérlőpultban nyisd meg: RateThatJob Index → Állások. Válaszd ki, mit mutasson, nézd meg az előnézetet, és másold a kódot az oldaladra."
+      "embedBody": "A vezérlőpultban nyisd meg: RateThatJob Index → Careers Hub. Válaszd ki, mit mutasson, nézd meg az előnézetet, és másold a kódot az oldaladra."
     },
     "codeTitle": "Így néz ki a kód",
     "codeBody": "Illeszd be oda, ahol az állásaidat mutatni szeretnéd. A saját kódod, a saját azonosítóiddal, a vezérlőpultban vár.",
@@ -1467,19 +1467,19 @@
     "pricingLink": "Álláscsomagok és árak",
     "faqTitle": "Kérdések",
     "faq": {
-      "costQ": "Kerül valamibe a widget?",
-      "costA": "Nem. A karrieroldal widget minden munkáltatónak ingyenes, aki átvette a munkahelyét, Pro csomaggal és nélküle is. Az álláshirdetéseknek hirdetésenkénti díja van – lásd az Árak oldalt.",
+      "costQ": "Kerül valamibe a Careers Hub?",
+      "costA": "Nem. A Careers Hub minden munkáltatónak ingyenes, aki átvette a munkahelyét, Pro csomaggal és nélküle is. Az álláshirdetéseknek hirdetésenkénti díja van – lásd az Árak oldalt.",
       "whereQ": "Hová tehetem ki?",
       "whereA": "Bármely weboldalra, ahová HTML-t tudsz tenni: karrieroldalra, saját kódot engedő weboldal-készítőkbe, kampányoldalakra.",
       "noJobsQ": "Mi van, ha nincs nyitott állásunk?",
-      "noJobsA": "A widget kiírja, hogy most nincs nyitott állás, és a RateThatJob Indexedet ekkor is mutatja.",
+      "noJobsA": "A Careers Hub kiírja, hogy most nincs nyitott állás, és a RateThatJob Indexedet ekkor is mutatja.",
       "indexQ": "Elrejthetjük az Indexet?",
-      "indexA": "Nem. A RateThatJob Index mindig ott van az állások alatt. Pro csomaggal vagy az ingyenes próbával a pontszámodat mutatja, különben azt, hogy az Index jelenleg nem elérhető.",
+      "indexA": "Nem. A RateThatJob Index a Careers Hubban mindig ott van az állások alatt. Pro csomaggal vagy az ingyenes próbával a pontszámodat mutatja, különben azt, hogy az Index jelenleg nem elérhető.",
       "dataQ": "Követi a látogatóinkat?",
-      "dataA": "Nincs süti. Csak azt rögzítjük, melyik weboldal mutatja a widgetet (a domaint), hogy lásd, hol vagy kint."
+      "dataA": "Nincs süti. Csak azt rögzítjük, melyik weboldal mutatja a Careers Hubot (a domaint), hogy lásd, hol vagy kint."
     },
     "bottomTitle": "Tedd ki az állásaidat oda, ahol a jelöltek már keresnek.",
-    "bottomBody": "Vedd át ingyen a munkahelyed, adj fel egy állást, és másold ki a kódot a vezérlőpultból."
+    "bottomBody": "Vedd át ingyen a munkahelyed, adj fel egy állást, és másold ki a Careers Hub kódodat a vezérlőpultból."
   },
   "Plan": {
     "status": "Állapot",
@@ -1506,7 +1506,7 @@
     "endedBody": "A kitett RateThatJob Indexed most pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”. Kapcsold be a Prót, hogy újra látszódjon.",
     "gate": {
       "indexTitle": "A RateThatJob Index a Pro része",
-      "indexBody": "Kapcsold be a Prót ennél a telephelynél, hogy kitehesd az Indexet a weboldaladra. A karrieroldal widget ingyenes – lásd az Állások fület.",
+      "indexBody": "Kapcsold be a Prót ennél a telephelynél, hogy kitehesd az Indexet a weboldaladra. A Careers Hub ingyenes – lásd a Careers Hub fület.",
       "statsTitle": "A statisztika a Pro része",
       "statsBody": "Kapcsold be a Prót ennél a telephelynél, hogy lásd a havi számokat, pontszámokat és a kategóriák alakulását."
     }

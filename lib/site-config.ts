@@ -15,8 +15,8 @@ export const OPERATOR = {
 
 /** Pro price per location. null = "price on request" until set. */
 export const PRICING: Record<string, { currency: string; monthly: number | null }> = {
-  en: { currency: "EUR", monthly: null },
-  hu: { currency: "HUF", monthly: null },
+  en: { currency: "EUR", monthly: 39 },
+  hu: { currency: "HUF", monthly: 12900 },
 };
 
 /** Yearly billing: 2 months free (SPEC 7). */

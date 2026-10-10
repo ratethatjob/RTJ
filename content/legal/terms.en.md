@@ -34,7 +34,7 @@ RateThatJob shows reviews of workplaces, facts (pay on time, overtime, hours, re
 - Every location gets a 30-day free Pro trial, once, with no card needed. It starts automatically when the claim is approved.
 - After the trial, Pro is billed per location, monthly or yearly, at the prices on the [Pricing](/pricing) page. Until online payment is available, we invoice you and switch Pro on once the payment arrives.
 - Without an active trial or paid Pro, embedded Index badges stay on your website but show that the Index is currently unavailable instead of the score, and still link to your public profile. Your public profile, reviews and scores on RateThatJob are always shown, whatever your plan.
-- The careers page widget (your jobs on your website) is free and doesn't need Pro. Job ads are priced per ad.
+- RateThatJob Careers Hub (your jobs on your website) is free and doesn't need Pro. Job ads are priced per ad.
 
 ## 6. Jobs and applications
 

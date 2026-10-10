@@ -6,15 +6,15 @@ import { SiteHeader } from "@/components/site-header";
 import { Link } from "@/i18n/navigation";
 import { localeAlternates, SITE_URL } from "@/lib/seo";
 
-type Props = PageProps<"/[locale]/career-page">;
+type Props = PageProps<"/[locale]/careers-hub">;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "CareerPage" });
+  const t = await getTranslations({ locale, namespace: "CareersHub" });
   return {
     title: `${t("metaTitle")} | RateThatJob`,
     description: t("metaDescription"),
-    alternates: localeAlternates("/career-page", locale),
+    alternates: localeAlternates("/careers-hub", locale),
     openGraph: { title: t("metaTitle"), description: t("metaDescription"), type: "website" },
   };
 }
@@ -24,10 +24,10 @@ const STEPS = ["claim", "post", "embed"] as const;
 const APPLY = ["quick", "ai", "contact", "back"] as const;
 const FAQ = ["cost", "where", "noJobs", "index", "data"] as const;
 
-export default async function CareerPage({ params }: Props) {
+export default async function CareersHubPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("CareerPage");
+  const t = await getTranslations("CareersHub");
   const code =
     `<div data-rtj-jobs="location" data-id="LOCATION_ID" data-theme="light" data-locale="${locale}">\n` +
     `  <a href="${SITE_URL}/your-company/your-location">${t("codeFallback")}</a>\n` +

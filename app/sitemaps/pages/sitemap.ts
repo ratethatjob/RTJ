@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry("/pricing"),
     entry("/about"),
     entry("/ratethatjob-index"),
-    entry("/career-page"),
+    entry("/careers-hub"),
     ...jobs.map((j) =>
       entry(`/${j.location.companySlug}/${j.location.slug}/jobs/${j.id}`, j.updatedAt),
     ),

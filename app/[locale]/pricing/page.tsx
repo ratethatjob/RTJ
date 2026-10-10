@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: `${t("metaTitle")} | RateThatJob`, description: t("intro"), alternates: localeAlternates("/pricing", locale) };
 }
 
-const FREE = ["claim", "reply", "dispute", "inviteLink", "careerWidget", "jobs", "profileBasic"] as const;
+const FREE = ["claim", "reply", "dispute", "inviteLink", "careersHub", "jobs", "profileBasic"] as const;
 const PRO = ["warnings", "stats", "invites", "index", "profile", "noCompetitors"] as const;
 const FAQ = ["q1", "trial", "q2", "q3", "q4"] as const;
 const JOB_FEATURES = { standard: ["ad", "apply", "contact"], basic: ["summary", "cv"], pro: ["followups", "featured"] } as const;

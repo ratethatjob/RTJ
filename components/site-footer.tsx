@@ -26,7 +26,7 @@ export async function SiteFooter() {
         { href: "/business/claim", label: t("claim") },
         { href: "/pricing", label: tn("pricing") },
         { href: "/ratethatjob-index", label: t("index") },
-        { href: "/career-page", label: t("careerPage") },
+        { href: "/careers-hub", label: t("careersHub") },
       ],
     },
     {

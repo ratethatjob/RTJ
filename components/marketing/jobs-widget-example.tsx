@@ -5,7 +5,7 @@ type ExampleJob = { title: string; pay: string; schedule: string; quick: boolean
 
 /** Static look-alike of the jobs widget (public/widget.js) with sample data, for the marketing page. */
 export async function JobsWidgetExample({ dark = false }: { dark?: boolean }) {
-  const t = await getTranslations("CareerPage.example");
+  const t = await getTranslations("CareersHub.example");
   const tw = await getTranslations("JobsWidget");
   const tj = await getTranslations("Jobs");
   const jobs: ExampleJob[] = [

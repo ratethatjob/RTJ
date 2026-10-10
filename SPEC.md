@@ -186,7 +186,7 @@ Levels shown as badges: Not verified · Verified (document) · Verified (invited
 - **Plan & billing:** per-location Free/Pro, monthly or yearly (2 months free). Chains 10+ locations: custom.
 - **Free trial:** every location gets 30 days of Pro free, no card, once per location; it starts automatically when the claim is approved (`location_plans.status = 'trialing'`, `trial_ends_at`). Notices 7 and 1 day(s) before the end and once after it (in-app + email). After that Pro is paid; until Stripe, the employer requests activation (monthly/yearly) and an admin marks it paid (`paid_until`).
 
-Pro features per location: early warnings, invites, statistics, branded profile (photos, benefits), remove competitor suggestions from own page, **RateThatJob Index** (image badge, iframe card, Top Rated seal, the score in the JSON API, the Index generator). The careers page jobs widget is free.
+Pro features per location: early warnings, invites, statistics, branded profile (photos, benefits), remove competitor suggestions from own page, **RateThatJob Index** (image badge, iframe card, Top Rated seal, the score in the JSON API, the Index generator). RateThatJob Careers Hub (the jobs widget) is free.
 
 ---
 
@@ -240,13 +240,14 @@ Goal: employers show their score on their careers page / job ads; every embed is
 - On our own job pages (Phase 3) the full widget is shown natively.
 - Track embeds: count distinct referring domains per location (shown to the employer, also a growth metric for us).
 
-### 8.4 Jobs widget
+### 8.4 RateThatJob Careers Hub (jobs widget)
+- Product name: **RateThatJob Careers Hub** (short: Careers Hub, not translated). Tagline: "Your jobs, on your website. Backed by your Index." / HU "Az állásaid a saját weboldaladon. Mellettük az Indexed." Marketing page: `/careers-hub`.
 - Same `widget.js`, new element: `<div data-rtj-jobs="job|location|company" data-id="ID or company slug" data-theme="light|dark" data-locale="en|hu"><a href="…">fallback link</a></div>`. The inner link stays as a crawlable fallback without JS.
 - Renders in Shadow DOM: job cards with title, pay, schedule, Quick apply badge; featured (Pro) jobs first.
 - The RateThatJob Index is always shown under the jobs (score from 5 reviews, otherwise "Rate us on RateThatJob"), following the Pro rule above (without Pro or trial: "currently unavailable"); employers cannot turn it off. For a company the score is the review-weighted average of its locations with Pro.
 - Data: `GET /api/public/jobs?job=ID | ?location=ID | ?company=SLUG [&locale=]` → open, published jobs only (from `public_jobs`), display strings in the requested language, never user data. CORS open, browser-cached (so `recordEmbed()` counts every site), rate-limited per IP.
 - "Apply" opens our apply flow in a new tab with `?ref=embed&from=<host page URL>`; the application is stored with `source = 'embed'`, and the done screen offers "Back to the company's website" (http/https only).
-- Generator: "Jobs" tab on `/business/index` (one job / location / whole company, theme, language, live preview, copyable code). Free for every claimed employer, with or without Pro.
+- Generator: "Careers Hub" tab on `/business/index` (one job / location / whole company, theme, language, live preview, copyable code). Free for every claimed employer, with or without Pro.
 
 ---
 

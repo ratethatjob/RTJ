@@ -21,4 +21,3 @@
 ## Fejlesztés
 - [ ] E-mail/SMS meghívók (Resend, Twilio) – kulcsok kellenek
 - [ ] Stripe: Pro előfizetés (helyszínenként, havi/éves; most 30 nap próba, utána `plan_orders` + kézi számla, admin „Előfizetések” fül) és álláscsomagok fizetése (most `job_orders` + kézi számla) – kulcsok kellenek
-- [ ] Pro havi ár (`PRICING` a `lib/site-config.ts`-ben) – amíg üres, az Árak oldalon „Egyedi ajánlat” látszik, az admin Előfizetések fülön nincs összeg
