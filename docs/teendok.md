@@ -14,12 +14,10 @@
 - [ ] Domain: ratethatjob.com bekötése a Vercelre, `NEXT_PUBLIC_SITE_URL`
 - [ ] Régi Vercel projekt („rtj”) és a supabase-cyan-kettle Supabase projekt törlése
 
-- [ ] Futtasd le a Supabase SQL Editorban (RTJ projekt): `supabase/migrations/20261010150000_job_packages_ai.sql` (álláscsomagok, AI, üzenetek), a végén:
-      `insert into supabase_migrations.schema_migrations (version, name) values ('20261010150000', 'job_packages_ai') on conflict do nothing;`
 - [ ] Üzemeltető: ABOVO JOBS MENA L.L.C-FZ beírva (`lib/site-config.ts`). (TRN: 105494925800001, irányadó jog: DIFC). Hiányzik: a `PRICING` Pro havi ár telephelyenként
 - [ ] Álláscsomag árak: `JOB_PRICING` (`lib/site-config.ts`) – javaslat: 4 990 / 14 990 / 29 990 Ft, 19 / 49 / 99 EUR
 - [ ] `RESEND_API_KEY` + `EMAIL_FROM` a Vercelen (üzenet e-mailben is a jelöltnek)
-- [ ] Jogi szövegek átnézése: `content/legal/` (ÁSZF, adatvédelem, sütik, impresszum – HU és EN). Stripe-ot és az AI-feldolgozást (Anthropic) fel kell venni az adatfeldolgozók közé
+- [ ] Jogi szövegek átnézése: `content/legal/` (ÁSZF, adatvédelem, sütik, impresszum – HU és EN). Az adatfeldolgozók (Stripe, Resend, Anthropic jelentkezés-összefoglaló) felvéve, a panasz-pont még a NAIH-ot említi
 
 ## Fejlesztés
 - [ ] E-mail/SMS meghívók (Resend, Twilio) – kulcsok kellenek

@@ -24,14 +24,18 @@ Employers never learn who wrote a review or who responded to their invite. Publi
 
 Review and reply text is checked by an AI model (Anthropic Claude) for personal data, threats and similar content, and translated into other languages. The model only receives the text, not your account details. When a review is held, a person decides.
 
+If an employer uses the Basic or Pro job ad package, the same AI model summarizes your application for the employer (your answers and, if you uploaded one, your CV) and, with Pro, asks you 2–3 follow-up questions. The summary only supports the employer; the decision is made by a person.
+
 ## 5. Processors
 
 - Supabase (database, sign-in, file storage)
 - Vercel (hosting, serving the website)
-- Anthropic (machine translation and content checks)
+- Anthropic (machine translation, content checks, application summaries)
 - Google (Google Maps based workplace search, when you use it)
+- Resend (sending emails, for example messages from employers)
+- Stripe (payments by employers; we never see full card details)
 
-We update this list before adding a new provider (for example email or payments).
+We update this list before adding a new provider.
 
 ## 6. How long we keep data
 

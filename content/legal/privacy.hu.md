@@ -24,14 +24,18 @@ A munkáltatók soha nem tudják meg, ki írt egy értékelést, és ki válaszo
 
 Az értékelések és cégválaszok szövegét egy MI-modell (Anthropic Claude) ellenőrzi személyes adatok, fenyegetés és hasonló tartalom szempontjából, és lefordítja más nyelvekre. A modell csak a szöveget kapja meg, a fiókod adatait nem. Ha egy értékelés fennakad, ember dönt róla.
 
+Ha a munkáltató Basic vagy Pro álláscsomagot használ, ugyanez az MI-modell összefoglalja neki a jelentkezésedet (a válaszaidat és, ha feltöltöttél, az önéletrajzodat), Pro csomagnál pedig 2–3 kiegészítő kérdést tesz fel neked. Az összefoglaló csak segíti a munkáltatót, a döntést ember hozza meg.
+
 ## 5. Adatfeldolgozók
 
 - Supabase (adatbázis, belépés, fájltárolás)
 - Vercel (tárhely, a weboldal kiszolgálása)
-- Anthropic (gépi fordítás és tartalomellenőrzés)
+- Anthropic (gépi fordítás, tartalomellenőrzés, jelentkezések összefoglalása)
 - Google (Google Térkép-alapú munkahelykeresés, ha használod)
+- Resend (e-mailek küldése, pl. a munkáltatók üzenetei)
+- Stripe (a munkáltatók fizetései; a teljes kártyaadatokat mi nem látjuk)
 
-Új szolgáltató (pl. e-mail-küldés, fizetés) bevonása előtt frissítjük ezt a listát.
+Új szolgáltató bevonása előtt frissítjük ezt a listát.
 
 ## 6. Meddig őrizzük
 
