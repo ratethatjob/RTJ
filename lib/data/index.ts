@@ -1,13 +1,12 @@
 import { cacheLife, cacheTag } from "next/cache";
+import { supabaseKey, supabaseUrl } from "@/lib/supabase/env";
 import { sampleLocations, sampleReviews } from "./sample";
 import { applyReviewFilter, publicClient, toLocation, toReview } from "./supabase";
 import type { LocationSummary, Review, ReviewFilter } from "./types";
 
 // Data access for public pages. Reads the Supabase public_* views when the
 // project is configured, otherwise falls back to the sample data.
-const useSupabase = Boolean(
-  process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-);
+const useSupabase = Boolean(supabaseUrl && supabaseKey);
 
 export const REVIEWS_PER_PAGE = 10;
 
@@ -48,7 +47,9 @@ export async function getLocationPaths() {
     .order("review_count", { ascending: false })
     .limit(1000);
   if (error) throw error;
-  return data.map((l) => ({ company: l.company_slug, location: l.slug }));
+  const paths = data.map((l) => ({ company: l.company_slug, location: l.slug }));
+  // Cache Components needs at least one param at build time; this one 404s.
+  return paths.length ? paths : [{ company: "_", location: "_" }];
 }
 
 export async function getFeaturedLocations(): Promise<LocationSummary[]> {

@@ -6,12 +6,13 @@ import type {
   Review,
   ReviewFilter,
 } from "./types";
+import { supabaseKey, supabaseUrl } from "@/lib/supabase/env";
 
 // Cookie-less client for public, cacheable reads of the public_* views.
 export function publicClient() {
   return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    supabaseUrl!,
+    supabaseKey!,
     { auth: { persistSession: false } },
   );
 }
