@@ -572,5 +572,32 @@
     "theme": "Téma",
     "preview": "Előnézet",
     "jsonCode": "JSON API (saját dizájnhoz)"
+  },
+  "Team": {
+    "title": "Csapat és szerepkörök",
+    "body": "Hívd meg a kollégáidat, hogy válaszoljanak az értékelésekre és meghívják a dolgozókat. A csapatot csak tulajdonos kezelheti.",
+    "members": "Tagok",
+    "you": "Te",
+    "pending": "Függő meghívók",
+    "noPending": "Nincs függő meghívó.",
+    "invite": "Tag meghívása",
+    "role": "Szerepkör",
+    "locations": "Helyszínek",
+    "createLink": "Meghívó link létrehozása",
+    "linkHint": "Küldd el ezt a linket a kollégádnak. Egyszer használható, és 7 nap múlva lejár.",
+    "expires": "Lejár: {date}",
+    "revoke": "Visszavonás",
+    "remove": "Eltávolítás",
+    "save": "Mentés",
+    "saved": "Mentve",
+    "allLocations": "Minden helyszín",
+    "pickLocation": "Válassz legalább egy helyszínt.",
+    "error": "Valami hiba történt. Próbáld újra.",
+    "lastOwner": "A cégnek legalább egy tulajdonosra szüksége van.",
+    "joinTitle": "Csatlakozás: {org} a RateThatJobon",
+    "joinBody": "{role} szerepkörrel hívtak meg.",
+    "join": "Csatlakozom",
+    "invalid": "Ez a meghívó link már nem érvényes. Kérj újat.",
+    "otherOrg": "A fiókod már egy másik céghez tartozik."
   }
 }

@@ -9,7 +9,7 @@ Project background (Hungarian): docs/osszefoglalo.md · Brand sheet: docs/brand-
 Next.js (App Router, `cacheComponents`) + TypeScript, Tailwind CSS v4, next-intl, Supabase, Vercel.
 
 - Routing: all pages live under `app/[locale]/`. English at the root, Hungarian under `/hu` (`localePrefix: "as-needed"`, see `i18n/routing.ts`). `proxy.ts` handles locale negotiation.
-- UI copy: never hard-code strings – add them to `messages/en.json` and `messages/hu.json`.
+- UI copy: never hard-code strings – add them to `messages/en.json` and `messages/hu.json`. Client components only receive the namespaces listed in their layout's `NextIntlClientProvider` (`pickMessages` in `lib/client-messages.ts`: root, `app/`, `business/`, `admin/` layouts) – add new client namespaces there.
 - Brand tokens: `app/globals.css` (`signal`, `ink`, `paper`, `slate`, `mist`, `tracking-brand`, `tracking-tagline`). Never use `signal` green as text on a light background.
 - Brand files: `public/brand/` (logo on light/dark, icon, app icon).
 - Supabase clients: `lib/supabase/server.ts`, `lib/supabase/client.ts`. Env vars: `.env.example`.
@@ -25,6 +25,8 @@ Next.js (App Router, `cacheComponents`) + TypeScript, Tailwind CSS v4, next-intl
 - Admin (`app/[locale]/admin`, noindex): claims, moderation, documents, disputes tabs, calling the `admin_*` RPCs. Admins are rows in `public.admins`. Decided verification files are deleted from storage.
 - Discovery & SEO: `/search` (noindex, follow), city hubs `/city/[city]` and `/city/[city]/[category]` (`CATEGORY_SLUGS` in `lib/format.ts`), sitemap index `app/sitemap.xml/route.ts` → `app/sitemaps/*`, `app/robots.ts`, OG image per location (`opengraph-image.tsx`, Archivo fonts in `assets/fonts`).
 - RateThatJob Index: `lib/rtj-index.ts` (SVG badges), `/embed/[id].svg?style=&locale=`, `/embed/[id]` (iframe card), `/embed/[id]/seal.svg`, `/api/public/locations/[id]/index` (JSON, CORS open), `public/widget.js`, generator at `/business/index`. Score shown from 5 reviews; seal at 4.0+ with 10+ verified.
+- Machine translation: `lib/translate.ts` (Claude, `ANTHROPIC_API_KEY`) detects the language and translates review/reply text into every locale; `lib/translation-jobs.ts` stores it with the service-role client (`lib/supabase/admin.ts`, `SUPABASE_SECRET_KEY`). Runs via `after()` on submit/reply and daily from `/api/cron/translate` (`vercel.json`, `CRON_SECRET`). Skipped silently when keys are missing.
+- Team: `/business/team` (owners invite with single-use links `org_member_invites` → `/business/join/[token]` → `accept_member_invite()`, change roles/locations, remove; `org_team()` lists members with email for owner/HR).
 - Employers (`app/[locale]/business/`, noindex): `/employers` landing → `/business/claim` (claim requests, approved by an admin with `select private.approve_claim('<claim id>')`) → dashboard (overview, reviews & replies/disputes, invite link, locations/team/plan). Data loader: `lib/business.ts`. Invite links: `/r/[token]` → `/app/rate/[id]?invite=` → `attach_invite()` marks the review invited and delays it.
 
 ## Working with the founder

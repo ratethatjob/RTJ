@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { BusinessSidebar } from "@/components/business/sidebar";
 import { getBusiness } from "@/lib/business";
+import { pickMessages, SHARED_CLIENT_NAMESPACES } from "@/lib/client-messages";
 
 // The employer dashboard is never indexed and always needs a session.
 export const metadata: Metadata = { robots: { index: false, follow: false } };
@@ -11,8 +13,15 @@ export default async function BusinessLayout({ children, params }: LayoutProps<"
   const { locale } = await params;
   setRequestLocale(locale);
   const { supabase, org } = await getBusiness(locale, "/business");
+  const messages = await pickMessages([...SHARED_CLIENT_NAMESPACES, "Business", "Index", "Team"]);
 
-  if (!org) return <div className="flex flex-1 flex-col">{children}</div>;
+  if (!org) {
+    return (
+      <NextIntlClientProvider messages={messages}>
+        <div className="flex flex-1 flex-col">{children}</div>
+      </NextIntlClientProvider>
+    );
+  }
 
   const ids = org.locations.map((l) => l.id);
   const { count } = ids.length
@@ -24,9 +33,11 @@ export default async function BusinessLayout({ children, params }: LayoutProps<"
     : { count: 0 };
 
   return (
-    <div className="flex flex-1 flex-col lg:flex-row">
-      <BusinessSidebar orgName={org.name} role={org.role} awaiting={count ?? 0} />
-      <div className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-10">{children}</div>
-    </div>
+    <NextIntlClientProvider messages={messages}>
+      <div className="flex flex-1 flex-col lg:flex-row">
+        <BusinessSidebar orgName={org.name} role={org.role} awaiting={count ?? 0} />
+        <div className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-10">{children}</div>
+      </div>
+    </NextIntlClientProvider>
   );
 }

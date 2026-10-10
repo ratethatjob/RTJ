@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidateTag } from "next/cache";
+import { after } from "next/server";
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
+import { translateReply } from "@/lib/translation-jobs";
 
 export async function postReply(
   reviewId: string,
@@ -13,14 +15,17 @@ export async function postReply(
   if (!text || text.length > 3000) return { error: true };
   const { supabase, user } = await getUser();
   if (!user) return { error: true };
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("employer_replies")
     .upsert(
       { review_id: reviewId, body: text, original_language: await getLocale() },
       { onConflict: "review_id" },
-    );
+    )
+    .select("id")
+    .single();
   if (error) return { error: true };
   revalidateTag(`reviews:${locationId}`, "max");
+  after(() => translateReply(data.id));
   return { ok: true };
 }
 

@@ -1,3 +1,4 @@
+import { Link } from "@/i18n/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PlanBadge } from "@/components/business/plan-badge";
 import { getBusiness } from "@/lib/business";
@@ -60,9 +61,9 @@ export default async function LocationsPage({ params }: PageProps<"/[locale]/bus
         <section id="team" className="rounded-3xl bg-white p-6">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-2xl font-black tracking-brand">{t("teamTitle")}</h2>
-            <button disabled title={t("comingSoon")} className="rounded-xl border-2 border-ink px-4 py-2 font-black opacity-50">
+            <Link href="/business/team" className="rounded-xl border-2 border-ink px-4 py-2 font-black">
               {t("inviteMember")}
-            </button>
+            </Link>
           </div>
           <ul className="mt-4 flex flex-col gap-3">
             {ROLES.map((r) => (

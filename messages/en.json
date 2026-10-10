@@ -572,5 +572,32 @@
     "theme": "Theme",
     "preview": "Preview",
     "jsonCode": "JSON API (your own design)"
+  },
+  "Team": {
+    "title": "Team & roles",
+    "body": "Invite colleagues to reply to reviews and invite your staff. Only owners can manage the team.",
+    "members": "Members",
+    "you": "You",
+    "pending": "Pending invites",
+    "noPending": "No pending invites.",
+    "invite": "Invite a member",
+    "role": "Role",
+    "locations": "Locations",
+    "createLink": "Create invite link",
+    "linkHint": "Send this link to your colleague. It works once and expires in 7 days.",
+    "expires": "Expires {date}",
+    "revoke": "Revoke",
+    "remove": "Remove",
+    "save": "Save",
+    "saved": "Saved",
+    "allLocations": "All locations",
+    "pickLocation": "Pick at least one location.",
+    "error": "Something went wrong. Please try again.",
+    "lastOwner": "The company needs at least one owner.",
+    "joinTitle": "Join {org} on RateThatJob",
+    "joinBody": "You have been invited as {role}.",
+    "join": "Join the team",
+    "invalid": "This invite link is no longer valid. Ask for a new one.",
+    "otherOrg": "Your account already belongs to another company."
   }
 }

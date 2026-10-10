@@ -13,7 +13,7 @@ const ITEMS = [
   { key: "invite", href: "/business/invite" },
   { key: "index", href: "/business/index" },
   { key: "jobs", href: null },
-  { key: "team", href: "/business/locations#team" },
+  { key: "team", href: "/business/team" },
   { key: "plan", href: "/business/locations#plan" },
 ] as const;
 
