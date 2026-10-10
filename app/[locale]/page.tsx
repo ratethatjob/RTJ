@@ -7,7 +7,13 @@ import { Link } from "@/i18n/navigation";
 import { locationPath } from "@/lib/format";
 import { localeAlternates } from "@/lib/seo";
 
-const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
+const CATEGORIES = [
+  "restaurant",
+  "retail",
+  "warehouse",
+  "factory",
+  "office",
+] as const;
 
 export async function generateMetadata({
   params,
@@ -45,7 +51,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               className="mt-8 flex flex-col rounded-3xl border border-mist/40 bg-white p-3 lg:flex-row lg:items-center lg:p-2"
             >
               <label className="flex flex-1 flex-col px-4 py-2">
-                <span className="text-sm font-black text-slate">{t("workplace")}</span>
+                <span className="text-sm font-black text-slate">
+                  {t("workplace")}
+                </span>
                 <input
                   name="q"
                   placeholder={t("workplacePlaceholder")}
@@ -54,7 +62,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               </label>
               <span className="mx-1 h-px bg-[#E8E6E1] lg:h-10 lg:w-px" />
               <label className="flex flex-1 flex-col px-4 py-2">
-                <span className="text-sm font-black text-slate">{t("where")}</span>
+                <span className="text-sm font-black text-slate">
+                  {t("where")}
+                </span>
                 <input
                   name="where"
                   placeholder={t("wherePlaceholder")}
@@ -90,10 +100,14 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-3xl font-black tracking-brand">{example.name}</p>
+                  <p className="text-3xl font-black tracking-brand">
+                    {example.name}
+                  </p>
                   <p className="text-mist">
                     {example.address} · {tc(example.category)} ·{" "}
-                    {tl("verifiedCount", { count: example.scores.verifiedCount })}
+                    {tl("verifiedCount", {
+                      count: example.scores.verifiedCount,
+                    })}
                   </p>
                 </div>
                 <ScoreTile score={example.scores.overall} size="sm" />
@@ -101,8 +115,14 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               <dl className="mt-6 flex flex-col gap-4">
                 {(
                   [
-                    [tl("facts.paid_on_time"), example.scores.facts.paid_on_time],
-                    [tl("facts.overtime_paid"), example.scores.facts.overtime_paid],
+                    [
+                      tl("facts.paid_on_time"),
+                      example.scores.facts.paid_on_time,
+                    ],
+                    [
+                      tl("facts.overtime_paid"),
+                      example.scores.facts.overtime_paid,
+                    ],
                     [tl("repliesToApplicants"), example.scores.replyRate],
                   ] as const
                 ).map(([label, value]) =>
@@ -122,45 +142,49 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           )}
         </section>
 
-        <section className="lg:hidden">
-          <h2 className="mb-4 text-sm font-black uppercase tracking-tagline text-slate">
-            {t("recentlyRated")}
-          </h2>
-          <ul className="flex flex-col gap-3">
-            {await Promise.all(
-              featured.map(async (l) => (
-                <li key={l.id}>
-                  <Link
-                    href={locationPath(l)}
-                    className="flex items-center justify-between gap-4 rounded-3xl bg-white p-6"
-                  >
-                    <div>
-                      <p className="text-2xl font-black tracking-brand">{l.name}</p>
-                      <p className="text-slate">
-                        {l.address} · {tc(l.category)}
-                      </p>
-                      {l.scores && (
-                        <p className="font-black">
-                          {t("paysOnTimeShort")} {l.scores.facts.paid_on_time}% ·{" "}
-                          {t("repliesShort")} {l.scores.replyRate}%
+        {featured.length > 0 && (
+          <section className="lg:hidden">
+            <h2 className="mb-4 text-sm font-black uppercase tracking-tagline text-slate">
+              {t("recentlyRated")}
+            </h2>
+            <ul className="flex flex-col gap-3">
+              {await Promise.all(
+                featured.map(async (l) => (
+                  <li key={l.id}>
+                    <Link
+                      href={locationPath(l)}
+                      className="flex items-center justify-between gap-4 rounded-3xl bg-white p-6"
+                    >
+                      <div>
+                        <p className="text-2xl font-black tracking-brand">
+                          {l.name}
                         </p>
+                        <p className="text-slate">
+                          {l.address} · {tc(l.category)}
+                        </p>
+                        {l.scores && (
+                          <p className="font-black">
+                            {t("paysOnTimeShort")} {l.scores.facts.paid_on_time}
+                            % · {t("repliesShort")} {l.scores.replyRate}%
+                          </p>
+                        )}
+                      </div>
+                      {l.scores && (
+                        <span
+                          className={`grid size-20 shrink-0 place-items-center rounded-2xl text-3xl font-black ${
+                            l.scores.overall >= 4 ? "bg-signal" : "bg-[#E8E6E1]"
+                          }`}
+                        >
+                          {await formatScore(l.scores.overall)}
+                        </span>
                       )}
-                    </div>
-                    {l.scores && (
-                      <span
-                        className={`grid size-20 shrink-0 place-items-center rounded-2xl text-3xl font-black ${
-                          l.scores.overall >= 4 ? "bg-signal" : "bg-[#E8E6E1]"
-                        }`}
-                      >
-                        {await formatScore(l.scores.overall)}
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              )),
-            )}
-          </ul>
-        </section>
+                    </Link>
+                  </li>
+                )),
+              )}
+            </ul>
+          </section>
+        )}
 
         <section className="grid gap-4 lg:grid-cols-3">
           {(["verified", "facts", "ghosting"] as const).map((key) => (
