@@ -1,7 +1,13 @@
 "use server";
 
 import { revalidateTag } from "next/cache";
+import { after } from "next/server";
+import { getTranslations } from "next-intl/server";
 import { getUser } from "@/lib/auth";
+import { summarizeApplication } from "@/lib/candidate-ai";
+import { sendEmail } from "@/lib/email";
+import { SITE_URL } from "@/lib/seo";
+import { JOB_TIERS, type JobTier } from "@/lib/site-config";
 import type { ApplyMode, JobQuestion } from "@/lib/data/types";
 import { parseQuestions } from "@/lib/job-questions";
 
@@ -20,6 +26,7 @@ export type JobInput = {
   offers: string;
   applyMode: ApplyMode;
   questions: JobQuestion[];
+  tier: JobTier;
   closesAt: string;
 };
 
@@ -56,6 +63,7 @@ function parse(input: JobInput) {
     description.length > 8000 ||
     !questions ||
     !["quick", "cv"].includes(input.applyMode) ||
+    !JOB_TIERS.includes(input.tier) ||
     lists.some((l) => l.length > 15 || l.some((item) => item.length > 300)) ||
     !WORK.includes(input.workType) ||
     !SCHEDULE.includes(input.schedule) ||
@@ -82,6 +90,7 @@ function parse(input: JobInput) {
     apply_mode: input.applyMode,
     questions,
     question: null,
+    tier: input.tier,
     closes_at: input.closesAt || null,
   };
 }
@@ -144,4 +153,65 @@ export async function decideApplication(
   if (error) return { error: "generic" };
   revalidateTag("locations", "max");
   return { ok: true };
+}
+
+type Listed = { id: string; email: string | null; full_name: string };
+
+/** The application, if the signed-in user manages its job (checked by the RPC). */
+async function managed(jobId: string, applicationId: string) {
+  const { supabase } = await getUser();
+  const { data } = await supabase.rpc("job_application_list", { p_job_id: jobId });
+  const app = ((data ?? []) as Listed[]).find((a) => a.id === applicationId);
+  return app ? { supabase, app } : null;
+}
+
+/** Message to the applicant: in their account, and by email when they gave one. */
+export async function messageApplicant(jobId: string, applicationId: string, body: string): Promise<Result> {
+  const text = body.trim();
+  if (!text || text.length > 4000) return { error: "invalid" };
+  const found = await managed(jobId, applicationId);
+  if (!found) return { error: "generic" };
+  const { supabase, app } = found;
+  const { error } = await supabase.rpc("send_application_message", { p_application_id: applicationId, p_body: text });
+  if (error) return { error: "generic" };
+  revalidateTag("locations", "max");
+  if (app.email) {
+    const { data: job } = await supabase
+      .from("jobs")
+      .select("title, locations(name, country)")
+      .eq("id", jobId)
+      .single();
+    const place = job?.locations as unknown as { name: string; country: string } | null;
+    const locale = place?.country === "HU" ? "hu" : "en";
+    const t = await getTranslations({ locale, namespace: "Email" });
+    const prefix = locale === "en" ? "" : `/${locale}`;
+    after(() =>
+      sendEmail(
+        app.email!,
+        t("messageSubject", { company: place?.name ?? "", job: job?.title ?? "" }),
+        t("messageBody", {
+          name: app.full_name,
+          company: place?.name ?? "",
+          job: job?.title ?? "",
+          message: text,
+          link: `${SITE_URL}${prefix}/app/applications/${applicationId}`,
+        }),
+      ),
+    );
+  }
+  return { ok: true };
+}
+
+export async function logCall(applicationId: string): Promise<Result> {
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("log_application_call", { p_application_id: applicationId });
+  return error ? { error: "generic" } : { ok: true };
+}
+
+/** Writes or refreshes the AI summary (basic and pro packages). */
+export async function refreshInsight(jobId: string, applicationId: string): Promise<Result> {
+  const found = await managed(jobId, applicationId);
+  if (!found) return { error: "generic" };
+  const ok = await summarizeApplication(applicationId).catch(() => false);
+  return ok ? { ok: true } : { error: "generic" };
 }

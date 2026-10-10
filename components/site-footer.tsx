@@ -4,13 +4,6 @@ import { OPERATOR } from "@/lib/site-config";
 import { LocaleSwitch } from "./locale-switch";
 import { Logo } from "./logo";
 
-const CITIES = [
-  ["budapest", "Budapest"],
-  ["debrecen", "Debrecen"],
-  ["szeged", "Szeged"],
-  ["gyor", "Győr"],
-] as const;
-
 export async function SiteFooter() {
   const t = await getTranslations("Footer");
   const tn = await getTranslations("Nav");
@@ -36,10 +29,6 @@ export async function SiteFooter() {
       ],
     },
     {
-      title: t("cities"),
-      links: CITIES.map(([slug, name]) => ({ href: `/city/${slug}`, label: name })),
-    },
-    {
       title: t("company"),
       links: [
         { href: "/about", label: tn("about") },
@@ -60,7 +49,7 @@ export async function SiteFooter() {
             <p className="mt-3 text-sm font-black uppercase tracking-tagline text-mist">{tm("tagline")}</p>
             <p className="mt-4 text-mist">{t("about")}</p>
           </div>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 lg:gap-x-12">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:gap-x-12">
             {columns.map((c) => (
               <div key={c.title}>
                 <h2 className="font-black text-mist">{c.title}</h2>

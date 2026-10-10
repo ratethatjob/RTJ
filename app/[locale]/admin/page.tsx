@@ -3,15 +3,27 @@ import { CsvImport, EntityForm, SlugEditor, UnverifyEntity } from "@/components/
 import { Decision } from "@/components/admin/decision";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
+import { jobPricing } from "@/lib/site-config";
 
 export const instant = false;
 
-const TABS = ["claims", "moderation", "verifications", "disputes", "reports"] as const;
+const TABS = ["claims", "moderation", "verifications", "disputes", "reports", "orders"] as const;
 const TOOLS = ["metrics", "workplaces", "entities", "import"] as const;
 type Queue = (typeof TABS)[number];
 type Tab = Queue | (typeof TOOLS)[number];
 
 type Place = { name: string; address: string } | null;
+type OrderRow = {
+  id: string;
+  created_at: string;
+  tier: "standard" | "basic" | "pro";
+  previous_tier: "standard" | "basic" | "pro" | null;
+  job_title: string;
+  location: string;
+  address: string;
+  country: string;
+  org_name: string;
+};
 type ReviewRow = {
   id: string;
   position: string;
@@ -50,6 +62,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     supabase.from("verifications").select("id", { count: "exact", head: true }).eq("status", "pending"),
     supabase.from("disputes").select("id", { count: "exact", head: true }).eq("status", "open"),
     supabase.from("reports").select("id", { count: "exact", head: true }).eq("status", "open"),
+    supabase.rpc("admin_job_orders").then((r) => ({ count: ((r.data ?? []) as OrderRow[]).length, data: r.data })),
   ]);
 
   const reviewCols = "id, position, relationship, overall, body, verification_level, locations(name, address)";
@@ -161,6 +174,29 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
                 <ReviewSummary r={r} relationship={tr(`relationship.${r.relationship}`)} />
               </div>
             )}
+          </>
+        ),
+      };
+    });
+  } else if (tab === "orders") {
+    const tj = await getTranslations("BusinessJobs");
+    items = ((counts[5].data ?? []) as OrderRow[]).map((o) => {
+      const pricing = jobPricing(o.country);
+      const amount = pricing.prices[o.tier] - (o.previous_tier ? pricing.prices[o.previous_tier] : 0);
+      return {
+        id: o.id,
+        created_at: o.created_at,
+        content: (
+          <>
+            <p className="text-lg font-black">
+              {tj(`packages.${o.tier}.name`)}
+              {o.previous_tier && ` (${t("orderUpgrade", { from: tj(`packages.${o.previous_tier}.name`) })})`} ·{" "}
+              {format.number(amount, { style: "currency", currency: pricing.currency, maximumFractionDigits: 0 })}
+            </p>
+            <p>
+              {o.job_title} · {o.location}, {o.address}
+            </p>
+            <p className="text-slate">{o.org_name}</p>
           </>
         ),
       };

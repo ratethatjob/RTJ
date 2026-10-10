@@ -15,6 +15,7 @@ export const sampleJobs: Job[] = [
       "Prep and cook on the pizza and pasta line. Evening and weekend shifts, schedule posted two weeks ahead.\n\nPaid weekly. Overtime paid at 1.5x.",
     question: null,
     applyMode: "quick",
+    featured: true,
     questions: [
       { id: "q1", text: "Do you have a food handler card?", type: "yes_no", required: true, must: "yes" },
       { id: "q2", text: "Can you work weekends?", type: "yes_no", required: true, must: null },
@@ -52,6 +53,7 @@ export const sampleJobs: Job[] = [
     description: "Két műszak, hétfőtől péntekig. Céges busz a Határ útról.",
     question: null,
     applyMode: "cv",
+    featured: false,
     questions: [{ id: "q1", text: "Van targoncavezetői engedélyed?", type: "yes_no", required: false, must: null }],
     responsibilities: ["Komissiózás kézi szkennerrel", "Kiszállítások összekészítése"],
     requirements: ["Két műszak vállalása"],

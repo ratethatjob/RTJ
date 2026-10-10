@@ -4,7 +4,7 @@ Hatályos: 2026. október 10.
 
 ## 1. A szolgáltató
 
-A RateThatJob.com oldalt a(z) {{name}} ({{address}}, cégjegyzékszám: {{registry}}, adószám: {{taxNumber}}, e-mail: {{email}}) üzemelteti („mi”). Ezek a feltételek minden látogatóra, regisztrált felhasználóra és munkáltatóra vonatkoznak.
+A RateThatJob.com oldalt a(z) {{name}} ({{address}}, cégengedély száma: {{registry}}, e-mail: {{email}}) üzemelteti („mi”). Ezek a feltételek minden látogatóra, regisztrált felhasználóra és munkáltatóra vonatkoznak.
 
 ## 2. A szolgáltatás
 

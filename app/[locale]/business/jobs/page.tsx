@@ -17,7 +17,7 @@ export default async function JobsPage({ params, searchParams }: PageProps<"/[lo
 
   const { data: jobs } = await supabase
     .from("jobs")
-    .select("id, title, status, location_id, published_at, created_at")
+    .select("id, title, status, location_id, published_at, created_at, tier")
     .in("location_id", ids)
     .order("created_at", { ascending: false });
   const { data: counts } = jobs?.length
@@ -75,6 +75,9 @@ export default async function JobsPage({ params, searchParams }: PageProps<"/[lo
                       }`}
                     >
                       {t(`status.${j.status}`)}
+                    </span>
+                    <span className="rounded-lg border border-mist px-2.5 py-1 text-sm font-black">
+                      {t(`packages.${j.tier}.name`)}
                     </span>
                   </span>
                 </Link>

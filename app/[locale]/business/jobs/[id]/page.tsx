@@ -1,10 +1,15 @@
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { messageApplicant } from "@/app/[locale]/business/jobs/actions";
+import { CallButton, InsightButton } from "@/components/business/application-tools";
 import { ApplicationDecision, JobStatusButton } from "@/components/business/job-actions";
+import { MessageThread, type ThreadMessage } from "@/components/message-thread";
 import { Link } from "@/i18n/navigation";
 import { QuickBadge } from "@/components/jobs/quick-badge";
 import { getBusiness } from "@/lib/business";
 import type { JobQuestion } from "@/lib/data/types";
+import type { Insight } from "@/lib/candidate-ai";
+import { InsightCard } from "@/components/business/insight-card";
 import { type Answers, unmetMusts } from "@/lib/job-questions";
 
 export const instant = false;
@@ -19,6 +24,10 @@ type Application = {
   answer: string | null;
   answers: Answers;
   cv_path: string | null;
+  last_called_at: string | null;
+  insight: Insight | null;
+  followups: { question: string; answer: string | null }[];
+  messages: ThreadMessage[];
   message: string | null;
   status: string;
   created_at: string;
@@ -32,7 +41,7 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const { data: job } = await supabase
     .from("jobs")
-    .select("id, title, status, location_id, apply_mode, questions")
+    .select("id, title, status, location_id, apply_mode, questions, tier")
     .eq("id", id)
     .maybeSingle();
   const location = job && org.locations.find((l) => l.id === job.location_id);
@@ -59,6 +68,8 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
   const t = await getTranslations("BusinessJobs");
   const format = await getFormatter();
   const status = job.status as "draft" | "open" | "closed";
+  const ai = job.tier === "basic" || job.tier === "pro";
+  const lang = locale === "hu" ? "hu" : "en";
 
   return (
     <main className="flex max-w-4xl flex-col gap-6">
@@ -78,6 +89,9 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
           {job.apply_mode === "quick" ? <QuickBadge label={t("applyMode.quick")} /> : (
             <span className="rounded-lg border border-mist px-2.5 py-1 text-sm font-black">{t("applyMode.cv")}</span>
           )}
+          <span className="rounded-lg border border-mist px-2.5 py-1 text-sm font-black">
+            {t(`packages.${job.tier}.name`)}
+          </span>
         </div>
         <p className="text-slate">
           {location.name} · {location.address}
@@ -169,7 +183,66 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
                     {t("answers.cv")}
                   </a>
                 )}
+                {a.followups.some((f) => f.answer) && (
+                  <dl className="mt-3 flex flex-col gap-2 rounded-2xl bg-paper p-4">
+                    <p className="text-sm font-black uppercase tracking-tagline text-slate">{t("ai.followups")}</p>
+                    {a.followups.map((f) =>
+                      f.answer ? (
+                        <div key={f.question}>
+                          <dt className="text-slate">{f.question}</dt>
+                          <dd className="font-black">{f.answer}</dd>
+                        </div>
+                      ) : null,
+                    )}
+                  </dl>
+                )}
                 {a.message && <p className="mt-3 whitespace-pre-line">{a.message}</p>}
+                {ai ? (
+                  a.insight ? (
+                    <InsightCard insight={a.insight} lang={lang} />
+                  ) : (
+                    <div className="mt-4 rounded-2xl bg-ink p-4 text-paper">
+                      <p className="font-black">{t("ai.title")}</p>
+                      <p className="mt-1 text-sm text-mist">{t("ai.pending")}</p>
+                      <div className="mt-3 [&_button]:border-paper">
+                        <InsightButton jobId={job.id} applicationId={a.id} refresh={false} />
+                      </div>
+                    </div>
+                  )
+                ) : (
+                  <p className="mt-4 rounded-2xl border border-dashed border-mist p-4 text-sm text-slate">
+                    {t("ai.upsell")}{" "}
+                    <Link href={`/business/jobs/${job.id}/edit`} className="font-black text-ink underline underline-offset-4">
+                      {t("ai.upgrade")}
+                    </Link>
+                  </p>
+                )}
+                {ai && a.insight && (
+                  <div className="mt-2">
+                    <InsightButton jobId={job.id} applicationId={a.id} refresh />
+                  </div>
+                )}
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                  {a.phone && <CallButton applicationId={a.id} phone={a.phone} />}
+                  {a.last_called_at && (
+                    <span className="text-sm text-slate">
+                      {t("tools.called", { date: format.dateTime(new Date(a.last_called_at), { dateStyle: "medium" }) })}
+                    </span>
+                  )}
+                </div>
+                <div className="mt-4">
+                  <MessageThread
+                    messages={a.messages}
+                    viewer="employer"
+                    otherName={a.full_name}
+                    send={async (body: string) => {
+                      "use server";
+                      const result = await messageApplicant(job.id, a.id, body);
+                      return result.error ? { error: true as const } : { ok: true as const };
+                    }}
+                    collapsed={a.messages.length === 0}
+                  />
+                </div>
                 <ApplicationDecision id={a.id} status={a.status} />
               </li>
             ))}

@@ -9,7 +9,17 @@ type Row = {
   kind: string;
   read_at: string | null;
   created_at: string;
-  data: { location?: string; address?: string; path?: string; job?: string; job_id?: string; status?: string };
+  data: {
+    location?: string;
+    address?: string;
+    path?: string;
+    job?: string;
+    job_id?: string;
+    status?: string;
+    application_id?: string;
+    sender?: string;
+    name?: string;
+  };
 };
 
 export default async function NotificationsPage({ params }: PageProps<"/[locale]/app/notifications">) {
@@ -28,7 +38,11 @@ export default async function NotificationsPage({ params }: PageProps<"/[locale]
   if (rows.some((r) => !r.read_at)) await supabase.rpc("mark_notifications_read");
 
   const href = (r: Row) =>
-    r.kind === "application_status"
+    r.kind === "application_message"
+      ? r.data.sender === "employer"
+        ? `/app/applications/${r.data.application_id}`
+        : `/business/jobs/${r.data.job_id}`
+      : r.kind === "application_status"
       ? "/app/applications"
       : r.kind === "new_application" && r.data.job_id
         ? `/business/jobs/${r.data.job_id}`
@@ -56,6 +70,8 @@ export default async function NotificationsPage({ params }: PageProps<"/[locale]
                       location: r.data.location ?? "",
                       job: r.data.job ?? "",
                       status: r.data.status ? ta(`status.${r.data.status}`) : "",
+                      sender: r.data.sender ?? "",
+                      name: r.data.name ?? "",
                     })}
                   </span>
                   <span className="text-sm text-slate">

@@ -388,7 +388,7 @@
       "improveBody": "Lásd a trendeket telephelyenként, és kapj figyelmeztetést, ha egy pontszám romlani kezd."
     },
     "pricingTitle": "Ingyen indulhatsz. Pro telephelyenként.",
-    "pricingBody": "Az átvétel, a válaszok és az álláshirdetések ingyenesek. A Pro korai figyelmeztetést, statisztikát, RateThatJob Indexet és még többet ad.",
+    "pricingBody": "Az átvétel és a válaszok ingyenesek. Az álláshirdetés alacsony feladási díjjal indul. A Pro korai figyelmeztetést, statisztikát, RateThatJob Indexet és még többet ad.",
     "pricingCta": "Árak",
     "faqTitle": "Munkáltatói kérdések",
     "faq": {
@@ -590,7 +590,8 @@
       "workplaces": "Munkahelyek",
       "import": "Importálás",
       "entities": "Jogi személyek",
-      "metrics": "Mutatók"
+      "metrics": "Mutatók",
+      "orders": "Rendelések"
     },
     "empty": "Nincs teendő.",
     "approve": "Jóváhagyom",
@@ -654,7 +655,10 @@
       "verified": "Igazolt",
       "users": "Új fiókok",
       "applications": "Jelentkezések"
-    }
+    },
+    "orderUpgrade": "bővítés erről: {from}",
+    "markPaid": "Fizetve",
+    "cancelOrder": "Törlés"
   },
   "Search": {
     "title": "Munkahely keresése",
@@ -798,7 +802,8 @@
     "yes": "Igen",
     "no": "Nem",
     "yesNo": "Igen / Nem",
-    "shortAnswer": "Rövid válasz"
+    "shortAnswer": "Rövid válasz",
+    "featured": "Kiemelt"
   },
   "Apply": {
     "title": "Jelentkezés: {title}",
@@ -844,7 +849,14 @@
     "cv": "Önéletrajzod",
     "cvPick": "Fájl kiválasztása",
     "cvHint": "PDF vagy Word, max. 5 MB",
-    "cvTooBig": "A fájl túl nagy (max. 5 MB)."
+    "cvTooBig": "A fájl túl nagy (max. 5 MB).",
+    "followups": {
+      "loading": "Egy pillanat – lehet, hogy a(z) {company} feltesz pár gyors kérdést…",
+      "title": "A(z) {company} feltenne pár gyors kérdést",
+      "body": "Nem kötelező, de segít, hogy jobban megismerjenek. Egy-két mondat elég.",
+      "send": "Válaszok elküldése",
+      "skip": "Kihagyom"
+    }
   },
   "Applications": {
     "title": "Jelentkezéseim",
@@ -862,11 +874,16 @@
     "withdraw": "Visszavonás",
     "rateHiring": "Értékeld, hogyan bánnak a jelentkezőkkel",
     "noReplyYet": "{days} napja nincs válasz",
-    "error": "Valami hiba történt. Próbáld újra."
+    "error": "Valami hiba történt. Próbáld újra.",
+    "open": "Részletek és üzenetek",
+    "messageCount": "{count} üzenet",
+    "followupsWaiting": "Kérdések a munkáltatótól",
+    "messages": "Üzenetek",
+    "noMessages": "Még nincs üzenet. Ha a(z) {company} ír neked, itt látod, és értesítést kapsz."
   },
   "BusinessJobs": {
     "title": "Állások",
-    "body": "Adj fel állást ingyen. A jelöltek 2 perc alatt, önéletrajz nélkül jelentkeznek, és az állás mellett látják az értékeléseidet.",
+    "body": "Adj fel állást alacsony díjért. A jelöltek percek alatt jelentkeznek, és az állás mellett látják az értékeléseidet.",
     "newJob": "Állás feladása",
     "editJob": "Állás szerkesztése",
     "noJobs": "Ennél a helyszínnél még nincs állás.",
@@ -1002,6 +1019,61 @@
       "unmet": "{count} elvárásnak nem felel meg",
       "miss": "nem egyezik",
       "cv": "Önéletrajz megnyitása"
+    },
+    "packages": {
+      "title": "Csomag",
+      "perAd": "hirdetésenként",
+      "everythingIn": "Minden, ami a(z) {name} csomagban, és még:",
+      "billing": "A számla akkor készül, amikor a hirdetés élesedik. Később bővítheted.",
+      "upgradeOnly": "A hirdetés már él: csak magasabb csomagra válthatsz, és csak a különbözetet számlázzuk.",
+      "standard": {
+        "name": "Alap",
+        "body": "Alacsony feladási díj magáért a hirdetésért."
+      },
+      "basic": {
+        "name": "Basic",
+        "body": "Az AI elolvas minden jelentkezést, és megmondja, kit hívj először."
+      },
+      "pro": {
+        "name": "Pro",
+        "body": "Az AI a jelentkezőket is kérdezi, a hirdetésed pedig a lista tetején áll."
+      },
+      "features": {
+        "ad": "Álláshirdetés az értékeléseid mellett",
+        "apply": "Gyors vagy önéletrajzos jelentkezés, saját kérdések",
+        "contact": "Jelöltek hívása és üzenet nekik",
+        "summary": "AI-összegzés minden jelöltről: erősségek, aggályok, miért, mit kérdezz",
+        "cv": "Az AI elolvassa az önéletrajzokat",
+        "followups": "Az AI minden jelentkezőnek feltesz pár további kérdést",
+        "featured": "Kiemelés az álláskeresés tetején"
+      }
+    },
+    "tools": {
+      "call": "Hívás",
+      "called": "Hívva: {date}"
+    },
+    "ai": {
+      "title": "AI-összegzés",
+      "pending": "Az összegzés készül, vagy elkészítheted most.",
+      "generate": "Összegzés készítése",
+      "refresh": "Összegzés frissítése",
+      "working": "Olvasom a jelentkezést…",
+      "error": "Nem sikerült az összegzés. Próbáld újra.",
+      "upsell": "A Basic és Pro csomag AI-összegzést ad minden jelöltről.",
+      "upgrade": "Hirdetés bővítése",
+      "fit": {
+        "strong": "Erős egyezés",
+        "good": "Jó egyezés",
+        "partial": "Részleges egyezés",
+        "weak": "Gyenge egyezés"
+      },
+      "cvRead": "Önéletrajz elolvasva",
+      "strengths": "Erősségek",
+      "concerns": "Mire figyelj",
+      "why": "Miért érdemes",
+      "ask": "Kérdezd meg az interjún",
+      "followups": "Válaszok a további kérdésekre",
+      "note": "AI által, csak a jelentkezés alapján készült. Döntés előtt nézd át magad is."
     }
   },
   "Report": {
@@ -1071,7 +1143,8 @@
       "application_status": "{job} – {location}: {status}",
       "followed_review": "Új értékelés: {location}",
       "followed_job": "Új állás itt: {location} – {job}",
-      "new_application": "Új jelentkezés: {job}"
+      "new_application": "Új jelentkezés: {job}",
+      "application_message": "{sender, select, employer {Új üzenet: {location} – {job}} other {{name} válaszolt: {job}}}"
     }
   },
   "Places": {
@@ -1090,7 +1163,6 @@
   "Footer": {
     "workers": "Munkavállalóknak",
     "employers": "Munkáltatóknak",
-    "cities": "Városok",
     "company": "RateThatJob",
     "account": "Fiókom",
     "claim": "Munkahely átvétele",
@@ -1128,7 +1200,7 @@
     "metaTitle": "Árak munkáltatóknak",
     "eyebrow": "Árak",
     "title": "Az átvétel ingyenes. Pro, ha többre van szükséged.",
-    "intro": "Minden munkáltató ingyen átveheti a telephelyeit, válaszolhat az értékelésekre és állást adhat fel. A Pro telephelyenként fizetendő.",
+    "intro": "Minden munkáltató ingyen átveheti a telephelyeit és válaszolhat az értékelésekre. A Pro telephelyenként, az álláshirdetés hirdetésenként fizetendő.",
     "monthly": "Havi",
     "yearly": "Éves",
     "perMonth": "hó / telephely",
@@ -1143,7 +1215,7 @@
         "reply": "Válasz minden értékelésre",
         "dispute": "Igazolatlan értékelések vitatása",
         "inviteLink": "Megosztható meghívó link a csapatnak",
-        "jobs": "Álláshirdetés, önéletrajz nélküli jelentkezés",
+        "jobs": "Álláshirdetés alacsony feladási díjjal",
         "profileBasic": "Csapattagok és szerepkörök"
       },
       "cta": "Ingyenes átvétel"
@@ -1178,13 +1250,33 @@
     "faqTitle": "Kérdések",
     "faq": {
       "q1": "Tényleg ingyenes az ingyenes?",
-      "q1a": "Igen. Az átvétel, a válasz, a vitatás, a meghívó link és az álláshirdetés időkorlát nélkül ingyenes.",
+      "q1a": "Igen. Az átvétel, a válasz, a vitatás és a meghívó link időkorlát nélkül ingyenes. Az álláshirdetésnek alacsony feladási díja van.",
       "q2": "Hogyan fizetünk a Próért?",
       "q2a": "Telephelyenként, havonta vagy évente. Az éves 2 hónapot ingyen ad.",
       "q3": "Lehet vegyesen ingyenes és Pro telephelyünk?",
       "q3a": "Igen. Csak azokra a telephelyekre válassz Prót, ahol szükséged van rá.",
       "q4": "Befolyásolja a Pro a pontszámunkat?",
       "q4a": "Nem. A pontszám csak értékelésekből és jelentkezésekből jön, mindenkinél ugyanúgy."
+    },
+    "jobAds": {
+      "title": "Álláshirdetések",
+      "intro": "Hirdetésenként fizetsz. Minden csomagban benne van a gyors vagy önéletrajzos jelentkezés, a saját kérdések, a jelöltek hívása és az üzenetküldés.",
+      "cta": "Állás feladása"
     }
+  },
+  "Thread": {
+    "you": "Te",
+    "message": "Üzenet",
+    "placeholderEmployer": "Írj a jelöltnek…",
+    "placeholderApplicant": "Írj választ…",
+    "employerHint": "A jelölt a fiókjában kapja meg, és e-mailben is, ha megadta. A ghosting-mérőben válasznak számít.",
+    "send": "Küldés",
+    "sending": "Küldés…",
+    "write": "Üzenet a jelöltnek",
+    "error": "Nem sikerült elküldeni. Próbáld újra."
+  },
+  "Email": {
+    "messageSubject": "A(z) {company} írt neked: {job}",
+    "messageBody": "Szia {name}!\n\nA(z) {company} üzenetet küldött a(z) {job} jelentkezésedről:\n\n{message}\n\nVálaszolj itt: {link}\n\nRateThatJob – Know before you go"
   }
 }

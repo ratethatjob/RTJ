@@ -5,8 +5,9 @@
 **{{name}}**
 
 - Registered office: {{address}}
-- Company registration number: {{registry}}
-- Tax number: {{taxNumber}}
+- Business license number: {{registry}}
+- Manager: {{manager}}
+- Tax registration number (TRN): {{taxNumber}}
 - Email: [{{email}}](mailto:{{email}})
 
 ## Hosting provider

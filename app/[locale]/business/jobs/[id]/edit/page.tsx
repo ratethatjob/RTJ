@@ -26,6 +26,7 @@ export default async function EditJobPage({ params }: PageProps<"/[locale]/busin
         orgId={org.id}
         jobId={job.id}
         status={job.status}
+        publishedTier={job.published_at ? job.tier : null}
         locations={[{ id: location.id, name: location.name, address: location.address, country: location.country }]}
         initial={{
           locationId: job.location_id,
@@ -42,6 +43,7 @@ export default async function EditJobPage({ params }: PageProps<"/[locale]/busin
           offers: (job.offers ?? []).join("\n"),
           applyMode: job.apply_mode ?? "quick",
           questions: (job.questions ?? []) as JobQuestion[],
+          tier: job.tier ?? "standard",
           closesAt: job.closes_at ?? "",
         }}
       />

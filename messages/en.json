@@ -388,7 +388,7 @@
       "improveBody": "See trends per location and get a warning when a score starts to drop."
     },
     "pricingTitle": "Free to start. Pro per location.",
-    "pricingBody": "Claiming, replies and job posts are free. Pro adds early warnings, statistics, the RateThatJob Index and more.",
+    "pricingBody": "Claiming and replies are free. Job ads start at a low posting fee. Pro adds early warnings, statistics, the RateThatJob Index and more.",
     "pricingCta": "See pricing",
     "faqTitle": "Questions from employers",
     "faq": {
@@ -590,7 +590,8 @@
       "workplaces": "Workplaces",
       "import": "Import",
       "entities": "Legal entities",
-      "metrics": "Metrics"
+      "metrics": "Metrics",
+      "orders": "Orders"
     },
     "empty": "Nothing waiting.",
     "approve": "Approve",
@@ -654,7 +655,10 @@
       "verified": "Verified",
       "users": "New accounts",
       "applications": "Applications"
-    }
+    },
+    "orderUpgrade": "upgrade from {from}",
+    "markPaid": "Mark as paid",
+    "cancelOrder": "Cancel"
   },
   "Search": {
     "title": "Find a workplace",
@@ -798,7 +802,8 @@
     "yes": "Yes",
     "no": "No",
     "yesNo": "Yes / No",
-    "shortAnswer": "Short answer"
+    "shortAnswer": "Short answer",
+    "featured": "Featured"
   },
   "Apply": {
     "title": "Apply: {title}",
@@ -844,7 +849,14 @@
     "cv": "Your CV",
     "cvPick": "Choose file",
     "cvHint": "PDF or Word, max 5 MB",
-    "cvTooBig": "The file is too large (max 5 MB)."
+    "cvTooBig": "The file is too large (max 5 MB).",
+    "followups": {
+      "loading": "One moment – {company} may have a few quick questions…",
+      "title": "{company} has a few quick questions",
+      "body": "Optional, but it helps them get to know you. A sentence or two is enough.",
+      "send": "Send answers",
+      "skip": "Skip"
+    }
   },
   "Applications": {
     "title": "My applications",
@@ -862,11 +874,16 @@
     "withdraw": "Withdraw",
     "rateHiring": "Rate how they treat applicants",
     "noReplyYet": "No reply after {days, plural, one {# day} other {# days}}",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "open": "Details and messages",
+    "messageCount": "{count, plural, one {# message} other {# messages}}",
+    "followupsWaiting": "Questions from the employer",
+    "messages": "Messages",
+    "noMessages": "No messages yet. When {company} writes to you, you'll see it here and get a notification."
   },
   "BusinessJobs": {
     "title": "Jobs",
-    "body": "Post jobs for free. Candidates apply in 2 minutes without a CV, and see your reviews next to the job.",
+    "body": "Post a job for a low fee. Candidates apply in minutes, and see your reviews next to the job.",
     "newJob": "Post a job",
     "editJob": "Edit job",
     "noJobs": "No jobs yet at this location.",
@@ -1002,6 +1019,61 @@
       "unmet": "{count, plural, one {Misses # must-have} other {Misses # must-haves}}",
       "miss": "doesn't match",
       "cv": "Open CV"
+    },
+    "packages": {
+      "title": "Package",
+      "perAd": "per job ad",
+      "everythingIn": "Everything in {name}, plus:",
+      "billing": "You're invoiced when the ad goes live. You can upgrade later.",
+      "upgradeOnly": "This ad is live: you can upgrade, and only the difference is invoiced.",
+      "standard": {
+        "name": "Standard",
+        "body": "A low posting fee for the ad itself."
+      },
+      "basic": {
+        "name": "Basic",
+        "body": "AI reads every application and tells you who to call first."
+      },
+      "pro": {
+        "name": "Pro",
+        "body": "The AI also interviews applicants, and your ad sits at the top."
+      },
+      "features": {
+        "ad": "Job ad next to your reviews",
+        "apply": "Quick apply or CV, your own questions",
+        "contact": "Call and message candidates",
+        "summary": "AI summary of every candidate: strengths, concerns, why, what to ask",
+        "cv": "AI reads the CVs",
+        "followups": "AI asks every applicant a few follow-up questions",
+        "featured": "Featured at the top of job search"
+      }
+    },
+    "tools": {
+      "call": "Call",
+      "called": "Called {date}"
+    },
+    "ai": {
+      "title": "AI summary",
+      "pending": "The summary is being prepared, or you can make it now.",
+      "generate": "Make summary",
+      "refresh": "Refresh summary",
+      "working": "Reading the application…",
+      "error": "Couldn't make the summary. Please try again.",
+      "upsell": "Basic and Pro packages add an AI summary of every candidate.",
+      "upgrade": "Upgrade this ad",
+      "fit": {
+        "strong": "Strong fit",
+        "good": "Good fit",
+        "partial": "Partial fit",
+        "weak": "Weak fit"
+      },
+      "cvRead": "CV read",
+      "strengths": "Strengths",
+      "concerns": "Watch out for",
+      "why": "Why consider them",
+      "ask": "Ask in the interview",
+      "followups": "Follow-up answers",
+      "note": "AI-generated from the application only. Check it yourself before you decide."
     }
   },
   "Report": {
@@ -1071,7 +1143,8 @@
       "application_status": "{job} at {location}: {status}",
       "followed_review": "New review of {location}",
       "followed_job": "New job at {location}: {job}",
-      "new_application": "New application for {job}"
+      "new_application": "New application for {job}",
+      "application_message": "{sender, select, employer {New message from {location} about {job}} other {{name} replied about {job}}}"
     }
   },
   "Places": {
@@ -1090,7 +1163,6 @@
   "Footer": {
     "workers": "For workers",
     "employers": "For employers",
-    "cities": "Cities",
     "company": "RateThatJob",
     "account": "My account",
     "claim": "Claim your workplace",
@@ -1128,7 +1200,7 @@
     "metaTitle": "Pricing for employers",
     "eyebrow": "Pricing",
     "title": "Free to claim. Pro when you need more.",
-    "intro": "Every employer can claim locations, reply to reviews and post jobs for free. Pro is billed per location.",
+    "intro": "Every employer can claim locations and reply to reviews for free. Pro is billed per location, job ads per ad.",
     "monthly": "Monthly",
     "yearly": "Yearly",
     "perMonth": "month per location",
@@ -1143,7 +1215,7 @@
         "reply": "Reply to every review",
         "dispute": "Dispute unverified reviews",
         "inviteLink": "Shareable invite link for your team",
-        "jobs": "Post jobs, CV-free applications",
+        "jobs": "Job ads from a low posting fee",
         "profileBasic": "Team members and roles"
       },
       "cta": "Claim for free"
@@ -1178,13 +1250,33 @@
     "faqTitle": "Questions",
     "faq": {
       "q1": "Is Free really free?",
-      "q1a": "Yes. Claiming, replying, disputing, invite links and job posts are free with no time limit.",
+      "q1a": "Yes. Claiming, replying, disputing and invite links are free with no time limit. Job ads have a low posting fee.",
       "q2": "How is Pro billed?",
       "q2a": "Per location, monthly or yearly. Yearly gives you 2 months free.",
       "q3": "Can we mix Free and Pro locations?",
       "q3a": "Yes. Choose Pro only for the locations where you need it.",
       "q4": "Does Pro affect our score?",
       "q4a": "No. Scores come only from reviews and applications, the same for everyone."
+    },
+    "jobAds": {
+      "title": "Job ads",
+      "intro": "Pay per ad. Every package includes quick apply or CV, your own questions, and calling and messaging candidates.",
+      "cta": "Post a job"
     }
+  },
+  "Thread": {
+    "you": "You",
+    "message": "Message",
+    "placeholderEmployer": "Write to the candidate…",
+    "placeholderApplicant": "Write a reply…",
+    "employerHint": "The candidate gets it in their account, and by email if they gave one. It counts as a reply in your ghosting meter.",
+    "send": "Send",
+    "sending": "Sending…",
+    "write": "Message the candidate",
+    "error": "Couldn't send. Please try again."
+  },
+  "Email": {
+    "messageSubject": "{company} wrote to you about {job}",
+    "messageBody": "Hi {name},\n\n{company} sent you a message about your application for {job}:\n\n{message}\n\nReply here: {link}\n\nRateThatJob – Know before you go"
   }
 }

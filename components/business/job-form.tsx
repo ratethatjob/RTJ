@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import {
   createJob,
@@ -11,6 +11,7 @@ import { useRouter } from "@/i18n/navigation";
 import { currencyFor } from "@/lib/currency";
 import type { JobQuestion } from "@/lib/data/types";
 import { MAX_QUESTIONS, PRESET_QUESTIONS } from "@/lib/job-questions";
+import { JOB_TIERS, type JobTier, jobPricing } from "@/lib/site-config";
 
 type Location = { id: string; name: string; address: string; country: string };
 
@@ -20,6 +21,8 @@ type Props = {
   initial: JobInput;
   jobId?: string;
   status?: "draft" | "open" | "closed";
+  /** Package already ordered for a published job: only upgrades are possible. */
+  publishedTier?: JobTier | null;
 };
 
 const WORK = ["permanent", "temporary"] as const;
@@ -33,6 +36,7 @@ export function JobForm({
   initial,
   jobId,
   status = "draft",
+  publishedTier = null,
 }: Props) {
   const t = useTranslations("BusinessJobs");
   const router = useRouter();
@@ -259,6 +263,13 @@ export function JobForm({
         input={input}
       />
 
+      <PackagePicker
+        value={v.tier}
+        onChange={(tier) => setV((prev) => ({ ...prev, tier }))}
+        country={locations.find((l) => l.id === v.locationId)?.country ?? "HU"}
+        minimum={publishedTier}
+      />
+
       <label className={label}>
         <span className="font-black">
           {t("closesAt")}{" "}
@@ -459,6 +470,73 @@ function QuestionBuilder({
           {t("questions.max", { count: MAX_QUESTIONS })}
         </p>
       )}
+    </fieldset>
+  );
+}
+
+const TIER_FEATURES: Record<JobTier, string[]> = {
+  standard: ["ad", "apply", "contact"],
+  basic: ["summary", "cv"],
+  pro: ["followups", "featured"],
+};
+
+function PackagePicker({
+  value,
+  onChange,
+  country,
+  minimum,
+}: {
+  value: JobTier;
+  onChange: (tier: JobTier) => void;
+  country: string;
+  minimum: JobTier | null;
+}) {
+  const t = useTranslations("BusinessJobs");
+  const format = useFormatter();
+  const pricing = jobPricing(country);
+  const rank = (tier: JobTier) => JOB_TIERS.indexOf(tier);
+
+  return (
+    <fieldset className="flex flex-col gap-3">
+      <legend className="mb-2 font-black">{t("packages.title")}</legend>
+      <div className="grid gap-2 sm:grid-cols-3">
+        {JOB_TIERS.map((tier, i) => {
+          const active = value === tier;
+          const locked = minimum != null && rank(tier) < rank(minimum);
+          return (
+            <button
+              key={tier}
+              type="button"
+              disabled={locked}
+              aria-pressed={active}
+              onClick={() => onChange(tier)}
+              className={`flex flex-col gap-2 rounded-2xl p-4 text-left disabled:opacity-40 ${
+                active ? "bg-ink text-paper" : "border border-mist/60 bg-white"
+              }`}
+            >
+              <span className="flex items-center justify-between gap-2">
+                <span className="font-black">{t(`packages.${tier}.name`)}</span>
+                {tier === "basic" && (
+                  <span className={`text-xs font-black ${active ? "text-signal" : "text-slate"}`}>
+                    {t("applyMode.recommended")}
+                  </span>
+                )}
+              </span>
+              <span className="text-2xl font-black tracking-brand">
+                {format.number(pricing.prices[tier], { style: "currency", currency: pricing.currency, maximumFractionDigits: 0 })}
+              </span>
+              <span className={`text-xs ${active ? "text-mist" : "text-slate"}`}>{t("packages.perAd")}</span>
+              <ul className="flex flex-col gap-1 text-sm">
+                {i > 0 && <li className={active ? "text-mist" : "text-slate"}>{t("packages.everythingIn", { name: t(`packages.${JOB_TIERS[i - 1]}.name`) })}</li>}
+                {TIER_FEATURES[tier].map((f) => (
+                  <li key={f}>✓ {t(`packages.features.${f}`)}</li>
+                ))}
+              </ul>
+            </button>
+          );
+        })}
+      </div>
+      <p className="text-sm text-slate">{minimum ? t("packages.upgradeOnly") : t("packages.billing")}</p>
     </fieldset>
   );
 }

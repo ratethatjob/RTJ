@@ -23,6 +23,7 @@ type JobRow = {
   responsibilities?: string[] | null;
   requirements?: string[] | null;
   offers?: string[] | null;
+  featured?: boolean | null;
   published_at: string;
   closes_at: string | null;
   updated_at: string;
@@ -55,6 +56,7 @@ function toJob(r: JobRow): Job {
     responsibilities: r.responsibilities ?? [],
     requirements: r.requirements ?? [],
     offers: r.offers ?? [],
+    featured: r.featured ?? false,
     publishedAt: r.published_at,
     closesAt: r.closes_at,
     updatedAt: r.updated_at,
@@ -129,7 +131,8 @@ export async function findJobs(
   if (quickOnly) query = query.eq("apply_mode", "quick");
   const { data, error } = await query.order("published_at", { ascending: false }).limit(50);
   if (error) throw error;
-  return data.map(toJob);
+  // Featured (pro) jobs first; the sort is stable, so newest first within each group.
+  return data.map(toJob).sort((a, b) => Number(b.featured) - Number(a.featured));
 }
 
 /** Every open job, for generateStaticParams and the sitemap. */

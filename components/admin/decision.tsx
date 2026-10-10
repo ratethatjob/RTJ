@@ -3,10 +3,17 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { decideClaim, decideDispute, decideReport, decideVerification, moderateReview } from "@/app/[locale]/admin/actions";
+import {
+  decideClaim,
+  decideDispute,
+  decideOrder,
+  decideReport,
+  decideVerification,
+  moderateReview,
+} from "@/app/[locale]/admin/actions";
 
 type Props = {
-  kind: "claims" | "moderation" | "verifications" | "disputes" | "reports";
+  kind: "claims" | "moderation" | "verifications" | "disputes" | "reports" | "orders";
   id: string;
   documentUrl?: string | null;
 };
@@ -28,7 +35,9 @@ export function Decision({ kind, id, documentUrl }: Props) {
             ? await moderateReview(id, yes)
             : kind === "verifications"
               ? await decideVerification(id, yes, entity)
-              : kind === "disputes"
+              : kind === "orders"
+                ? await decideOrder(id, yes)
+                : kind === "disputes"
                 ? await decideDispute(id, !yes)
                 : await decideReport(id, !yes);
       if (result.error) return setError(true);
@@ -37,8 +46,8 @@ export function Decision({ kind, id, documentUrl }: Props) {
   }
 
   const keepOrRemove = kind === "disputes" || kind === "reports";
-  const yesLabel = keepOrRemove ? t("keep") : t("approve");
-  const noLabel = keepOrRemove ? t("remove") : t("reject");
+  const yesLabel = kind === "orders" ? t("markPaid") : keepOrRemove ? t("keep") : t("approve");
+  const noLabel = kind === "orders" ? t("cancelOrder") : keepOrRemove ? t("remove") : t("reject");
 
   return (
     <div className="mt-4 flex flex-col gap-3 border-t border-[#E8E6E1] pt-4">

@@ -10,6 +10,8 @@ type Row = {
   status: string;
   created_at: string;
   first_reply_at: string | null;
+  application_messages: { sender: string }[];
+  application_followups: { answer: string | null }[];
   jobs: {
     id: string;
     title: string;
@@ -30,7 +32,7 @@ export default async function ApplicationsPage({ params }: PageProps<"/[locale]/
   const { data } = await supabase
     .from("job_applications")
     .select(
-      "id, status, created_at, first_reply_at, jobs(id, title, status, location_id, locations(name, address, slug, companies(slug)))",
+      "id, status, created_at, first_reply_at, application_messages(sender), application_followups(answer), jobs(id, title, status, location_id, locations(name, address, slug, companies(slug)))",
     )
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
@@ -88,6 +90,19 @@ export default async function ApplicationsPage({ params }: PageProps<"/[locale]/
                   {ghosted && ` · ${t("noReplyYet", { days })}`}
                 </p>
                 <div className="mt-3 flex flex-wrap items-center gap-4">
+                  <Link href={`/app/applications/${a.id}`} className="font-black underline underline-offset-4">
+                    {t("open")}
+                    {a.application_messages.some((m) => m.sender === "employer") &&
+                      ` · ${t("messageCount", { count: a.application_messages.length })}`}
+                  </Link>
+                  {a.application_followups.some((f) => !f.answer) && a.status !== "withdrawn" && (
+                    <Link
+                      href={`/app/applications/${a.id}`}
+                      className="rounded-lg bg-signal px-2.5 py-1 text-sm font-black"
+                    >
+                      {t("followupsWaiting")}
+                    </Link>
+                  )}
                   {canRate && job && (
                     <Link
                       href={`/app/rate/${job.location_id}`}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Link } from "@/i18n/navigation";
-import { OPERATOR, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
+import { JOB_TIERS, jobPricing, OPERATOR, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
 import { localeAlternates } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/pricing">;
@@ -18,12 +18,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const FREE = ["claim", "reply", "dispute", "inviteLink", "jobs", "profileBasic"] as const;
 const PRO = ["warnings", "stats", "invites", "index", "profile", "noCompetitors"] as const;
 const FAQ = ["q1", "q2", "q3", "q4"] as const;
+const JOB_FEATURES = { standard: ["ad", "apply", "contact"], basic: ["summary", "cv"], pro: ["followups", "featured"] } as const;
 
 export default async function PricingPage({ params, searchParams }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const yearly = (await searchParams).billing === "yearly";
   const t = await getTranslations("Pricing");
+  const tj = await getTranslations("BusinessJobs");
+  const jobPrice = jobPricing(locale === "hu" ? "HU" : "default");
   const format = await getFormatter();
   const price = PRICING[locale] ?? PRICING.en;
   const money = (v: number) =>
@@ -122,6 +125,62 @@ export default async function PricingPage({ params, searchParams }: Props) {
             <a href={`mailto:${OPERATOR.email}?subject=RateThatJob`} className="mt-8 rounded-2xl border-2 border-ink px-6 py-4 text-center text-lg font-black">
               {t("chains.cta")}
             </a>
+          </div>
+        </section>
+
+        <section className="flex flex-col gap-6">
+          <div className="max-w-3xl">
+            <h2 className="text-3xl font-black tracking-brand lg:text-4xl">{t("jobAds.title")}</h2>
+            <p className="mt-3 text-lg text-slate">{t("jobAds.intro")}</p>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-3">
+            {JOB_TIERS.map((tier, i) => (
+              <div
+                key={tier}
+                className={`flex flex-col rounded-[2rem] p-8 ${tier === "basic" ? "bg-ink text-paper" : "bg-white"}`}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-2xl font-black tracking-brand">{tj(`packages.${tier}.name`)}</h3>
+                  {tier === "basic" && (
+                    <span className="rounded-lg bg-signal px-2.5 py-1 text-sm font-black text-ink">
+                      {tj("applyMode.recommended")}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-4 text-5xl font-black tracking-brand">
+                  {format.number(jobPrice.prices[tier], {
+                    style: "currency",
+                    currency: jobPrice.currency,
+                    maximumFractionDigits: 0,
+                  })}
+                </p>
+                <p className={tier === "basic" ? "text-mist" : "text-slate"}>{tj("packages.perAd")}</p>
+                <p className={`mt-3 ${tier === "basic" ? "text-mist" : "text-slate"}`}>{tj(`packages.${tier}.body`)}</p>
+                <ul className="mt-6 flex flex-col gap-3">
+                  {i > 0 && (
+                    <li className="font-black">
+                      {tj("packages.everythingIn", { name: tj(`packages.${JOB_TIERS[i - 1]}.name`) })}
+                    </li>
+                  )}
+                  {JOB_FEATURES[tier].map((f) => (
+                    <li key={f} className="flex gap-3">
+                      <span className={`font-black ${tier === "basic" ? "text-signal" : ""}`} aria-hidden="true">
+                        ✓
+                      </span>
+                      {tj(`packages.features.${f}`)}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/business/jobs/new"
+                  className={`mt-8 rounded-2xl px-6 py-4 text-center text-lg font-black ${
+                    tier === "basic" ? "bg-signal text-ink" : "border-2 border-ink"
+                  }`}
+                >
+                  {t("jobAds.cta")}
+                </Link>
+              </div>
+            ))}
           </div>
         </section>
 

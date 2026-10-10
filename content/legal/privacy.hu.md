@@ -4,7 +4,7 @@ Hatályos: 2026. október 10.
 
 ## 1. Adatkezelő
 
-{{name}} ({{address}}, cégjegyzékszám: {{registry}}). Adatvédelmi kérdésekben: [{{privacyEmail}}](mailto:{{privacyEmail}}).
+{{name}} ({{address}}, cégengedély száma: {{registry}}). Adatvédelmi kérdésekben: [{{privacyEmail}}](mailto:{{privacyEmail}}).
 
 ## 2. A legfontosabb szabály: névtelenség
 

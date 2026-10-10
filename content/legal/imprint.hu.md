@@ -5,8 +5,9 @@
 **{{name}}**
 
 - Székhely: {{address}}
-- Cégjegyzékszám: {{registry}}
-- Adószám: {{taxNumber}}
+- Cégengedély (business license) száma: {{registry}}
+- Ügyvezető: {{manager}}
+- Adóazonosító (TRN): {{taxNumber}}
 - E-mail: [{{email}}](mailto:{{email}})
 
 ## Tárhelyszolgáltató

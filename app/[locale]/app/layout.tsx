@@ -19,6 +19,7 @@ export default async function AppLayout({ children, params }: LayoutProps<"/[loc
     "Countries",
     "Account",
     "Apply",
+    "Thread",
     "Applications",
     "Places",
   ]);

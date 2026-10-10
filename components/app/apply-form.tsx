@@ -1,8 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
-import { applyToJob, type ApplyInput } from "@/app/[locale]/app/apply/actions";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { answerFollowups, applyToJob, getFollowups, type ApplyInput } from "@/app/[locale]/app/apply/actions";
 import { QuickBadge } from "@/components/jobs/quick-badge";
 import { Link } from "@/i18n/navigation";
 import type { ApplyMode, JobQuestion } from "@/lib/data/types";
@@ -38,10 +38,13 @@ export function ApplyForm(props: Props) {
   const [message, setMessage] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState<{ id: string; followups: boolean } | null>(null);
   const [pending, startTransition] = useTransition();
   const quick = props.mode === "quick";
 
+  if (done?.followups) {
+    return <Followups applicationId={done.id} company={props.company} onDone={() => setDone({ ...done, followups: false })} />;
+  }
   if (done) {
     return (
       <section className="rounded-3xl bg-white p-6">
@@ -80,8 +83,8 @@ export function ApplyForm(props: Props) {
         message,
       };
       const result = await applyToJob(payload);
-      if (result.error) return setError(t(`errors.${result.error}`));
-      setDone(true);
+      if (result.error || !result.id) return setError(t(`errors.${result.error ?? "generic"}`));
+      setDone({ id: result.id, followups: Boolean(result.followups) });
       window.scrollTo(0, 0);
     });
   }
@@ -348,5 +351,87 @@ function QuickSteps(p: QuickProps) {
         </button>
       )}
     </section>
+  );
+}
+
+/** Pro jobs: a few AI follow-up questions right after applying. Skippable. */
+export function Followups({
+  applicationId,
+  company,
+  onDone,
+  initial,
+}: {
+  applicationId: string;
+  company: string;
+  onDone: () => void;
+  initial?: { id: string; question: string }[];
+}) {
+  const t = useTranslations("Apply");
+  const locale = useLocale();
+  const [questions, setQuestions] = useState(initial ?? null);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [error, setError] = useState(false);
+  const [pending, startTransition] = useTransition();
+
+  const started = useRef(Boolean(initial));
+  useEffect(() => {
+    if (started.current) return;
+    started.current = true;
+    getFollowups(applicationId, locale).then((q) => (q.length ? setQuestions(q) : onDone()));
+  }, [applicationId, locale, onDone]);
+
+  if (!questions) {
+    return (
+      <section className="rounded-3xl bg-white p-6" aria-busy="true">
+        <h2 className="text-3xl font-black tracking-brand">{t("doneTitle")}</h2>
+        <p className="mt-2 animate-pulse text-lg text-slate">{t("followups.loading", { company })}</p>
+      </section>
+    );
+  }
+
+  function send(skip: boolean) {
+    setError(false);
+    startTransition(async () => {
+      const result = await answerFollowups(applicationId, skip ? {} : answers);
+      if (result.error) return setError(true);
+      onDone();
+    });
+  }
+
+  return (
+    <form
+      className="flex flex-col gap-5 rounded-3xl bg-white p-6"
+      onSubmit={(e) => {
+        e.preventDefault();
+        send(false);
+      }}
+    >
+      <div>
+        {!initial && <p className="font-black text-slate">{t("doneTitle")} ✓</p>}
+        <h2 className="mt-1 text-3xl font-black tracking-brand">{t("followups.title", { company })}</h2>
+        <p className="mt-2 text-slate">{t("followups.body")}</p>
+      </div>
+      {questions.map((q) => (
+        <label key={q.id} className="flex flex-col gap-2">
+          <span className="font-black">{q.question}</span>
+          <textarea
+            value={answers[q.id] ?? ""}
+            onChange={(e) => setAnswers((a) => ({ ...a, [q.id]: e.target.value }))}
+            rows={2}
+            maxLength={1000}
+            className={input}
+          />
+        </label>
+      ))}
+      {error && <p className="rounded-2xl bg-paper p-4 font-black">{t("errors.generic")}</p>}
+      <div className="flex flex-wrap items-center gap-4">
+        <button type="submit" disabled={pending} className="rounded-2xl bg-ink px-6 py-4 text-lg font-black text-paper disabled:opacity-60">
+          {t("followups.send")}
+        </button>
+        <button type="button" disabled={pending} onClick={() => send(true)} className="font-black underline underline-offset-4">
+          {t("followups.skip")}
+        </button>
+      </div>
+    </form>
   );
 }

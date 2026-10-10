@@ -4,7 +4,7 @@ Effective: 10 October 2026
 
 ## 1. Who we are
 
-RateThatJob.com is operated by {{name}} ({{address}}, company registration number: {{registry}}, tax number: {{taxNumber}}, email: {{email}}) ("we"). These terms apply to every visitor, registered user and employer.
+RateThatJob.com is operated by {{name}} ({{address}}, business license number: {{registry}}, email: {{email}}) ("we"). These terms apply to every visitor, registered user and employer.
 
 ## 2. The service
 

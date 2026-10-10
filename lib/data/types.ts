@@ -113,6 +113,8 @@ export type Job = {
   responsibilities: string[];
   requirements: string[];
   offers: string[];
+  /** Pro package: shown first in job search. */
+  featured: boolean;
   publishedAt: string;
   closesAt: string | null;
   updatedAt: string;

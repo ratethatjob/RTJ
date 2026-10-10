@@ -35,6 +35,7 @@ export default async function NewJobPage({ params, searchParams }: PageProps<"/[
           offers: "",
           applyMode: "quick",
           questions: [],
+          tier: "standard",
           closesAt: "",
         }}
       />

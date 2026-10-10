@@ -4,7 +4,7 @@ Effective: 10 October 2026
 
 ## 1. Controller
 
-{{name}} ({{address}}, company registration number: {{registry}}). Privacy questions: [{{privacyEmail}}](mailto:{{privacyEmail}}).
+{{name}} ({{address}}, business license number: {{registry}}). Privacy questions: [{{privacyEmail}}](mailto:{{privacyEmail}}).
 
 ## 2. The most important rule: anonymity
 
