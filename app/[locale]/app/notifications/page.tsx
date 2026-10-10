@@ -19,6 +19,7 @@ type Row = {
     application_id?: string;
     sender?: string;
     name?: string;
+    days?: number;
   };
 };
 
@@ -38,7 +39,9 @@ export default async function NotificationsPage({ params }: PageProps<"/[locale]
   if (rows.some((r) => !r.read_at)) await supabase.rpc("mark_notifications_read");
 
   const href = (r: Row) =>
-    r.kind === "application_message"
+    r.kind === "trial_ending" || r.kind === "trial_ended"
+      ? "/business/locations#plan"
+      : r.kind === "application_message"
       ? r.data.sender === "employer"
         ? `/app/applications/${r.data.application_id}`
         : `/business/jobs/${r.data.job_id}`
@@ -72,6 +75,7 @@ export default async function NotificationsPage({ params }: PageProps<"/[locale]
                       status: r.data.status ? ta(`status.${r.data.status}`) : "",
                       sender: r.data.sender ?? "",
                       name: r.data.name ?? "",
+                      days: r.data.days ?? 0,
                     })}
                   </span>
                   <span className="text-sm text-slate">

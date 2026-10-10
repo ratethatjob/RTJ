@@ -60,6 +60,8 @@ export type LocationSummary = {
   /** Reply rate to applicants; from RateThatJob applications when `applications` ≥ 5. */
   ghosting?: { replyRate: number; avgReplyDays: number | null; applications: number } | null;
   updatedAt?: string | null;
+  /** Pro (trial or paid) is on, so embeds show the Index. Sample data leaves it out (= on). */
+  indexActive?: boolean;
 };
 
 export type Review = {

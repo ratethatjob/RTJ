@@ -130,3 +130,11 @@ export async function decideOrder(id: string, paid: boolean): Promise<Result> {
   const { error } = await supabase.rpc("admin_decide_order", { p_order_id: id, p_paid: paid });
   return error ? { error: true } : { ok: true };
 }
+
+export async function decidePlanOrder(id: string, paid: boolean): Promise<Result> {
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("admin_decide_plan_order", { p_order_id: id, p_paid: paid });
+  if (error) return { error: true };
+  revalidateTag("locations", "max");
+  return { ok: true };
+}

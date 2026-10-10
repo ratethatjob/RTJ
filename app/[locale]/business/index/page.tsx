@@ -7,6 +7,7 @@ import {
 import { EmbedGenerator } from "@/components/business/embed-generator";
 import { JobsEmbedGenerator } from "@/components/business/jobs-embed-generator";
 import { LocationSelect } from "@/components/business/location-select";
+import { ProGate } from "@/components/business/trial-banner";
 import { getPathname, Link } from "@/i18n/navigation";
 import { getBusiness, pickLocation } from "@/lib/business";
 import { locationPath } from "@/lib/format";
@@ -108,6 +109,8 @@ export default async function IndexPage({
             url: url(`${locationPath(location)}/jobs/${j.id}`),
           }))}
         />
+      ) : !location.pro ? (
+        <ProGate feature="index" />
       ) : (
         <>
           {few && (

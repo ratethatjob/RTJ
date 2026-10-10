@@ -84,3 +84,11 @@ export async function submitClaim(form: {
   if (error) return { error: error.code === "23505" ? "exists" : "generic" };
   return { ok: true };
 }
+
+/** Asks to activate Pro for a location (paid by invoice until online payment is connected). */
+export async function requestPro(locationId: string, interval: "month" | "year"): Promise<{ ok?: true; error?: true }> {
+  if (interval !== "month" && interval !== "year") return { error: true };
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("request_pro", { p_location_id: locationId, p_interval: interval });
+  return error ? { error: true } : { ok: true };
+}

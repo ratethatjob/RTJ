@@ -184,8 +184,9 @@ Levels shown as badges: Not verified · Verified (document) · Verified (invited
 - **Invite your team (Pro, or limited on Free):** pick location → CSV upload (name optional, email or phone; private emails fine) / add one by one / shareable link → message template per recipient language → send by email/SMS, one reminder after 5 days.
 - **Locations, team & roles:** owner (all + billing), HR (all locations, replies, invites), location manager (own location only).
 - **Plan & billing:** per-location Free/Pro, monthly or yearly (2 months free). Chains 10+ locations: custom.
+- **Free trial:** every location gets 30 days of Pro free, no card, once per location; it starts automatically when the claim is approved (`location_plans.status = 'trialing'`, `trial_ends_at`). Notices 7 and 1 day(s) before the end and once after it (in-app + email). After that Pro is paid; until Stripe, the employer requests activation (monthly/yearly) and an admin marks it paid (`paid_until`).
 
-Pro features per location: early warnings, invites, statistics, branded profile (photos, benefits), remove competitor suggestions from own page, **RateThatJob Index** widget.
+Pro features per location: early warnings, invites, statistics, branded profile (photos, benefits), remove competitor suggestions from own page, **RateThatJob Index** (image badge, iframe card, Top Rated seal, the score in the JSON API, the Index generator). The careers page jobs widget is free.
 
 ---
 
@@ -200,6 +201,7 @@ Goal: employers show their score on their careers page / job ads; every embed is
 - Embed code generator in dashboard (Pro): employer picks variant, size and theme, copies one snippet.
 - Badge always links back to the public location page.
 - Show score only when the location has ≥ 5 published reviews; otherwise "Rate us on RateThatJob".
+- The Index on embeds needs Pro (trial or paid). Without it, embeds don't disappear: badge, card and seal say "RateThatJob Index currently unavailable. Employer: sign in to your account to activate it." and still link to the public location page (which always shows reviews and scores); the JSON API returns `status: "inactive"` and no score.
 
 ### 8.1 Variants (see design canvas, boards I1–I2)
 - **Compact badge** – light / dark: icon, score, "RateThatJob Index", verified review count.
@@ -241,10 +243,10 @@ Goal: employers show their score on their careers page / job ads; every embed is
 ### 8.4 Jobs widget
 - Same `widget.js`, new element: `<div data-rtj-jobs="job|location|company" data-id="ID or company slug" data-theme="light|dark" data-locale="en|hu"><a href="…">fallback link</a></div>`. The inner link stays as a crawlable fallback without JS.
 - Renders in Shadow DOM: job cards with title, pay, schedule, Quick apply badge; featured (Pro) jobs first.
-- The RateThatJob Index is always shown under the jobs (score from 5 reviews, otherwise "Rate us on RateThatJob"); employers cannot turn it off. For a company the score is the review-weighted average of its locations.
+- The RateThatJob Index is always shown under the jobs (score from 5 reviews, otherwise "Rate us on RateThatJob"), following the Pro rule above (without Pro or trial: "currently unavailable"); employers cannot turn it off. For a company the score is the review-weighted average of its locations with Pro.
 - Data: `GET /api/public/jobs?job=ID | ?location=ID | ?company=SLUG [&locale=]` → open, published jobs only (from `public_jobs`), display strings in the requested language, never user data. CORS open, browser-cached (so `recordEmbed()` counts every site), rate-limited per IP.
 - "Apply" opens our apply flow in a new tab with `?ref=embed&from=<host page URL>`; the application is stored with `source = 'embed'`, and the done screen offers "Back to the company's website" (http/https only).
-- Generator: "Jobs" tab on `/business/index` (one job / location / whole company, theme, language, live preview, copyable code). Available to every claimed employer for now; may move behind Pro later.
+- Generator: "Jobs" tab on `/business/index` (one job / location / whole company, theme, language, live preview, copyable code). Free for every claimed employer, with or without Pro.
 
 ---
 

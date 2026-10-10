@@ -15,9 +15,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: `${t("metaTitle")} | RateThatJob`, description: t("intro"), alternates: localeAlternates("/pricing", locale) };
 }
 
-const FREE = ["claim", "reply", "dispute", "inviteLink", "jobs", "profileBasic"] as const;
+const FREE = ["claim", "reply", "dispute", "inviteLink", "careerWidget", "jobs", "profileBasic"] as const;
 const PRO = ["warnings", "stats", "invites", "index", "profile", "noCompetitors"] as const;
-const FAQ = ["q1", "q2", "q3", "q4"] as const;
+const FAQ = ["q1", "trial", "q2", "q3", "q4"] as const;
 const JOB_FEATURES = { standard: ["ad", "apply", "contact"], basic: ["summary", "cv"], pro: ["followups", "featured"] } as const;
 
 export default async function PricingPage({ params, searchParams }: Props) {
@@ -96,6 +96,7 @@ export default async function PricingPage({ params, searchParams }: Props) {
               <p className="mt-4 text-3xl font-black tracking-brand">{t("onRequest")}</p>
             )}
             <p className="text-mist">{t("pro.note")}</p>
+            <p className="mt-4 self-start rounded-lg bg-signal px-3 py-1.5 font-black text-ink">{t("pro.trial")}</p>
             <p className="mt-6 font-black">{t("pro.everythingFree")}</p>
             <ul className="mt-3 flex flex-col gap-3">
               {PRO.map((f) => (
@@ -105,9 +106,9 @@ export default async function PricingPage({ params, searchParams }: Props) {
                 </li>
               ))}
             </ul>
-            <a href={`mailto:${OPERATOR.email}?subject=RateThatJob Pro`} className="mt-8 rounded-2xl bg-signal px-6 py-4 text-center text-lg font-black text-ink">
+            <Link href="/business/claim" className="mt-8 rounded-2xl bg-signal px-6 py-4 text-center text-lg font-black text-ink">
               {t("pro.cta")}
-            </a>
+            </Link>
           </div>
 
           <div className="flex flex-col rounded-[2rem] bg-white p-8">

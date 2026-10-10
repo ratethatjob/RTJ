@@ -30,7 +30,11 @@ RateThatJob shows reviews of workplaces, facts (pay on time, overtime, hours, re
 - Claiming a workplace is free. We verify every claim.
 - Employers can reply to reviews and dispute unverified reviews. Reviews cannot be deleted, hidden or bought.
 - Employers must not try to identify reviewers or put pressure on their staff because of a review.
-- Paid (Pro) features follow the prices and terms on the [Pricing](/pricing) page, billed per location, monthly or yearly.
+- Pro is a paid plan per location. It includes the RateThatJob Index for your website (image badge, iframe card, Top Rated seal, the score in the JSON API), early warnings and statistics, and the other features listed on the [Pricing](/pricing) page.
+- Every location gets a 30-day free Pro trial, once, with no card needed. It starts automatically when the claim is approved.
+- After the trial, Pro is billed per location, monthly or yearly, at the prices on the [Pricing](/pricing) page. Until online payment is available, we invoice you and switch Pro on once the payment arrives.
+- Without an active trial or paid Pro, embedded Index badges stay on your website but show that the Index is currently unavailable instead of the score, and still link to your public profile. Your public profile, reviews and scores on RateThatJob are always shown, whatever your plan.
+- The careers page widget (your jobs on your website) is free and doesn't need Pro. Job ads are priced per ad.
 
 ## 6. Jobs and applications
 

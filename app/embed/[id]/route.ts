@@ -35,7 +35,8 @@ export async function GET(request: Request, { params }: RouteContext<"/embed/[id
       headers: { ...EMBED_HEADERS, "Content-Type": "image/svg+xml; charset=utf-8" },
     });
   }
-  const href = data.showScore ? data.profileUrl : data.rateUrl;
+  // Inactive Index: the badge says so and links to the public profile, where scores always show.
+  const href = data.showScore || !data.active ? data.profileUrl : data.rateUrl;
   const html = `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>RateThatJob Index</title><style>html,body{margin:0;background:transparent}a{display:inline-block;line-height:0}</style></head><body><a href="${href}" target="_blank" rel="noopener">${badge}</a></body></html>`;
   return new Response(html, {
     headers: { ...EMBED_HEADERS, "Content-Type": "text/html; charset=utf-8" },

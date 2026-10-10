@@ -1,7 +1,9 @@
 import { Link } from "@/i18n/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { ActivatePro } from "@/components/business/activate-pro";
 import { PlanBadge } from "@/components/business/plan-badge";
-import { getBusiness } from "@/lib/business";
+import { TrialBanner } from "@/components/business/trial-banner";
+import { daysLeft, getBusiness } from "@/lib/business";
 
 export const instant = false;
 
@@ -13,24 +15,31 @@ export default async function LocationsPage({ params }: PageProps<"/[locale]/bus
   const { supabase, org } = await getBusiness(locale, "/business/locations");
   if (!org) return null;
   const t = await getTranslations("Business");
+  const tp = await getTranslations("Plan");
+  const format = await getFormatter();
+  const date = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "medium" });
+  const billing = org.role === "owner" || org.role === "hr";
 
   const { data: members } = await supabase.from("org_members").select("role").eq("org_id", org.id);
   const count = (role: string) => (members ?? []).filter((m) => m.role === role).length;
-  const proCount = org.locations.filter((l) => l.plan === "pro").length;
   const bold = (chunks: React.ReactNode) => <b className="font-black text-paper">{chunks}</b>;
 
   return (
     <main>
       <h1 className="text-4xl font-black tracking-brand lg:text-5xl">{t("locationsTitle")}</h1>
       <p className="mt-1 text-slate">{t("locationsBody")}</p>
+      <div className="mt-6">
+        <TrialBanner locations={org.locations} />
+      </div>
 
       <section className="mt-6 overflow-x-auto rounded-3xl bg-white">
-        <table className="w-full min-w-[560px] text-left">
+        <table className="w-full min-w-[720px] text-left">
           <thead className="text-sm uppercase tracking-tagline text-slate">
             <tr className="border-b border-[#E8E6E1]">
               <th className="px-6 py-4 font-black">{t("table.location")}</th>
               <th className="px-6 py-4 font-black">{t("table.plan")}</th>
-              <th className="px-6 py-4 text-right font-black">{t("price")}</th>
+              <th className="px-6 py-4 font-black">{tp("status")}</th>
+              <th className="px-6 py-4 text-right font-black">{billing ? tp("activateColumn") : ""}</th>
             </tr>
           </thead>
           <tbody>
@@ -46,10 +55,17 @@ export default async function LocationsPage({ params }: PageProps<"/[locale]/bus
                 <td className="px-6 py-4">
                   <PlanBadge plan={l.plan} label={t(`plans.${l.plan}`)} />
                 </td>
+                <td className="px-6 py-4 text-sm text-slate">
+                  {l.plan === "pro" && l.paidUntil
+                    ? tp("paidUntil", { date: date(l.paidUntil) })
+                    : l.plan === "trial" && l.trialEndsAt
+                      ? tp("trialDays", { days: daysLeft(l.trialEndsAt), date: date(l.trialEndsAt) })
+                      : l.trialUsed
+                        ? tp("trialEnded")
+                        : tp("noPro")}
+                </td>
                 <td className="px-6 py-4 text-right">
-                  <button disabled title={t("comingSoon")} className="rounded-xl border-2 border-ink px-4 py-2 font-black opacity-50">
-                    {t("upgrade")}
-                  </button>
+                  {billing && l.plan !== "pro" && <ActivatePro locationId={l.id} pending={l.pendingOrder} />}
                 </td>
               </tr>
             ))}
@@ -80,16 +96,11 @@ export default async function LocationsPage({ params }: PageProps<"/[locale]/bus
 
         <section id="plan" className="rounded-3xl bg-ink p-6 text-paper">
           <h2 className="text-2xl font-black tracking-brand">{t("planTitle")}</h2>
-          <div className="mt-4 grid grid-cols-2 rounded-2xl bg-white/10 p-1.5 font-black">
-            <span className="rounded-xl py-3 text-center">{t("monthly")}</span>
-            <span className="rounded-xl bg-signal py-3 text-center text-ink">{t("yearly")}</span>
-          </div>
-          <p className="mt-4 text-mist">{t.rich("proIncludes", { b: bold })}</p>
+          <p className="mt-4 font-black text-signal">{tp("trialOffer")}</p>
+          <p className="mt-2 text-mist">{t.rich("proIncludes", { b: bold })}</p>
           <p className="mt-2 text-mist">{t.rich("chains", { b: bold })}</p>
           <div className="mt-4 border-t border-white/15 pt-4">
-            <p className="text-sm text-mist">
-              {proCount} Pro · {t("billingSoon")}
-            </p>
+            <p className="text-sm text-mist">{tp("billingNote")}</p>
           </div>
         </section>
       </div>

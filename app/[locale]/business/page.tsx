@@ -1,6 +1,7 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { LocationSelect } from "@/components/business/location-select";
 import { PlanBadge } from "@/components/business/plan-badge";
+import { TrialBanner } from "@/components/business/trial-banner";
 import { Link } from "@/i18n/navigation";
 import { getBusiness, pickLocation } from "@/lib/business";
 
@@ -71,9 +72,10 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
         .in("location_id", ids)
         .is("reply_body", null)
     : { count: 0 };
-  // Biggest category drop in the last 60 days (n >= 5 on both sides).
-  const { data: warnings } = ids.length
-    ? await supabase.rpc("early_warnings", { p_location_ids: ids })
+  // Biggest category drop in the last 60 days (n >= 5 on both sides). Pro (trial or paid) only.
+  const proIds = locs.filter((l) => l.pro).map((l) => l.id);
+  const { data: warnings } = proIds.length
+    ? await supabase.rpc("early_warnings", { p_location_ids: proIds })
     : { data: [] };
   const top = (warnings as { location_id: string; category: string; recent: number; baseline: number; delta: number }[] | null)?.[0];
   const warning = top && { ...top, location: locs.find((l) => l.id === top.location_id)! };
@@ -99,6 +101,10 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
           </Link>
         </div>
       </header>
+
+      <div className="mt-6">
+        <TrialBanner locations={org.locations} />
+      </div>
 
       <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Stat label={t("avgScore")} value={num(avg)}>

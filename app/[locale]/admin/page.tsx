@@ -3,11 +3,11 @@ import { CsvImport, EntityForm, SlugEditor, UnverifyEntity } from "@/components/
 import { Decision } from "@/components/admin/decision";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
-import { jobPricing } from "@/lib/site-config";
+import { jobPricing, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
 
 export const instant = false;
 
-const TABS = ["claims", "moderation", "verifications", "disputes", "reports", "orders"] as const;
+const TABS = ["claims", "moderation", "verifications", "disputes", "reports", "orders", "plans"] as const;
 const TOOLS = ["metrics", "workplaces", "entities", "import"] as const;
 type Queue = (typeof TABS)[number];
 type Tab = Queue | (typeof TOOLS)[number];
@@ -23,6 +23,17 @@ type OrderRow = {
   address: string;
   country: string;
   org_name: string;
+};
+type PlanOrderRow = {
+  id: string;
+  created_at: string;
+  billing_interval: "month" | "year";
+  location: string;
+  address: string;
+  country: string;
+  org_name: string;
+  trial_ends_at: string | null;
+  paid_until: string | null;
 };
 type ReviewRow = {
   id: string;
@@ -63,6 +74,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     supabase.from("disputes").select("id", { count: "exact", head: true }).eq("status", "open"),
     supabase.from("reports").select("id", { count: "exact", head: true }).eq("status", "open"),
     supabase.rpc("admin_job_orders").then((r) => ({ count: ((r.data ?? []) as OrderRow[]).length, data: r.data })),
+    supabase.rpc("admin_plan_orders").then((r) => ({ count: ((r.data ?? []) as PlanOrderRow[]).length, data: r.data })),
   ]);
 
   const reviewCols = "id, position, relationship, overall, body, verification_level, locations(name, address)";
@@ -197,6 +209,34 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
               {o.job_title} · {o.location}, {o.address}
             </p>
             <p className="text-slate">{o.org_name}</p>
+          </>
+        ),
+      };
+    });
+  } else if (tab === "plans") {
+    const tp = await getTranslations("Plan");
+    items = ((counts[6].data ?? []) as PlanOrderRow[]).map((o) => {
+      const price = PRICING[o.country === "HU" ? "hu" : "en"];
+      const amount =
+        price.monthly == null ? null : o.billing_interval === "year" ? price.monthly * YEARLY_MONTHS : price.monthly;
+      return {
+        id: o.id,
+        created_at: o.created_at,
+        content: (
+          <>
+            <p className="text-lg font-black">
+              Pro · {tp(`intervals.${o.billing_interval}`)}
+              {amount != null &&
+                ` · ${format.number(amount, { style: "currency", currency: price.currency, maximumFractionDigits: 0 })}`}
+            </p>
+            <p>
+              {o.location}, {o.address}
+            </p>
+            <p className="text-slate">
+              {o.org_name}
+              {o.paid_until && ` · ${tp("paidUntil", { date: date(o.paid_until) })}`}
+              {!o.paid_until && o.trial_ends_at && ` · ${tp("trialUntil", { date: date(o.trial_ends_at) })}`}
+            </p>
           </>
         ),
       };

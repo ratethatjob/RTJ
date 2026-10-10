@@ -12,12 +12,13 @@ import {
 } from "@/lib/rtj-index";
 
 // Top Rated Employer seal: 404 unless the location earned it (4.0+, 10+ verified in 12 months).
+// Without Pro (trial or paid) the seal stays but says the Index is unavailable.
 export async function GET(request: Request, { params }: RouteContext<"/embed/[id]/seal.svg">) {
   const { id } = await params;
   const requested = new URL(request.url).searchParams.get("locale");
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
   const data = await getIndexLocation(id);
-  if (!data || !isTopRated(data.location)) {
+  if (!data || (data.active && !isTopRated(data.location))) {
     return new Response("Not found", { status: 404, headers: PUBLIC_HEADERS });
   }
   after(() => recordEmbed(request, data.location.id));

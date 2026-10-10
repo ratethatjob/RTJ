@@ -35,7 +35,7 @@
       })
       .then(function (res) {
         var data = res[1] || {};
-        var href = data.score == null && data.rate_url ? data.rate_url : data.profile_url;
+        var href = data.status !== "inactive" && data.score == null && data.rate_url ? data.rate_url : data.profile_url;
         if (!href && fallback) href = fallback.href;
         var root = el.attachShadow ? el.attachShadow({ mode: "open" }) : el;
         var a = document.createElement("a");
@@ -153,13 +153,17 @@
 
         // The RateThatJob Index is always shown under the jobs.
         var idx = data.index;
-        var foot = link(idx.score != null ? idx.url : idx.rate_url, { class: "i" });
+        var foot = link(idx.score != null || !idx.active ? idx.url : idx.rate_url, { class: "i" });
         var name = el("span", { class: "n" });
         name.innerHTML = ICON;
         name.appendChild(document.createTextNode(L.index));
         foot.appendChild(name);
         var right = el("span", { class: "r" });
-        if (idx.score != null) {
+        if (!idx.active) {
+          right.appendChild(el("span", { class: "u" }, L.unavailable));
+          right.appendChild(el("br"));
+          right.appendChild(document.createTextNode(L.unavailableHint));
+        } else if (idx.score != null) {
           right.appendChild(document.createTextNode(L.reviews));
           right.appendChild(el("span", { class: "v" }, idx.score));
         } else {

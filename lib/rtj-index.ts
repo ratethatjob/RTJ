@@ -16,12 +16,17 @@ export function isTopRated(l: LocationSummary) {
   return Boolean(l.scores && l.scores.overall >= 4 && l.scores.verifiedCount >= 10);
 }
 
+/** Embeds show the Index only while the location has Pro (trial or paid). */
+export const indexActive = (l: LocationSummary) => l.indexActive !== false;
+
 export async function getIndexLocation(id: string) {
   const location = await getLocationById(id);
   if (!location) return null;
+  const active = indexActive(location);
   return {
     location,
-    showScore: (location.scores?.reviewCount ?? 0) >= MIN_REVIEWS,
+    active,
+    showScore: active && (location.scores?.reviewCount ?? 0) >= MIN_REVIEWS,
     profileUrl: `${SITE_URL}${locationPath(location)}`,
     rateUrl: `${SITE_URL}/app/rate/${location.id}`,
   };
@@ -37,6 +42,8 @@ export type BadgeLabels = {
   replies: string;
   topRated: string;
   footer: string;
+  unavailable: string;
+  unavailableHint: string;
   score: string;
   year: string;
 };
@@ -75,6 +82,8 @@ export function renderBadge(
   const sub = dark ? MIST : SLATE;
   const border = dark ? "" : ` stroke="#E3E1DC"`;
   const title = showScore ? `${location.name}: ${l.score} – ${l.name}` : l.rateUs;
+
+  if (!data.active) return renderUnavailable(style, location.name, l);
 
   if (style === "strip") {
     const text = showScore ? l.strip : l.rateUs;
@@ -141,9 +150,86 @@ export function renderBadge(
   return svg(w, h, title, body);
 }
 
+/** Shown instead of the score when the location's Pro (trial or paid) has ended. */
+function renderUnavailable(style: BadgeStyle, name: string, l: BadgeLabels): string {
+  const dark = style.endsWith("dark");
+  const bg = dark ? INK : "#FFFFFF";
+  const fg = dark ? PAPER : INK;
+  const sub = dark ? MIST : SLATE;
+  const border = dark ? "" : ` stroke="#E3E1DC"`;
+  const title = `${name}: ${l.unavailable} ${l.unavailableHint}`;
+  if (style === "strip") {
+    const text = `${l.unavailable} ${l.unavailableHint}`;
+    const w = 44 + textWidth(text, 13, true);
+    return svg(
+      w,
+      32,
+      title,
+      `<rect x=".5" y=".5" width="${Math.ceil(w) - 1}" height="31" rx="8" fill="#FFFFFF" stroke="#E3E1DC"/>${icon(10, 7, 18)}<text x="36" y="20" font-size="13" font-weight="700" fill="${INK}">${esc(text)}</text>`,
+    );
+  }
+  const compact = style.startsWith("compact");
+  const w = compact
+    ? 64 + Math.max(textWidth(l.unavailable, 15, true), textWidth(l.unavailableHint, 13)) + 18
+    : 400;
+  if (compact) {
+    return svg(
+      w,
+      64,
+      title,
+      `<rect x=".5" y=".5" width="${Math.ceil(w) - 1}" height="63" rx="14" fill="${bg}"${border}/>${icon(16, 17, 30)}` +
+        `<text x="62" y="29" font-size="15" font-weight="800" fill="${fg}">${esc(l.unavailable)}</text>` +
+        `<text x="62" y="47" font-size="13" fill="${sub}">${esc(l.unavailableHint)}</text>`,
+    );
+  }
+  const h = 216;
+  const short = name.length > 26 ? `${name.slice(0, 25)}…` : name;
+  return svg(
+    w,
+    h,
+    title,
+    `<rect x=".5" y=".5" width="${w - 1}" height="${h - 1}" rx="20" fill="${bg}"${border}/>` +
+      `${icon(20, 22, 40)}` +
+      `<text x="76" y="40" font-size="20" font-weight="900" letter-spacing="-.5" fill="${fg}">${esc(short)}</text>` +
+      `<text x="76" y="62" font-size="14" fill="${sub}">${esc(l.name)}</text>` +
+      wrap(l.unavailable, 30)
+        .map((line, i) => `<text x="20" y="${112 + i * 26}" font-size="20" font-weight="900" fill="${fg}">${esc(line)}</text>`)
+        .join("") +
+      wrap(l.unavailableHint, 44)
+        .map((line, i) => `<text x="20" y="${166 + i * 19}" font-size="14" fill="${sub}">${esc(line)}</text>`)
+        .join(""),
+  );
+}
+
+/** Splits text into lines of at most `max` characters, on spaces. */
+function wrap(text: string, max: number) {
+  const lines: string[] = [];
+  for (const word of text.split(" ")) {
+    const last = lines[lines.length - 1];
+    if (last && `${last} ${word}`.length <= max) lines[lines.length - 1] = `${last} ${word}`;
+    else lines.push(word);
+  }
+  return lines;
+}
+
 export function renderSeal(data: NonNullable<Awaited<ReturnType<typeof getIndexLocation>>>, l: BadgeLabels) {
   const size = 168;
   const c = size / 2;
+  if (!data.active) {
+    return svg(
+      size,
+      size,
+      `${data.location.name}: ${l.unavailable} ${l.unavailableHint}`,
+      `<circle cx="${c}" cy="${c}" r="${c - 2}" fill="${INK}"/>` +
+        icon(c - 14, 22, 26) +
+        wrap(l.unavailable, 20)
+          .map((line, i) => `<text x="${c}" y="${70 + i * 14}" font-size="11" font-weight="800" text-anchor="middle" fill="${PAPER}">${esc(line)}</text>`)
+          .join("") +
+        wrap(l.unavailableHint, 24)
+          .map((line, i) => `<text x="${c}" y="${112 + i * 12}" font-size="9" text-anchor="middle" fill="${MIST}">${esc(line)}</text>`)
+          .join(""),
+    );
+  }
   return svg(
     size,
     size,
@@ -185,6 +271,8 @@ export async function badgeLabels(
     replies: t("replies"),
     topRated: t("topRated"),
     footer: t("footer"),
+    unavailable: t("unavailable"),
+    unavailableHint: t("unavailableHint"),
     score,
     year: String(new Date().getFullYear()),
   };

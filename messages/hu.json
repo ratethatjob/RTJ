@@ -478,7 +478,8 @@
     },
     "plans": {
       "free": "Ingyenes",
-      "pro": "Pro"
+      "pro": "Pro",
+      "trial": "Pro próba"
     },
     "upgrade": "Váltás Pro-ra",
     "inviteTeam": "Csapat meghívása",
@@ -587,7 +588,8 @@
       "import": "Importálás",
       "entities": "Jogi személyek",
       "metrics": "Mutatók",
-      "orders": "Rendelések"
+      "orders": "Rendelések",
+      "plans": "Előfizetések"
     },
     "empty": "Nincs teendő.",
     "approve": "Jóváhagyom",
@@ -699,7 +701,9 @@
       "paidOnTime": "Időben fizet",
       "replies": "Válaszol a jelentkezőknek",
       "topRated": "Top Rated Employer",
-      "footer": "RateThatJob.com · Know before you go"
+      "footer": "RateThatJob.com · Know before you go",
+      "unavailable": "A RateThatJob Index jelenleg nem elérhető.",
+      "unavailableHint": "Kérjük, lépjen be a fiókjába az aktiváláshoz."
     },
     "theme": "Téma",
     "preview": "Előnézet",
@@ -731,7 +735,7 @@
         "en": "English",
         "hu": "Magyar"
       },
-      "indexNote": "A kiemelt (Pro) állások kerülnek előre. A RateThatJob Index mindig látszik az állások alatt.",
+      "indexNote": "A kiemelt (Pro) állások kerülnek előre. A RateThatJob Index mindig látszik az állások alatt: Pro csomaggal vagy próbával a pontszámod, különben „jelenleg nem elérhető”. Maga a widget ingyenes.",
       "code": "Kód a weboldaladra",
       "codeHint": "Illeszd be oda, ahol az állásokat mutatni szeretnéd. JavaScript nélkül is működik a benne lévő link.",
       "fallback": "{name} állásai a RateThatJobon"
@@ -1169,7 +1173,9 @@
       "followed_review": "Új értékelés: {location}",
       "followed_job": "Új állás itt: {location} – {job}",
       "new_application": "Új jelentkezés: {job}",
-      "application_message": "{sender, select, employer {Új üzenet: {location} – {job}} other {{name} válaszolt: {job}}}"
+      "application_message": "{sender, select, employer {Új üzenet: {location} – {job}} other {{name} válaszolt: {job}}}",
+      "trial_ending": "{location}: még {days} nap a Pro próbából",
+      "trial_ended": "{location}: lejárt a Pro próbád – a kitett Index most „nem elérhető” feliratot mutat"
     }
   },
   "Places": {
@@ -1242,7 +1248,8 @@
         "dispute": "Igazolatlan értékelések vitatása",
         "inviteLink": "Megosztható meghívó link a csapatnak",
         "jobs": "Álláshirdetés alacsony feladási díjjal",
-        "profileBasic": "Csapattagok és szerepkörök"
+        "profileBasic": "Csapattagok és szerepkörök",
+        "careerWidget": "Karrieroldal widget a weboldaladra"
       },
       "cta": "Ingyenes átvétel"
     },
@@ -1258,7 +1265,8 @@
         "profile": "Egyedi profil fotókkal és juttatásokkal",
         "noCompetitors": "Nincs konkurens ajánló az oldaladon"
       },
-      "cta": "Pro igénylése"
+      "cta": "Ingyenes próba indítása",
+      "trial": "30 nap ingyen, bankkártya nélkül"
     },
     "chains": {
       "name": "Láncok",
@@ -1282,7 +1290,9 @@
       "q3": "Lehet vegyesen ingyenes és Pro telephelyünk?",
       "q3a": "Igen. Csak azokra a telephelyekre válassz Prót, ahol szükséged van rá.",
       "q4": "Befolyásolja a Pro a pontszámunkat?",
-      "q4a": "Nem. A pontszám csak értékelésekből és jelentkezésekből jön, mindenkinél ugyanúgy."
+      "q4a": "Nem. A pontszám csak értékelésekből és jelentkezésekből jön, mindenkinél ugyanúgy.",
+      "trial": "Van ingyenes próba?",
+      "triala": "Igen. Minden telephely 30 nap Prót kap ingyen, bankkártya nélkül. Automatikusan indul, amikor jóváhagyjuk az átvételt, telephelyenként egyszer. Utána a kitett Index „jelenleg nem elérhető” feliratot mutat, amíg be nem kapcsolod a Prót."
     },
     "jobAds": {
       "title": "Álláshirdetések",
@@ -1303,7 +1313,11 @@
   },
   "Email": {
     "messageSubject": "A(z) {company} írt neked: {job}",
-    "messageBody": "Szia {name}!\n\nA(z) {company} üzenetet küldött a(z) {job} jelentkezésedről:\n\n{message}\n\nVálaszolj itt: {link}\n\nRateThatJob – Know before you go"
+    "messageBody": "Szia {name}!\n\nA(z) {company} üzenetet küldött a(z) {job} jelentkezésedről:\n\n{message}\n\nVálaszolj itt: {link}\n\nRateThatJob – Know before you go",
+    "trial_endingSubject": "Még {days} nap a Pro próbából – {location}",
+    "trial_endingBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája {days} nap múlva lejár. Utána a weboldaladon lévő RateThatJob Index pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”, a korai figyelmeztetés és a statisztika pedig kikapcsol.\n\nItt kapcsolhatod be a Prót: {link}\n\nRateThatJob – Know before you go",
+    "trial_endedSubject": "Lejárt a Pro próbád – {location}",
+    "trial_endedBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája lejárt. A weboldaladon lévő RateThatJob Index most pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”. A nyilvános profilod és az értékelések továbbra is láthatók.\n\nKapcsold be a Prót, hogy újra látszódjon a pontszámod: {link}\n\nRateThatJob – Know before you go"
   },
   "JobsWidget": {
     "title": "Nyitott állások: {name}",
@@ -1368,7 +1382,7 @@
     "cannotTitle": "Ami nem működik",
     "cannotBody": "A munkáltató nem törölhet értékelést, és jobb pontszámot sem lehet venni. Az ellenőrizetlen értékelést vitathatod, erről a moderátoraink döntenek.",
     "warningTitle": "Lásd előre a bajt",
-    "warningBody": "A vezérlőpultod szól, ha a vezető, a fizetés, a beosztás vagy a környezet értékelése az elmúlt 60 napban legalább 0,5-tel romlott a korábbihoz képest (mindkét időszakban legalább 5 értékeléssel). Így észreveszed, ha romlik a hangulat, mielőtt az Indexedet is lehúzza.",
+    "warningBody": "Pro csomaggal a vezérlőpultod szól, ha a vezető, a fizetés, a beosztás vagy a környezet értékelése az elmúlt 60 napban legalább 0,5-tel romlott a korábbihoz képest (mindkét időszakban legalább 5 értékeléssel). Így észreveszed, ha romlik a hangulat, mielőtt az Indexedet is lehúzza.",
     "sealTitle": "Top Rated Employer pecsét",
     "sealBody": "Egy telephely akkor kapja meg a pecsétet, ha az Indexe legalább 4,0, és az elmúlt 12 hónapban legalább 10 ellenőrzött értékelése van. A pecsét az aktuális évet mutatja, és eltűnik, ha a telephely már nem felel meg.",
     "topTitle": "4,8 felett: nagyon szűk kör",
@@ -1384,10 +1398,11 @@
       "fewQ": "Mi van, ha 5-nél kevesebb értékelésünk van?",
       "fewA": "A jelvényen az áll, hogy „Értékelj minket a RateThatJobon”, és a telephelyed értékelő űrlapjára visz. Oszd meg a meghívó linkedet a csapatoddal, hogy összegyűljön az 5.",
       "costQ": "Kerül valamibe?",
-      "costA": "A munkahely átvétele ingyenes, a beágyazó kódokat a munkáltatói vezérlőpultodban találod. Hogy melyik csomagban mi van, az Árak oldalon látod."
+      "costA": "A weboldaladra kitehető Index a Pro része. Minden telephely 30 napot kap ingyen, bankkártya nélkül, az átvétel jóváhagyásától. Utána a Pro telephelyenként fizetős; nélküle a kitett jelvények megmaradnak, de azt mutatják, hogy az Index jelenleg nem elérhető. A nyilvános profilod és az értékelések mindig láthatók."
     },
     "bottomTitle": "Hadd beszéljenek helyetted a dolgozóid.",
-    "bottomBody": "Vedd át ingyen a munkahelyed, és tedd ki az Indexedet a karrieroldaladra."
+    "bottomBody": "Vedd át ingyen a munkahelyed, és próbáld ki az Indexet a karrieroldaladon 30 napig, bankkártya nélkül.",
+    "trialNote": "A Pro része · 30 nap ingyen, bankkártya nélkül"
   },
   "CareerPage": {
     "metaTitle": "Beágyazható karrieroldal – az állásaid a saját weboldaladon",
@@ -1416,7 +1431,7 @@
       "autoTitle": "Mindig naprakész",
       "autoBody": "Ha a RateThatJobon feladsz, módosítasz vagy lezársz egy állást, az oldalad magától mutatja a változást.",
       "trustTitle": "Alatta az Index",
-      "trustBody": "A RateThatJob Indexed mindig ott van az állások alatt, bizalmi jelként. 5 értékeléstől a pontszámodat mutatja.",
+      "trustBody": "A RateThatJob Indexed mindig ott van az állások alatt, bizalmi jelként. Pro csomaggal vagy az ingyenes próbával 5 értékeléstől a pontszámodat mutatja, különben azt, hogy az Index jelenleg nem elérhető.",
       "scopeTitle": "Egy állás, egy telephely vagy az egész cég",
       "scopeBody": "Mutathatsz egyetlen állást, egy telephely összes állását, vagy a céged összes állását.",
       "looksTitle": "Világos vagy sötét, angol vagy magyar",
@@ -1453,17 +1468,47 @@
     "faqTitle": "Kérdések",
     "faq": {
       "costQ": "Kerül valamibe a widget?",
-      "costA": "A widget minden munkáltatónak elérhető, aki átvette a munkahelyét. Az álláshirdetéseknek hirdetésenkénti díja van – lásd az Árak oldalt.",
+      "costA": "Nem. A karrieroldal widget minden munkáltatónak ingyenes, aki átvette a munkahelyét, Pro csomaggal és nélküle is. Az álláshirdetéseknek hirdetésenkénti díja van – lásd az Árak oldalt.",
       "whereQ": "Hová tehetem ki?",
       "whereA": "Bármely weboldalra, ahová HTML-t tudsz tenni: karrieroldalra, saját kódot engedő weboldal-készítőkbe, kampányoldalakra.",
       "noJobsQ": "Mi van, ha nincs nyitott állásunk?",
       "noJobsA": "A widget kiírja, hogy most nincs nyitott állás, és a RateThatJob Indexedet ekkor is mutatja.",
       "indexQ": "Elrejthetjük az Indexet?",
-      "indexA": "Nem. A RateThatJob Index mindig ott van az állások alatt – ettől lesz a widget bizalmi jel.",
+      "indexA": "Nem. A RateThatJob Index mindig ott van az állások alatt. Pro csomaggal vagy az ingyenes próbával a pontszámodat mutatja, különben azt, hogy az Index jelenleg nem elérhető.",
       "dataQ": "Követi a látogatóinkat?",
       "dataA": "Nincs süti. Csak azt rögzítjük, melyik weboldal mutatja a widgetet (a domaint), hogy lásd, hol vagy kint."
     },
     "bottomTitle": "Tedd ki az állásaidat oda, ahol a jelöltek már keresnek.",
     "bottomBody": "Vedd át ingyen a munkahelyed, adj fel egy állást, és másold ki a kódot a vezérlőpultból."
+  },
+  "Plan": {
+    "status": "Állapot",
+    "activateColumn": "Pro bekapcsolása",
+    "paidUntil": "Fizetve eddig: {date}",
+    "trialUntil": "Próba eddig: {date}",
+    "trialDays": "Még {days} nap az ingyenes próbából ({date}-ig)",
+    "trialEnded": "A próba lejárt – a kitett Index „nem elérhető” feliratot mutat",
+    "noPro": "Nincs Pro",
+    "trialOffer": "Minden telephely: 30 nap Pro ingyen, bankkártya nélkül.",
+    "billingNote": "Amíg nincs online fizetés, számlát küldünk, és a befizetés után kapcsoljuk be a Prót.",
+    "activate": "Pro bekapcsolása",
+    "activate_month": "Havi",
+    "activate_year": "Éves",
+    "requested": "Kérve ({interval}) – küldjük a számlát",
+    "intervals": {
+      "month": "havi",
+      "year": "éves"
+    },
+    "error": "Valami hiba történt. Próbáld újra.",
+    "trialLeft": "Még {days} nap az ingyenes Pro próbából",
+    "trialBody": "A RateThatJob Index, a korai figyelmeztetés és a statisztika be van kapcsolva. Kapcsold be a Prót, hogy megmaradjanak.",
+    "endedTitle": "{count, plural, one {Lejárt a Pro próbád} other {# telephelyen lejárt a Pro próba}}",
+    "endedBody": "A kitett RateThatJob Indexed most pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”. Kapcsold be a Prót, hogy újra látszódjon.",
+    "gate": {
+      "indexTitle": "A RateThatJob Index a Pro része",
+      "indexBody": "Kapcsold be a Prót ennél a telephelynél, hogy kitehesd az Indexet a weboldaladra. A karrieroldal widget ingyenes – lásd az Állások fület.",
+      "statsTitle": "A statisztika a Pro része",
+      "statsBody": "Kapcsold be a Prót ennél a telephelynél, hogy lásd a havi számokat, pontszámokat és a kategóriák alakulását."
+    }
   }
 }

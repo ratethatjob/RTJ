@@ -5,10 +5,27 @@ import type { LocationSummary } from "@/lib/data/types";
 
 export type OrgRole = "owner" | "hr" | "location_manager";
 
+/** "trial": in the free 30-day trial; "pro": paid; "free": no Pro (never had it, or it ended). */
+export type PlanState = "trial" | "pro" | "free";
+
 export type BusinessLocation = LocationSummary & {
   trend: number | null;
-  plan: "free" | "pro";
+  plan: PlanState;
+  /** Pro features (Index embeds, early warnings, statistics) are on. */
+  pro: boolean;
+  trialEndsAt: string | null;
+  paidUntil: string | null;
+  trialUsed: boolean;
+  /** Activation requested and waiting for payment. */
+  pendingOrder: "month" | "year" | null;
 };
+
+const DAY = 24 * 3600 * 1000;
+
+/** Whole days left until `iso` (at least 1 while it is in the future). */
+export function daysLeft(iso: string, now = Date.now()) {
+  return Math.max(1, Math.ceil((Date.parse(iso) - now) / DAY));
+}
 
 // Everything the employer dashboard needs about the signed-in member's org.
 const loadBusiness = cache(async (locale: string, path: string) => {
@@ -37,12 +54,19 @@ const loadBusiness = cache(async (locale: string, path: string) => {
   }
   const ids = locations.map((l) => l.id);
 
-  const [{ data: scores }, { data: plans }] = await Promise.all([
+  const [{ data: scores }, { data: plans }, { data: orders }] = await Promise.all([
     supabase.from("location_scores").select("location_id, overall_trend").in("location_id", ids),
-    supabase.from("location_plans").select("location_id, plan").in("location_id", ids),
+    supabase
+      .from("location_plans")
+      .select("location_id, trial_started_at, trial_ends_at, paid_until")
+      .in("location_id", ids),
+    supabase.from("plan_orders").select("location_id, billing_interval").eq("status", "pending").in("location_id", ids),
   ]);
   const trend = new Map((scores ?? []).map((s) => [s.location_id, s.overall_trend]));
-  const plan = new Map((plans ?? []).map((p) => [p.location_id, p.plan]));
+  const plan = new Map((plans ?? []).map((p) => [p.location_id, p]));
+  const pending = new Map((orders ?? []).map((o) => [o.location_id, o.billing_interval as "month" | "year"]));
+  const now = Date.now();
+  const future = (iso: string | null | undefined) => Boolean(iso && Date.parse(iso) > now);
 
   const org = member.orgs as unknown as { name: string } | null;
   return {
@@ -55,7 +79,19 @@ const loadBusiness = cache(async (locale: string, path: string) => {
       locations: locations.map<BusinessLocation>((l) => ({
         ...l,
         trend: trend.get(l.id) == null ? null : Number(trend.get(l.id)),
-        plan: (plan.get(l.id) as "free" | "pro") ?? "free",
+        ...(() => {
+          const p = plan.get(l.id);
+          const paid = future(p?.paid_until);
+          const trial = future(p?.trial_ends_at);
+          return {
+            plan: (paid ? "pro" : trial ? "trial" : "free") as PlanState,
+            pro: paid || trial,
+            trialEndsAt: p?.trial_ends_at ?? null,
+            paidUntil: p?.paid_until ?? null,
+            trialUsed: Boolean(p?.trial_started_at),
+            pendingOrder: pending.get(l.id) ?? null,
+          };
+        })(),
       })),
     },
   };

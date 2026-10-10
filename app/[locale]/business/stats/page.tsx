@@ -1,6 +1,7 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { BarChart } from "@/components/business/bar-chart";
 import { LocationSelect } from "@/components/business/location-select";
+import { ProGate } from "@/components/business/trial-banner";
 import { getBusiness, pickLocation } from "@/lib/business";
 
 export const instant = false;
@@ -20,6 +21,17 @@ export default async function StatsPage({ params, searchParams }: PageProps<"/[l
   const format = await getFormatter();
   const location = pickLocation(org.locations, query.location) ?? org.locations[0];
 
+  if (!location.pro) {
+    return (
+      <main className="flex max-w-4xl flex-col gap-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h1 className="text-4xl font-black tracking-brand lg:text-5xl">{t("title")}</h1>
+          {org.locations.length > 1 && <LocationSelect locations={org.locations} selected={location.id} allowAll={false} />}
+        </div>
+        <ProGate feature="stats" />
+      </main>
+    );
+  }
   const { data } = await supabase.rpc("location_stats", { p_location_id: location.id });
   const stats = (data ?? { months: [], categories: [] }) as { months: Month[]; categories: Category[] };
   const months = stats.months;

@@ -30,7 +30,11 @@ A RateThatJob munkahelyekről szóló értékeléseket, tényeket (bérfizetés,
 - A munkahely átvétele ingyenes. Az átvételt ellenőrizzük.
 - A munkáltató válaszolhat az értékelésekre, és vitathatja az igazolatlan értékeléseket. Értékelést törölni, elrejteni vagy megvásárolni nem lehet.
 - A munkáltató nem próbálhatja kideríteni az értékelők kilétét, és nem gyakorolhat nyomást a dolgozóira az értékelés miatt.
-- A fizetős (Pro) funkciókra az [Árak](/pricing) oldalon leírt díjak és feltételek vonatkoznak. A díjakat telephelyenként, havi vagy éves előfizetésként számlázzuk.
+- A Pro telephelyenkénti fizetős csomag. Benne van a RateThatJob Index a weboldaladra (képes jelvény, iframe kártya, Top Rated pecsét, a pontszám a JSON API-ban), a korai figyelmeztetés és a statisztika, valamint az [Árak](/pricing) oldalon felsorolt további funkciók.
+- Minden telephely egyszer 30 napos ingyenes Pro próbát kap, bankkártya nélkül. A próba automatikusan indul, amikor jóváhagyjuk az átvételt.
+- A próba után a Pro telephelyenként, havi vagy éves díjjal fizetős, az [Árak](/pricing) oldalon szereplő áron. Amíg nincs online fizetés, számlát küldünk, és a befizetés után kapcsoljuk be a Prót.
+- Aktív próba vagy kifizetett Pro nélkül a kitett Index-jelvények nem tűnnek el a weboldaladról, de pontszám helyett azt mutatják, hogy az Index jelenleg nem elérhető, és továbbra is a nyilvános profilodra visznek. A nyilvános profilod, az értékelések és a pontszámok a RateThatJobon csomagtól függetlenül mindig láthatók.
+- A karrieroldal widget (az állásaid a weboldaladon) ingyenes, nem kell hozzá Pro. Az álláshirdetések díja hirdetésenként fizetendő.
 
 ## 6. Állások és jelentkezés
 

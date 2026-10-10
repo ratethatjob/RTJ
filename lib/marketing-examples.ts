@@ -34,7 +34,7 @@ const EXAMPLE: LocationSummary = {
   },
 };
 
-const data: IndexData = { location: EXAMPLE, showScore: true, profileUrl: SITE_URL, rateUrl: SITE_URL };
+const data: IndexData = { location: EXAMPLE, active: true, showScore: true, profileUrl: SITE_URL, rateUrl: SITE_URL };
 
 /** SVG markup of example badges (text is escaped by the renderers). */
 export async function exampleBadges(locale: string) {

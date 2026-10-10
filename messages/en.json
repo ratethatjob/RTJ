@@ -478,7 +478,8 @@
     },
     "plans": {
       "free": "Free",
-      "pro": "Pro"
+      "pro": "Pro",
+      "trial": "Pro trial"
     },
     "upgrade": "Upgrade",
     "inviteTeam": "Invite your team",
@@ -587,7 +588,8 @@
       "import": "Import",
       "entities": "Legal entities",
       "metrics": "Metrics",
-      "orders": "Orders"
+      "orders": "Orders",
+      "plans": "Subscriptions"
     },
     "empty": "Nothing waiting.",
     "approve": "Approve",
@@ -699,7 +701,9 @@
       "paidOnTime": "Paid on time",
       "replies": "Replies to applicants",
       "topRated": "Top Rated Employer",
-      "footer": "RateThatJob.com · Know before you go"
+      "footer": "RateThatJob.com · Know before you go",
+      "unavailable": "RateThatJob Index currently unavailable.",
+      "unavailableHint": "Employer: sign in to your account to activate it."
     },
     "theme": "Theme",
     "preview": "Preview",
@@ -731,7 +735,7 @@
         "en": "English",
         "hu": "Magyar"
       },
-      "indexNote": "Featured (Pro) jobs come first. The RateThatJob Index always appears under the jobs.",
+      "indexNote": "Featured (Pro) jobs come first. The RateThatJob Index is always shown under the jobs: with Pro or the trial your score, otherwise \"currently unavailable\". The widget itself is free.",
       "code": "Code for your website",
       "codeHint": "Paste it where the jobs should appear. Without JavaScript the link inside still works.",
       "fallback": "Jobs at {name} on RateThatJob"
@@ -1169,7 +1173,9 @@
       "followed_review": "New review of {location}",
       "followed_job": "New job at {location}: {job}",
       "new_application": "New application for {job}",
-      "application_message": "{sender, select, employer {New message from {location} about {job}} other {{name} replied about {job}}}"
+      "application_message": "{sender, select, employer {New message from {location} about {job}} other {{name} replied about {job}}}",
+      "trial_ending": "{location}: {days, plural, one {# day} other {# days}} left of your Pro trial",
+      "trial_ended": "{location}: your Pro trial has ended – your embedded Index now says \"currently unavailable\""
     }
   },
   "Places": {
@@ -1242,7 +1248,8 @@
         "dispute": "Dispute unverified reviews",
         "inviteLink": "Shareable invite link for your team",
         "jobs": "Job ads from a low posting fee",
-        "profileBasic": "Team members and roles"
+        "profileBasic": "Team members and roles",
+        "careerWidget": "Careers page widget for your website"
       },
       "cta": "Claim for free"
     },
@@ -1258,7 +1265,8 @@
         "profile": "Branded profile with photos and benefits",
         "noCompetitors": "No competitor suggestions on your page"
       },
-      "cta": "Get Pro"
+      "cta": "Start your free trial",
+      "trial": "30 days free, no card"
     },
     "chains": {
       "name": "Chains",
@@ -1282,7 +1290,9 @@
       "q3": "Can we mix Free and Pro locations?",
       "q3a": "Yes. Choose Pro only for the locations where you need it.",
       "q4": "Does Pro affect our score?",
-      "q4a": "No. Scores come only from reviews and applications, the same for everyone."
+      "q4a": "No. Scores come only from reviews and applications, the same for everyone.",
+      "trial": "Is there a free trial?",
+      "triala": "Yes. Every location gets 30 days of Pro free, with no card needed. It starts automatically when your claim is approved, once per location. After that, your embedded Index says \"currently unavailable\" until you activate Pro."
     },
     "jobAds": {
       "title": "Job ads",
@@ -1303,7 +1313,11 @@
   },
   "Email": {
     "messageSubject": "{company} wrote to you about {job}",
-    "messageBody": "Hi {name},\n\n{company} sent you a message about your application for {job}:\n\n{message}\n\nReply here: {link}\n\nRateThatJob – Know before you go"
+    "messageBody": "Hi {name},\n\n{company} sent you a message about your application for {job}:\n\n{message}\n\nReply here: {link}\n\nRateThatJob – Know before you go",
+    "trial_endingSubject": "{days, plural, one {# day} other {# days}} left of your Pro trial – {location}",
+    "trial_endingBody": "Hi,\n\nYour free Pro trial for {location} ends in {days, plural, one {# day} other {# days}}. After that, your RateThatJob Index on your website will say \"currently unavailable\" instead of your score, and early warnings and statistics will turn off.\n\nActivate Pro here: {link}\n\nRateThatJob – Know before you go",
+    "trial_endedSubject": "Your Pro trial has ended – {location}",
+    "trial_endedBody": "Hi,\n\nYour free Pro trial for {location} has ended. Your RateThatJob Index on your website now says \"currently unavailable\" instead of your score. Your public profile and reviews stay visible as always.\n\nActivate Pro to show your score again: {link}\n\nRateThatJob – Know before you go"
   },
   "JobsWidget": {
     "title": "Open jobs at {name}",
@@ -1368,7 +1382,7 @@
     "cannotTitle": "What doesn't work",
     "cannotBody": "Employers can't delete reviews, and a better score can't be bought. You can dispute a review that isn't verified; our moderators decide.",
     "warningTitle": "See trouble early",
-    "warningBody": "Your dashboard warns you when management, pay, schedule or environment drops by 0.5 or more in the last 60 days compared with before (with at least 5 reviews in both periods). So you notice a souring mood before it pulls your Index down.",
+    "warningBody": "With Pro, your dashboard warns you when management, pay, schedule or environment drops by 0.5 or more in the last 60 days compared with before (with at least 5 reviews in both periods). So you notice a souring mood before it pulls your Index down.",
     "sealTitle": "Top Rated Employer seal",
     "sealBody": "A location earns the seal with an Index of 4.0 or higher and at least 10 verified reviews in the last 12 months. The seal shows the current year and disappears if the location no longer qualifies.",
     "topTitle": "Above 4.8: a very small club",
@@ -1384,10 +1398,11 @@
       "fewQ": "What if we have fewer than 5 reviews?",
       "fewA": "The badge says \"Rate us on RateThatJob\" and links to the review form for your location. Share your invite link with your team to get there.",
       "costQ": "Does it cost anything?",
-      "costA": "Claiming your workplace is free, and the embed codes are in your employer dashboard. See Pricing for what each plan includes."
+      "costA": "The Index for your website is part of Pro. Every location gets 30 days free with no card, starting when your claim is approved. After that Pro is billed per location; without it, your embedded badges stay but say the Index is currently unavailable. Your public profile and reviews are always visible."
     },
     "bottomTitle": "Let your people speak for you.",
-    "bottomBody": "Claim your workplace for free and put your Index on your careers page."
+    "bottomBody": "Claim your workplace for free and try the Index on your careers page for 30 days, no card.",
+    "trialNote": "Part of Pro · 30 days free, no card"
   },
   "CareerPage": {
     "metaTitle": "Embeddable careers page – your jobs on your website",
@@ -1416,7 +1431,7 @@
       "autoTitle": "Always up to date",
       "autoBody": "Post, edit or close a job on RateThatJob and your site shows the change on its own.",
       "trustTitle": "The Index underneath",
-      "trustBody": "Your RateThatJob Index is always shown under the jobs as a sign of trust. From 5 reviews it shows your score.",
+      "trustBody": "Your RateThatJob Index is always shown under the jobs as a sign of trust. With Pro or the free trial it shows your score from 5 reviews; otherwise it says the Index is currently unavailable.",
       "scopeTitle": "One job, a location or the whole company",
       "scopeBody": "Show a single job, every job at one location, or all jobs across your company.",
       "looksTitle": "Light or dark, English or Hungarian",
@@ -1453,17 +1468,47 @@
     "faqTitle": "Questions",
     "faq": {
       "costQ": "Does the widget cost anything?",
-      "costA": "The widget is available to every employer who has claimed their workplace. Job ads are priced per ad – see Pricing.",
+      "costA": "No. The careers page widget is free for every employer who has claimed their workplace, with or without Pro. Job ads are priced per ad – see Pricing.",
       "whereQ": "Where can I put it?",
       "whereA": "On any website where you can add HTML: your careers page, website builders that allow custom code, landing pages.",
       "noJobsQ": "What if we have no open jobs?",
       "noJobsA": "The widget says there are no open jobs right now and still shows your RateThatJob Index.",
       "indexQ": "Can we hide the Index?",
-      "indexA": "No. The RateThatJob Index is always shown under the jobs – that's what makes the widget a sign of trust.",
+      "indexA": "No. The RateThatJob Index is always shown under the jobs. With Pro or the free trial it shows your score; otherwise it says the Index is currently unavailable.",
       "dataQ": "Does it track our visitors?",
       "dataA": "No cookies. We only record which websites show the widget (the domain), so you can see where you're embedded."
     },
     "bottomTitle": "Put your jobs where your candidates already look.",
     "bottomBody": "Claim your workplace for free, post a job and copy the code from your dashboard."
+  },
+  "Plan": {
+    "status": "Status",
+    "activateColumn": "Activate Pro",
+    "paidUntil": "Paid until {date}",
+    "trialUntil": "Trial until {date}",
+    "trialDays": "{days, plural, one {# day} other {# days}} left of the free trial (until {date})",
+    "trialEnded": "Trial ended – the embedded Index shows \"currently unavailable\"",
+    "noPro": "No Pro",
+    "trialOffer": "Every location: 30 days of Pro free, no card.",
+    "billingNote": "Until online payment is ready, we send an invoice and switch Pro on when it's paid.",
+    "activate": "Activate Pro",
+    "activate_month": "Monthly",
+    "activate_year": "Yearly",
+    "requested": "Requested ({interval}) – we'll send the invoice",
+    "intervals": {
+      "month": "monthly",
+      "year": "yearly"
+    },
+    "error": "Something went wrong. Please try again.",
+    "trialLeft": "{days, plural, one {# day} other {# days}} left of your free Pro trial",
+    "trialBody": "Your RateThatJob Index, early warnings and statistics are on. Activate Pro to keep them.",
+    "endedTitle": "{count, plural, one {Your Pro trial has ended} other {Your Pro trial has ended at # locations}}",
+    "endedBody": "Your embedded RateThatJob Index now says \"currently unavailable\" instead of your score. Activate Pro to show it again.",
+    "gate": {
+      "indexTitle": "The RateThatJob Index is part of Pro",
+      "indexBody": "Activate Pro for this location to put your Index on your website. The careers page widget is free – see the Jobs tab.",
+      "statsTitle": "Statistics are part of Pro",
+      "statsBody": "Activate Pro for this location to see monthly volume, scores and category trends."
+    }
   }
 }

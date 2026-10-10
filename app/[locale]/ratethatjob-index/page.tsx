@@ -50,6 +50,7 @@ export default async function IndexMarketingPage({ params }: Props) {
                 {t("ctaEmployers")}
               </Link>
             </div>
+            <p className="mt-4 inline-block rounded-lg bg-signal px-3 py-1.5 font-black">{t("trialNote")}</p>
           </div>
           <figure className="flex min-w-0 flex-col gap-4 rounded-[2rem] bg-white p-6 sm:p-8">
             <figcaption className="self-start rounded-lg border-2 border-dashed border-mist px-3 py-1 text-sm font-black text-slate">

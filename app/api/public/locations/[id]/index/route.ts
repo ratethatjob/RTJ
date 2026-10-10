@@ -1,14 +1,16 @@
 import { getIndexLocation, isTopRated, PUBLIC_HEADERS } from "@/lib/rtj-index";
 
-// Public JSON for the RateThatJob Index. Scores only from 5 published reviews.
+// Public JSON for the RateThatJob Index. Scores only from 5 published reviews, and only while
+// the location has Pro (trial or paid); otherwise status is "inactive".
 export async function GET(_request: Request, { params }: RouteContext<"/api/public/locations/[id]/index">) {
   const { id } = await params;
   const data = await getIndexLocation(id);
   if (!data) return Response.json({ error: "not_found" }, { status: 404, headers: PUBLIC_HEADERS });
-  const { location, showScore, profileUrl, rateUrl } = data;
+  const { location, active, showScore, profileUrl, rateUrl } = data;
   const s = location.scores;
   return Response.json(
     {
+      status: active ? "active" : "inactive",
       name: location.name,
       company: location.companyName,
       address: location.address,
@@ -24,7 +26,7 @@ export async function GET(_request: Request, { params }: RouteContext<"/api/publ
         reply_rate: showScore ? (s?.replyRate ?? null) : null,
         avg_reply_days: showScore ? (s?.avgReplyDays ?? null) : null,
       },
-      top_rated: isTopRated(location),
+      top_rated: active && isTopRated(location),
       profile_url: profileUrl,
       rate_url: rateUrl,
       updated_at: location.updatedAt ?? null,
