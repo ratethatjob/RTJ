@@ -10,7 +10,7 @@
 - [ ] Vercel: `POSTGRES_URL_NON_POOLING` (RTJ adatbázis kapcsolat), hogy a migrációk minden buildnél automatikusan lefussanak
 - [ ] Supabase Auth: Site URL és Redirect URL-ek beállítva (rtj-k9pn.vercel.app, ratethatjob.com, www, preview, localhost). Hátra: saját SMTP (Resend: smtp.resend.com, jelszó a kulcs), utána {{ .Token }} az e-mail sablonba
 - [ ] Belépési szolgáltatók: Apple, Google, Facebook, SMS (Twilio), TikTok
-- [ ] Domain: ratethatjob.com és www (308 a fő címre) felvéve a Vercelre, GoDaddy @ A rekord → 216.198.79.1. Hátra: NEXT_PUBLIC_SITE_URL=https://ratethatjob.com, ha a domain él
+- [x] Domain: ratethatjob.com él a Vercelen, a www 308-cal a fő címre visz (GoDaddy @ A rekord → 216.198.79.1)
 - [ ] Régi Vercel projekt („rtj”) és a supabase-cyan-kettle Supabase projekt törlése
 
 - [ ] Üzemeltető: ABOVO JOBS MENA L.L.C-FZ beírva (`lib/site-config.ts`). (TRN: 105494925800001, irányadó jog: DIFC). Hiányzik: a `PRICING` Pro havi ár telephelyenként
