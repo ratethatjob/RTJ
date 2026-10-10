@@ -45,7 +45,7 @@ export default async function InviteTeamPage({ params, searchParams }: PageProps
             </p>
             {url ? <CopyLink url={url} /> : <p className="text-slate">{t("error")}</p>}
           </div>
-          <p className="mt-4 text-slate">{t("emailSmsSoon")}</p>
+          <p className="mt-4 text-slate">{t("emailSoon")}</p>
         </section>
       </div>
 

@@ -17,7 +17,11 @@ export async function requireUser(locale: string, path: string) {
   const { supabase, user } = await getUser();
   if (!user) {
     redirect({
-      href: { pathname: "/app/sign-in", query: { next: getPathname({ href: path, locale }) } },
+      href: {
+        pathname: "/app/sign-in",
+        // Employer pages get the employer sign-in (work email code only).
+        query: { next: getPathname({ href: path, locale }), ...(path.startsWith("/business") && { for: "business" }) },
+      },
       locale,
     });
   }

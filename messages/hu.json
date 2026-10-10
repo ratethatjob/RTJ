@@ -199,7 +199,14 @@
     "footer": "Nem kell jelszó. A folytatással elfogadod a <terms>Felhasználási feltételeket</terms> és az <privacy>Adatvédelmi tájékoztatót</privacy>.",
     "errorGeneric": "Valami hiba történt. Próbáld újra.",
     "errorCode": "Ez a kód nem jó. Ellenőrizd, vagy kérj újat.",
-    "errorLink": "A belépési link lejárt. Próbáld újra."
+    "errorLink": "A belépési link lejárt. Próbáld újra.",
+    "businessEyebrow": "Munkáltatóknak",
+    "businessTitle": "Munkáltatói belépés",
+    "businessSubtitle": "Lépj be vagy regisztrálj a céges e-mail-címeddel. Küldünk egy 6 jegyű kódot – jelszó nem kell.",
+    "businessEmail": "Céges e-mail",
+    "businessPlaceholder": "nev@cegneved.hu",
+    "notEmployer": "A saját munkavállalói fiókodat keresed?",
+    "workerSignIn": "Belépés itt"
   },
   "Welcome": {
     "title": "Hogyan jelenjünk meg?",
@@ -512,7 +519,6 @@
     "shareableHint": "tedd ki a dolgozói csoportba",
     "copy": "Link másolása",
     "copied": "Kimásolva",
-    "emailSmsSoon": "Az e-mailes és SMS-es meghívás CSV-feltöltéssel hamarosan jön.",
     "thisLocation": "Ez a telephely",
     "invitesSent": "Kiküldött meghívó",
     "reviewsReceived": "Beérkezett értékelés",
@@ -535,7 +541,8 @@
     "billingSoon": "A fizetős csomagok hamarosan jönnek. Addig minden ingyenes.",
     "comingSoon": "Hamarosan",
     "warningCategory": "{category}: {delta}-del csökkent az utolsó 60 napban ({recent}, korábban {baseline}).",
-    "seeStats": "Statisztika"
+    "seeStats": "Statisztika",
+    "emailSoon": "Az e-mailes meghívás CSV-feltöltéssel hamarosan jön."
   },
   "Account": {
     "title": "Fiókod",
@@ -1260,7 +1267,7 @@
       "features": {
         "warnings": "Korai figyelmeztetés, ha romlik egy pontszám",
         "stats": "Statisztika és trendek telephelyenként",
-        "invites": "E-mailes és SMS-es meghívók emlékeztetővel",
+        "invites": "E-mailes meghívók emlékeztetővel",
         "index": "RateThatJob Index jelvény és widget",
         "profile": "Egyedi profil fotókkal és juttatásokkal",
         "noCompetitors": "Nincs konkurens ajánló az oldaladon"

@@ -199,7 +199,14 @@
     "footer": "No password needed. By continuing you agree to the <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
     "errorGeneric": "Something went wrong. Please try again.",
     "errorCode": "That code didn't work. Check it or send a new one.",
-    "errorLink": "That sign-in link has expired. Please try again."
+    "errorLink": "That sign-in link has expired. Please try again.",
+    "businessEyebrow": "For employers",
+    "businessTitle": "Employer sign-in",
+    "businessSubtitle": "Sign in or create your employer account with your work email address. We'll email you a 6-digit code – no password needed.",
+    "businessEmail": "Work email",
+    "businessPlaceholder": "you@yourcompany.com",
+    "notEmployer": "Looking for your own worker account?",
+    "workerSignIn": "Sign in here"
   },
   "Welcome": {
     "title": "How should we show you?",
@@ -512,7 +519,6 @@
     "shareableHint": "post it in your staff group chat",
     "copy": "Copy link",
     "copied": "Copied",
-    "emailSmsSoon": "Email and SMS invites with CSV upload are coming soon.",
     "thisLocation": "This location",
     "invitesSent": "Invites sent",
     "reviewsReceived": "Reviews received",
@@ -535,7 +541,8 @@
     "billingSoon": "Paid plans are coming soon. Everything is free until then.",
     "comingSoon": "Coming soon",
     "warningCategory": "{category} is down {delta} in the last 60 days ({recent} vs {baseline}).",
-    "seeStats": "See statistics"
+    "seeStats": "See statistics",
+    "emailSoon": "Email invites with CSV upload are coming soon."
   },
   "Account": {
     "title": "Your account",
@@ -1260,7 +1267,7 @@
       "features": {
         "warnings": "Early warnings when a score starts dropping",
         "stats": "Statistics and trends per location",
-        "invites": "Email and SMS invites with reminders",
+        "invites": "Email invites with reminders",
         "index": "RateThatJob Index badge and widget",
         "profile": "Branded profile with photos and benefits",
         "noCompetitors": "No competitor suggestions on your page"

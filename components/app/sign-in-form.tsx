@@ -6,7 +6,8 @@ import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-type Props = { next: string; welcome: string; linkError: boolean };
+/** `business`: employer sign-in, work email code only (no Apple, Google or Facebook). */
+type Props = { next: string; welcome: string; linkError: boolean; business?: boolean };
 
 const PROVIDERS: { id: Provider; name: string }[] = [
   { id: "apple", name: "Apple" },
@@ -14,7 +15,7 @@ const PROVIDERS: { id: Provider; name: string }[] = [
   { id: "facebook", name: "Facebook" },
 ];
 
-export function SignInForm({ next, welcome, linkError }: Props) {
+export function SignInForm({ next, welcome, linkError, business = false }: Props) {
   const t = useTranslations("Auth");
   const [target, setTarget] = useState("");
   const [code, setCode] = useState("");
@@ -108,6 +109,8 @@ export function SignInForm({ next, welcome, linkError }: Props) {
 
   return (
     <div className="mt-8 flex flex-1 flex-col">
+      {!business && (
+        <>
       <div className="flex flex-col gap-3">
         {PROVIDERS.map((p, i) => (
           <button
@@ -129,15 +132,18 @@ export function SignInForm({ next, welcome, linkError }: Props) {
         <span className="h-px flex-1 bg-mist/60" />
       </div>
 
+        </>
+      )}
+
       <form onSubmit={sendCode} className="flex flex-col gap-3">
         <label className="flex flex-col gap-2">
-          <span className="font-black text-slate">{t("email")}</span>
+          <span className="font-black text-slate">{business ? t("businessEmail") : t("email")}</span>
           <input
             type="email"
             autoComplete="email"
             value={target}
             onChange={(e) => setTarget(e.target.value)}
-            placeholder={t("emailPlaceholder")}
+            placeholder={business ? t("businessPlaceholder") : t("emailPlaceholder")}
             required
             className="rounded-2xl border border-mist/60 bg-white px-5 py-4 text-lg outline-none focus:border-ink"
           />
@@ -150,6 +156,15 @@ export function SignInForm({ next, welcome, linkError }: Props) {
           {t("sendCode")}
         </button>
       </form>
+
+      {business && (
+        <p className="mt-6 text-center text-slate">
+          {t("notEmployer")}{" "}
+          <Link href="/app/sign-in" className="font-black text-ink underline underline-offset-4">
+            {t("workerSignIn")}
+          </Link>
+        </p>
+      )}
 
       <p className="mt-auto pt-10 text-center text-sm text-slate">
         {t.rich("footer", {

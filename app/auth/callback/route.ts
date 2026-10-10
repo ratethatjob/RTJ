@@ -18,10 +18,14 @@ export async function GET(request: NextRequest) {
       ? await supabase.auth.verifyOtp({ token_hash: tokenHash, type })
       : { error: new Error("missing code") };
 
+  // Employer pages: back to the employer sign-in on error, and no reviewer display-name step.
+  const business = /^\/(?:hu\/)?business(?:[/?]|$)/.test(next);
   if (error) {
-    return NextResponse.redirect(`${origin}/app/sign-in?error=1&next=${encodeURIComponent(next)}`);
+    return NextResponse.redirect(
+      `${origin}/app/sign-in?error=1&next=${encodeURIComponent(next)}${business ? "&for=business" : ""}`,
+    );
   }
-  return NextResponse.redirect(`${origin}${welcomePath(next)}`);
+  return NextResponse.redirect(`${origin}${business ? next : welcomePath(next)}`);
 }
 
 // Only same-site relative paths.

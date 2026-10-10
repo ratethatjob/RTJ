@@ -19,5 +19,5 @@
 - [ ] Jogi szövegek átnézése: `content/legal/` (ÁSZF, adatvédelem, sütik, impresszum – HU és EN). Az adatfeldolgozók (Stripe, Resend, Anthropic jelentkezés-összefoglaló) felvéve
 
 ## Fejlesztés
-- [ ] E-mail/SMS meghívók (Resend, Twilio) – kulcsok kellenek
+- [ ] E-mailes meghívók (Resend) – kulcs kell
 - [ ] Stripe: Pro előfizetés (helyszínenként, havi/éves; most 30 nap próba, utána `plan_orders` + kézi számla, admin „Előfizetések” fül) és álláscsomagok fizetése (most `job_orders` + kézi számla) – kulcsok kellenek

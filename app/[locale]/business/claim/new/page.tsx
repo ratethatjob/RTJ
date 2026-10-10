@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { NewWorkplaceForm } from "@/components/app/new-workplace-form";
 import { getPathname } from "@/i18n/navigation";
+import { requireUser } from "@/lib/auth";
 
 export const instant = false;
 
@@ -8,6 +9,7 @@ export default async function ClaimNewWorkplacePage({ params, searchParams }: Pa
   const { locale } = await params;
   setRequestLocale(locale);
   const { q } = await searchParams;
+  await requireUser(locale, `/business/claim/new${typeof q === "string" && q ? `?q=${encodeURIComponent(q)}` : ""}`);
   const t = await getTranslations("NewWorkplace");
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 py-10">

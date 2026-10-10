@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Faq } from "@/components/faq";
-import { Link } from "@/i18n/navigation";
+import { getPathname, Link } from "@/i18n/navigation";
 import { localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/employers">): Promise<Metadata> {
@@ -33,7 +33,10 @@ export default async function EmployersPage({ params }: PageProps<"/[locale]/emp
             <Link href="/business/claim" className="rounded-2xl bg-ink px-7 py-4 text-lg font-black text-paper">
               {t("cta")}
             </Link>
-            <Link href="/business" className="rounded-2xl border-2 border-ink px-7 py-4 text-lg font-black">
+            <Link
+              href={{ pathname: "/app/sign-in", query: { for: "business", next: getPathname({ href: "/business", locale }) } }}
+              className="rounded-2xl border-2 border-ink px-7 py-4 text-lg font-black"
+            >
               {t("dashboard")}
             </Link>
           </div>

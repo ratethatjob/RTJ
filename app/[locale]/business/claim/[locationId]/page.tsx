@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ClaimForm } from "@/components/business/claim-form";
+import { requireUser } from "@/lib/auth";
 import { getLocationById } from "@/lib/data";
 
 export const instant = false;
@@ -8,6 +9,7 @@ export const instant = false;
 export default async function ClaimPage({ params }: PageProps<"/[locale]/business/claim/[locationId]">) {
   const { locale, locationId } = await params;
   setRequestLocale(locale);
+  await requireUser(locale, `/business/claim/${locationId}`);
   const location = await getLocationById(locationId);
   if (!location) notFound();
   const t = await getTranslations("Business");

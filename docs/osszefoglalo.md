@@ -58,7 +58,7 @@ A munkáltatónak (aki fizet):
 
 ## 6. Céges meghívó (dolgozók értékelésre hívása)
 
-- A cég CSV-t tölt fel vagy egyenként ad hozzá dolgozókat (név opcionális, **bármilyen e-mail**, magáncím is jó, vagy **telefonszám SMS-hez**, mert sok kékgalléros dolgozónál nincs e-mail), plusz megosztható link.
+- A cég CSV-t tölt fel vagy egyenként ad hozzá dolgozókat (név opcionális, **bármilyen e-mail**, magáncím is jó), plusz megosztható link. SMS-es meghívó nincs.
 - A meghívásos értékelés automatikusan igazolt, de „cég által meghívott” jelölést kap, és a profilon látszik a meghívó/értékelés arány (szelekciós torzítás ellen).
 - A pozitív értékeléseket aktívan kell kérni (a negatívak maguktól jönnek) – erre való a meghívó.
 
@@ -98,7 +98,7 @@ A munkáltatónak (aki fizet):
 3. Értékelés 1 perc alatt, 3 lépésben (kapcsolat típusa és időszak, pozíció, állandó/alkalmi; 5 pontszám; tények igen/nem; jelentkezői kérdések; opcionális szöveg bármilyen nyelven; közzététel időzítése)
 4. Igazolás (szintek, dokumentum, hely–entitás összerendelés, súlyozás)
 5. Névtelenség védelme (5-ös küszöb, késleltetés)
-6. Céges meghívó (CSV/kézi/link, e-mail/SMS, emlékeztető, arány a profilon)
+6. Céges meghívó (CSV/kézi/link, e-mail, emlékeztető, arány a profilon)
 7. Moderálás (automatikus szűrés, csalásfigyelés, vitatás, jelentés)
 8. Megjelenítés (friss pontszám, tények %, ghosting-mutató, szűrők, céges válasz)
 9. Visszatérés (értesítés, frissítés, „hasznos”)

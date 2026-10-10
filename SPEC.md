@@ -37,7 +37,6 @@ Later phase: job posting + easy, CV-free applying on the same platform (the appl
 | Machine translation | LLM API (e.g. Claude) | Translate on publish, cache in DB |
 | Moderation | LLM classifier + rules | Personal data, hate, threats; queue for manual review |
 | Email | Resend (or Postmark) | Invites, reminders, notifications |
-| SMS | Twilio | SMS invites |
 | Payments | Stripe Billing | Subscription per location (quantity-based), monthly / yearly |
 | Places data | Google Places API | Location autocomplete, seeding, address normalization |
 | Search | Postgres full-text + `pg_trgm` | Move to Typesense/Meilisearch when needed |
@@ -126,7 +125,7 @@ Main tables (all with `id uuid`, `created_at`, `updated_at`):
 
 **Invites**
 - `invite_batches` – `location_id`, `org_id`, `channel_mix`, `created_by`, `sent_count`.
-- `invites` – `batch_id`, `channel` (`email` | `sms` | `link`), `contact_encrypted` (deleted after the reminder window), `contact_hash`, `token`, `sent_at`, `reminded_at`, `opened_at`, `used_at`.
+- `invites` – `batch_id`, `channel` (`email` | `link`), `contact_encrypted` (deleted after the reminder window), `contact_hash`, `token`, `sent_at`, `reminded_at`, `opened_at`, `used_at`.
 - Employers only ever see batch-level counts: invites sent, reviews received – and **received counts are shown only when ≥ 5**.
 
 **Aggregates (materialized / cached)**
@@ -181,7 +180,7 @@ Levels shown as badges: Not verified · Verified (document) · Verified (invited
 - **Overview:** score, verified count, applicant reply rate, reviews awaiting reply, early warnings, per-location table.
 - **Early warnings (Pro):** detect drops in a category score (e.g. −0.5 within 60 days) or recurring topics (LLM topic clustering on recent reviews) per location; email + dashboard alert.
 - **Reviews & replies:** reply in any language (auto-translated for readers), dispute unverified reviews. No deletion.
-- **Invite your team (Pro, or limited on Free):** pick location → CSV upload (name optional, email or phone; private emails fine) / add one by one / shareable link → message template per recipient language → send by email/SMS, one reminder after 5 days.
+- **Invite your team (Pro, or limited on Free):** pick location → CSV upload (name optional, email; private emails fine) / add one by one / shareable link → message template per recipient language → send by email, one reminder after 5 days. No SMS.
 - **Locations, team & roles:** owner (all + billing), HR (all locations, replies, invites), location manager (own location only).
 - **Plan & billing:** per-location Free/Pro, monthly or yearly (2 months free). Chains 10+ locations: custom.
 - **Free trial:** every location gets 30 days of Pro free, no card, once per location; it starts automatically when the claim is approved (`location_plans.status = 'trialing'`, `trial_ends_at`). Notices 7 and 1 day(s) before the end and once after it (in-app + email). After that Pro is paid; until Stripe, the employer requests activation (monthly/yearly) and an admin marks it paid (`paid_until`).
