@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* Brand tokens – see SPEC.md section 12 */
+@theme {
+  --color-signal: #3ddc97; /* accent, icon, primary CTA on dark – never as text on light */
+  --color-ink: #14161a; /* text, dark backgrounds, primary buttons */
+  --color-paper: #f4f2ee; /* light background */
+  --color-slate: #4a4f57; /* secondary text on light */
+  --color-mist: #b5bac1; /* secondary text on dark */
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+
+  --tracking-brand: -0.03em; /* wordmark, headings */
+  --tracking-tagline: 0.16em; /* uppercase tagline */
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-weight: 500;
+}
