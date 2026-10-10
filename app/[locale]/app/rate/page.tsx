@@ -13,6 +13,7 @@ export default async function RatePickerPage({ params, searchParams }: PageProps
   const query = typeof q === "string" ? q.slice(0, 80) : "";
   const results = query ? await searchLocations(query) : [];
   const t = await getTranslations("RatePicker");
+  const tw = await getTranslations("NewWorkplace");
   const tc = await getTranslations("Categories");
 
   return (
@@ -47,6 +48,16 @@ export default async function RatePickerPage({ params, searchParams }: PageProps
           ))}
         </ul>
       )}
+
+      <p className="mt-8 text-slate">
+        {tw("cantFind")}{" "}
+        <Link
+          href={{ pathname: "/app/rate/new", query: query ? { q: query } : {} }}
+          className="font-black text-ink underline underline-offset-4"
+        >
+          {tw("addIt")}
+        </Link>
+      </p>
     </main>
   );
 }

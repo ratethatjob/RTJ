@@ -3,8 +3,9 @@ import { supabaseKey, supabaseUrl } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
 export async function getUser() {
-  if (!supabaseUrl || !supabaseKey) throw new Error("Supabase is not configured");
+  // createClient reads cookies first, so prerendering stops before this runs.
   const supabase = await createClient();
+  if (!supabaseUrl || !supabaseKey) throw new Error("Supabase is not configured");
   const {
     data: { user },
   } = await supabase.auth.getUser();

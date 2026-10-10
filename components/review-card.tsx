@@ -23,9 +23,11 @@ function pickText(text: LocalizedText, locale: string) {
 export async function ReviewCard({
   review,
   companyName,
+  children,
 }: {
   review: Review;
   companyName: string;
+  children?: React.ReactNode;
 }) {
   const locale = await getLocale();
   const t = await getTranslations("Review");
@@ -119,6 +121,7 @@ export async function ReviewCard({
           <p className="mt-1 text-slate">{reply.text}</p>
         </div>
       )}
+      {children}
     </article>
   );
 }

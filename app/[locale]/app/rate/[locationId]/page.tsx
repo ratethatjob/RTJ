@@ -8,13 +8,15 @@ import { locationPath } from "@/lib/format";
 
 export const instant = false;
 
-export default async function RatePage({ params }: PageProps<"/[locale]/app/rate/[locationId]">) {
+export default async function RatePage({ params, searchParams }: PageProps<"/[locale]/app/rate/[locationId]">) {
   const { locale, locationId } = await params;
+  const { invite } = await searchParams;
+  const inviteToken = typeof invite === "string" && /^[\w-]{8,64}$/.test(invite) ? invite : undefined;
   setRequestLocale(locale);
   const location = await getLocationById(locationId);
   if (!location) notFound();
 
-  const self = `/app/rate/${locationId}`;
+  const self = `/app/rate/${locationId}${inviteToken ? `?invite=${inviteToken}` : ""}`;
   const { supabase, user } = await requireUser(locale, self);
   const { data: profile } = await supabase
     .from("profiles")
@@ -28,6 +30,7 @@ export default async function RatePage({ params }: PageProps<"/[locale]/app/rate
   return (
     <ReviewForm
       userId={user.id}
+      inviteToken={inviteToken}
       location={{ id: location.id, name: location.name, address: location.address }}
       displayName={displayName ?? ""}
       changeNameHref={getPathname({

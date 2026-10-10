@@ -134,7 +134,7 @@ export default async function LocationPage({ params }: Props) {
               <h2 className="text-xl font-black">{t("claimTitle")}</h2>
               <p className="mt-2 text-slate">{t("claimBody")}</p>
               <Link
-                href="/employers"
+                href={`/business/claim/${data.id}`}
                 className="mt-4 inline-block font-black underline underline-offset-4"
               >
                 {t("claimCta")}
@@ -203,7 +203,8 @@ function JsonLd({ location, locale }: { location: LocationSummary; locale: strin
       "@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "RateThatJob", item: `${SITE_URL}${prefix || "/"}` },
-        { "@type": "ListItem", position: 2, name: `${location.name} (${location.address})`, item: url },
+        { "@type": "ListItem", position: 2, name: location.companyName, item: `${SITE_URL}${prefix}/${location.companySlug}` },
+        { "@type": "ListItem", position: 3, name: `${location.name} (${location.address})`, item: url },
       ],
     },
   ];

@@ -20,6 +20,9 @@ Next.js (App Router, `cacheComponents`) + TypeScript, Tailwind CSS v4, next-intl
 - Reviewer flow (`app/[locale]/app/`, noindex): `sign-in` (email/phone OTP, OAuth) → `/auth/callback` → `welcome` (display name) → `rate` (workplace search) → `rate/[locationId]` (3-step form, `components/app/review-form.tsx`). Server actions: `app/[locale]/app/actions.ts`; validation: `lib/review-input.ts`. `proxy.ts` refreshes the Supabase session on `/app` paths only.
 - Publishing: reviews are inserted as `pending_moderation`; a DB trigger (`private.moderate_review`) schedules them (anonymity delay, manual queue for contact details/links), and pg_cron runs `publish_due_reviews()` every 15 minutes. Verification files go to the private `verifications` storage bucket under `<user id>/`.
 
+- Workplaces: reviewers add missing ones via `create_workplace()` (`/app/rate/new`); company pages at `app/[locale]/[company]`.
+- Employers (`app/[locale]/business/`, noindex): `/employers` landing → `/business/claim` (claim requests, approved by an admin with `select private.approve_claim('<claim id>')`) → dashboard (overview, reviews & replies/disputes, invite link, locations/team/plan). Data loader: `lib/business.ts`. Invite links: `/r/[token]` → `/app/rate/[id]?invite=` → `attach_invite()` marks the review invited and delays it.
+
 ## Working with the founder
 - Communicates in Hungarian, short and direct. Product and UI copy are in English (and Hungarian translations), mobile first.
 - Do only what is asked; don't add extras or offer unrequested work.

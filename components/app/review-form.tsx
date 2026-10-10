@@ -15,6 +15,7 @@ import { ChevronLeftIcon, GlobeIcon } from "../icons";
 
 type Props = {
   userId: string;
+  inviteToken?: string;
   location: { id: string; name: string; address: string };
   displayName: string;
   changeNameHref: string;
@@ -40,7 +41,7 @@ const empty = (locationId: string): ReviewInput => ({
   publishMode: "now",
 });
 
-export function ReviewForm({ userId, location, displayName, changeNameHref, locationHref }: Props) {
+export function ReviewForm({ userId, inviteToken, location, displayName, changeNameHref, locationHref }: Props) {
   const t = useTranslations("ReviewForm");
   const storageKey = `rtj-review-${location.id}`;
   const [step, setStep] = useState(1);
@@ -104,7 +105,7 @@ export function ReviewForm({ userId, location, displayName, changeNameHref, loca
   function submit() {
     setError(null);
     startTransition(async () => {
-      const result = await submitReview(input);
+      const result = await submitReview(input, inviteToken);
       if (result.error || !result.id) return setError(t(`errors.${result.error ?? "generic"}`));
       if (file) {
         const ok = await uploadDocument(result.id);

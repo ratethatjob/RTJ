@@ -35,6 +35,7 @@ export async function saveDisplayName(
 
 export async function submitReview(
   input: ReviewInput,
+  inviteToken?: string,
 ): Promise<{ id?: string; error?: "required" | "dates" | "generic" }> {
   const { supabase, user } = await getUser();
   if (!user) return { error: "generic" };
@@ -54,5 +55,44 @@ export async function submitReview(
     .select("id")
     .single();
   if (error) return { error: "generic" };
+  // Marks the review as invited; an invalid or reused token is simply ignored.
+  if (inviteToken) {
+    await supabase.rpc("attach_invite", { p_review_id: data.id, p_token: inviteToken });
+  }
   return { id: data.id };
+}
+
+const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
+const COUNTRIES = ["HU", "US", "AT", "DE", "SK", "RO", "GB"] as const;
+
+export async function createWorkplace(form: {
+  company: string;
+  address: string;
+  city: string;
+  country: string;
+  category: string;
+}): Promise<{ id?: string; error?: "invalid" | "limit" | "generic" }> {
+  const { supabase, user } = await getUser();
+  if (!user) return { error: "generic" };
+  const company = form.company.trim();
+  const address = form.address.trim();
+  const city = form.city.trim();
+  if (
+    company.length < 2 ||
+    address.length < 2 ||
+    city.length < 2 ||
+    !COUNTRIES.includes(form.country as (typeof COUNTRIES)[number]) ||
+    !CATEGORIES.includes(form.category as (typeof CATEGORIES)[number])
+  ) {
+    return { error: "invalid" };
+  }
+  const { data, error } = await supabase.rpc("create_workplace", {
+    p_company: company,
+    p_address: address,
+    p_city: city,
+    p_country: form.country,
+    p_category: form.category,
+  });
+  if (error) return { error: error.code === "54000" ? "limit" : error.code === "22023" ? "invalid" : "generic" };
+  return { id: data as string };
 }

@@ -70,6 +70,30 @@ export async function searchLocations(q: string): Promise<LocationSummary[]> {
   return data.map(toLocation);
 }
 
+export async function getCompany(
+  slug: string,
+): Promise<{ name: string; slug: string; locations: LocationSummary[] } | null> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag(`company:${slug}`);
+  let locations: LocationSummary[];
+  if (!useSupabase) {
+    locations = sampleLocations.filter((l) => l.companySlug === slug);
+  } else {
+    const { data, error } = await publicClient()
+      .from("public_locations")
+      .select("*")
+      .eq("company_slug", slug)
+      .order("review_count", { ascending: false })
+      .limit(500);
+    if (error) throw error;
+    locations = data.map(toLocation);
+  }
+  return locations.length
+    ? { name: locations[0].companyName, slug, locations }
+    : null;
+}
+
 export async function getLocationPaths() {
   "use cache";
   cacheLife("hours");

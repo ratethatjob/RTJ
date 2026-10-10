@@ -8,13 +8,13 @@ const intl = createMiddleware(routing);
 export default async function proxy(request: NextRequest) {
   const response = intl(request);
   // Only signed-in areas need the session; public pages stay cacheable.
-  if (/^\/(?:[a-z]{2}\/)?app(?:\/|$)/.test(request.nextUrl.pathname)) {
+  if (/^\/(?:[a-z]{2}\/)?(?:app|business)(?:\/|$)/.test(request.nextUrl.pathname)) {
     return refreshSession(request, response);
   }
   return response;
 }
 
 export const config = {
-  // Skip API, auth callbacks, embeds, invite redirects, Next internals and files with an extension
-  matcher: "/((?!api|auth|embed|r/|_next|_vercel|.*\\..*).*)",
+  // Skip API, auth callbacks, embeds, Next internals and files with an extension
+  matcher: "/((?!api|auth|embed|_next|_vercel|.*\\..*).*)",
 };
