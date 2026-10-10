@@ -9,7 +9,7 @@
 - [ ] Google Places: Google Cloud Console → új projekt → „Places API (New)” bekapcsolása → API kulcs (API restrictions: csak Places API (New)) → Vercelen `GOOGLE_PLACES_API_KEY`, utána Redeploy. A `SUPABASE_SECRET_KEY` is kell hozzá. A kód kész, a kulccsal azonnal működik.
 - [ ] Vercel: `POSTGRES_URL_NON_POOLING` (RTJ adatbázis kapcsolat), hogy a migrációk minden buildnél automatikusan lefussanak
 - [ ] Supabase Auth: Site URL és Redirect URL-ek beállítva (rtj-k9pn.vercel.app, ratethatjob.com, www, preview, localhost). Hátra: saját SMTP (Resend: smtp.resend.com, jelszó a kulcs), utána {{ .Token }} az e-mail sablonba
-- [ ] Belépési szolgáltatók: Apple, Google, Facebook, SMS (Twilio), TikTok
+- [ ] Belépési szolgáltatók: Apple, Google, Facebook
 - [x] Domain: ratethatjob.com él a Vercelen, a www 308-cal a fő címre visz (GoDaddy @ A rekord → 216.198.79.1)
 - [ ] Régi Vercel projekt („rtj”) és a supabase-cyan-kettle Supabase projekt törlése
 

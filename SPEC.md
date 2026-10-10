@@ -30,14 +30,14 @@ Later phase: job posting + easy, CV-free applying on the same platform (the appl
 | Framework | **Next.js (App Router) + TypeScript** | SSR/ISR for public pages, React Server Components |
 | Hosting | **Vercel** | Edge caching, ISR revalidation, OG image generation |
 | Database | **Postgres (Supabase)** | Row Level Security on every table |
-| Auth | **Supabase Auth** | Apple, Google, Facebook, email OTP (passwordless), phone OTP. TikTok via TikTok Login Kit as a custom OAuth flow (check current Supabase provider support first) |
+| Auth | **Supabase Auth** | Apple, Google, Facebook, email OTP (passwordless) |
 | File storage | Supabase Storage, **private bucket** | Verification documents only; auto-delete after review |
 | Styling | Tailwind CSS | Design tokens from section 12 |
 | i18n | next-intl | Locale routing, ICU messages |
 | Machine translation | LLM API (e.g. Claude) | Translate on publish, cache in DB |
 | Moderation | LLM classifier + rules | Personal data, hate, threats; queue for manual review |
 | Email | Resend (or Postmark) | Invites, reminders, notifications |
-| SMS | Twilio | Phone OTP fallback, SMS invites |
+| SMS | Twilio | SMS invites |
 | Payments | Stripe Billing | Subscription per location (quantity-based), monthly / yearly |
 | Places data | Google Places API | Location autocomplete, seeding, address normalization |
 | Search | Postgres full-text + `pg_trgm` | Move to Typesense/Meilisearch when needed |
@@ -137,7 +137,7 @@ Main tables (all with `id uuid`, `created_at`, `updated_at`):
 ## 5. Reviewer flows
 
 ### 5.1 Sign-up (one tap)
-- Buttons: Continue with Apple / Google / Facebook / TikTok, email OTP (no password), phone OTP.
+- Buttons: Continue with Apple / Google / Facebook, email OTP (no password).
 - After first login: choose display name → generated anonymous name (shuffle button) or own username. Changeable anytime.
 - Account belongs to the worker, not the employer; it moves with them between jobs.
 
@@ -237,6 +237,14 @@ Goal: employers show their score on their careers page / job ads; every embed is
 - Big job boards (e.g. Profession, Indeed) usually don't allow custom HTML in ads → use the inline text strip + link there; partner integrations later.
 - On our own job pages (Phase 3) the full widget is shown natively.
 - Track embeds: count distinct referring domains per location (shown to the employer, also a growth metric for us).
+
+### 8.4 Jobs widget
+- Same `widget.js`, new element: `<div data-rtj-jobs="job|location|company" data-id="ID or company slug" data-theme="light|dark" data-locale="en|hu"><a href="…">fallback link</a></div>`. The inner link stays as a crawlable fallback without JS.
+- Renders in Shadow DOM: job cards with title, pay, schedule, Quick apply badge; featured (Pro) jobs first.
+- The RateThatJob Index is always shown under the jobs (score from 5 reviews, otherwise "Rate us on RateThatJob"); employers cannot turn it off. For a company the score is the review-weighted average of its locations.
+- Data: `GET /api/public/jobs?job=ID | ?location=ID | ?company=SLUG [&locale=]` → open, published jobs only (from `public_jobs`), display strings in the requested language, never user data. CORS open, browser-cached (so `recordEmbed()` counts every site), rate-limited per IP.
+- "Apply" opens our apply flow in a new tab with `?ref=embed&from=<host page URL>`; the application is stored with `source = 'embed'`, and the done screen offers "Back to the company's website" (http/https only).
+- Generator: "Jobs" tab on `/business/index` (one job / location / whole company, theme, language, live preview, copyable code). Available to every claimed employer for now; may move behind Pro later.
 
 ---
 

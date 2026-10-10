@@ -16,6 +16,7 @@ export type ApplyInput = {
   answers: Record<string, boolean | string>;
   cvPath: string | null;
   message: string;
+  source: "site" | "embed";
 };
 
 const START = ["now", "two_weeks", "later"];
@@ -66,6 +67,7 @@ export async function applyToJob(
     answers,
     cv_path: quick ? null : cvPath,
     message: message || null,
+    source: input.source === "embed" ? "embed" : "site",
   }).select("id").single();
   if (!error) {
     // Pro jobs ask follow-up questions first; the summary is written after they're answered or skipped.

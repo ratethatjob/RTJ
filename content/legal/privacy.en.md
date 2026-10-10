@@ -12,7 +12,7 @@ Employers never learn who wrote a review or who responded to their invite. Publi
 
 ## 3. What we process and why
 
-- **Account:** email address or phone number, display name, language. Purpose: sign-in and providing the service. Legal basis: providing the service (contract).
+- **Account:** email address, display name, language. Purpose: sign-in and providing the service. Legal basis: providing the service (contract).
 - **Reviews:** the workplace, your relationship to it (employee, former employee, applicant), period, position, ratings, facts and text. Purpose: publishing, computing scores, moderation. Legal basis: contract and legitimate interest (keeping reviews trustworthy).
 - **Verification document (optional):** payslip, contract and similar. Used only to check the review and deleted after the decision, at the latest within 30 days.
 - **Applications:** name, email or phone, your answers. They go to the employer you apply to. Legal basis: your request (contract).

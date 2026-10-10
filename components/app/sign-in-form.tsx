@@ -7,18 +7,15 @@ import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 type Props = { next: string; welcome: string; linkError: boolean };
-type Channel = "email" | "phone";
 
-const PROVIDERS: { id: Provider | "tiktok"; name: string }[] = [
+const PROVIDERS: { id: Provider; name: string }[] = [
   { id: "apple", name: "Apple" },
   { id: "google", name: "Google" },
   { id: "facebook", name: "Facebook" },
-  { id: "tiktok", name: "TikTok" },
 ];
 
 export function SignInForm({ next, welcome, linkError }: Props) {
   const t = useTranslations("Auth");
-  const [channel, setChannel] = useState<Channel>("email");
   const [target, setTarget] = useState("");
   const [code, setCode] = useState("");
   const [sent, setSent] = useState(false);
@@ -28,8 +25,7 @@ export function SignInForm({ next, welcome, linkError }: Props) {
   const callback = () =>
     `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
-  async function oauth(provider: Provider | "tiktok") {
-    if (provider === "tiktok") return setError(t("tiktokSoon"));
+  async function oauth(provider: Provider) {
     setError(null);
     const { error } = await createClient().auth.signInWithOAuth({
       provider,
@@ -42,11 +38,10 @@ export function SignInForm({ next, welcome, linkError }: Props) {
     event.preventDefault();
     setBusy(true);
     setError(null);
-    const auth = createClient().auth;
-    const { error } =
-      channel === "email"
-        ? await auth.signInWithOtp({ email: target.trim(), options: { emailRedirectTo: callback() } })
-        : await auth.signInWithOtp({ phone: target.replace(/[\s()-]/g, "") });
+    const { error } = await createClient().auth.signInWithOtp({
+      email: target.trim(),
+      options: { emailRedirectTo: callback() },
+    });
     setBusy(false);
     if (error) return setError(t("errorGeneric"));
     setSent(true);
@@ -56,12 +51,11 @@ export function SignInForm({ next, welcome, linkError }: Props) {
     event.preventDefault();
     setBusy(true);
     setError(null);
-    const auth = createClient().auth;
-    const token = code.replace(/\s/g, "");
-    const { error } =
-      channel === "email"
-        ? await auth.verifyOtp({ email: target.trim(), token, type: "email" })
-        : await auth.verifyOtp({ phone: target.replace(/[\s()-]/g, ""), token, type: "sms" });
+    const { error } = await createClient().auth.verifyOtp({
+      email: target.trim(),
+      token: code.replace(/\s/g, ""),
+      type: "email",
+    });
     if (error) {
       setBusy(false);
       return setError(t("errorCode"));
@@ -137,14 +131,13 @@ export function SignInForm({ next, welcome, linkError }: Props) {
 
       <form onSubmit={sendCode} className="flex flex-col gap-3">
         <label className="flex flex-col gap-2">
-          <span className="font-black text-slate">{t(channel)}</span>
+          <span className="font-black text-slate">{t("email")}</span>
           <input
-            key={channel}
-            type={channel === "email" ? "email" : "tel"}
-            autoComplete={channel === "email" ? "email" : "tel"}
+            type="email"
+            autoComplete="email"
             value={target}
             onChange={(e) => setTarget(e.target.value)}
-            placeholder={t(channel === "email" ? "emailPlaceholder" : "phonePlaceholder")}
+            placeholder={t("emailPlaceholder")}
             required
             className="rounded-2xl border border-mist/60 bg-white px-5 py-4 text-lg outline-none focus:border-ink"
           />
@@ -155,16 +148,6 @@ export function SignInForm({ next, welcome, linkError }: Props) {
           className="rounded-2xl bg-signal py-4 text-lg font-black text-ink disabled:opacity-60"
         >
           {t("sendCode")}
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setChannel(channel === "email" ? "phone" : "email");
-            setTarget("");
-          }}
-          className="mt-2 font-black underline underline-offset-4"
-        >
-          {t(channel === "email" ? "usePhone" : "useEmail")}
         </button>
       </form>
 

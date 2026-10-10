@@ -12,7 +12,7 @@ A munkáltatók soha nem tudják meg, ki írt egy értékelést, és ki válaszo
 
 ## 3. Milyen adatokat kezelünk és miért
 
-- **Fiók:** e-mail-cím vagy telefonszám, megjelenő név, nyelv. Cél: belépés és a szolgáltatás nyújtása. Jogalap: a szolgáltatás nyújtása (szerződés).
+- **Fiók:** e-mail-cím, megjelenő név, nyelv. Cél: belépés és a szolgáltatás nyújtása. Jogalap: a szolgáltatás nyújtása (szerződés).
 - **Értékelések:** a munkahely, a kapcsolatod (dolgozó, volt dolgozó, jelentkező), időszak, munkakör, pontszámok, tények és a szöveg. Cél: közzététel, pontszámok számítása, moderálás. Jogalap: szerződés és jogos érdek (a megbízható értékelések biztosítása).
 - **Igazoló dokumentum (opcionális):** bérjegyzék, szerződés stb. Csak ellenőrzésre használjuk, a döntés után töröljük, legkésőbb 30 napon belül.
 - **Jelentkezések:** név, e-mail vagy telefon, a válaszaid. Ezeket megkapja az a munkáltató, ahová jelentkeztél. Jogalap: a te kérésed (szerződés).

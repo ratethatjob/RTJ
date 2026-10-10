@@ -17,6 +17,10 @@ type Props = {
   questions: JobQuestion[];
   defaultEmail: string;
   defaultPhone: string;
+  /** "embed" when the applicant came from a jobs widget on the employer's website. */
+  source: "site" | "embed";
+  /** The employer's page the applicant came from (http/https only). */
+  returnUrl: string | null;
 };
 
 const START = ["now", "two_weeks", "later"] as const;
@@ -50,9 +54,23 @@ export function ApplyForm(props: Props) {
       <section className="rounded-3xl bg-white p-6">
         <h2 className="text-3xl font-black tracking-brand">{t("doneTitle")}</h2>
         <p className="mt-2 text-lg text-slate">{t("doneBody", { company: props.company })}</p>
-        <Link href="/app/applications" className="mt-5 inline-block rounded-2xl bg-ink px-6 py-3 font-black text-paper">
-          {t("myApplications")}
-        </Link>
+        <div className="mt-5 flex flex-wrap items-center gap-3">
+          {props.returnUrl && (
+            <a href={props.returnUrl} rel="noopener" className="rounded-2xl bg-ink px-6 py-3 font-black text-paper">
+              {t("backToCompany", { company: props.company })}
+            </a>
+          )}
+          <Link
+            href="/app/applications"
+            className={
+              props.returnUrl
+                ? "rounded-2xl border-2 border-ink px-6 py-3 font-black"
+                : "rounded-2xl bg-ink px-6 py-3 font-black text-paper"
+            }
+          >
+            {t("myApplications")}
+          </Link>
+        </div>
       </section>
     );
   }
@@ -81,6 +99,7 @@ export function ApplyForm(props: Props) {
         answers,
         cvPath,
         message,
+        source: props.source,
       };
       const result = await applyToJob(payload);
       if (result.error || !result.id) return setError(t(`errors.${result.error ?? "generic"}`));

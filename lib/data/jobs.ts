@@ -91,6 +91,22 @@ export async function getLocationJobs(locationId: string): Promise<Job[]> {
   return data.map(toJob);
 }
 
+/** Open jobs at every location of a company (jobs widget). */
+export async function getCompanyJobs(companySlug: string): Promise<Job[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("jobs", `company:${companySlug}`);
+  if (!useSupabase) return sampleJobs.filter((j) => j.location.companySlug === companySlug);
+  const { data, error } = await publicClient()
+    .from("public_jobs")
+    .select("*")
+    .eq("company_slug", companySlug)
+    .order("published_at", { ascending: false })
+    .limit(100);
+  if (error) throw error;
+  return data.map(toJob);
+}
+
 export async function getJob(id: string): Promise<Job | null> {
   "use cache";
   cacheLife("hours");

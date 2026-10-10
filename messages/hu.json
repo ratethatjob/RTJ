@@ -190,18 +190,13 @@
     "or": "vagy",
     "email": "E-mail",
     "emailPlaceholder": "te@pelda.hu",
-    "phone": "Telefonszám",
-    "phonePlaceholder": "+36 30 123 4567",
     "sendCode": "Kérem a kódot",
-    "usePhone": "Inkább telefonszámmal",
-    "useEmail": "Inkább e-maillel",
     "codeTitle": "Írd be a kódot",
     "codeSent": "Küldtünk egy 6 jegyű kódot ide: {target}.",
     "code": "Kód",
     "verify": "Tovább",
     "resend": "Új kód küldése",
     "footer": "Nem kell jelszó. A folytatással elfogadod a <terms>Felhasználási feltételeket</terms> és az <privacy>Adatvédelmi tájékoztatót</privacy>.",
-    "tiktokSoon": "A TikTokos belépés hamarosan jön.",
     "errorGeneric": "Valami hiba történt. Próbáld újra.",
     "errorCode": "Ez a kód nem jó. Ellenőrizd, vagy kérj újat.",
     "errorLink": "A belépési link lejárt. Próbáld újra."
@@ -711,7 +706,35 @@
     "sitesTitle": "{count, plural, =0 {Hol látszik a jelvényed} other {# weboldalon látszik a jelvényed}}",
     "sitesEmpty": "Amint a jelvényed kikerül egy weboldalra, itt megjelenik. Csak a weboldal domainjét számoljuk, a látogatóiról semmit.",
     "views": "{count} megtekintés",
-    "lastSeen": "utoljára: {date}"
+    "lastSeen": "utoljára: {date}",
+    "tabs": {
+      "index": "Index jelvény",
+      "jobs": "Állások"
+    },
+    "jobs": {
+      "body": "Mutasd a nyitott állásaidat a saját weboldaladon. A jelöltek a RateThatJobon jelentkeznek, új lapon, utána visszatérhetnek az oldaladra.",
+      "scope": "Mit mutasson",
+      "scopes": {
+        "job": "Egy állás",
+        "location": "{location}",
+        "company": "A(z) {company} összes állása"
+      },
+      "noOpenJobs": "Ennél a telephelynél még nincs nyitott állás. A widget ekkor is mutatja a RateThatJob Indexet.",
+      "theme": "Téma",
+      "themes": {
+        "light": "Világos",
+        "dark": "Sötét"
+      },
+      "language": "Nyelv",
+      "languages": {
+        "en": "English",
+        "hu": "Magyar"
+      },
+      "indexNote": "A kiemelt (Pro) állások kerülnek előre. A RateThatJob Index mindig látszik az állások alatt.",
+      "code": "Kód a weboldaladra",
+      "codeHint": "Illeszd be oda, ahol az állásokat mutatni szeretnéd. JavaScript nélkül is működik a benne lévő link.",
+      "fallback": "{name} állásai a RateThatJobon"
+    }
   },
   "Team": {
     "title": "Csapat és szerepkörök",
@@ -856,7 +879,8 @@
       "body": "Nem kötelező, de segít, hogy jobban megismerjenek. Egy-két mondat elég.",
       "send": "Válaszok elküldése",
       "skip": "Kihagyom"
-    }
+    },
+    "backToCompany": "Vissza a(z) {company} oldalára"
   },
   "Applications": {
     "title": "Jelentkezéseim",
@@ -1278,5 +1302,15 @@
   "Email": {
     "messageSubject": "A(z) {company} írt neked: {job}",
     "messageBody": "Szia {name}!\n\nA(z) {company} üzenetet küldött a(z) {job} jelentkezésedről:\n\n{message}\n\nVálaszolj itt: {link}\n\nRateThatJob – Know before you go"
+  },
+  "JobsWidget": {
+    "title": "Nyitott állások: {name}",
+    "apply": "Jelentkezem",
+    "noJobs": "Most nincs nyitott állás.",
+    "index": "RateThatJob Index",
+    "reviews": "{count} értékelés",
+    "rateUs": "Értékelj minket a RateThatJobon",
+    "workedHere": "Dolgoztál itt? Oszd meg a tapasztalatod.",
+    "newTab": "új lapon nyílik meg"
   }
 }

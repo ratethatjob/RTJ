@@ -8,10 +8,26 @@ import { getJob } from "@/lib/data/jobs";
 
 export const instant = false;
 
-export default async function ApplyPage({ params }: PageProps<"/[locale]/app/apply/[jobId]">) {
+/** The employer's page from a jobs widget: absolute http(s) URL only. */
+function returnUrl(value: unknown) {
+  if (typeof value !== "string" || value.length > 500) return null;
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
+export default async function ApplyPage({ params, searchParams }: PageProps<"/[locale]/app/apply/[jobId]">) {
   const { locale, jobId } = await params;
   setRequestLocale(locale);
-  const { supabase, user } = await requireUser(locale, `/app/apply/${jobId}`);
+  const sp = await searchParams;
+  const source = sp.ref === "embed" ? "embed" : "site";
+  const from = returnUrl(sp.from);
+  // Keep ?ref and ?from through sign-in.
+  const query = new URLSearchParams({ ...(source === "embed" && { ref: "embed" }), ...(from && { from }) }).toString();
+  const { supabase, user } = await requireUser(locale, `/app/apply/${jobId}${query ? `?${query}` : ""}`);
   const t = await getTranslations("Apply");
   const job = await getJob(jobId);
   const { data: existing } = job
@@ -48,6 +64,8 @@ export default async function ApplyPage({ params }: PageProps<"/[locale]/app/app
             company={job.location.companyName}
             mode={job.applyMode}
             questions={job.questions}
+            source={source}
+            returnUrl={from}
             defaultEmail={user.email ?? ""}
             defaultPhone={user.phone ? `+${user.phone.replace(/^\+/, "")}` : ""}
           />
