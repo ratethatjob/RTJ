@@ -91,7 +91,10 @@
     "repliesToApplicants": "Válaszol a jelentkezőknek",
     "ghostingFromApplications": "{count} RateThatJobon keresztüli jelentkezés alapján",
     "openJobs": "Nyitott állások",
-    "seeJob": "Megnézem"
+    "seeJob": "Megnézem",
+    "fromEmployer": "A munkáltatótól",
+    "website": "Weboldaluk",
+    "nearby": "Hasonló munkahelyek: {city}"
   },
   "Reviews": {
     "metaTitle": "{company} ({location}) értékelések",
@@ -354,7 +357,9 @@
       "team": "Csapat és szerepkörök",
       "plan": "Csomag és számlázás",
       "soon": "Hamarosan",
-      "index": "RateThatJob Index"
+      "index": "RateThatJob Index",
+      "stats": "Statisztika",
+      "profile": "Munkahelyi profil"
     },
     "signedInAs": "Belépve mint {role}",
     "roles": {
@@ -474,7 +479,9 @@
     "proIncludes": "<b>Pro telephelyenként:</b> korai figyelmeztetés, csapatmeghívók, RateThatJob Index a weboldaladra, statisztikák, egyedi profil, konkurens ajánlók nélkül.",
     "chains": "<b>Láncok (10+ telephely):</b> egyedi ár és bevezetés.",
     "billingSoon": "A fizetős csomagok hamarosan jönnek. Addig minden ingyenes.",
-    "comingSoon": "Hamarosan"
+    "comingSoon": "Hamarosan",
+    "warningCategory": "{category}: {delta}-del csökkent az utolsó 60 napban ({recent}, korábban {baseline}).",
+    "seeStats": "Statisztika"
   },
   "Account": {
     "title": "Fiókod",
@@ -518,7 +525,10 @@
       "claims": "Igénylések",
       "moderation": "Moderálás",
       "verifications": "Dokumentumok",
-      "disputes": "Vitatások"
+      "disputes": "Vitatások",
+      "reports": "Jelentések",
+      "workplaces": "Munkahelyek",
+      "import": "Importálás"
     },
     "empty": "Nincs teendő.",
     "approve": "Jóváhagyom",
@@ -528,7 +538,19 @@
     "openDocument": "Dokumentum megnyitása",
     "legalEntity": "A dokumentumon szereplő cég",
     "notAdmin": "Ez a rész csak adminoknak szól.",
-    "error": "Valami hiba történt. Próbáld újra."
+    "error": "Valami hiba történt. Próbáld újra.",
+    "searchCompany": "Cégnév",
+    "search": "Keresés",
+    "slugHint": "Az URL módosítása után a régi cím is működik, állandó átirányítással.",
+    "saveSlug": "URL mentése",
+    "slugError": "Foglalt vagy érvénytelen (kisbetű, szám, kötőjel).",
+    "importTitle": "Munkahelyek importálása",
+    "importBody": "Illessz be vagy tölts fel egy fejlécsoros CSV-t. Kötelező: company, address, city, country (HU, US…), category (restaurant, retail, warehouse, factory, office). A már meglévő munkahelyeket kihagyja.",
+    "importPlaceholder": "company,address,city,country,category",
+    "importHeaderError": "A fejlécben legalább company, address, city, country és category kell.",
+    "importRows": "{count} sor kész",
+    "importButton": "Importálás",
+    "importResult": "Létrehozva: {created}, kihagyva: {skipped}, hibás: {failed}."
   },
   "Search": {
     "title": "Munkahely keresése",
@@ -776,5 +798,63 @@
     },
     "replyNote": "A jelölteket e-mailben vagy telefonon keresd. Minden itt jelölt döntés válasznak számít a ghosting mérőben, és a jelölt is látja.",
     "appliedOn": "Jelentkezett: {date}"
+  },
+  "Report": {
+    "report": "Jelentés",
+    "title": "Mi a gond ezzel az értékeléssel?",
+    "reasons": {
+      "personal": "Nevek vagy személyes adatok",
+      "hate": "Gyűlöletkeltés vagy zaklatás",
+      "fake": "Kamu, nem valós tapasztalat",
+      "spam": "Spam vagy reklám",
+      "other": "Más"
+    },
+    "details": "Részletek (nem kötelező)",
+    "send": "Jelentés küldése",
+    "cancel": "Mégse",
+    "sent": "Köszönjük, a csapatunk megnézi.",
+    "error": "Valami hiba történt. Próbáld újra."
+  },
+  "Stats": {
+    "title": "Statisztika",
+    "subtitle": "elmúlt 12 hónap",
+    "reviewsPerMonth": "Megjelent értékelések havonta",
+    "scorePerMonth": "Átlagpontszám havonta",
+    "minNote": "Azokban a hónapokban látszik, ahol legalább 5 értékelés van.",
+    "categoriesTitle": "Utolsó 60 nap a korábbiakhoz képest",
+    "categoriesNote": "Az átlaghoz mindkét oldalon legalább 5 értékelés kell. Legalább 0,5-ös esés korai figyelmeztetést vált ki.",
+    "category": "Kategória",
+    "last60": "Utolsó 60 nap",
+    "before": "Előtte 12 hónap",
+    "change": "Változás",
+    "warning": "Korai figyelmeztetés",
+    "noData": "Még nincs elég értékelés.",
+    "categories": {
+      "overall": "Összesített",
+      "manager": "Vezető",
+      "pay": "Fizetés",
+      "schedule": "Beosztás",
+      "environment": "Környezet"
+    }
+  },
+  "Profile": {
+    "title": "Munkahelyi profil",
+    "body": "A nyilvános oldaladon jelenik meg, a munkáltatótól származó információként jelölve.",
+    "viewPublic": "Nyilvános oldal",
+    "about": "A munkahelyről",
+    "aboutPlaceholder": "Mivel foglalkoztok, milyen a csapat, hogy néz ki egy átlagos műszak.",
+    "benefits": "Juttatások",
+    "benefitsHint": "Soronként egy, legfeljebb 12.",
+    "benefitsPlaceholder": "Ingyen dolgozói étkezés\nHetente elosztott borravaló\nBérlettámogatás",
+    "website": "Weboldal vagy karrieroldal",
+    "photos": "Fotók ({count}/{max})",
+    "addPhotos": "Fotók hozzáadása",
+    "uploading": "Feltöltés…",
+    "removePhoto": "Fotó eltávolítása",
+    "photoError": "Néhány fotót nem sikerült feltölteni (JPG, PNG vagy WebP, max. 5 MB).",
+    "save": "Profil mentése",
+    "saved": "Mentve",
+    "invalid": "Ellenőrizd a szövegeket: bemutatkozás legfeljebb 2000 karakter, legfeljebb 12 juttatás 80 karakterig, érvényes weboldal.",
+    "error": "Valami hiba történt. Próbáld újra."
   }
 }

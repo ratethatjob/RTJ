@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ChevronLeftIcon } from "@/components/icons";
 import { ReviewCard } from "@/components/review-card";
 import { SiteHeader } from "@/components/site-header";
-import { Link } from "@/i18n/navigation";
+import { getPathname, Link } from "@/i18n/navigation";
 import { getLocation, getLocationPaths, getReviews, REVIEWS_PER_PAGE } from "@/lib/data";
 import type { ReviewFilter } from "@/lib/data/types";
 import { locationPath } from "@/lib/format";
+import { findRedirect } from "@/lib/data/redirects";
 import { localeAlternates } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/[company]/[location]/reviews">;
@@ -36,7 +37,11 @@ export default async function ReviewsPage({ params, searchParams }: Props) {
   const { locale, company, location } = await params;
   setRequestLocale(locale);
   const data = await getLocation(company, location);
-  if (!data) notFound();
+  if (!data) {
+    const to = await findRedirect(company, location, "/reviews");
+    if (to) permanentRedirect(getPathname({ href: to, locale }));
+    notFound();
+  }
 
   const query = await searchParams;
   const filter = FILTERS.includes(query.filter as ReviewFilter)
@@ -97,7 +102,7 @@ export default async function ReviewsPage({ params, searchParams }: Props) {
           <p className="rounded-3xl bg-white p-6 text-slate">{t("empty")}</p>
         ) : (
           reviews.map((r) => (
-            <ReviewCard key={r.id} review={r} companyName={data.companyName} />
+            <ReviewCard key={r.id} review={r} companyName={data.companyName} reportable />
           ))
         )}
       </section>

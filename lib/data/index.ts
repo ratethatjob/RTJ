@@ -280,3 +280,54 @@ export async function getSitemapLocations(): Promise<SitemapLocation[]> {
     if (data.length < 1000) return rows;
   }
 }
+
+export type LocationProfile = {
+  about: string | null;
+  website: string | null;
+  benefits: string[];
+  photos: string[];
+};
+
+/** Employer-written profile (about, benefits, website, photo URLs). */
+export async function getLocationProfile(locationId: string): Promise<LocationProfile | null> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag(`profile:${locationId}`);
+  if (!useSupabase) return null;
+  const { data, error } = await publicClient()
+    .from("location_profiles")
+    .select("about, website, benefits, photos")
+    .eq("location_id", locationId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  return {
+    ...data,
+    photos: (data.photos as string[]).map(
+      (p) => `${supabaseUrl}/storage/v1/object/public/profile-photos/${p}`,
+    ),
+  };
+}
+
+/** Similar workplaces in the same city: same category first, best rated first. */
+export async function getNearbyLocations(location: LocationSummary): Promise<LocationSummary[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("locations");
+  if (!useSupabase) {
+    return sampleLocations.filter((l) => l.citySlug === location.citySlug && l.id !== location.id).slice(0, 4);
+  }
+  const { data, error } = await publicClient()
+    .from("public_locations")
+    .select("*")
+    .eq("city_slug", location.citySlug)
+    .neq("id", location.id)
+    .order("review_count", { ascending: false })
+    .limit(30);
+  if (error) throw error;
+  const rows = data.map(toLocation);
+  return [
+    ...rows.filter((l) => l.category === location.category),
+    ...rows.filter((l) => l.category !== location.category),
+  ].slice(0, 4);
+}

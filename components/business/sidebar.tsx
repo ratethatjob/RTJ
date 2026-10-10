@@ -10,6 +10,8 @@ const ITEMS = [
   { key: "overview", href: "/business" },
   { key: "locations", href: "/business/locations" },
   { key: "reviews", href: "/business/reviews" },
+  { key: "stats", href: "/business/stats" },
+  { key: "profile", href: "/business/profile" },
   { key: "invite", href: "/business/invite" },
   { key: "index", href: "/business/index" },
   { key: "jobs", href: "/business/jobs" },

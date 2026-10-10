@@ -3,10 +3,10 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { decideClaim, decideDispute, decideVerification, moderateReview } from "@/app/[locale]/admin/actions";
+import { decideClaim, decideDispute, decideReport, decideVerification, moderateReview } from "@/app/[locale]/admin/actions";
 
 type Props = {
-  kind: "claims" | "moderation" | "verifications" | "disputes";
+  kind: "claims" | "moderation" | "verifications" | "disputes" | "reports";
   id: string;
   documentUrl?: string | null;
 };
@@ -28,14 +28,17 @@ export function Decision({ kind, id, documentUrl }: Props) {
             ? await moderateReview(id, yes)
             : kind === "verifications"
               ? await decideVerification(id, yes, entity)
-              : await decideDispute(id, !yes);
+              : kind === "disputes"
+                ? await decideDispute(id, !yes)
+                : await decideReport(id, !yes);
       if (result.error) return setError(true);
       router.refresh();
     });
   }
 
-  const yesLabel = kind === "disputes" ? t("keep") : t("approve");
-  const noLabel = kind === "disputes" ? t("remove") : t("reject");
+  const keepOrRemove = kind === "disputes" || kind === "reports";
+  const yesLabel = keepOrRemove ? t("keep") : t("approve");
+  const noLabel = keepOrRemove ? t("remove") : t("reject");
 
   return (
     <div className="mt-4 flex flex-col gap-3 border-t border-[#E8E6E1] pt-4">

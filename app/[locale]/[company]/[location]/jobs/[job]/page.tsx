@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { formatPay } from "@/components/jobs/pay";
 import { FactBars, GhostingMeter, ScoreTile } from "@/components/scores";
 import { SiteHeader } from "@/components/site-header";
-import { Link } from "@/i18n/navigation";
+import { getPathname, Link } from "@/i18n/navigation";
 import { getLocationById } from "@/lib/data";
 import { getAllJobs, getJob } from "@/lib/data/jobs";
 import type { Job } from "@/lib/data/types";
 import { locationPath } from "@/lib/format";
+import { findRedirect } from "@/lib/data/redirects";
 import { localeAlternates, SITE_URL } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/[company]/[location]/jobs/[job]">;
@@ -53,7 +54,11 @@ export default async function JobPage({ params }: Props) {
   const { locale, company, location, job: id } = await params;
   setRequestLocale(locale);
   const job = await load(company, location, id);
-  if (!job) notFound();
+  if (!job) {
+    const to = await findRedirect(company, location, `/jobs/${id}`);
+    if (to) permanentRedirect(getPathname({ href: to, locale }));
+    notFound();
+  }
   const workplace = await getLocationById(job.location.id);
   const t = await getTranslations("Jobs");
   const tr = await getTranslations("Review");

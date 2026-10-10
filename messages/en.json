@@ -91,7 +91,10 @@
     "repliesToApplicants": "Replies to applicants",
     "ghostingFromApplications": "Based on {count} applications through RateThatJob",
     "openJobs": "Open jobs",
-    "seeJob": "See job"
+    "seeJob": "See job",
+    "fromEmployer": "From the employer",
+    "website": "Visit their website",
+    "nearby": "Similar workplaces in {city}"
   },
   "Reviews": {
     "metaTitle": "{company} ({location}) reviews",
@@ -354,7 +357,9 @@
       "team": "Team & roles",
       "plan": "Plan & billing",
       "soon": "Soon",
-      "index": "RateThatJob Index"
+      "index": "RateThatJob Index",
+      "stats": "Statistics",
+      "profile": "Workplace profile"
     },
     "signedInAs": "Signed in as {role}",
     "roles": {
@@ -474,7 +479,9 @@
     "proIncludes": "<b>Pro per location:</b> early warnings, team invites, the RateThatJob Index for your website, statistics, branded profile, no competitor suggestions.",
     "chains": "<b>Chains (10+ locations):</b> custom pricing and onboarding.",
     "billingSoon": "Paid plans are coming soon. Everything is free until then.",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "warningCategory": "{category} is down {delta} in the last 60 days ({recent} vs {baseline}).",
+    "seeStats": "See statistics"
   },
   "Account": {
     "title": "Your account",
@@ -518,7 +525,10 @@
       "claims": "Claims",
       "moderation": "Moderation",
       "verifications": "Documents",
-      "disputes": "Disputes"
+      "disputes": "Disputes",
+      "reports": "Reports",
+      "workplaces": "Workplaces",
+      "import": "Import"
     },
     "empty": "Nothing waiting.",
     "approve": "Approve",
@@ -528,7 +538,19 @@
     "openDocument": "Open document",
     "legalEntity": "Legal entity on the document",
     "notAdmin": "This area is for admins only.",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "searchCompany": "Company name",
+    "search": "Search",
+    "slugHint": "Changing a URL keeps the old one working with a permanent redirect.",
+    "saveSlug": "Save URL",
+    "slugError": "Not available or invalid (lowercase letters, numbers, hyphens).",
+    "importTitle": "Import workplaces",
+    "importBody": "Paste or upload a CSV with a header row. Required: company, address, city, country (HU, US…), category (restaurant, retail, warehouse, factory, office). Existing workplaces are skipped.",
+    "importPlaceholder": "company,address,city,country,category",
+    "importHeaderError": "The header row needs at least company, address, city, country and category.",
+    "importRows": "{count, plural, one {# row} other {# rows}} ready",
+    "importButton": "Import",
+    "importResult": "Created {created}, skipped {skipped}, failed {failed}."
   },
   "Search": {
     "title": "Find a workplace",
@@ -776,5 +798,63 @@
     },
     "replyNote": "Contact candidates by email or phone. Every decision you mark here counts as a reply in your ghosting meter, and the candidate sees it.",
     "appliedOn": "Applied {date}"
+  },
+  "Report": {
+    "report": "Report",
+    "title": "What's wrong with this review?",
+    "reasons": {
+      "personal": "Names or personal details",
+      "hate": "Hate or harassment",
+      "fake": "Fake or not a real experience",
+      "spam": "Spam or advertising",
+      "other": "Something else"
+    },
+    "details": "Details (optional)",
+    "send": "Send report",
+    "cancel": "Cancel",
+    "sent": "Thanks. Our team will look at it.",
+    "error": "Something went wrong. Please try again."
+  },
+  "Stats": {
+    "title": "Statistics",
+    "subtitle": "last 12 months",
+    "reviewsPerMonth": "Published reviews per month",
+    "scorePerMonth": "Average score per month",
+    "minNote": "Shown for months with at least 5 reviews.",
+    "categoriesTitle": "Last 60 days vs. before",
+    "categoriesNote": "Averages need at least 5 reviews on each side. A drop of 0.5 or more triggers an early warning.",
+    "category": "Category",
+    "last60": "Last 60 days",
+    "before": "12 months before",
+    "change": "Change",
+    "warning": "Early warning",
+    "noData": "Not enough reviews yet.",
+    "categories": {
+      "overall": "Overall",
+      "manager": "Manager",
+      "pay": "Pay",
+      "schedule": "Schedule",
+      "environment": "Environment"
+    }
+  },
+  "Profile": {
+    "title": "Workplace profile",
+    "body": "Shown on your public page, marked as information from the employer.",
+    "viewPublic": "View public page",
+    "about": "About the workplace",
+    "aboutPlaceholder": "What you do, the team, what a typical shift looks like.",
+    "benefits": "Benefits",
+    "benefitsHint": "One per line, up to 12.",
+    "benefitsPlaceholder": "Free staff meal\nTips shared weekly\nTravel pass",
+    "website": "Website or careers page",
+    "photos": "Photos ({count}/{max})",
+    "addPhotos": "Add photos",
+    "uploading": "Uploading…",
+    "removePhoto": "Remove photo",
+    "photoError": "Some photos could not be uploaded (JPG, PNG or WebP, max 5 MB).",
+    "save": "Save profile",
+    "saved": "Saved",
+    "invalid": "Check the texts: about up to 2000 characters, up to 12 benefits of 80 characters, a valid website.",
+    "error": "Something went wrong. Please try again."
   }
 }

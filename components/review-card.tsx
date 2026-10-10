@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import type { FactKey, LocalizedText, Review } from "@/lib/data/types";
 import { initials, periodLabel, weeksWaited } from "@/lib/format";
+import { ReportButton } from "./report-button";
 import { formatScore } from "./scores";
 import { TranslatedText } from "./translated-text";
 
@@ -24,10 +25,13 @@ export async function ReviewCard({
   review,
   companyName,
   children,
+  reportable = false,
 }: {
   review: Review;
   companyName: string;
   children?: React.ReactNode;
+  /** Public pages: readers can flag the review for moderation. */
+  reportable?: boolean;
 }) {
   const locale = await getLocale();
   const t = await getTranslations("Review");
@@ -126,6 +130,7 @@ export async function ReviewCard({
         </div>
       )}
       {children}
+      {reportable && <ReportButton reviewId={review.id} />}
     </article>
   );
 }

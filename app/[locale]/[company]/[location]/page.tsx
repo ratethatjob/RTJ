@@ -1,18 +1,26 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ReviewCard } from "@/components/review-card";
 import {
   CategoryScores,
   FactBars,
+  formatScore,
   GhostingMeter,
   ScoreTile,
 } from "@/components/scores";
 import { SiteHeader } from "@/components/site-header";
-import { Link } from "@/i18n/navigation";
+import { getPathname, Link } from "@/i18n/navigation";
 import { JobCard } from "@/components/jobs/job-card";
-import { getLocation, getLocationPaths, getReviews } from "@/lib/data";
+import {
+  getLocation,
+  getLocationPaths,
+  getLocationProfile,
+  getNearbyLocations,
+  getReviews,
+} from "@/lib/data";
 import { getLocationJobs } from "@/lib/data/jobs";
+import { findRedirect } from "@/lib/data/redirects";
 import type { LocationSummary } from "@/lib/data/types";
 import { locationPath } from "@/lib/format";
 import { locationMetadata } from "@/lib/location-meta";
@@ -40,12 +48,21 @@ export default async function LocationPage({ params }: Props) {
   const { locale, company, location } = await params;
   setRequestLocale(locale);
   const data = await getLocation(company, location);
-  if (!data) notFound();
+  if (!data) {
+    const to = await findRedirect(company, location);
+    if (to) permanentRedirect(getPathname({ href: to, locale }));
+    notFound();
+  }
 
   const t = await getTranslations("Location");
   const tc = await getTranslations("Categories");
   const tr = await getTranslations("Reviews");
-  const [{ reviews }, jobs] = await Promise.all([getReviews(data.id), getLocationJobs(data.id)]);
+  const [{ reviews }, jobs, profile, nearby] = await Promise.all([
+    getReviews(data.id),
+    getLocationJobs(data.id),
+    getLocationProfile(data.id),
+    getNearbyLocations(data),
+  ]);
   const s = data.scores;
   const ghosting =
     data.ghosting ??
@@ -157,6 +174,47 @@ export default async function LocationPage({ params }: Props) {
         </aside>
 
         <div className="flex flex-col gap-6 lg:order-1">
+        {profile && (profile.about || profile.benefits.length > 0 || profile.photos.length > 0) && (
+          <section className="flex flex-col gap-4 rounded-3xl bg-white p-6">
+            <h2 className="text-sm font-black uppercase tracking-tagline text-slate">
+              {t("fromEmployer")}
+            </h2>
+            {profile.photos.length > 0 && (
+              <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6">
+                {profile.photos.map((src) => (
+                  // eslint-disable-next-line @next/next/no-img-element -- employer photos from storage
+                  <img
+                    key={src}
+                    src={src}
+                    alt=""
+                    loading="lazy"
+                    className="aspect-[4/3] h-44 shrink-0 snap-start rounded-2xl object-cover"
+                  />
+                ))}
+              </div>
+            )}
+            {profile.about && <p className="whitespace-pre-line text-lg leading-relaxed">{profile.about}</p>}
+            {profile.benefits.length > 0 && (
+              <ul className="flex flex-wrap gap-2">
+                {profile.benefits.map((b) => (
+                  <li key={b} className="rounded-lg bg-[#EDEBE6] px-3 py-1.5 font-black">
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {profile.website && (
+              <a
+                href={profile.website}
+                rel="nofollow ugc noopener"
+                target="_blank"
+                className="self-start font-black underline underline-offset-4"
+              >
+                {t("website")}
+              </a>
+            )}
+          </section>
+        )}
         {jobs.length > 0 && (
           <section id="jobs" className="flex flex-col gap-3">
             <h2 className="text-sm font-black uppercase tracking-tagline text-slate">
@@ -188,7 +246,7 @@ export default async function LocationPage({ params }: Props) {
               )}
             </nav>
             {reviews.slice(0, 3).map((r) => (
-              <ReviewCard key={r.id} review={r} companyName={data.companyName} />
+              <ReviewCard key={r.id} review={r} companyName={data.companyName} reportable />
             ))}
             <Link
               href={`${path}/reviews`}
@@ -200,6 +258,40 @@ export default async function LocationPage({ params }: Props) {
         )}
         </div>
       </div>
+
+      {nearby.length > 0 && (
+        <section className="mt-10">
+          <h2 className="mb-4 text-2xl font-black tracking-brand">{t("nearby", { city: data.city })}</h2>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {await Promise.all(
+              nearby.map(async (l) => (
+                <li key={l.id}>
+                  <Link
+                    href={locationPath(l)}
+                    className="flex h-full items-start justify-between gap-3 rounded-3xl bg-white p-5"
+                  >
+                    <span className="min-w-0">
+                      <span className="block text-lg font-black leading-tight">{l.name}</span>
+                      <span className="text-sm text-slate">
+                        {l.address} · {tc(l.category)}
+                      </span>
+                    </span>
+                    {l.scores && (
+                      <span
+                        className={`grid size-12 shrink-0 place-items-center rounded-xl font-black ${
+                          l.scores.overall >= 4 ? "bg-signal" : "bg-[#E8E6E1]"
+                        }`}
+                      >
+                        {await formatScore(l.scores.overall)}
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              )),
+            )}
+          </ul>
+        </section>
+      )}
 
       <div className="fixed inset-x-0 bottom-0 grid grid-cols-2 gap-3 bg-paper/95 p-4 backdrop-blur lg:hidden">
         <Link

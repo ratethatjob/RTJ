@@ -61,3 +61,40 @@ export async function decideDispute(id: string, removeReview: boolean): Promise<
   }
   return { ok: true };
 }
+
+export async function decideReport(id: string, removeReview: boolean): Promise<Result> {
+  const { supabase } = await getUser();
+  const { data: r } = await supabase.from("reports").select("reviews(location_id)").eq("id", id).single();
+  const { error } = await supabase.rpc("admin_decide_report", { p_report_id: id, p_remove_review: removeReview });
+  if (error) return { error: true };
+  const loc = (r?.reviews as unknown as { location_id: string } | null)?.location_id;
+  if (loc && removeReview) {
+    revalidateTag(`reviews:${loc}`, "max");
+    revalidateTag("locations", "max");
+  }
+  return { ok: true };
+}
+
+export type ImportRow = Record<string, string>;
+
+export async function importLocations(
+  rows: ImportRow[],
+): Promise<{ created: number; skipped: number; failed: number } | { error: true }> {
+  const { supabase } = await getUser();
+  const { data, error } = await supabase.rpc("admin_import_locations", { p_rows: rows });
+  if (error) return { error: true };
+  revalidateTag("locations", "max");
+  return data as { created: number; skipped: number; failed: number };
+}
+
+export async function setSlug(kind: "company" | "location", id: string, slug: string): Promise<Result> {
+  const { supabase } = await getUser();
+  const { error } =
+    kind === "company"
+      ? await supabase.rpc("admin_set_company_slug", { p_company_id: id, p_slug: slug })
+      : await supabase.rpc("admin_set_location_slug", { p_location_id: id, p_slug: slug });
+  if (error) return { error: true };
+  revalidateTag("locations", "max");
+  revalidateTag("redirects", "max");
+  return { ok: true };
+}

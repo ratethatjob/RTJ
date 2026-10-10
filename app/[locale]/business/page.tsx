@@ -71,9 +71,13 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
         .in("location_id", ids)
         .is("reply_body", null)
     : { count: 0 };
-  const warning = locs
-    .filter((l) => l.trend != null && l.trend <= -0.5)
-    .sort((a, b) => a.trend! - b.trend!)[0];
+  // Biggest category drop in the last 60 days (n >= 5 on both sides).
+  const { data: warnings } = ids.length
+    ? await supabase.rpc("early_warnings", { p_location_ids: ids })
+    : { data: [] };
+  const top = (warnings as { location_id: string; category: string; recent: number; baseline: number; delta: number }[] | null)?.[0];
+  const warning = top && { ...top, location: locs.find((l) => l.id === top.location_id)! };
+  const tc = await getTranslations("Stats.categories");
 
   const num = (v: number | null, digits = 1) =>
     v == null ? "–" : format.number(v, { minimumFractionDigits: digits, maximumFractionDigits: digits });
@@ -122,14 +126,21 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
           </span>
           <div className="flex-1">
             <p className="text-sm font-black uppercase tracking-tagline text-mist">{t("earlyWarning")}</p>
-            <p className="text-xl font-black">{t("warningTitle", { location: warning.address })}</p>
-            <p className="text-mist">{t("warningBody", { delta: num(warning.trend) })}</p>
+            <p className="text-xl font-black">{t("warningTitle", { location: warning.location.address })}</p>
+            <p className="text-mist">
+              {t("warningCategory", {
+                category: tc(warning.category),
+                delta: num(Math.abs(Number(warning.delta))),
+                recent: num(Number(warning.recent)),
+                baseline: num(Number(warning.baseline)),
+              })}
+            </p>
           </div>
           <Link
-            href={{ pathname: "/business/reviews", query: { location: warning.id, filter: "all" } }}
+            href={{ pathname: "/business/stats", query: { location: warning.location_id } }}
             className="rounded-2xl bg-paper px-5 py-3 font-black text-ink"
           >
-            {t("seeReviews")}
+            {t("seeStats")}
           </Link>
         </section>
       )}

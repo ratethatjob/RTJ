@@ -1,12 +1,15 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { CsvImport, SlugEditor } from "@/components/admin/tools";
 import { Decision } from "@/components/admin/decision";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 
 export const instant = false;
 
-const TABS = ["claims", "moderation", "verifications", "disputes"] as const;
-type Tab = (typeof TABS)[number];
+const TABS = ["claims", "moderation", "verifications", "disputes", "reports"] as const;
+const TOOLS = ["workplaces", "import"] as const;
+type Queue = (typeof TABS)[number];
+type Tab = Queue | (typeof TOOLS)[number];
 
 type Place = { name: string; address: string } | null;
 type ReviewRow = {
@@ -22,8 +25,9 @@ type ReviewRow = {
 export default async function AdminPage({ params, searchParams }: PageProps<"/[locale]/admin">) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { tab: rawTab } = await searchParams;
-  const tab: Tab = TABS.includes(rawTab as Tab) ? (rawTab as Tab) : "claims";
+  const { tab: rawTab, q: rawQ } = await searchParams;
+  const tab: Tab = [...TABS, ...TOOLS].includes(rawTab as Tab) ? (rawTab as Tab) : "claims";
+  const q = typeof rawQ === "string" ? rawQ.trim().slice(0, 80) : "";
   const { supabase, user } = await requireUser(locale, "/admin");
   const t = await getTranslations("Admin");
   const tb = await getTranslations("Business");
@@ -45,6 +49,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     supabase.from("reviews").select("id", { count: "exact", head: true }).eq("status", "pending_moderation"),
     supabase.from("verifications").select("id", { count: "exact", head: true }).eq("status", "pending"),
     supabase.from("disputes").select("id", { count: "exact", head: true }).eq("status", "open"),
+    supabase.from("reports").select("id", { count: "exact", head: true }).eq("status", "open"),
   ]);
 
   const reviewCols = "id, position, relationship, overall, body, verification_level, locations(name, address)";
@@ -118,7 +123,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
         ),
       };
     });
-  } else {
+  } else if (tab === "disputes") {
     const { data } = await supabase
       .from("disputes")
       .select(`id, created_at, reason, reviews(${reviewCols})`)
@@ -141,7 +146,49 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
         ),
       };
     });
+  } else if (tab === "reports") {
+    const { data } = await supabase
+      .from("reports")
+      .select(`id, created_at, reason, reviews(${reviewCols})`)
+      .eq("status", "open")
+      .not("review_id", "is", null)
+      .order("created_at");
+    items = (data ?? []).map((d) => {
+      const r = d.reviews as unknown as ReviewRow;
+      return {
+        id: d.id,
+        created_at: d.created_at,
+        content: (
+          <>
+            <p className="whitespace-pre-line rounded-2xl bg-paper p-4">{d.reason}</p>
+            {r && (
+              <div className="mt-3">
+                <ReviewSummary r={r} relationship={tr(`relationship.${r.relationship}`)} />
+              </div>
+            )}
+          </>
+        ),
+      };
+    });
   }
+
+  type CompanyRow = {
+    id: string;
+    name: string;
+    slug: string;
+    locations: { id: string; slug: string; address: string; city: string }[];
+  };
+  const companies: CompanyRow[] =
+    tab === "workplaces" && q
+      ? (((
+          await supabase
+            .from("companies")
+            .select("id, name, slug, locations(id, slug, address, city)")
+            .ilike("name", `%${q.replace(/[%_\\,()]/g, " ")}%`)
+            .order("name")
+            .limit(20)
+        ).data ?? []) as CompanyRow[])
+      : [];
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 pb-12 pt-8">
@@ -151,7 +198,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
           ←
         </Link>
       </header>
-      <nav className="-mx-4 flex gap-2 overflow-x-auto px-4">
+      <nav className="-mx-4 flex flex-wrap gap-2 px-4">
         {TABS.map((key, i) => (
           <Link
             key={key}
@@ -167,8 +214,50 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
             </span>
           </Link>
         ))}
+        {TOOLS.map((key) => (
+          <Link
+            key={key}
+            href={{ pathname: "/admin", query: { tab: key } }}
+            aria-current={key === tab ? "page" : undefined}
+            className={`shrink-0 rounded-xl px-4 py-2.5 font-black ${key === tab ? "bg-ink text-paper" : "border border-mist/60"}`}
+          >
+            {t(`tabs.${key}`)}
+          </Link>
+        ))}
       </nav>
-      {items.length === 0 ? (
+      {tab === "import" ? (
+        <CsvImport />
+      ) : tab === "workplaces" ? (
+        <section className="flex flex-col gap-4">
+          <form className="flex gap-2">
+            <input type="hidden" name="tab" value="workplaces" />
+            <input
+              name="q"
+              defaultValue={q}
+              placeholder={t("searchCompany")}
+              className="min-w-0 flex-1 rounded-2xl border border-mist/60 bg-white px-4 py-3 outline-none focus:border-ink"
+            />
+            <button className="rounded-2xl bg-ink px-5 py-3 font-black text-paper">{t("search")}</button>
+          </form>
+          <p className="text-sm text-slate">{t("slugHint")}</p>
+          {companies.map((c) => (
+            <div key={c.id} className="rounded-3xl bg-white p-5">
+              <p className="text-lg font-black">{c.name}</p>
+              <SlugEditor kind="company" id={c.id} slug={c.slug} prefix="/" />
+              <ul className="mt-3 flex flex-col gap-2 border-t border-[#E8E6E1] pt-3">
+                {c.locations.map((l) => (
+                  <li key={l.id}>
+                    <p className="text-slate">
+                      {l.address}, {l.city}
+                    </p>
+                    <SlugEditor kind="location" id={l.id} slug={l.slug} prefix={`/${c.slug}/`} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+      ) : items.length === 0 ? (
         <p className="rounded-3xl bg-white p-5 text-slate">{t("empty")}</p>
       ) : (
         <ul className="flex flex-col gap-3">
@@ -176,7 +265,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
             <li key={item.id} className="rounded-3xl bg-white p-5">
               <p className="mb-2 text-sm text-slate">{date(item.created_at)}</p>
               {item.content}
-              <Decision kind={tab} id={item.id} documentUrl={item.documentUrl} />
+              <Decision kind={tab as Queue} id={item.id} documentUrl={item.documentUrl} />
             </li>
           ))}
         </ul>

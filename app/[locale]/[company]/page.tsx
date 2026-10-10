@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { formatScore } from "@/components/scores";
 import { SiteHeader } from "@/components/site-header";
-import { Link } from "@/i18n/navigation";
+import { getPathname, Link } from "@/i18n/navigation";
 import { getCompany, getLocationPaths } from "@/lib/data";
 import { locationPath } from "@/lib/format";
+import { findRedirect } from "@/lib/data/redirects";
 import { localeAlternates } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/[company]">;
@@ -35,7 +36,11 @@ export default async function CompanyPage({ params }: Props) {
   const { locale, company } = await params;
   setRequestLocale(locale);
   const data = await getCompany(company);
-  if (!data) notFound();
+  if (!data) {
+    const to = await findRedirect(company);
+    if (to) permanentRedirect(getPathname({ href: to, locale }));
+    notFound();
+  }
   const t = await getTranslations("Company");
   const tc = await getTranslations("Categories");
 

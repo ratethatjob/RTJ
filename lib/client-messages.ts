@@ -6,4 +6,4 @@ export async function pickMessages(namespaces: string[]) {
   return Object.fromEntries(namespaces.filter((n) => n in all).map((n) => [n, all[n]]));
 }
 
-export const SHARED_CLIENT_NAMESPACES = ["Nav", "NavAccount"];
+export const SHARED_CLIENT_NAMESPACES = ["Nav", "NavAccount", "Report"];

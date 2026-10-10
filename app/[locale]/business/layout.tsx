@@ -13,7 +13,7 @@ export default async function BusinessLayout({ children, params }: LayoutProps<"
   const { locale } = await params;
   setRequestLocale(locale);
   const { supabase, org } = await getBusiness(locale, "/business");
-  const messages = await pickMessages([...SHARED_CLIENT_NAMESPACES, "Business", "Index", "Team", "BusinessJobs"]);
+  const messages = await pickMessages([...SHARED_CLIENT_NAMESPACES, "Business", "Index", "Team", "BusinessJobs", "Profile"]);
 
   if (!org) {
     return (
