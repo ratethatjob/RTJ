@@ -94,7 +94,8 @@
     "seeJob": "Megnézem",
     "fromEmployer": "A munkáltatótól",
     "website": "Weboldaluk",
-    "nearby": "Hasonló munkahelyek: {city}"
+    "nearby": "Hasonló munkahelyek: {city}",
+    "following": "Követed"
   },
   "Reviews": {
     "metaTitle": "{company} ({location}) értékelések",
@@ -142,7 +143,8 @@
     "showOriginal": "Eredeti",
     "showTranslation": "Fordítás",
     "replyFrom": "{company} válasza",
-    "verifiedApplication": "Igazolt · Itt jelentkezett"
+    "verifiedApplication": "Igazolt · Itt jelentkezett",
+    "helpful": "Hasznos"
   },
   "NotFound": {
     "title": "Az oldal nem található",
@@ -514,10 +516,13 @@
     "deleteButton": "Fiók törlése",
     "error": "Valami hiba történt. Próbáld újra.",
     "admin": "Admin",
-    "applications": "Jelentkezéseim"
+    "applications": "Jelentkezéseim",
+    "following": "Követett munkahelyek",
+    "noFollowing": "Kövess egy munkahelyet, és szólunk, ha új értékelés vagy állás jelenik meg."
   },
   "NavAccount": {
-    "account": "Fiókom"
+    "account": "Fiókom",
+    "notifications": "{count, plural, =0 {Értesítések} other {Értesítések, # olvasatlan}}"
   },
   "Admin": {
     "title": "Admin",
@@ -529,7 +534,8 @@
       "reports": "Jelentések",
       "workplaces": "Munkahelyek",
       "import": "Importálás",
-      "entities": "Jogi személyek"
+      "entities": "Jogi személyek",
+      "metrics": "Mutatók"
     },
     "empty": "Nincs teendő.",
     "approve": "Jóváhagyom",
@@ -579,6 +585,20 @@
       "registry": "cégjegyzék",
       "claim": "átvétel",
       "admin": "admin"
+    },
+    "metrics": {
+      "claimed": "Átvett munkahelyek",
+      "rated": "Értékelt munkahelyek",
+      "ofLocations": "összesen {count}",
+      "invites": "Meghívóból jött értékelések",
+      "inviteLinks": "{count} meghívó link",
+      "openJobs": "Nyitott állások",
+      "embeds": "Weboldalak jelvénnyel",
+      "month": "Hónap",
+      "reviews": "Megjelent értékelések",
+      "verified": "Igazolt",
+      "users": "Új fiókok",
+      "applications": "Jelentkezések"
     }
   },
   "Search": {
@@ -889,5 +909,17 @@
     "saved": "Mentve",
     "invalid": "Ellenőrizd a szövegeket: bemutatkozás legfeljebb 2000 karakter, legfeljebb 12 juttatás 80 karakterig, érvényes weboldal.",
     "error": "Valami hiba történt. Próbáld újra."
+  },
+  "Notifications": {
+    "title": "Értesítések",
+    "empty": "Még nincs semmi. Kövess munkahelyeket, és szólunk az új értékelésekről és állásokról.",
+    "kinds": {
+      "review_published": "Megjelent az értékelésed: {location}",
+      "reply": "A(z) {location} válaszolt az értékelésedre",
+      "application_status": "{job} – {location}: {status}",
+      "followed_review": "Új értékelés: {location}",
+      "followed_job": "Új állás itt: {location} – {job}",
+      "new_application": "Új jelentkezés: {job}"
+    }
   }
 }

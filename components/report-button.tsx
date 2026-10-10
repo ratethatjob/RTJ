@@ -17,16 +17,16 @@ export function ReportButton({ reviewId }: { reviewId: string }) {
   const [message, setMessage] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
-  if (message && !open) return <p className="mt-4 text-sm text-slate">{message}</p>;
+  if (message && !open) return <p className="text-sm text-slate">{message}</p>;
   if (!open) {
     return (
-      <button type="button" onClick={() => setOpen(true)} className="mt-4 text-sm text-slate underline underline-offset-4">
+      <button type="button" onClick={() => setOpen(true)} className="py-1.5 text-sm text-slate underline underline-offset-4">
         {t("report")}
       </button>
     );
   }
   return (
-    <div className="mt-4 flex flex-col gap-3 border-t border-[#E8E6E1] pt-4">
+    <div className="flex w-full flex-col gap-3 border-t border-[#E8E6E1] pt-4">
       <p className="font-black">{t("title")}</p>
       <div className="flex flex-wrap gap-2">
         {REASONS.map((r) => (

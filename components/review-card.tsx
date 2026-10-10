@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import type { FactKey, LocalizedText, Review } from "@/lib/data/types";
 import { initials, periodLabel, weeksWaited } from "@/lib/format";
+import { HelpfulButton } from "./helpful-button";
 import { ReportButton } from "./report-button";
 import { formatScore } from "./scores";
 import { TranslatedText } from "./translated-text";
@@ -130,7 +131,12 @@ export async function ReviewCard({
         </div>
       )}
       {children}
-      {reportable && <ReportButton reviewId={review.id} />}
+      {reportable && (
+        <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
+          <HelpfulButton reviewId={review.id} count={review.helpfulCount ?? 0} label={t("helpful")} />
+          <ReportButton reviewId={review.id} />
+        </div>
+      )}
     </article>
   );
 }

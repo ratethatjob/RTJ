@@ -94,7 +94,8 @@
     "seeJob": "See job",
     "fromEmployer": "From the employer",
     "website": "Visit their website",
-    "nearby": "Similar workplaces in {city}"
+    "nearby": "Similar workplaces in {city}",
+    "following": "Following"
   },
   "Reviews": {
     "metaTitle": "{company} ({location}) reviews",
@@ -142,7 +143,8 @@
     "showOriginal": "Show original",
     "showTranslation": "Show translation",
     "replyFrom": "Reply from {company}",
-    "verifiedApplication": "Verified · Applied here"
+    "verifiedApplication": "Verified · Applied here",
+    "helpful": "Helpful"
   },
   "NotFound": {
     "title": "Page not found",
@@ -514,10 +516,13 @@
     "deleteButton": "Delete my account",
     "error": "Something went wrong. Please try again.",
     "admin": "Admin",
-    "applications": "My applications"
+    "applications": "My applications",
+    "following": "Workplaces you follow",
+    "noFollowing": "Follow a workplace to hear about new reviews and jobs there."
   },
   "NavAccount": {
-    "account": "My account"
+    "account": "My account",
+    "notifications": "{count, plural, =0 {Notifications} one {Notifications, # unread} other {Notifications, # unread}}"
   },
   "Admin": {
     "title": "Admin",
@@ -529,7 +534,8 @@
       "reports": "Reports",
       "workplaces": "Workplaces",
       "import": "Import",
-      "entities": "Legal entities"
+      "entities": "Legal entities",
+      "metrics": "Metrics"
     },
     "empty": "Nothing waiting.",
     "approve": "Approve",
@@ -579,6 +585,20 @@
       "registry": "registry",
       "claim": "claim",
       "admin": "admin"
+    },
+    "metrics": {
+      "claimed": "Claimed workplaces",
+      "rated": "Rated workplaces",
+      "ofLocations": "of {count}",
+      "invites": "Reviews from invites",
+      "inviteLinks": "{count} invite links",
+      "openJobs": "Open jobs",
+      "embeds": "Websites with a badge",
+      "month": "Month",
+      "reviews": "Published reviews",
+      "verified": "Verified",
+      "users": "New accounts",
+      "applications": "Applications"
     }
   },
   "Search": {
@@ -889,5 +909,17 @@
     "saved": "Saved",
     "invalid": "Check the texts: about up to 2000 characters, up to 12 benefits of 80 characters, a valid website.",
     "error": "Something went wrong. Please try again."
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "empty": "Nothing yet. Follow workplaces to hear about new reviews and jobs.",
+    "kinds": {
+      "review_published": "Your review of {location} is live",
+      "reply": "{location} replied to your review",
+      "application_status": "{job} at {location}: {status}",
+      "followed_review": "New review of {location}",
+      "followed_job": "New job at {location}: {job}",
+      "new_application": "New application for {job}"
+    }
   }
 }

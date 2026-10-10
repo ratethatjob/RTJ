@@ -78,6 +78,7 @@ export type Review = {
   body: LocalizedText | null;
   reply: { body: LocalizedText } | null;
   publishedAt: string;
+  helpfulCount?: number;
 };
 
 export type ReviewFilter = "all" | "verified" | "permanent" | "temporary" | "applicants";

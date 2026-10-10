@@ -11,6 +11,7 @@ import {
 } from "@/components/scores";
 import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
+import { FollowButton } from "@/components/follow-button";
 import { JobCard } from "@/components/jobs/job-card";
 import {
   getLocation,
@@ -118,12 +119,12 @@ export default async function LocationPage({ params }: Props) {
           </p>
         )}
         <div className="hidden gap-3 lg:flex">
-          <Link
-            href="/app/sign-in"
+          <FollowButton
+            locationId={data.id}
+            followLabel={t("follow")}
+            followingLabel={t("following")}
             className="rounded-2xl border-2 border-ink px-7 py-4 text-lg font-black"
-          >
-            {t("follow")}
-          </Link>
+          />
           <Link
             href={rateHref}
             className="rounded-2xl bg-ink px-7 py-4 text-lg font-black text-paper"

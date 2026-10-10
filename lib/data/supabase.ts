@@ -114,6 +114,7 @@ type ReviewRow = {
   reply_language: string | null;
   reply_translations: Record<string, string>;
   published_at: string;
+  helpful_count?: number | null;
 } & Partial<Record<FactKey, boolean | null>>;
 
 const FACTS: FactKey[] = [
@@ -157,6 +158,7 @@ export function toReview(row: ReviewRow): Review {
         }
       : null,
     publishedAt: row.published_at,
+    helpfulCount: row.helpful_count ?? 0,
   };
 }
 

@@ -7,7 +7,7 @@ import { requireUser } from "@/lib/auth";
 export const instant = false;
 
 const TABS = ["claims", "moderation", "verifications", "disputes", "reports"] as const;
-const TOOLS = ["workplaces", "entities", "import"] as const;
+const TOOLS = ["metrics", "workplaces", "entities", "import"] as const;
 type Queue = (typeof TABS)[number];
 type Tab = Queue | (typeof TOOLS)[number];
 
@@ -223,6 +223,19 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
         ).data ?? []) as unknown as CompanyRow[])
       : [];
 
+  type Metrics = {
+    months: { month: string; reviews: number; verified: number; users: number; applications: number }[];
+    locations: number;
+    claimed_locations: number;
+    rated_locations: number;
+    invites_used: number;
+    invite_links: number;
+    open_jobs: number;
+    embeds: number;
+  };
+  const metrics = tab === "metrics" ? ((await supabase.rpc("admin_metrics")).data as Metrics | null) : null;
+  const pct = (a: number, b: number) => (b ? `${Math.round((100 * a) / b)}%` : "–");
+
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 pb-12 pt-8">
       <header className="flex items-center justify-between gap-4">
@@ -258,7 +271,55 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
           </Link>
         ))}
       </nav>
-      {tab === "import" ? (
+      {tab === "metrics" ? (
+        metrics && (
+          <section className="flex flex-col gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {(
+                [
+                  [t("metrics.claimed"), pct(metrics.claimed_locations, metrics.locations), `${metrics.claimed_locations} / ${metrics.locations}`],
+                  [t("metrics.rated"), String(metrics.rated_locations), t("metrics.ofLocations", { count: metrics.locations })],
+                  [t("metrics.invites"), String(metrics.invites_used), t("metrics.inviteLinks", { count: metrics.invite_links })],
+                  [t("metrics.openJobs"), String(metrics.open_jobs), ""],
+                  [t("metrics.embeds"), String(metrics.embeds), ""],
+                ] as const
+              ).map(([label, value, sub]) => (
+                <div key={label} className="rounded-3xl bg-white p-5">
+                  <p className="text-sm font-black text-slate">{label}</p>
+                  <p className="text-3xl font-black tracking-brand">{value}</p>
+                  {sub && <p className="text-sm text-slate">{sub}</p>}
+                </div>
+              ))}
+            </div>
+            <div className="overflow-x-auto rounded-3xl bg-white p-5">
+              <table className="w-full min-w-[480px] text-left">
+                <thead className="text-sm text-slate">
+                  <tr>
+                    <th className="py-2 font-black">{t("metrics.month")}</th>
+                    <th className="py-2 text-right font-black">{t("metrics.reviews")}</th>
+                    <th className="py-2 text-right font-black">{t("metrics.verified")}</th>
+                    <th className="py-2 text-right font-black">{t("metrics.users")}</th>
+                    <th className="py-2 text-right font-black">{t("metrics.applications")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...metrics.months].reverse().map((m) => (
+                    <tr key={m.month} className="border-t border-[#E8E6E1]">
+                      <td className="py-2.5 font-black">
+                        {format.dateTime(new Date(`${m.month}-01T12:00:00Z`), { year: "numeric", month: "long" })}
+                      </td>
+                      <td className="py-2.5 text-right">{m.reviews}</td>
+                      <td className="py-2.5 text-right font-black">{m.verified}</td>
+                      <td className="py-2.5 text-right">{m.users}</td>
+                      <td className="py-2.5 text-right">{m.applications}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )
+      ) : tab === "import" ? (
         <CsvImport />
       ) : tab === "workplaces" || tab === "entities" ? (
         <section className="flex flex-col gap-4">
