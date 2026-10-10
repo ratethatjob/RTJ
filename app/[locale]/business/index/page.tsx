@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { EmbedGenerator } from "@/components/business/embed-generator";
 import { LocationSelect } from "@/components/business/location-select";
 import { getPathname } from "@/i18n/navigation";
@@ -13,7 +13,7 @@ export default async function IndexPage({ params, searchParams }: PageProps<"/[l
   const { locale } = await params;
   setRequestLocale(locale);
   const query = await searchParams;
-  const { org } = await getBusiness(locale, "/business/index");
+  const { supabase, org } = await getBusiness(locale, "/business/index");
   if (!org || org.locations.length === 0) return null;
   const t = await getTranslations("Index");
 
@@ -21,6 +21,13 @@ export default async function IndexPage({ params, searchParams }: PageProps<"/[l
   const host = (await headers()).get("host");
   const origin = `${host?.startsWith("localhost") ? "http" : "https"}://${host}`;
   const few = (location.scores?.reviewCount ?? 0) < MIN_REVIEWS;
+  const format = await getFormatter();
+  const { data: sites } = await supabase
+    .from("embed_referrers")
+    .select("domain, views, last_seen")
+    .eq("location_id", location.id)
+    .order("views", { ascending: false })
+    .limit(50);
 
   return (
     <main className="flex max-w-4xl flex-col gap-4">
@@ -42,6 +49,24 @@ export default async function IndexPage({ params, searchParams }: PageProps<"/[l
         locale={locale}
         sealEarned={isTopRated(location)}
       />
+      <section className="rounded-3xl bg-white p-6">
+        <h2 className="text-xl font-black">{t("sitesTitle", { count: sites?.length ?? 0 })}</h2>
+        {!sites?.length ? (
+          <p className="mt-2 text-slate">{t("sitesEmpty")}</p>
+        ) : (
+          <ul className="mt-3 flex flex-col">
+            {sites.map((s) => (
+              <li key={s.domain} className="flex flex-wrap justify-between gap-2 border-t border-[#E8E6E1] py-3 first:border-t-0">
+                <span className="break-all font-black">{s.domain}</span>
+                <span className="text-slate">
+                  {t("views", { count: Number(s.views) })} ·{" "}
+                  {t("lastSeen", { date: format.dateTime(new Date(s.last_seen), { dateStyle: "medium" }) })}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </main>
   );
 }

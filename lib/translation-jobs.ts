@@ -1,5 +1,6 @@
 import { revalidateTag } from "next/cache";
 import { adminClient } from "./supabase/admin";
+import { moderate } from "./moderate";
 import { translate } from "./translate";
 
 // Stores machine translations of reviews and employer replies. Runs after the
@@ -54,6 +55,27 @@ export async function translateReply(replyId: string) {
   } catch (e) {
     console.error("translateReply", replyId, e);
   }
+}
+
+/** New review: AI moderation (may send it back to the manual queue), then translation. */
+export async function processNewReview(reviewId: string) {
+  const db = adminClient();
+  if (!db) return;
+  try {
+    const { data: r } = await db.from("reviews").select("body, status").eq("id", reviewId).single();
+    if (r?.body && ["pending_moderation", "scheduled"].includes(r.status)) {
+      const result = await moderate(r.body);
+      if (result?.flagged) {
+        await db.rpc("hold_review", {
+          p_review_id: reviewId,
+          p_reason: `ai:${result.reasons.join(",") || "declined"}`,
+        });
+      }
+    }
+  } catch (e) {
+    console.error("moderate", reviewId, e);
+  }
+  await translateReview(reviewId);
 }
 
 /** Backfill: recent reviews and replies with text but no translations yet. */

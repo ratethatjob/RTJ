@@ -195,3 +195,27 @@ export const PUBLIC_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Cache-Control": "public, max-age=600, s-maxage=3600, stale-while-revalidate=86400",
 };
+
+/** Badges are only cached in the browser so every embedding site is counted. */
+export const EMBED_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Cache-Control": "public, max-age=600",
+};
+
+/** Records which website shows the badge (domain only, nothing about the visitor). */
+export async function recordEmbed(request: Request, locationId: string) {
+  const source = request.headers.get("referer") ?? request.headers.get("origin");
+  if (!source) return;
+  let domain: string;
+  try {
+    domain = new URL(source).hostname.replace(/^www\./, "");
+  } catch {
+    return;
+  }
+  const own = new URL(request.url).hostname;
+  if (!domain || domain === own || domain === "localhost" || domain.endsWith("ratethatjob.com")) return;
+  const { supabaseKey, supabaseUrl } = await import("@/lib/supabase/env");
+  if (!supabaseUrl || !supabaseKey) return;
+  const { publicClient } = await import("@/lib/data/supabase");
+  await publicClient().rpc("record_embed_view", { p_location_id: locationId, p_domain: domain });
+}

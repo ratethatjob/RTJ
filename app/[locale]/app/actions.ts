@@ -5,7 +5,7 @@ import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
 import { getLocationById } from "@/lib/data";
 import { parseReview, type ReviewInput } from "@/lib/review-input";
-import { translateReview } from "@/lib/translation-jobs";
+import { processNewReview } from "@/lib/translation-jobs";
 
 export async function shuffleName(): Promise<string | null> {
   const { supabase, user } = await getUser();
@@ -61,7 +61,7 @@ export async function submitReview(
   if (inviteToken) {
     await supabase.rpc("attach_invite", { p_review_id: data.id, p_token: inviteToken });
   }
-  if (parsed.row.body) after(() => translateReview(data.id));
+  if (parsed.row.body) after(() => processNewReview(data.id));
   return { id: data.id };
 }
 

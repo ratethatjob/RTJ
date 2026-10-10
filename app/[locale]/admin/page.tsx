@@ -1,5 +1,5 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
-import { CsvImport, SlugEditor } from "@/components/admin/tools";
+import { CsvImport, EntityForm, SlugEditor, UnverifyEntity } from "@/components/admin/tools";
 import { Decision } from "@/components/admin/decision";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
@@ -7,7 +7,7 @@ import { requireUser } from "@/lib/auth";
 export const instant = false;
 
 const TABS = ["claims", "moderation", "verifications", "disputes", "reports"] as const;
-const TOOLS = ["workplaces", "import"] as const;
+const TOOLS = ["workplaces", "entities", "import"] as const;
 type Queue = (typeof TABS)[number];
 type Tab = Queue | (typeof TOOLS)[number];
 
@@ -88,13 +88,32 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
   } else if (tab === "moderation") {
     const { data } = await supabase
       .from("reviews")
-      .select(`${reviewCols}, created_at`)
+      .select(`${reviewCols}, created_at, hold_reason`)
       .eq("status", "pending_moderation")
       .order("created_at");
+    const holdLabel = (reason: string) =>
+      reason.startsWith("ai:")
+        ? `${t("holdReasons.ai")}: ${reason
+            .slice(3)
+            .split(",")
+            .map((x) => (t.has(`aiReasons.${x}`) ? t(`aiReasons.${x}`) : x))
+            .join(", ")}`
+        : t.has(`holdReasons.${reason}`)
+          ? t(`holdReasons.${reason}`)
+          : reason;
     items = (data ?? []).map((r) => ({
       id: r.id,
       created_at: r.created_at,
-      content: <ReviewSummary r={r as unknown as ReviewRow} relationship={tr(`relationship.${r.relationship}`)} />,
+      content: (
+        <>
+          {r.hold_reason && (
+            <p className="mb-2 inline-block rounded-lg bg-ink px-2.5 py-1 text-sm font-black text-paper">
+              {holdLabel(r.hold_reason)}
+            </p>
+          )}
+          <ReviewSummary r={r as unknown as ReviewRow} relationship={tr(`relationship.${r.relationship}`)} />
+        </>
+      ),
     }));
   } else if (tab === "verifications") {
     const { data } = await supabase
@@ -176,18 +195,32 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     id: string;
     name: string;
     slug: string;
-    locations: { id: string; slug: string; address: string; city: string }[];
+    locations: {
+      id: string;
+      slug: string;
+      address: string;
+      city: string;
+      country: string;
+      location_entity_links: {
+        id: string;
+        source: string;
+        verified_at: string | null;
+        legal_entities: { name: string; registry_id: string | null } | null;
+      }[];
+    }[];
   };
   const companies: CompanyRow[] =
-    tab === "workplaces" && q
+    (tab === "workplaces" || tab === "entities") && q
       ? (((
           await supabase
             .from("companies")
-            .select("id, name, slug, locations(id, slug, address, city)")
+            .select(
+              "id, name, slug, locations(id, slug, address, city, country, location_entity_links(id, source, verified_at, legal_entities(name, registry_id)))",
+            )
             .ilike("name", `%${q.replace(/[%_\\,()]/g, " ")}%`)
             .order("name")
             .limit(20)
-        ).data ?? []) as CompanyRow[])
+        ).data ?? []) as unknown as CompanyRow[])
       : [];
 
   return (
@@ -227,10 +260,10 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
       </nav>
       {tab === "import" ? (
         <CsvImport />
-      ) : tab === "workplaces" ? (
+      ) : tab === "workplaces" || tab === "entities" ? (
         <section className="flex flex-col gap-4">
           <form className="flex gap-2">
-            <input type="hidden" name="tab" value="workplaces" />
+            <input type="hidden" name="tab" value={tab} />
             <input
               name="q"
               defaultValue={q}
@@ -239,8 +272,38 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
             />
             <button className="rounded-2xl bg-ink px-5 py-3 font-black text-paper">{t("search")}</button>
           </form>
-          <p className="text-sm text-slate">{t("slugHint")}</p>
-          {companies.map((c) => (
+          <p className="text-sm text-slate">{tab === "entities" ? t("entityHint") : t("slugHint")}</p>
+          {tab === "entities" &&
+            companies.flatMap((c) =>
+              c.locations.map((l) => (
+                <div key={l.id} className="rounded-3xl bg-white p-5">
+                  <p className="text-lg font-black">{c.name}</p>
+                  <p className="text-slate">
+                    {l.address}, {l.city}
+                  </p>
+                  <ul className="mt-3 flex flex-col gap-2">
+                    {l.location_entity_links.map((k) => (
+                      <li key={k.id} className="flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-paper p-3">
+                        <span>
+                          <span className="font-black">{k.legal_entities?.name}</span>
+                          {k.legal_entities?.registry_id && (
+                            <span className="text-slate"> · {k.legal_entities.registry_id}</span>
+                          )}
+                          <span className="text-sm text-slate">
+                            {" "}
+                            · {t(`entitySources.${k.source}`)} ·{" "}
+                            {k.verified_at ? t("entityVerified") : t("entityUnverified")}
+                          </span>
+                        </span>
+                        {k.verified_at && <UnverifyEntity linkId={k.id} />}
+                      </li>
+                    ))}
+                  </ul>
+                  <EntityForm locationId={l.id} country={l.country} />
+                </div>
+              )),
+            )}
+          {tab === "workplaces" && companies.map((c) => (
             <div key={c.id} className="rounded-3xl bg-white p-5">
               <p className="text-lg font-black">{c.name}</p>
               <SlugEditor kind="company" id={c.id} slug={c.slug} prefix="/" />

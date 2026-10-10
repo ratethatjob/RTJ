@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { type ImportRow, importLocations, setSlug } from "@/app/[locale]/admin/actions";
+import { type ImportRow, importLocations, linkEntity, setSlug, unverifyEntity } from "@/app/[locale]/admin/actions";
 
 export function SlugEditor({
   kind,
@@ -152,5 +152,60 @@ export function CsvImport() {
         {t("importButton")}
       </button>
     </section>
+  );
+}
+
+export function EntityForm({ locationId, country }: { locationId: string; country: string }) {
+  const t = useTranslations("Admin");
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [registry, setRegistry] = useState("");
+  const [error, setError] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const input = "min-w-0 rounded-xl border border-mist/60 px-3 py-2 outline-none focus:border-ink";
+  return (
+    <div className="mt-3 flex flex-wrap items-center gap-2">
+      <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("entityName")} className={`${input} flex-1`} />
+      <input value={registry} onChange={(e) => setRegistry(e.target.value)} placeholder={t("entityRegistry")} className={`${input} w-40`} />
+      <button
+        type="button"
+        disabled={pending || name.trim().length < 2}
+        onClick={() =>
+          startTransition(async () => {
+            setError(false);
+            const result = await linkEntity(locationId, name, country, registry);
+            if (result.error) return setError(true);
+            setName("");
+            setRegistry("");
+            router.refresh();
+          })
+        }
+        className="rounded-xl bg-ink px-4 py-2 font-black text-paper disabled:opacity-40"
+      >
+        {t("entityLink")}
+      </button>
+      {error && <span className="text-sm font-black">{t("error")}</span>}
+    </div>
+  );
+}
+
+export function UnverifyEntity({ linkId }: { linkId: string }) {
+  const t = useTranslations("Admin");
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  return (
+    <button
+      type="button"
+      disabled={pending}
+      onClick={() =>
+        startTransition(async () => {
+          const result = await unverifyEntity(linkId);
+          if (!result.error) router.refresh();
+        })
+      }
+      className="text-sm font-black underline underline-offset-4"
+    >
+      {t("entityUnlink")}
+    </button>
   );
 }

@@ -528,7 +528,8 @@
       "disputes": "Vitatások",
       "reports": "Jelentések",
       "workplaces": "Munkahelyek",
-      "import": "Importálás"
+      "import": "Importálás",
+      "entities": "Jogi személyek"
     },
     "empty": "Nincs teendő.",
     "approve": "Jóváhagyom",
@@ -550,7 +551,35 @@
     "importHeaderError": "A fejlécben legalább company, address, city, country és category kell.",
     "importRows": "{count} sor kész",
     "importButton": "Importálás",
-    "importResult": "Létrehozva: {created}, kihagyva: {skipped}, hibás: {failed}."
+    "importResult": "Létrehozva: {created}, kihagyva: {skipped}, hibás: {failed}.",
+    "holdReasons": {
+      "contact_details": "Elérhetőség vagy link a szövegben",
+      "burst": "Ma több új fiók is értékelte ezt a helyet",
+      "new_account": "Percekkel előtte létrehozott fiók, más új fiókok mellett",
+      "many_locations": "Ugyanaz a személy ma sok helyet értékelt",
+      "ai": "AI ellenőrzés"
+    },
+    "aiReasons": {
+      "personal_data": "személyes adat",
+      "threat": "fenyegetés",
+      "hate": "gyűlöletkeltés",
+      "harassment": "zaklatás",
+      "spam": "spam",
+      "declined": "emberi ellenőrzés kell"
+    },
+    "entityHint": "A jogi személy összekötése után a munkahely oldalán megjelenik: „Üzemeltető: …”.",
+    "entityName": "Jogi személy neve",
+    "entityRegistry": "Cégjegyzékszám",
+    "entityLink": "Összekötés igazoltként",
+    "entityUnlink": "Igazolás visszavonása",
+    "entityVerified": "igazolt",
+    "entityUnverified": "nem igazolt",
+    "entitySources": {
+      "document": "dokumentum",
+      "registry": "cégjegyzék",
+      "claim": "átvétel",
+      "admin": "admin"
+    }
   },
   "Search": {
     "title": "Munkahely keresése",
@@ -599,7 +628,11 @@
     },
     "theme": "Téma",
     "preview": "Előnézet",
-    "jsonCode": "JSON API (saját dizájnhoz)"
+    "jsonCode": "JSON API (saját dizájnhoz)",
+    "sitesTitle": "{count, plural, =0 {Hol látszik a jelvényed} other {# weboldalon látszik a jelvényed}}",
+    "sitesEmpty": "Amint a jelvényed kikerül egy weboldalra, itt megjelenik. Csak a weboldal domainjét számoljuk, a látogatóiról semmit.",
+    "views": "{count} megtekintés",
+    "lastSeen": "utoljára: {date}"
   },
   "Team": {
     "title": "Csapat és szerepkörök",

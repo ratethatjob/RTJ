@@ -528,7 +528,8 @@
       "disputes": "Disputes",
       "reports": "Reports",
       "workplaces": "Workplaces",
-      "import": "Import"
+      "import": "Import",
+      "entities": "Legal entities"
     },
     "empty": "Nothing waiting.",
     "approve": "Approve",
@@ -550,7 +551,35 @@
     "importHeaderError": "The header row needs at least company, address, city, country and category.",
     "importRows": "{count, plural, one {# row} other {# rows}} ready",
     "importButton": "Import",
-    "importResult": "Created {created}, skipped {skipped}, failed {failed}."
+    "importResult": "Created {created}, skipped {skipped}, failed {failed}.",
+    "holdReasons": {
+      "contact_details": "Contact details or link in the text",
+      "burst": "Several new accounts rated this place today",
+      "new_account": "Account created minutes before, with other new accounts here",
+      "many_locations": "Same person rated many places today",
+      "ai": "AI check"
+    },
+    "aiReasons": {
+      "personal_data": "personal data",
+      "threat": "threat",
+      "hate": "hate",
+      "harassment": "harassment",
+      "spam": "spam",
+      "declined": "needs a human look"
+    },
+    "entityHint": "Linking a legal entity shows \"Operated by …\" on the workplace page.",
+    "entityName": "Legal entity name",
+    "entityRegistry": "Registry number",
+    "entityLink": "Link as verified",
+    "entityUnlink": "Unverify",
+    "entityVerified": "verified",
+    "entityUnverified": "not verified",
+    "entitySources": {
+      "document": "document",
+      "registry": "registry",
+      "claim": "claim",
+      "admin": "admin"
+    }
   },
   "Search": {
     "title": "Find a workplace",
@@ -599,7 +628,11 @@
     },
     "theme": "Theme",
     "preview": "Preview",
-    "jsonCode": "JSON API (your own design)"
+    "jsonCode": "JSON API (your own design)",
+    "sitesTitle": "{count, plural, =0 {Where your badge appears} one {Your badge appears on # website} other {Your badge appears on # websites}}",
+    "sitesEmpty": "Once your badge is on a website, it shows up here. Only the website's domain is counted, nothing about its visitors.",
+    "views": "{count, plural, one {# view} other {# views}}",
+    "lastSeen": "last seen {date}"
   },
   "Team": {
     "title": "Team & roles",

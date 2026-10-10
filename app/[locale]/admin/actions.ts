@@ -98,3 +98,29 @@ export async function setSlug(kind: "company" | "location", id: string, slug: st
   revalidateTag("redirects", "max");
   return { ok: true };
 }
+
+export async function linkEntity(
+  locationId: string,
+  name: string,
+  country: string,
+  registryId: string,
+): Promise<Result> {
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("admin_link_entity", {
+    p_location_id: locationId,
+    p_name: name,
+    p_country: country.toUpperCase(),
+    p_registry_id: registryId || null,
+  });
+  if (error) return { error: true };
+  revalidateTag("locations", "max");
+  return { ok: true };
+}
+
+export async function unverifyEntity(linkId: string): Promise<Result> {
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("admin_unverify_entity", { p_link_id: linkId });
+  if (error) return { error: true };
+  revalidateTag("locations", "max");
+  return { ok: true };
+}
