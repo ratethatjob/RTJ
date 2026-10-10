@@ -1,0 +1,144 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { choosePlace, confirmPlace, searchPlaces, type Suggestion } from "@/app/[locale]/app/rate/places/actions";
+import { usePathname, useRouter } from "@/i18n/navigation";
+
+const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
+
+type Place = { placeId: string; name: string; address: string; city: string; category: string | null };
+
+/** Find a workplace on Google Maps; one RateThatJob page per Google place. */
+export function PlaceSearch({ initialQuery = "" }: { initialQuery?: string }) {
+  const t = useTranslations("Places");
+  const tc = useTranslations("Categories");
+  const router = useRouter();
+  const pathname = usePathname();
+  const [query, setQuery] = useState(initialQuery);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [place, setPlace] = useState<Place | null>(null);
+  const [category, setCategory] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+  // One billing session per search: autocomplete calls plus the chosen place's details.
+  const session = useRef<string>("");
+
+  useEffect(() => {
+    if (!session.current) session.current = crypto.randomUUID();
+    const text = query.trim();
+    if (text.length < 3 || place) return;
+    const timer = setTimeout(async () => {
+      const result = await searchPlaces(text, session.current);
+      if (result.error === "signin") {
+        return router.push({ pathname: "/app/sign-in", query: { next: pathname } });
+      }
+      if (result.error) return setError(t("error"));
+      setError(null);
+      setSuggestions(result.suggestions ?? []);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [query, place, router, pathname, t]);
+
+  function pick(s: Suggestion) {
+    if (s.locationId) return router.push(`/app/rate/${s.locationId}`);
+    startTransition(async () => {
+      const result = await choosePlace(s.placeId, session.current);
+      session.current = crypto.randomUUID();
+      if (result.locationId) return router.push(`/app/rate/${result.locationId}`);
+      if (!result.place) return setError(t("error"));
+      setPlace(result.place);
+      setCategory(result.place.category ?? "");
+    });
+  }
+
+  function confirm() {
+    if (!place || !category) return;
+    startTransition(async () => {
+      const result = await confirmPlace(place.placeId, category);
+      if (result.error || !result.locationId) {
+        return setError(result.error === "limit" ? t("limit") : t("error"));
+      }
+      router.push(`/app/rate/${result.locationId}`);
+    });
+  }
+
+  if (place) {
+    return (
+      <div className="flex flex-col gap-4 rounded-3xl bg-white p-5">
+        <div>
+          <p className="text-xl font-black tracking-brand">{place.name}</p>
+          <p className="text-slate">
+            {place.address}, {place.city}
+          </p>
+        </div>
+        <fieldset>
+          <legend className="mb-2 font-black">{t("category")}</legend>
+          <div className="flex flex-wrap gap-2">
+            {CATEGORIES.map((c) => (
+              <button
+                key={c}
+                type="button"
+                aria-pressed={category === c}
+                onClick={() => setCategory(c)}
+                className={`rounded-2xl px-4 py-2.5 font-black ${category === c ? "bg-ink text-paper" : "border border-mist/60"}`}
+              >
+                {tc(c)}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+        {error && <p className="font-black">{error}</p>}
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            disabled={pending || !category}
+            onClick={confirm}
+            className="rounded-2xl bg-ink px-6 py-3 font-black text-paper disabled:opacity-50"
+          >
+            {t("addAndRate")}
+          </button>
+          <button type="button" onClick={() => setPlace(null)} className="rounded-2xl px-4 py-3 font-black">
+            {t("back")}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      <input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder={t("placeholder")}
+        aria-label={t("placeholder")}
+        className="w-full rounded-2xl border border-mist/60 bg-white px-4 py-3 text-lg outline-none focus:border-ink"
+      />
+      {error && <p className="font-black">{error}</p>}
+      {suggestions.length > 0 && (
+        <ul className="flex flex-col gap-2">
+          {suggestions.map((s) => (
+            <li key={s.placeId}>
+              <button
+                type="button"
+                disabled={pending}
+                onClick={() => pick(s)}
+                className="flex w-full items-start justify-between gap-3 rounded-2xl bg-white p-4 text-left disabled:opacity-60"
+              >
+                <span className="min-w-0">
+                  <span className="block font-black">{s.main}</span>
+                  <span className="text-sm text-slate">{s.secondary}</span>
+                </span>
+                {s.locationId && (
+                  <span className="shrink-0 rounded-lg bg-signal px-2 py-1 text-xs font-black">{t("onRtj")}</span>
+                )}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="text-xs text-slate">{t("poweredBy")}</p>
+    </div>
+  );
+}

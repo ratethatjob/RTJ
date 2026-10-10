@@ -921,5 +921,18 @@
       "followed_job": "New job at {location}: {job}",
       "new_application": "New application for {job}"
     }
+  },
+  "Places": {
+    "title": "Find it on Google Maps",
+    "placeholder": "Workplace name and street, e.g. McDonald’s Blaha",
+    "onRtj": "On RateThatJob",
+    "category": "What kind of workplace is it?",
+    "addAndRate": "Add and rate",
+    "back": "Back",
+    "error": "Something went wrong. Please try again.",
+    "limit": "You have added many workplaces today. Try again tomorrow.",
+    "poweredBy": "Search powered by Google",
+    "notOnMap": "Not on Google Maps?",
+    "manualTitle": "Or enter it yourself"
   }
 }

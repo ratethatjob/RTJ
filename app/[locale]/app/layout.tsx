@@ -20,6 +20,7 @@ export default async function AppLayout({ children, params }: LayoutProps<"/[loc
     "Account",
     "Apply",
     "Applications",
+    "Places",
   ]);
   return <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>;
 }

@@ -921,5 +921,18 @@
       "followed_job": "Új állás itt: {location} – {job}",
       "new_application": "Új jelentkezés: {job}"
     }
+  },
+  "Places": {
+    "title": "Keresd meg a Google Térképen",
+    "placeholder": "Munkahely neve és utca, pl. McDonald’s Blaha",
+    "onRtj": "Már fent van",
+    "category": "Milyen munkahely ez?",
+    "addAndRate": "Hozzáadom és értékelem",
+    "back": "Vissza",
+    "error": "Valami hiba történt. Próbáld újra.",
+    "limit": "Ma már sok munkahelyet felvettél. Próbáld újra holnap.",
+    "poweredBy": "A keresést a Google biztosítja",
+    "notOnMap": "Nincs fent a Google Térképen?",
+    "manualTitle": "Vagy add meg te"
   }
 }
