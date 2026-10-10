@@ -17,6 +17,9 @@ Next.js (App Router, `cacheComponents`) + TypeScript, Tailwind CSS v4, next-intl
 - Database: `supabase/migrations/` (schema + RLS), applied automatically before every Vercel build by `scripts/migrate.mjs` (uses `POSTGRES_URL_NON_POOLING` from the Supabase ↔ Vercel integration; tracked in `supabase_migrations.schema_migrations`). Migrations must be new files, never edits of applied ones, `supabase/seed.sql` (local sample data). The public never reads `reviews`, `profiles` or `invites` directly – only through the `public_*` views. Score aggregates: `recompute_location_scores()` (service role).
 - Public routes: `app/[locale]/[company]/[location]` (location page, JSON-LD, hreflang) and `.../reviews` (filters, pagination). These block instead of streaming (`instant = false`) so unknown slugs return a real 404.
 
+- Reviewer flow (`app/[locale]/app/`, noindex): `sign-in` (email/phone OTP, OAuth) → `/auth/callback` → `welcome` (display name) → `rate` (workplace search) → `rate/[locationId]` (3-step form, `components/app/review-form.tsx`). Server actions: `app/[locale]/app/actions.ts`; validation: `lib/review-input.ts`. `proxy.ts` refreshes the Supabase session on `/app` paths only.
+- Publishing: reviews are inserted as `pending_moderation`; a DB trigger (`private.moderate_review`) schedules them (anonymity delay, manual queue for contact details/links), and pg_cron runs `publish_due_reviews()` every 15 minutes. Verification files go to the private `verifications` storage bucket under `<user id>/`.
+
 ## Working with the founder
 - Communicates in Hungarian, short and direct. Product and UI copy are in English (and Hungarian translations), mobile first.
 - Do only what is asked; don't add extras or offer unrequested work.

@@ -34,6 +34,42 @@ export async function getLocation(
   return data && toLocation(data);
 }
 
+export async function getLocationById(id: string): Promise<LocationSummary | null> {
+  "use cache";
+  cacheLife("hours");
+  if (!useSupabase) return sampleLocations.find((l) => l.id === id) ?? null;
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+  const { data, error } = await publicClient()
+    .from("public_locations")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  return data && toLocation(data);
+}
+
+export async function searchLocations(q: string): Promise<LocationSummary[]> {
+  "use cache";
+  cacheLife("minutes");
+  const term = q.trim().toLowerCase();
+  if (!term) return [];
+  if (!useSupabase) {
+    return sampleLocations.filter((l) =>
+      `${l.name} ${l.address} ${l.city}`.toLowerCase().includes(term),
+    );
+  }
+  // Escape LIKE wildcards and PostgREST filter syntax characters.
+  const safe = term.replace(/[%_\\,()]/g, " ");
+  const { data, error } = await publicClient()
+    .from("public_locations")
+    .select("*")
+    .or(`name.ilike.%${safe}%,company_name.ilike.%${safe}%,address.ilike.%${safe}%`)
+    .order("review_count", { ascending: false })
+    .limit(20);
+  if (error) throw error;
+  return data.map(toLocation);
+}
+
 export async function getLocationPaths() {
   "use cache";
   cacheLife("hours");
