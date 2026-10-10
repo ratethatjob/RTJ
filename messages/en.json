@@ -182,7 +182,7 @@
     "title": "Which workplace?",
     "placeholder": "Workplace name",
     "search": "Search",
-    "noResults": "No workplaces found. Adding new workplaces is coming soon.",
+    "noResults": "No workplaces found.",
     "hint": "Search by name, then pick the location."
   },
   "ReviewForm": {

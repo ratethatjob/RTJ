@@ -182,7 +182,7 @@
     "title": "Melyik munkahely?",
     "placeholder": "Munkahely neve",
     "search": "Keresés",
-    "noResults": "Nincs találat. Új munkahely felvétele hamarosan.",
+    "noResults": "Nincs találat.",
     "hint": "Keress név alapján, aztán válaszd ki a telephelyet."
   },
   "ReviewForm": {
