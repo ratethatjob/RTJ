@@ -49,7 +49,7 @@ We update this list before adding a new provider.
 - Access and portability: download your data (JSON) on the My account page.
 - Erasure: delete your account on the My account page.
 - Rectification, restriction, objection: write to [{{privacyEmail}}](mailto:{{privacyEmail}}).
-- Complaints: to your local data protection authority (in Hungary: NAIH, naih.hu).
+- Complaints: to the Commissioner of Data Protection of the Dubai International Financial Centre (DIFC), or to the data protection authority where you live (for example in Hungary: NAIH, naih.hu).
 
 ## 8. Cookies
 
