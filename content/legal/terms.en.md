@@ -52,4 +52,4 @@ We may change these terms. We announce significant changes on the site; changes 
 
 ## 10. Governing law
 
-These terms are governed by Hungarian law. Questions: {{email}}.
+These terms are governed by the laws of the Dubai International Financial Centre (DIFC), Dubai, United Arab Emirates. Questions: {{email}}.

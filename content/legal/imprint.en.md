@@ -7,7 +7,7 @@
 - Registered office: {{address}}
 - Business license number: {{registry}}
 - Manager: {{manager}}
-- Tax registration number (TRN): {{taxNumber}}
+- Corporate Tax Registration Number (TRN, UAE): {{taxNumber}}
 - Email: [{{email}}](mailto:{{email}})
 
 ## Hosting provider

@@ -6,7 +6,7 @@ export const OPERATOR = {
   address: "Meydan Grandstand, 6th floor, Meydan Road, Nad Al Sheba, Dubai, United Arab Emirates",
   registry: "2648676.01 (Meydan Free Zone, Dubai)",
   manager: "Gabor Levente Pinter",
-  taxNumber: "«TRN»",
+  taxNumber: "105494925800001",
   email: "hello@ratethatjob.com",
   privacyEmail: "privacy@ratethatjob.com",
   hosting: "Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA",

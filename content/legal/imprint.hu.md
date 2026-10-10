@@ -7,7 +7,7 @@
 - Székhely: {{address}}
 - Cégengedély (business license) száma: {{registry}}
 - Ügyvezető: {{manager}}
-- Adóazonosító (TRN): {{taxNumber}}
+- Társasági adó azonosító (TRN, Egyesült Arab Emírségek): {{taxNumber}}
 - E-mail: [{{email}}](mailto:{{email}})
 
 ## Tárhelyszolgáltató
