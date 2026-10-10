@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { getSitemapLocations, type SitemapLocation } from "@/lib/data";
+import { getAllJobs } from "@/lib/data/jobs";
 import { CATEGORY_SLUGS } from "@/lib/format";
 import { entry } from "@/lib/sitemap";
 
-// Home, employers, company pages and city hubs that have at least one rated workplace.
+// Home, employers, jobs, company pages and city hubs that have at least one rated workplace.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const rated = (await getSitemapLocations()).filter((l) => l.reviewCount > 0);
   const latest = (key: (l: SitemapLocation) => string) => {
@@ -14,9 +15,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
     return [...map];
   };
+  const jobs = await getAllJobs();
   return [
     entry("/"),
     entry("/employers"),
+    entry("/jobs"),
+    ...jobs.map((j) =>
+      entry(`/${j.location.companySlug}/${j.location.slug}/jobs/${j.id}`, j.updatedAt),
+    ),
     ...latest((l) => `/${l.companySlug}`).map(([path, at]) => entry(path, at)),
     ...latest((l) => `/city/${l.citySlug}`).map(([path, at]) => entry(path, at)),
     ...latest((l) => `/city/${l.citySlug}/${CATEGORY_SLUGS[l.category]}`).map(([path, at]) => entry(path, at)),

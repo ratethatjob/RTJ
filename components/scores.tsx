@@ -77,9 +77,12 @@ export async function FactBars({ facts }: { facts: LocationScores["facts"] }) {
 export async function GhostingMeter({
   replyRate,
   avgReplyDays,
+  applications = 0,
 }: {
   replyRate: number;
   avgReplyDays: number | null;
+  /** Shown as the source when the rate comes from RateThatJob applications. */
+  applications?: number;
 }) {
   const t = await getTranslations("Location");
   return (
@@ -93,6 +96,9 @@ export async function GhostingMeter({
         </p>
         {avgReplyDays != null && (
           <p className="text-mist">{t("avgReplyTime", { days: avgReplyDays })}</p>
+        )}
+        {applications >= 5 && (
+          <p className="mt-1 text-sm text-mist">{t("ghostingFromApplications", { count: applications })}</p>
         )}
       </div>
       <p className="text-5xl font-black tracking-brand text-signal">{replyRate}%</p>

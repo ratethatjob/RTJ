@@ -10,7 +10,9 @@ import {
 } from "@/components/scores";
 import { SiteHeader } from "@/components/site-header";
 import { Link } from "@/i18n/navigation";
+import { JobCard } from "@/components/jobs/job-card";
 import { getLocation, getLocationPaths, getReviews } from "@/lib/data";
+import { getLocationJobs } from "@/lib/data/jobs";
 import type { LocationSummary } from "@/lib/data/types";
 import { locationPath } from "@/lib/format";
 import { locationMetadata } from "@/lib/location-meta";
@@ -43,8 +45,11 @@ export default async function LocationPage({ params }: Props) {
   const t = await getTranslations("Location");
   const tc = await getTranslations("Categories");
   const tr = await getTranslations("Reviews");
-  const { reviews } = await getReviews(data.id);
+  const [{ reviews }, jobs] = await Promise.all([getReviews(data.id), getLocationJobs(data.id)]);
   const s = data.scores;
+  const ghosting =
+    data.ghosting ??
+    (s?.replyRate != null ? { replyRate: s.replyRate, avgReplyDays: s.avgReplyDays, applications: 0 } : null);
   const path = locationPath(data);
   const rateHref = `/app/rate/${data.id}`;
 
@@ -116,8 +121,12 @@ export default async function LocationPage({ params }: Props) {
           {s ? (
             <>
               <FactBars facts={s.facts} />
-              {s.replyRate != null && (
-                <GhostingMeter replyRate={s.replyRate} avgReplyDays={s.avgReplyDays} />
+              {ghosting && (
+                <GhostingMeter
+                  replyRate={ghosting.replyRate}
+                  avgReplyDays={ghosting.avgReplyDays}
+                  applications={ghosting.applications}
+                />
               )}
               <CategoryScores scores={s} />
             </>
@@ -147,8 +156,19 @@ export default async function LocationPage({ params }: Props) {
           )}
         </aside>
 
+        <div className="flex flex-col gap-6 lg:order-1">
+        {jobs.length > 0 && (
+          <section id="jobs" className="flex flex-col gap-3">
+            <h2 className="text-sm font-black uppercase tracking-tagline text-slate">
+              {t("openJobs")}
+            </h2>
+            {jobs.map((j) => (
+              <JobCard key={j.id} job={j} showPlace={false} />
+            ))}
+          </section>
+        )}
         {reviews.length > 0 && (
-          <section id="reviews" className="flex flex-col gap-4 lg:order-1">
+          <section id="reviews" className="flex flex-col gap-4">
             <nav className="hidden flex-wrap gap-3 lg:flex">
               {(["all", "verified", "permanent", "temporary", "applicants"] as const).map(
                 (f) => (
@@ -178,6 +198,7 @@ export default async function LocationPage({ params }: Props) {
             </Link>
           </section>
         )}
+        </div>
       </div>
 
       <div className="fixed inset-x-0 bottom-0 grid grid-cols-2 gap-3 bg-paper/95 p-4 backdrop-blur lg:hidden">

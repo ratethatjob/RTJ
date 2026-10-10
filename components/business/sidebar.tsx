@@ -12,7 +12,7 @@ const ITEMS = [
   { key: "reviews", href: "/business/reviews" },
   { key: "invite", href: "/business/invite" },
   { key: "index", href: "/business/index" },
-  { key: "jobs", href: null },
+  { key: "jobs", href: "/business/jobs" },
   { key: "team", href: "/business/team" },
   { key: "plan", href: "/business/locations#plan" },
 ] as const;
@@ -39,7 +39,7 @@ export function BusinessSidebar({ orgName, role, awaiting }: Props) {
 
       <nav className="-mx-4 mt-4 flex gap-1 overflow-x-auto px-4 lg:mx-0 lg:mt-6 lg:flex-col lg:px-0">
         {ITEMS.map(({ key, href }) => {
-          const active = href && !href.includes("#") && pathname === href;
+          const active = href && !href.includes("#") && (pathname === href || (href !== "/business" && pathname.startsWith(`${href}/`)));
           const content = (
             <>
               <span>{t(`nav.${key}`)}</span>

@@ -46,6 +46,7 @@ type LocationRow = {
   verified_count: number;
   scores_updated_at?: string | null;
   updated_at?: string | null;
+  application_count?: number | null;
 };
 
 export function toLocation(row: LocationRow): LocationSummary {
@@ -63,6 +64,14 @@ export function toLocation(row: LocationRow): LocationSummary {
     legalEntityName: row.legal_entity_name,
     claimed: row.claimed,
     updatedAt: row.scores_updated_at ?? row.updated_at ?? null,
+    ghosting:
+      row.reply_rate_pct == null
+        ? null
+        : {
+            replyRate: row.reply_rate_pct,
+            avgReplyDays: row.avg_reply_days == null ? null : Number(row.avg_reply_days),
+            applications: row.application_count ?? 0,
+          },
     scores:
       row.review_count > 0 && row.overall != null
         ? {

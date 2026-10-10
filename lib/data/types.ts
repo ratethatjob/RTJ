@@ -57,6 +57,8 @@ export type LocationSummary = {
   claimed: boolean;
   /** Rolling 12 months; null when there are no published reviews. */
   scores: LocationScores | null;
+  /** Reply rate to applicants; from RateThatJob applications when `applications` ≥ 5. */
+  ghosting?: { replyRate: number; avgReplyDays: number | null; applications: number } | null;
   updatedAt?: string | null;
 };
 
@@ -79,3 +81,35 @@ export type Review = {
 };
 
 export type ReviewFilter = "all" | "verified" | "permanent" | "temporary" | "applicants";
+
+export type JobSchedule = "full_time" | "part_time" | "shifts" | "flexible";
+export type PayPeriod = "hour" | "day" | "week" | "month" | "year";
+
+/** An open job post as the public sees it. */
+export type Job = {
+  id: string;
+  title: string;
+  workType: WorkType;
+  schedule: JobSchedule;
+  payMin: number | null;
+  payMax: number | null;
+  payCurrency: string | null;
+  payPeriod: PayPeriod | null;
+  description: string;
+  question: string | null;
+  publishedAt: string;
+  closesAt: string | null;
+  updatedAt: string;
+  location: {
+    id: string;
+    slug: string;
+    name: string;
+    address: string;
+    city: string;
+    citySlug: string;
+    country: string;
+    category: Category;
+    companySlug: string;
+    companyName: string;
+  };
+};

@@ -53,7 +53,11 @@ export async function ReviewCard({
       </span>
     ) : (
       <span className="rounded-lg bg-signal px-3 py-1 font-black">
-        {review.verification === "invited" ? t("verifiedInvited") : t("verified")}
+        {review.verification === "invited"
+          ? t("verifiedInvited")
+          : review.verification === "application"
+            ? t("verifiedApplication")
+            : t("verified")}
       </span>
     )
   );

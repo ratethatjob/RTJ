@@ -64,6 +64,11 @@ export default async function AccountPage({ params }: PageProps<"/[locale]/app/a
         </Link>
       </section>
 
+      <Link href="/app/applications" className="flex items-center justify-between rounded-3xl bg-white p-5 font-black">
+        {t("applications")}
+        <span aria-hidden>→</span>
+      </Link>
+
       <section>
         <h2 className="mb-3 text-2xl font-black tracking-brand">{t("myReviews")}</h2>
         {reviews.length === 0 ? (

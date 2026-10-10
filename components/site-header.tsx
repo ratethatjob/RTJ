@@ -37,6 +37,9 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
             <Link href="/search" className="hidden lg:inline">
               {t("findWorkplaces")}
             </Link>
+            <Link href="/jobs" className="hidden lg:inline">
+              {t("jobs")}
+            </Link>
             <Link href="/employers" className="hidden lg:inline">
               {t("forEmployers")}
             </Link>
