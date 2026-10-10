@@ -13,6 +13,9 @@ Next.js (App Router, `cacheComponents`) + TypeScript, Tailwind CSS v4, next-intl
 - Brand tokens: `app/globals.css` (`signal`, `ink`, `paper`, `slate`, `mist`, `tracking-brand`, `tracking-tagline`). Never use `signal` green as text on a light background.
 - Brand files: `public/brand/` (logo on light/dark, icon, app icon).
 - Supabase clients: `lib/supabase/server.ts`, `lib/supabase/client.ts`. Env vars: `.env.example`.
+- Public data: `lib/data/index.ts` (`"use cache"`). Reads the `public_locations` / `public_reviews` views when Supabase env vars are set, otherwise `lib/data/sample.ts`.
+- Database: `supabase/migrations/` (schema + RLS), `supabase/seed.sql` (local sample data). The public never reads `reviews`, `profiles` or `invites` directly – only through the `public_*` views. Score aggregates: `recompute_location_scores()` (service role).
+- Public routes: `app/[locale]/[company]/[location]` (location page, JSON-LD, hreflang) and `.../reviews` (filters, pagination). These block instead of streaming (`instant = false`) so unknown slugs return a real 404.
 
 ## Working with the founder
 - Communicates in Hungarian, short and direct. Product and UI copy are in English (and Hungarian translations), mobile first.

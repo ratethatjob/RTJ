@@ -112,12 +112,12 @@ Main tables (all with `id uuid`, `created_at`, `updated_at`):
   - ratings 1–5: `overall`, `manager`, `pay`, `schedule`, `environment`
   - facts (nullable booleans): `paid_as_promised`, `paid_on_time`, `overtime_paid`, `hours_as_promised`, `would_return`
   - applicant facts: `got_reply` (bool), `reply_days` (int), `interview_rounds` (int)
-  - `body_pros`, `body_cons` (optional), `original_language`
+  - `body` (optional, one field: "Anything others should know?"), `original_language`
   - `publish_mode` (`now` | `delayed` | `after_leaving`), `publish_at`, `published_at`
   - `verification_level` (`none` | `document` | `invited` | `application`)
   - `invite_id` (nullable; **never exposed to employer**)
   - `status` (`draft` | `pending_moderation` | `scheduled` | `published` | `rejected` | `removed`)
-- `review_translations` – `review_id`, `locale`, `body_pros`, `body_cons`, `model`, `created_at`.
+- `review_translations` – `review_id`, `locale`, `body`, `model`, `created_at`.
 - `employer_replies` – `review_id`, `org_member_id`, `body`, `original_language`; + `reply_translations`.
 - `verifications` – `review_id`, `storage_path`, `doc_type`, `detected_legal_entity`, `status`, `reviewed_by`, `deleted_at`. Delete file after decision (max 30 days).
 - `disputes` – employer disputes on **unverified** reviews only; `reason`, `status`. Employers can never delete reviews.
