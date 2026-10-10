@@ -6,7 +6,10 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import pg from "pg";
 
-const url = process.env.rtj_POSTGRES_URL_NON_POOLING ?? process.env.MIGRATE_DATABASE_URL;
+const url =
+  process.env.POSTGRES_URL_NON_POOLING ??
+  process.env.rtj_POSTGRES_URL_NON_POOLING ??
+  process.env.MIGRATE_DATABASE_URL;
 if (!url) {
   console.log("migrate: no database URL, skipping");
   process.exit(0);

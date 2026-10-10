@@ -14,7 +14,7 @@ Next.js (App Router, `cacheComponents`) + TypeScript, Tailwind CSS v4, next-intl
 - Brand files: `public/brand/` (logo on light/dark, icon, app icon).
 - Supabase clients: `lib/supabase/server.ts`, `lib/supabase/client.ts`. Env vars: `.env.example`.
 - Public data: `lib/data/index.ts` (`"use cache"`). Reads the `public_locations` / `public_reviews` views when Supabase env vars are set, otherwise `lib/data/sample.ts`.
-- Database: `supabase/migrations/` (schema + RLS), applied automatically before every Vercel build by `scripts/migrate.mjs` (uses `rtj_POSTGRES_URL_NON_POOLING` from the Vercel Supabase integration; tracked in `supabase_migrations.schema_migrations`). Migrations must be new files, never edits of applied ones, `supabase/seed.sql` (local sample data). The public never reads `reviews`, `profiles` or `invites` directly – only through the `public_*` views. Score aggregates: `recompute_location_scores()` (service role).
+- Database: `supabase/migrations/` (schema + RLS), applied automatically before every Vercel build by `scripts/migrate.mjs` (uses `POSTGRES_URL_NON_POOLING` from the Supabase ↔ Vercel integration; tracked in `supabase_migrations.schema_migrations`). Migrations must be new files, never edits of applied ones, `supabase/seed.sql` (local sample data). The public never reads `reviews`, `profiles` or `invites` directly – only through the `public_*` views. Score aggregates: `recompute_location_scores()` (service role).
 - Public routes: `app/[locale]/[company]/[location]` (location page, JSON-LD, hreflang) and `.../reviews` (filters, pagination). These block instead of streaming (`instant = false`) so unknown slugs return a real 404.
 
 ## Working with the founder
