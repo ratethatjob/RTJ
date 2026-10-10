@@ -21,7 +21,7 @@ export async function CityHub({ city, category }: { city: string; category: Cate
   return (
     <>
       <SiteHeader withSearch />
-      <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 pb-16 pt-6 sm:px-6">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-8 pt-6 sm:px-6 lg:pt-10">
         <div>
           <h1 className="text-4xl font-black tracking-brand lg:text-6xl">
             {category

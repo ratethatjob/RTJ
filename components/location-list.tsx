@@ -10,13 +10,13 @@ export async function LocationList({ locations }: { locations: LocationSummary[]
   const tl = await getTranslations("Company");
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="grid gap-3 lg:grid-cols-2">
       {await Promise.all(
         locations.map(async (l) => (
           <li key={l.id}>
             <Link
               href={locationPath(l)}
-              className="flex items-center justify-between gap-4 rounded-3xl bg-white p-5 sm:p-6"
+              className="flex h-full items-center justify-between gap-4 rounded-3xl bg-white p-5 sm:p-6"
             >
               <span className="min-w-0">
                 <span className="block text-2xl font-black tracking-brand">{l.name}</span>

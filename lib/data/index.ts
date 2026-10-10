@@ -235,6 +235,7 @@ export async function getCity(
 export type SitemapLocation = {
   companySlug: string;
   slug: string;
+  city: string;
   citySlug: string;
   category: Category;
   reviewCount: number;
@@ -251,6 +252,7 @@ export async function getSitemapLocations(): Promise<SitemapLocation[]> {
     return sampleLocations.map((l) => ({
       companySlug: l.companySlug,
       slug: l.slug,
+      city: l.city,
       citySlug: l.citySlug,
       category: l.category,
       reviewCount: l.scores?.reviewCount ?? 0,
@@ -262,7 +264,7 @@ export async function getSitemapLocations(): Promise<SitemapLocation[]> {
   for (let from = 0; ; from += 1000) {
     const { data, error } = await publicClient()
       .from("public_locations")
-      .select("company_slug, slug, city_slug, category, review_count, is_seeded, updated_at, scores_updated_at")
+      .select("company_slug, slug, city, city_slug, category, review_count, is_seeded, updated_at, scores_updated_at")
       .order("id")
       .range(from, from + 999);
     if (error) throw error;
@@ -270,6 +272,7 @@ export async function getSitemapLocations(): Promise<SitemapLocation[]> {
       rows.push({
         companySlug: r.company_slug,
         slug: r.slug,
+        city: r.city,
         citySlug: r.city_slug,
         category: r.category,
         reviewCount: r.review_count,

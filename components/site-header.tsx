@@ -3,6 +3,7 @@ import { getPathname, Link } from "@/i18n/navigation";
 import { AccountLink } from "./account-link";
 import { SearchIcon } from "./icons";
 import { LocaleSwitch } from "./locale-switch";
+import { MobileMenu } from "./mobile-menu";
 import { Logo } from "./logo";
 
 export async function SiteHeader({ withSearch = false }: { withSearch?: boolean }) {
@@ -45,10 +46,11 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
             </Link>
           </>
         )}
-        <span className={withSearch ? "" : "hidden sm:inline"}>
+        <span className="hidden lg:inline">
           <LocaleSwitch />
         </span>
         <AccountLink signInLabel={t("signIn")} />
+        <MobileMenu />
         {!withSearch && (
           <Link
             href="/app/rate"

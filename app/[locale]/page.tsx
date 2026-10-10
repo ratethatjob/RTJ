@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Bar, formatScore, ScoreTile } from "@/components/scores";
-import { getFeaturedLocations } from "@/lib/data";
+import { Faq } from "@/components/faq";
+import { JobCard } from "@/components/jobs/job-card";
+import { getFeaturedLocations, getSitemapLocations } from "@/lib/data";
+import { getAllJobs } from "@/lib/data/jobs";
 import { getPathname, Link } from "@/i18n/navigation";
 import { locationPath } from "@/lib/format";
 import { localeAlternates } from "@/lib/seo";
@@ -28,13 +31,25 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const t = await getTranslations("Home");
   const tc = await getTranslations("Categories");
   const tl = await getTranslations("Location");
-  const featured = await getFeaturedLocations();
+  const [featured, allJobs, allLocations] = await Promise.all([
+    getFeaturedLocations(),
+    getAllJobs(),
+    getSitemapLocations(),
+  ]);
+  const jobs = allJobs.slice(0, 3);
+  const cityCounts = new Map<string, number>();
+  const cityNames = new Map<string, string>();
+  for (const l of allLocations) {
+    cityCounts.set(l.citySlug, (cityCounts.get(l.citySlug) ?? 0) + 1);
+    cityNames.set(l.citySlug, l.city);
+  }
+  const cities = [...cityCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
   const example = featured[0];
 
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-32 pt-6 sm:px-6 lg:gap-14 lg:pb-16 lg:pt-12">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-8 pt-6 sm:px-6 lg:gap-16 lg:pb-8 lg:pt-12">
         <section className="grid items-center gap-10 lg:grid-cols-[1fr_340px] lg:gap-16 xl:grid-cols-[1fr_400px]">
           <div>
             <h1 className="text-[3.25rem] font-black leading-[0.95] tracking-brand sm:text-7xl lg:text-8xl">
@@ -197,6 +212,57 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           ))}
         </section>
 
+        <section>
+          <h2 className="text-3xl font-black tracking-brand lg:text-4xl">{t("howTitle")}</h2>
+          <ol className="mt-6 grid gap-4 lg:grid-cols-3">
+            {(["find", "facts", "rate"] as const).map((step, i) => (
+              <li key={step} className="rounded-3xl bg-white p-7">
+                <span className="grid size-10 place-items-center rounded-full bg-ink font-black text-paper">{i + 1}</span>
+                <h3 className="mt-4 text-xl font-black">{t(`how.${step}Title`)}</h3>
+                <p className="mt-1 text-slate">{t(`how.${step}Body`)}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        {jobs.length > 0 && (
+          <section>
+            <div className="flex items-end justify-between gap-4">
+              <h2 className="text-3xl font-black tracking-brand lg:text-4xl">{t("jobsTitle")}</h2>
+              <Link href="/jobs" className="shrink-0 font-black underline underline-offset-4">
+                {t("allJobs")}
+              </Link>
+            </div>
+            <p className="mt-2 text-lg text-slate">{t("jobsBody")}</p>
+            <ul className="mt-6 grid gap-3 lg:grid-cols-3">
+              {jobs.map((j) => (
+                <li key={j.id}>
+                  <JobCard job={j} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {cities.length > 0 && (
+          <section>
+            <h2 className="text-3xl font-black tracking-brand lg:text-4xl">{t("citiesTitle")}</h2>
+            <ul className="mt-6 flex flex-wrap gap-3">
+              {cities.map(([slug, count]) => (
+                <li key={slug}>
+                  <Link
+                    href={`/city/${slug}`}
+                    className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-black"
+                  >
+                    {cityNames.get(slug)}
+                    <span className="rounded-full bg-paper px-2 text-sm text-slate">{count}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <section className="flex flex-col gap-6 rounded-[2rem] bg-signal p-8 lg:flex-row lg:items-center lg:justify-between lg:p-11">
           <div className="max-w-2xl">
             <h2 className="text-3xl font-black tracking-brand lg:text-4xl">
@@ -211,6 +277,13 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             {t("claimCta")}
           </Link>
         </section>
+        <Faq
+          title={t("faqTitle")}
+          items={(["anonymous", "verified", "employer", "free"] as const).map((k) => ({
+            q: t(`faq.${k}Q`),
+            a: t(`faq.${k}A`),
+          }))}
+        />
       </main>
 
       <div className="fixed inset-x-4 bottom-4 flex items-center justify-between gap-4 rounded-3xl bg-ink p-5 text-paper lg:hidden">

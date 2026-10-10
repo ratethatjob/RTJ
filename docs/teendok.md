@@ -14,7 +14,9 @@
 - [ ] Domain: ratethatjob.com bekötése a Vercelre, `NEXT_PUBLIC_SITE_URL`
 - [ ] Régi Vercel projekt („rtj”) és a supabase-cyan-kettle Supabase projekt törlése
 
+- [ ] Üzemeltető adatai és Pro ár: `lib/site-config.ts` (cégnév, cím, cégjegyzékszám, adószám, e-mailek; `PRICING` havi ár telephelyenként – amíg üres, „Egyedi ajánlat” látszik)
+- [ ] Jogi szövegek átnézése: `content/legal/` (ÁSZF, adatvédelem, sütik, impresszum – HU és EN)
+
 ## Fejlesztés
 - [ ] E-mail/SMS meghívók (Resend, Twilio) – kulcsok kellenek
 - [ ] Stripe előfizetés (Pro helyszínenként, havi/éves) – kulcsok kellenek
-- [ ] ÁSZF és adatvédelmi oldal (szöveg kell)

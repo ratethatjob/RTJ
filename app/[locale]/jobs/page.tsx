@@ -43,12 +43,12 @@ export default async function JobsPage({ params, searchParams }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 pb-16 pt-6 sm:px-6">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-8 pt-6 sm:px-6 lg:pt-10">
         <h1 className="text-4xl font-black tracking-brand lg:text-6xl">{t("title")}</h1>
         <form
           action={getPathname({ href: "/jobs", locale })}
           role="search"
-          className="flex flex-col rounded-3xl border border-mist/40 bg-white p-3 sm:flex-row sm:items-center sm:p-2"
+          className="flex max-w-3xl flex-col rounded-3xl border border-mist/40 bg-white p-3 sm:flex-row sm:items-center sm:p-2"
         >
           <label className="flex flex-1 flex-col px-4 py-2">
             <span className="text-sm font-black text-slate">{t("searchLabel")}</span>
@@ -90,7 +90,7 @@ export default async function JobsPage({ params, searchParams }: Props) {
         {jobs.length === 0 ? (
           <p className="rounded-3xl bg-white p-5 text-slate">{t("noJobs")}</p>
         ) : (
-          <ul className="flex flex-col gap-3">
+          <ul className="grid gap-3 lg:grid-cols-2">
             {jobs.map((j) => (
               <li key={j.id}>
                 <JobCard job={j} />

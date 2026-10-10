@@ -76,7 +76,7 @@ export default async function JobPage({ params }: Props) {
   return (
     <>
       <SiteHeader withSearch />
-      <main className="mx-auto w-full max-w-6xl px-4 pb-32 pt-4 sm:px-6 lg:pb-16 lg:pt-6">
+      <main className="mx-auto w-full max-w-6xl px-4 pb-8 pt-4 sm:px-6 lg:pt-6">
         <JsonLd job={job} locale={locale} />
         <div className="grid gap-6 lg:grid-cols-[1fr_380px] lg:items-start">
           <article className="flex flex-col gap-6">

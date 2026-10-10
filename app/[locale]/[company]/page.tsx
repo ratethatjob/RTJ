@@ -47,10 +47,10 @@ export default async function CompanyPage({ params }: Props) {
   return (
     <>
       <SiteHeader withSearch />
-      <main className="mx-auto w-full max-w-3xl px-4 pb-16 pt-6 sm:px-6">
+      <main className="mx-auto w-full max-w-6xl px-4 pb-8 pt-6 sm:px-6 lg:pt-10">
         <h1 className="text-4xl font-black tracking-brand lg:text-6xl">{data.name}</h1>
         <p className="mt-2 text-lg text-slate">{t("locations", { count: data.locations.length })}</p>
-        <ul className="mt-8 flex flex-col gap-3">
+        <ul className="mt-8 grid gap-3 lg:grid-cols-2">
           {await Promise.all(
             data.locations.map(async (l) => (
               <li key={l.id}>

@@ -15,7 +15,7 @@ export async function JobCard({ job, showPlace = true }: { job: Job; showPlace?:
   const pay = formatPay(job, locale, t);
 
   return (
-    <Link href={jobPath(job)} className="flex flex-col gap-1 rounded-3xl bg-white p-5 sm:p-6">
+    <Link href={jobPath(job)} className="flex h-full flex-col gap-1 rounded-3xl bg-white p-5 sm:p-6">
       <span className="text-2xl font-black tracking-brand">{job.title}</span>
       {showPlace && (
         <span className="text-slate">

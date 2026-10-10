@@ -74,7 +74,7 @@ export default async function LocationPage({ params }: Props) {
   return (
     <>
     <SiteHeader withSearch />
-    <main className="mx-auto w-full max-w-6xl px-4 pb-32 pt-4 sm:px-6 lg:pb-16 lg:pt-6">
+    <main className="mx-auto w-full max-w-6xl px-4 pb-8 pt-4 sm:px-6 lg:pt-6">
       <JsonLd location={data} locale={locale} />
 
       <section className="flex flex-col gap-6 lg:flex-row lg:items-center">

@@ -12,7 +12,15 @@
     "searchWorkplaces": "Munkahely keresése",
     "switchLanguage": "Nyelv váltása",
     "back": "Vissza",
-    "jobs": "Állások"
+    "jobs": "Állások",
+    "pricing": "Árak",
+    "about": "Rólunk",
+    "menu": "Menü",
+    "close": "Bezárás",
+    "languages": {
+      "en": "English",
+      "hu": "Magyar"
+    }
   },
   "Home": {
     "headline": "Know before you go.",
@@ -39,7 +47,31 @@
     "rateBarTitle": "Dolgoztál valahol?",
     "rateBarBody": "Értékeld 1 perc alatt.",
     "paysOnTimeShort": "Időben fizet",
-    "repliesShort": "Válaszol"
+    "repliesShort": "Válaszol",
+    "howTitle": "Hogyan működik",
+    "how": {
+      "findTitle": "Keresd meg a munkahelyet",
+      "findBody": "Keress név, utca vagy város szerint. Minden telephelynek saját oldala van.",
+      "factsTitle": "Nézd meg a tényeket",
+      "factsBody": "Időben fizet? Kifizeti a túlórát? Megvannak az ígért órák? Milyen gyorsan válaszol a jelentkezőknek? Olyanoktól, akik ott dolgoztak.",
+      "rateTitle": "Értékeld egy perc alatt",
+      "rateBody": "Dolgoztál valahol? Oszd meg névtelenül. A munkáltató soha nem látja, ki írta."
+    },
+    "jobsTitle": "Friss állások",
+    "jobsBody": "Jelentkezz 2 perc alatt önéletrajz nélkül, és nézd meg az értékeléseket az állás mellett.",
+    "allJobs": "Összes állás",
+    "citiesTitle": "Munkahelyek városonként",
+    "faqTitle": "Kérdések",
+    "faq": {
+      "anonymousQ": "Megtudja a munkáltatóm, hogy értékeltem?",
+      "anonymousA": "Nem. Csak a választott megjelenő neved látszik. A munkáltató soha nem látja, ki írta az értékelést, a kis munkahelyeken pedig véletlenszerű késleltetéssel jelennek meg az értékelések.",
+      "verifiedQ": "Mit jelent az „igazolt”?",
+      "verifiedA": "Az értékelő bérjegyzéket vagy szerződést mutatott, a munkáltató meghívójával jött, vagy a RateThatJobon jelentkezett oda. Az igazolt értékelések többet számítanak a pontszámban.",
+      "employerQ": "Törölheti a munkáltató a rossz értékeléseket?",
+      "employerA": "Nem. Válaszolhat, és vitathatja az igazolatlan értékeléseket, de törölni, elrejteni vagy megvenni nem tudja őket.",
+      "freeQ": "Kerül valamibe?",
+      "freeA": "Nem. Az olvasás, az értékelés és a jelentkezés ingyenes."
+    }
   },
   "Categories": {
     "restaurant": "Étterem",
@@ -345,7 +377,30 @@
       "indexTitle": "RateThatJob Index",
       "indexBody": "Mutasd meg a pontszámod a karrieroldaladon és az álláshirdetéseidben. Magától frissül."
     },
-    "free": "Az átvétel ingyenes. Értékelést nem lehet megvenni vagy eltávolítani."
+    "free": "Az átvétel ingyenes. Értékelést nem lehet megvenni vagy eltávolítani.",
+    "howTitle": "Hogyan működik",
+    "how": {
+      "claimTitle": "Vedd át a munkahelyed",
+      "claimBody": "Ingyenes. Céges e-maillel, telefonon vagy cégkivonattal ellenőrizzük.",
+      "engageTitle": "Válaszolj és hívd meg a csapatod",
+      "engageBody": "Válaszolj a saját nyelveden, ossz meg egy meghívó linket a dolgozóiddal, adj fel állásokat.",
+      "improveTitle": "Vedd észre időben a gondokat",
+      "improveBody": "Lásd a trendeket telephelyenként, és kapj figyelmeztetést, ha egy pontszám romlani kezd."
+    },
+    "pricingTitle": "Ingyen indulhatsz. Pro telephelyenként.",
+    "pricingBody": "Az átvétel, a válaszok és az álláshirdetések ingyenesek. A Pro korai figyelmeztetést, statisztikát, RateThatJob Indexet és még többet ad.",
+    "pricingCta": "Árak",
+    "faqTitle": "Munkáltatói kérdések",
+    "faq": {
+      "removeQ": "Eltávolíthatunk egy negatív értékelést?",
+      "removeA": "Nem, és megvásárolni sem lehet. Nyilvánosan válaszolhatsz, és vitathatod a szabályokat sértő igazolatlan értékeléseket.",
+      "anonymousQ": "Láthatjuk, ki írta az értékelést?",
+      "anonymousA": "Nem. Az értékelések a névtelenség miatt őszinték. A válaszokat, a trendeket és az összesített számokat látod, 5 értékeléstől.",
+      "disputeQ": "Mi történik, ha vitatunk egy értékelést?",
+      "disputeA": "A csapatunk a szabályok alapján megnézi. Ami sérti őket, lekerül; az őszinte kritika marad.",
+      "costQ": "Mennyibe kerül?",
+      "costA": "Az átvétel és az alapfunkciók ingyenesek. A Pro telephelyenként fizetendő, havonta vagy évente, ami 2 hónapnyi kedvezményt ad."
+    }
   },
   "Business": {
     "brand": "munkáltatóknak",
@@ -934,5 +989,105 @@
     "poweredBy": "A keresést a Google biztosítja",
     "notOnMap": "Nincs fent a Google Térképen?",
     "manualTitle": "Vagy add meg te"
+  },
+  "Footer": {
+    "workers": "Munkavállalóknak",
+    "employers": "Munkáltatóknak",
+    "cities": "Városok",
+    "company": "RateThatJob",
+    "account": "Fiókom",
+    "claim": "Munkahely átvétele",
+    "index": "RateThatJob Index",
+    "imprint": "Impresszum",
+    "terms": "ÁSZF",
+    "privacy": "Adatvédelem",
+    "cookies": "Sütik",
+    "about": "Igazolt értékelések és tények a frontvonalbeli munkahelyekről: bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel.",
+    "noAds": "Értékelést nem lehet megvenni vagy eltávolítani."
+  },
+  "About": {
+    "metaTitle": "Rólunk",
+    "eyebrow": "Rólunk",
+    "title": "Know before you go.",
+    "intro": "A RateThatJob megmutatja, milyen valójában dolgozni egy étteremben, boltban, raktárban vagy gyárban – telephelyenként, azoktól, akik ott dolgoztak.",
+    "principles": {
+      "anonymousTitle": "Mindig névtelen",
+      "anonymousBody": "A munkáltatók soha nem tudják meg, ki írt értékelést, vagy ki válaszolt a meghívójukra.",
+      "verifiedTitle": "Igazolt, ahol számít",
+      "verifiedBody": "Bérjegyzék, szerződés, munkáltatói meghívó vagy jelentkezés teszi igazolttá az értékelést, és az igazoltak többet számítanak.",
+      "factsTitle": "Tények, nem csak csillagok",
+      "factsBody": "Időben fizettek? Kifizették a túlórát? Válaszoltak a jelentkezőknek? A világos válaszok segítenek dönteni.",
+      "fairTitle": "Korrekt a munkáltatókkal",
+      "fairBody": "Az átvétel ingyenes, minden munkáltató válaszolhat, és értékelést senki nem vehet meg vagy távolíthat el."
+    },
+    "whyTitle": "Miért csináljuk",
+    "why1": "A legtöbb állásoldal irodai munkákra és nagy márkákra készült. Órabéres munkánál a konkrét telephely számít: a vezető, a beosztás, és hogy időben jön-e a fizetés.",
+    "why2": "Azt szeretnénk, hogy minden műszakos dolgozó tudja, hová megy, és minden jó munkáltató megkapja érte az elismerést.",
+    "contactTitle": "Írj nekünk",
+    "contactBody": "Kérdés, ötlet, együttműködés vagy sajtó.",
+    "imprintLink": "Impresszum és üzemeltető"
+  },
+  "Pricing": {
+    "metaTitle": "Árak munkáltatóknak",
+    "eyebrow": "Árak",
+    "title": "Az átvétel ingyenes. Pro, ha többre van szükséged.",
+    "intro": "Minden munkáltató ingyen átveheti a telephelyeit, válaszolhat az értékelésekre és állást adhat fel. A Pro telephelyenként fizetendő.",
+    "monthly": "Havi",
+    "yearly": "Éves",
+    "perMonth": "hó / telephely",
+    "perYear": "év / telephely",
+    "twoMonthsFree": "2 hónap ingyen",
+    "onRequest": "Egyedi ajánlat",
+    "free": {
+      "name": "Ingyenes",
+      "note": "Örökre, minden telephelyre.",
+      "features": {
+        "claim": "Munkahelyek átvétele",
+        "reply": "Válasz minden értékelésre",
+        "dispute": "Igazolatlan értékelések vitatása",
+        "inviteLink": "Megosztható meghívó link a csapatnak",
+        "jobs": "Álláshirdetés, önéletrajz nélküli jelentkezés",
+        "profileBasic": "Csapattagok és szerepkörök"
+      },
+      "cta": "Ingyenes átvétel"
+    },
+    "pro": {
+      "name": "Pro",
+      "note": "Telephelyenként, bármikor lemondható.",
+      "everythingFree": "Minden, ami az ingyenesben, plusz:",
+      "features": {
+        "warnings": "Korai figyelmeztetés, ha romlik egy pontszám",
+        "stats": "Statisztika és trendek telephelyenként",
+        "invites": "E-mailes és SMS-es meghívók emlékeztetővel",
+        "index": "RateThatJob Index jelvény és widget",
+        "profile": "Egyedi profil fotókkal és juttatásokkal",
+        "noCompetitors": "Nincs konkurens ajánló az oldaladon"
+      },
+      "cta": "Pro igénylése"
+    },
+    "chains": {
+      "name": "Láncok",
+      "price": "Egyedi",
+      "note": "10 vagy több telephely.",
+      "features": {
+        "allPro": "Pro minden telephelyen",
+        "rollout": "Segítség a beállításban és a meghívókban",
+        "manager": "Telephelyvezetők saját hozzáféréssel",
+        "invoice": "Egy számla minden telephelyre"
+      },
+      "cta": "Beszéljünk"
+    },
+    "promise": "Egyik csomaggal sem lehet értékelést eltávolítani, elrejteni vagy megvenni.",
+    "faqTitle": "Kérdések",
+    "faq": {
+      "q1": "Tényleg ingyenes az ingyenes?",
+      "q1a": "Igen. Az átvétel, a válasz, a vitatás, a meghívó link és az álláshirdetés időkorlát nélkül ingyenes.",
+      "q2": "Hogyan fizetünk a Próért?",
+      "q2a": "Telephelyenként, havonta vagy évente. Az éves 2 hónapot ingyen ad.",
+      "q3": "Lehet vegyesen ingyenes és Pro telephelyünk?",
+      "q3a": "Igen. Csak azokra a telephelyekre válassz Prót, ahol szükséged van rá.",
+      "q4": "Befolyásolja a Pro a pontszámunkat?",
+      "q4a": "Nem. A pontszám csak értékelésekből és jelentkezésekből jön, mindenkinél ugyanúgy."
+    }
   }
 }

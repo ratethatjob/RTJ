@@ -12,7 +12,15 @@
     "searchWorkplaces": "Search workplaces",
     "switchLanguage": "Switch language",
     "back": "Back",
-    "jobs": "Jobs"
+    "jobs": "Jobs",
+    "pricing": "Pricing",
+    "about": "About",
+    "menu": "Menu",
+    "close": "Close",
+    "languages": {
+      "en": "English",
+      "hu": "Magyar"
+    }
   },
   "Home": {
     "headline": "Know before you go.",
@@ -39,7 +47,31 @@
     "rateBarTitle": "Worked somewhere?",
     "rateBarBody": "Rate it in 1 minute.",
     "paysOnTimeShort": "Pays on time",
-    "repliesShort": "Replies"
+    "repliesShort": "Replies",
+    "howTitle": "How it works",
+    "how": {
+      "findTitle": "Find the workplace",
+      "findBody": "Search by name, street or city. Every location has its own page.",
+      "factsTitle": "Check the facts",
+      "factsBody": "Pay on time, overtime, promised hours and how fast they reply to applicants, from people who worked there.",
+      "rateTitle": "Rate it in a minute",
+      "rateBody": "Worked somewhere? Share it anonymously. Your employer never sees who wrote it."
+    },
+    "jobsTitle": "Latest jobs",
+    "jobsBody": "Apply in 2 minutes without a CV, and see the reviews next to the job.",
+    "allJobs": "All jobs",
+    "citiesTitle": "Workplaces by city",
+    "faqTitle": "Questions",
+    "faq": {
+      "anonymousQ": "Will my employer know I wrote a review?",
+      "anonymousA": "No. Only your chosen display name is shown. Employers never see who wrote a review, and reviews from small workplaces are published with a random delay.",
+      "verifiedQ": "What does “verified” mean?",
+      "verifiedA": "The reviewer showed a payslip or contract, came through the employer's invite, or applied through RateThatJob. Verified reviews count more in the score.",
+      "employerQ": "Can employers remove bad reviews?",
+      "employerA": "No. Employers can reply and dispute unverified reviews, but they can't delete, hide or buy reviews.",
+      "freeQ": "Does it cost anything?",
+      "freeA": "No. Reading, reviewing and applying are free for workers."
+    }
   },
   "Categories": {
     "restaurant": "Restaurant",
@@ -345,7 +377,30 @@
       "indexTitle": "RateThatJob Index",
       "indexBody": "Show your score on your careers page and job ads. It updates itself."
     },
-    "free": "Claiming is free. Reviews can never be bought or removed."
+    "free": "Claiming is free. Reviews can never be bought or removed.",
+    "howTitle": "How it works",
+    "how": {
+      "claimTitle": "Claim your workplace",
+      "claimBody": "Free. We verify it by business email, phone or a registry extract.",
+      "engageTitle": "Reply and invite",
+      "engageBody": "Answer reviews in your own language, share one invite link with your team, post jobs.",
+      "improveTitle": "Spot problems early",
+      "improveBody": "See trends per location and get a warning when a score starts to drop."
+    },
+    "pricingTitle": "Free to start. Pro per location.",
+    "pricingBody": "Claiming, replies and job posts are free. Pro adds early warnings, statistics, the RateThatJob Index and more.",
+    "pricingCta": "See pricing",
+    "faqTitle": "Questions from employers",
+    "faq": {
+      "removeQ": "Can we remove a negative review?",
+      "removeA": "No, and nobody can buy their way out. You can reply publicly, and dispute unverified reviews that break the rules.",
+      "anonymousQ": "Can we see who wrote a review?",
+      "anonymousA": "No. Anonymity is what makes reviews honest. You see replies, trends and aggregate numbers from 5 reviews.",
+      "disputeQ": "What happens when we dispute a review?",
+      "disputeA": "Our team checks it against the rules. Reviews that break them are removed; honest criticism stays.",
+      "costQ": "What does it cost?",
+      "costA": "Claiming and the basic features are free. Pro is billed per location, monthly or yearly with 2 months free."
+    }
   },
   "Business": {
     "brand": "for Employers",
@@ -934,5 +989,105 @@
     "poweredBy": "Search powered by Google",
     "notOnMap": "Not on Google Maps?",
     "manualTitle": "Or enter it yourself"
+  },
+  "Footer": {
+    "workers": "For workers",
+    "employers": "For employers",
+    "cities": "Cities",
+    "company": "RateThatJob",
+    "account": "My account",
+    "claim": "Claim your workplace",
+    "index": "RateThatJob Index",
+    "imprint": "Imprint",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "cookies": "Cookies",
+    "about": "Verified reviews and hard facts about frontline workplaces: pay, hours, managers and how they treat applicants.",
+    "noAds": "Reviews can’t be bought or removed."
+  },
+  "About": {
+    "metaTitle": "About RateThatJob",
+    "eyebrow": "About us",
+    "title": "Know before you go.",
+    "intro": "RateThatJob shows what it is really like to work at restaurants, shops, warehouses and factories – location by location, from the people who worked there.",
+    "principles": {
+      "anonymousTitle": "Anonymous, always",
+      "anonymousBody": "Employers never learn who wrote a review or who answered their invite.",
+      "verifiedTitle": "Verified where it matters",
+      "verifiedBody": "Payslips, contracts, employer invites and applications make reviews verified, and verified reviews count more.",
+      "factsTitle": "Facts, not just stars",
+      "factsBody": "Were you paid on time? Was overtime paid? Did they reply to applicants? Clear answers help people decide.",
+      "fairTitle": "Fair to employers",
+      "fairBody": "Claiming is free, every employer can reply, and reviews can't be bought or removed – by anyone."
+    },
+    "whyTitle": "Why we built it",
+    "why1": "Most job sites are built for office jobs and big brands. For hourly work, what matters is the specific location: the manager, the schedule, whether pay arrives on time.",
+    "why2": "We want every shift worker to know before they go, and every good employer to get credit for it.",
+    "contactTitle": "Get in touch",
+    "contactBody": "Questions, ideas, partnerships or press.",
+    "imprintLink": "Imprint and operator details"
+  },
+  "Pricing": {
+    "metaTitle": "Pricing for employers",
+    "eyebrow": "Pricing",
+    "title": "Free to claim. Pro when you need more.",
+    "intro": "Every employer can claim locations, reply to reviews and post jobs for free. Pro is billed per location.",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "perMonth": "month per location",
+    "perYear": "year per location",
+    "twoMonthsFree": "2 months free",
+    "onRequest": "Price on request",
+    "free": {
+      "name": "Free",
+      "note": "Forever, for every location.",
+      "features": {
+        "claim": "Claim your workplaces",
+        "reply": "Reply to every review",
+        "dispute": "Dispute unverified reviews",
+        "inviteLink": "Shareable invite link for your team",
+        "jobs": "Post jobs, CV-free applications",
+        "profileBasic": "Team members and roles"
+      },
+      "cta": "Claim for free"
+    },
+    "pro": {
+      "name": "Pro",
+      "note": "Per location, cancel any time.",
+      "everythingFree": "Everything in Free, plus:",
+      "features": {
+        "warnings": "Early warnings when a score starts dropping",
+        "stats": "Statistics and trends per location",
+        "invites": "Email and SMS invites with reminders",
+        "index": "RateThatJob Index badge and widget",
+        "profile": "Branded profile with photos and benefits",
+        "noCompetitors": "No competitor suggestions on your page"
+      },
+      "cta": "Get Pro"
+    },
+    "chains": {
+      "name": "Chains",
+      "price": "Custom",
+      "note": "10 or more locations.",
+      "features": {
+        "allPro": "Pro on every location",
+        "rollout": "Help with setup and invites",
+        "manager": "Location managers with their own access",
+        "invoice": "One invoice for all locations"
+      },
+      "cta": "Talk to us"
+    },
+    "promise": "No plan lets anyone remove, hide or buy reviews.",
+    "faqTitle": "Questions",
+    "faq": {
+      "q1": "Is Free really free?",
+      "q1a": "Yes. Claiming, replying, disputing, invite links and job posts are free with no time limit.",
+      "q2": "How is Pro billed?",
+      "q2a": "Per location, monthly or yearly. Yearly gives you 2 months free.",
+      "q3": "Can we mix Free and Pro locations?",
+      "q3a": "Yes. Choose Pro only for the locations where you need it.",
+      "q4": "Does Pro affect our score?",
+      "q4a": "No. Scores come only from reviews and applications, the same for everyone."
+    }
   }
 }
