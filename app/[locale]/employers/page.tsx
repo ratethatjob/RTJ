@@ -43,6 +43,11 @@ export default async function EmployersPage({ params }: PageProps<"/[locale]/emp
             <div key={f} className="rounded-3xl bg-white p-8">
               <h2 className="text-2xl font-black tracking-brand">{t(`features.${f}Title`)}</h2>
               <p className="mt-2 text-slate">{t(`features.${f}Body`)}</p>
+              {f === "index" && (
+                <Link href="/ratethatjob-index" className="mt-3 inline-block font-black underline underline-offset-4">
+                  {t("features.indexLink")}
+                </Link>
+              )}
             </div>
           ))}
         </section>
