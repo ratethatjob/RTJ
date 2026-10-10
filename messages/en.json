@@ -1,13 +1,143 @@
 {
   "Metadata": {
     "title": "RateThatJob – Know before you go",
-    "description": "Honest, verified reviews of workplaces – pay, hours, managers and whether they reply to applicants."
+    "description": "Verified reviews from people who actually worked there. Pay, hours, managers and how workplaces treat applicants."
+  },
+  "Nav": {
+    "findWorkplaces": "Find workplaces",
+    "forEmployers": "For employers",
+    "signIn": "Sign in",
+    "rateAJob": "Rate a job",
+    "searchWorkplaces": "Search workplaces",
+    "switchLanguage": "Switch language",
+    "back": "Back"
   },
   "Home": {
-    "tagline": "Know before you go",
-    "headline": "See what it's really like to work there.",
-    "searchPlaceholder": "Workplace, e.g. Joe's Pizzeria",
-    "wherePlaceholder": "City or street",
-    "search": "Search"
+    "headline": "Know before you go.",
+    "intro": "Verified reviews from people who actually worked there.",
+    "introMore": "Pay, hours, managers and how they treat applicants, for every workplace.",
+    "workplace": "Workplace",
+    "workplacePlaceholder": "e.g. Joe's Pizzeria",
+    "where": "Where",
+    "wherePlaceholder": "City, street or area",
+    "search": "Search",
+    "recentlyRated": "Recently rated",
+    "exampleProfile": "Example workplace profile",
+    "features": {
+      "verifiedTitle": "Verified, not guessed",
+      "verifiedBody": "Reviews are checked against payslips, contracts or employer invites. Verified reviews count more.",
+      "factsTitle": "Facts, not just opinions",
+      "factsBody": "Were you paid on time? Was overtime paid? Did you get the hours you were promised?",
+      "ghostingTitle": "Ghosting meter",
+      "ghostingBody": "See how often a workplace replies to applicants, and how fast."
+    },
+    "claimTitle": "Run a workplace? Claim it for free.",
+    "claimBody": "Reply to reviews, invite your team, and show candidates what it is really like to work with you.",
+    "claimCta": "Claim your workplace",
+    "rateBarTitle": "Worked somewhere?",
+    "rateBarBody": "Rate it in 1 minute.",
+    "paysOnTimeShort": "Pays on time",
+    "repliesShort": "Replies"
+  },
+  "Categories": {
+    "restaurant": "Restaurant",
+    "retail": "Retail",
+    "warehouse": "Warehouse",
+    "factory": "Factory",
+    "office": "Office",
+    "restaurantPlural": "Restaurants",
+    "retailPlural": "Retail",
+    "warehousePlural": "Warehouses",
+    "factoryPlural": "Factories",
+    "officePlural": "Startups"
+  },
+  "Location": {
+    "metaTitle": "Working at {company} ({location}) – reviews, pay, hours",
+    "metaDescription": "{company}, {address}: {score} out of 5 from {count, plural, one {# review} other {# reviews}}. Paid on time {paidOnTime}%. Replies to {replyRate}% of applicants.",
+    "metaDescriptionEmpty": "Worked at {company}, {address}? Be the first to rate pay, hours and managers on RateThatJob.",
+    "outOf5": "out of 5",
+    "operatedBy": "Operated by {entity}",
+    "last12Months": "Last 12 months",
+    "reviewCount": "{count, plural, one {# review} other {# reviews}}",
+    "verifiedCount": "{count} verified",
+    "follow": "Follow",
+    "rateThisJob": "Rate this job",
+    "readReviews": "Read reviews",
+    "seeAllReviews": "See all reviews",
+    "theFacts": "The facts",
+    "facts": {
+      "paid_on_time": "Paid on time",
+      "paid_as_promised": "Paid what was promised",
+      "overtime_paid": "Overtime paid",
+      "hours_as_promised": "Got the promised hours"
+    },
+    "ghostingMeter": "Ghosting meter",
+    "repliesTo": "Replies to {rate}% of applicants",
+    "avgReplyTime": "Average reply time: {days, plural, one {# day} other {# days}}",
+    "categories": {
+      "manager": "Manager",
+      "pay": "Pay",
+      "schedule": "Schedule",
+      "environment": "Environment"
+    },
+    "claimTitle": "Is this your workplace?",
+    "claimBody": "Claim it for free to reply to reviews and invite your team.",
+    "claimCta": "Claim this workplace",
+    "noReviewsTitle": "No reviews yet",
+    "noReviewsBody": "Worked here? Be the first to share what it's really like.",
+    "beTheFirst": "Be the first to rate",
+    "repliesToApplicants": "Replies to applicants"
+  },
+  "Reviews": {
+    "metaTitle": "{company} ({location}) reviews",
+    "filters": {
+      "all": "All reviews",
+      "allShort": "All",
+      "verified": "Verified only",
+      "verifiedShort": "Verified",
+      "permanent": "Permanent",
+      "temporary": "Temporary",
+      "applicants": "Applicants"
+    },
+    "empty": "No reviews match this filter yet.",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {pages}"
+  },
+  "Review": {
+    "verified": "Verified",
+    "verifiedInvited": "Verified · Invited",
+    "notVerified": "Not verified",
+    "relationship": {
+      "applicant": "Applicant",
+      "trial_shift": "Trial shift",
+      "current": "Current employee",
+      "former": "Former employee"
+    },
+    "workType": {
+      "permanent": "Permanent",
+      "temporary": "Temporary"
+    },
+    "facts": {
+      "paid_on_time": "Paid on time",
+      "paid_as_promised": "Paid as promised",
+      "overtime_paid": "Overtime paid",
+      "hours_as_promised": "Promised hours",
+      "would_return": "Would go back"
+    },
+    "yes": "Yes",
+    "no": "No",
+    "noReplyAfter": "No reply after {weeks, plural, one {# week} other {# weeks}}",
+    "noReply": "No reply",
+    "repliedIn": "Replied in {days, plural, one {# day} other {# days}}",
+    "translatedFrom": "Translated from {language}",
+    "showOriginal": "Show original",
+    "showTranslation": "Show translation",
+    "replyFrom": "Reply from {company}"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "body": "We couldn't find that page.",
+    "home": "Go to the home page"
   }
 }

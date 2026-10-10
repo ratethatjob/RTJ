@@ -1,13 +1,143 @@
 {
   "Metadata": {
     "title": "RateThatJob – Know before you go",
-    "description": "Őszinte, igazolt munkahely-értékelések – bér, beosztás, vezetők, és hogy válaszolnak-e a jelentkezőknek."
+    "description": "Igazolt értékelések olyanoktól, akik tényleg ott dolgoztak. Bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel."
+  },
+  "Nav": {
+    "findWorkplaces": "Munkahelyek",
+    "forEmployers": "Munkáltatóknak",
+    "signIn": "Belépés",
+    "rateAJob": "Értékelj",
+    "searchWorkplaces": "Munkahely keresése",
+    "switchLanguage": "Nyelv váltása",
+    "back": "Vissza"
   },
   "Home": {
-    "tagline": "Know before you go",
-    "headline": "Nézd meg, milyen ott dolgozni valójában.",
-    "searchPlaceholder": "Munkahely, pl. Joe's Pizzeria",
-    "wherePlaceholder": "Város vagy utca",
-    "search": "Keresés"
+    "headline": "Know before you go.",
+    "intro": "Igazolt értékelések olyanoktól, akik tényleg ott dolgoztak.",
+    "introMore": "Bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel – minden munkahelyről.",
+    "workplace": "Munkahely",
+    "workplacePlaceholder": "pl. Joe's Pizzeria",
+    "where": "Hol",
+    "wherePlaceholder": "Város, utca vagy környék",
+    "search": "Keresés",
+    "recentlyRated": "Friss értékelések",
+    "exampleProfile": "Példa munkahelyprofil",
+    "features": {
+      "verifiedTitle": "Igazolt, nem találgatás",
+      "verifiedBody": "Az értékeléseket bérjegyzékkel, szerződéssel vagy munkáltatói meghívóval ellenőrizzük. Az igazolt értékelés többet számít.",
+      "factsTitle": "Tények, nem csak vélemények",
+      "factsBody": "Időben fizettek? Kifizették a túlórát? Megkaptad az ígért órákat?",
+      "ghostingTitle": "Ghosting-mutató",
+      "ghostingBody": "Nézd meg, milyen gyakran és milyen gyorsan válaszol egy munkahely a jelentkezőknek."
+    },
+    "claimTitle": "Munkahelyet vezetsz? Vedd át ingyen.",
+    "claimBody": "Válaszolj az értékelésekre, hívd meg a csapatod, és mutasd meg a jelentkezőknek, milyen nálatok dolgozni.",
+    "claimCta": "Munkahely átvétele",
+    "rateBarTitle": "Dolgoztál valahol?",
+    "rateBarBody": "Értékeld 1 perc alatt.",
+    "paysOnTimeShort": "Időben fizet",
+    "repliesShort": "Válaszol"
+  },
+  "Categories": {
+    "restaurant": "Étterem",
+    "retail": "Kiskereskedelem",
+    "warehouse": "Raktár",
+    "factory": "Gyár",
+    "office": "Iroda",
+    "restaurantPlural": "Vendéglátás",
+    "retailPlural": "Kiskereskedelem",
+    "warehousePlural": "Raktárak",
+    "factoryPlural": "Gyárak",
+    "officePlural": "Startupok"
+  },
+  "Location": {
+    "metaTitle": "{company} ({location}) – értékelések, bér, beosztás",
+    "metaDescription": "{company}, {address}: {score} / 5, {count} értékelés alapján. Időben fizet: {paidOnTime}%. A jelentkezők {replyRate}%-ának válaszol.",
+    "metaDescriptionEmpty": "Dolgoztál itt: {company}, {address}? Értékeld elsőként a bért, a beosztást és a vezetőket a RateThatJobon.",
+    "outOf5": "/ 5",
+    "operatedBy": "Üzemeltető: {entity}",
+    "last12Months": "Utolsó 12 hónap",
+    "reviewCount": "{count} értékelés",
+    "verifiedCount": "{count} igazolt",
+    "follow": "Követés",
+    "rateThisJob": "Értékelem",
+    "readReviews": "Értékelések",
+    "seeAllReviews": "Összes értékelés",
+    "theFacts": "A tények",
+    "facts": {
+      "paid_on_time": "Időben fizet",
+      "paid_as_promised": "Annyit fizet, amennyit ígér",
+      "overtime_paid": "Kifizeti a túlórát",
+      "hours_as_promised": "Megvannak az ígért órák"
+    },
+    "ghostingMeter": "Ghosting-mutató",
+    "repliesTo": "A jelentkezők {rate}%-ának válaszol",
+    "avgReplyTime": "Átlagos válaszidő: {days} nap",
+    "categories": {
+      "manager": "Vezető",
+      "pay": "Bér",
+      "schedule": "Beosztás",
+      "environment": "Légkör"
+    },
+    "claimTitle": "Ez a te munkahelyed?",
+    "claimBody": "Vedd át ingyen, hogy válaszolhass az értékelésekre és meghívhasd a csapatod.",
+    "claimCta": "Munkahely átvétele",
+    "noReviewsTitle": "Még nincs értékelés",
+    "noReviewsBody": "Dolgoztál itt? Oszd meg elsőként, milyen valójában.",
+    "beTheFirst": "Értékeld elsőként",
+    "repliesToApplicants": "Válaszol a jelentkezőknek"
+  },
+  "Reviews": {
+    "metaTitle": "{company} ({location}) értékelések",
+    "filters": {
+      "all": "Összes",
+      "allShort": "Összes",
+      "verified": "Csak igazolt",
+      "verifiedShort": "Igazolt",
+      "permanent": "Állandó",
+      "temporary": "Alkalmi",
+      "applicants": "Jelentkezők"
+    },
+    "empty": "Ehhez a szűrőhöz még nincs értékelés.",
+    "previous": "Előző",
+    "next": "Következő",
+    "pageOf": "{page}. oldal / {pages}"
+  },
+  "Review": {
+    "verified": "Igazolt",
+    "verifiedInvited": "Igazolt · Meghívott",
+    "notVerified": "Nem igazolt",
+    "relationship": {
+      "applicant": "Jelentkező",
+      "trial_shift": "Próbanap",
+      "current": "Jelenlegi dolgozó",
+      "former": "Volt dolgozó"
+    },
+    "workType": {
+      "permanent": "Állandó",
+      "temporary": "Alkalmi"
+    },
+    "facts": {
+      "paid_on_time": "Időben fizettek",
+      "paid_as_promised": "Annyit fizettek, amennyit ígértek",
+      "overtime_paid": "Túlóra kifizetve",
+      "hours_as_promised": "Ígért órák",
+      "would_return": "Visszamenne"
+    },
+    "yes": "Igen",
+    "no": "Nem",
+    "noReplyAfter": "{weeks} hét után sincs válasz",
+    "noReply": "Nem válaszoltak",
+    "repliedIn": "{days} nap alatt válaszoltak",
+    "translatedFrom": "Fordítás, eredeti nyelv: {language}",
+    "showOriginal": "Eredeti",
+    "showTranslation": "Fordítás",
+    "replyFrom": "{company} válasza"
+  },
+  "NotFound": {
+    "title": "Az oldal nem található",
+    "body": "Ezt az oldalt nem találjuk.",
+    "home": "Vissza a kezdőlapra"
   }
 }
