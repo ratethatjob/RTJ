@@ -62,7 +62,11 @@ export default async function LocationPage({ params }: Props) {
               {data.name}
             </h1>
             <p className="text-lg text-slate">
-              {data.address}, {data.city} · {tc(data.category)}
+              {data.address},{" "}
+              <Link href={`/city/${data.citySlug}`} className="underline-offset-4 hover:underline">
+                {data.city}
+              </Link>{" "}
+              · {tc(data.category)}
               {data.legalEntityName && (
                 <>
                   <span className="lg:hidden">

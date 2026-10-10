@@ -6,6 +6,7 @@ import type {
   Review,
   ReviewFilter,
 } from "./types";
+import { slugify } from "@/lib/format";
 import { supabaseKey, supabaseUrl } from "@/lib/supabase/env";
 
 // Cookie-less client for public, cacheable reads of the public_* views.
@@ -25,6 +26,7 @@ type LocationRow = {
   name: string;
   address: string;
   city: string;
+  city_slug?: string | null;
   country: string;
   category: Category;
   claimed: boolean;
@@ -42,6 +44,8 @@ type LocationRow = {
   avg_reply_days: number | null;
   review_count: number;
   verified_count: number;
+  scores_updated_at?: string | null;
+  updated_at?: string | null;
 };
 
 export function toLocation(row: LocationRow): LocationSummary {
@@ -53,10 +57,12 @@ export function toLocation(row: LocationRow): LocationSummary {
     name: row.name,
     address: row.address,
     city: row.city,
+    citySlug: row.city_slug ?? slugify(row.city),
     country: row.country,
     category: row.category,
     legalEntityName: row.legal_entity_name,
     claimed: row.claimed,
+    updatedAt: row.scores_updated_at ?? row.updated_at ?? null,
     scores:
       row.review_count > 0 && row.overall != null
         ? {

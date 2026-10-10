@@ -50,12 +50,14 @@ export type LocationSummary = {
   name: string;
   address: string;
   city: string;
+  citySlug: string;
   country: string;
   category: Category;
   legalEntityName: string | null;
   claimed: boolean;
   /** Rolling 12 months; null when there are no published reviews. */
   scores: LocationScores | null;
+  updatedAt?: string | null;
 };
 
 export type Review = {

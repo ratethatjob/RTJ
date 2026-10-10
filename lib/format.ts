@@ -24,3 +24,28 @@ export function weeksWaited(review: Review) {
 export function locationPath(l: Pick<LocationSummary, "companySlug" | "slug">) {
   return `/${l.companySlug}/${l.slug}`;
 }
+
+/** Same rules as public.slugify(): ASCII, lowercase, hyphens ("Budapest" → "budapest"). */
+export function slugify(value: string) {
+  return value
+    .replace(/['’]/g, "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/** URL segment for a category on city hubs: /city/budapest/restaurants. */
+export const CATEGORY_SLUGS = {
+  restaurant: "restaurants",
+  retail: "retail",
+  warehouse: "warehouses",
+  factory: "factories",
+  office: "offices",
+} as const;
+
+export function categoryFromSlug(slug: string) {
+  const entry = Object.entries(CATEGORY_SLUGS).find(([, s]) => s === slug);
+  return entry ? (entry[0] as keyof typeof CATEGORY_SLUGS) : null;
+}

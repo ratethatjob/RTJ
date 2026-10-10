@@ -1,0 +1,199 @@
+import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { Decision } from "@/components/admin/decision";
+import { Link } from "@/i18n/navigation";
+import { requireUser } from "@/lib/auth";
+
+export const instant = false;
+
+const TABS = ["claims", "moderation", "verifications", "disputes"] as const;
+type Tab = (typeof TABS)[number];
+
+type Place = { name: string; address: string } | null;
+type ReviewRow = {
+  id: string;
+  position: string;
+  relationship: string;
+  overall: number | null;
+  body: string | null;
+  verification_level: string;
+  locations: Place;
+};
+
+export default async function AdminPage({ params, searchParams }: PageProps<"/[locale]/admin">) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const { tab: rawTab } = await searchParams;
+  const tab: Tab = TABS.includes(rawTab as Tab) ? (rawTab as Tab) : "claims";
+  const { supabase, user } = await requireUser(locale, "/admin");
+  const t = await getTranslations("Admin");
+  const tb = await getTranslations("Business");
+  const tr = await getTranslations("Review");
+  const tf = await getTranslations("ReviewForm");
+  const format = await getFormatter();
+
+  const { data: admin } = await supabase.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
+  if (!admin) {
+    return (
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+        <p className="text-lg text-slate">{t("notAdmin")}</p>
+      </main>
+    );
+  }
+
+  const counts = await Promise.all([
+    supabase.from("claim_requests").select("id", { count: "exact", head: true }).eq("status", "open"),
+    supabase.from("reviews").select("id", { count: "exact", head: true }).eq("status", "pending_moderation"),
+    supabase.from("verifications").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    supabase.from("disputes").select("id", { count: "exact", head: true }).eq("status", "open"),
+  ]);
+
+  const reviewCols = "id, position, relationship, overall, body, verification_level, locations(name, address)";
+  const date = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "medium" });
+
+  let items: { id: string; created_at: string; content: React.ReactNode; documentUrl?: string | null }[] = [];
+
+  if (tab === "claims") {
+    const { data } = await supabase
+      .from("claim_requests")
+      .select("id, created_at, org_name, contact_name, job_title, business_email, phone, method, note, locations(name, address)")
+      .eq("status", "open")
+      .order("created_at");
+    items = (data ?? []).map((c) => {
+      const place = c.locations as unknown as Place;
+      return {
+        id: c.id,
+        created_at: c.created_at,
+        content: (
+          <>
+            <p className="text-lg font-black">{c.org_name}</p>
+            <p className="text-slate">{place?.name} · {place?.address}</p>
+            <dl className="mt-3 grid gap-x-4 gap-y-1 sm:grid-cols-[auto_1fr]">
+              <dt className="font-black">{tb("contactName")}</dt>
+              <dd>{c.contact_name}{c.job_title ? `, ${c.job_title}` : ""}</dd>
+              <dt className="font-black">{tb("method")}</dt>
+              <dd>{tb(`methods.${c.method}`)}</dd>
+              {c.business_email && (<><dt className="font-black">{tb("businessEmail")}</dt><dd className="break-all">{c.business_email}</dd></>)}
+              {c.phone && (<><dt className="font-black">{tb("phone")}</dt><dd>{c.phone}</dd></>)}
+              {c.note && (<><dt className="font-black">{tb("note")}</dt><dd className="whitespace-pre-line">{c.note}</dd></>)}
+            </dl>
+          </>
+        ),
+      };
+    });
+  } else if (tab === "moderation") {
+    const { data } = await supabase
+      .from("reviews")
+      .select(`${reviewCols}, created_at`)
+      .eq("status", "pending_moderation")
+      .order("created_at");
+    items = (data ?? []).map((r) => ({
+      id: r.id,
+      created_at: r.created_at,
+      content: <ReviewSummary r={r as unknown as ReviewRow} relationship={tr(`relationship.${r.relationship}`)} />,
+    }));
+  } else if (tab === "verifications") {
+    const { data } = await supabase
+      .from("verifications")
+      .select(`id, created_at, doc_type, storage_path, reviews(${reviewCols})`)
+      .eq("status", "pending")
+      .order("created_at");
+    const paths = (data ?? []).map((v) => v.storage_path).filter((p): p is string => Boolean(p));
+    const { data: signed } = paths.length
+      ? await supabase.storage.from("verifications").createSignedUrls(paths, 600)
+      : { data: [] };
+    const urls = new Map((signed ?? []).map((s) => [s.path, s.signedUrl]));
+    items = (data ?? []).map((v) => {
+      const r = v.reviews as unknown as ReviewRow;
+      return {
+        id: v.id,
+        created_at: v.created_at,
+        documentUrl: v.storage_path ? urls.get(v.storage_path) : null,
+        content: (
+          <>
+            <p className="mb-2 inline-block rounded-lg border border-mist px-2.5 py-1 text-sm font-black">
+              {tf(`docTypes.${v.doc_type}`)}
+            </p>
+            {r && <ReviewSummary r={r} relationship={tr(`relationship.${r.relationship}`)} />}
+          </>
+        ),
+      };
+    });
+  } else {
+    const { data } = await supabase
+      .from("disputes")
+      .select(`id, created_at, reason, reviews(${reviewCols})`)
+      .eq("status", "open")
+      .order("created_at");
+    items = (data ?? []).map((d) => {
+      const r = d.reviews as unknown as ReviewRow;
+      return {
+        id: d.id,
+        created_at: d.created_at,
+        content: (
+          <>
+            <p className="whitespace-pre-line rounded-2xl bg-paper p-4">{d.reason}</p>
+            {r && (
+              <div className="mt-3">
+                <ReviewSummary r={r} relationship={tr(`relationship.${r.relationship}`)} />
+              </div>
+            )}
+          </>
+        ),
+      };
+    });
+  }
+
+  return (
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 pb-12 pt-8">
+      <header className="flex items-center justify-between gap-4">
+        <h1 className="text-4xl font-black tracking-brand">{t("title")}</h1>
+        <Link href="/app/account" className="font-black underline underline-offset-4">
+          ←
+        </Link>
+      </header>
+      <nav className="-mx-4 flex gap-2 overflow-x-auto px-4">
+        {TABS.map((key, i) => (
+          <Link
+            key={key}
+            href={{ pathname: "/admin", query: { tab: key } }}
+            aria-current={key === tab ? "page" : undefined}
+            className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 font-black ${
+              key === tab ? "bg-ink text-paper" : "bg-white"
+            }`}
+          >
+            {t(`tabs.${key}`)}
+            <span className={`rounded-full px-2 text-sm ${key === tab ? "bg-signal text-ink" : "bg-paper"}`}>
+              {counts[i].count ?? 0}
+            </span>
+          </Link>
+        ))}
+      </nav>
+      {items.length === 0 ? (
+        <p className="rounded-3xl bg-white p-5 text-slate">{t("empty")}</p>
+      ) : (
+        <ul className="flex flex-col gap-3">
+          {items.map((item) => (
+            <li key={item.id} className="rounded-3xl bg-white p-5">
+              <p className="mb-2 text-sm text-slate">{date(item.created_at)}</p>
+              {item.content}
+              <Decision kind={tab} id={item.id} documentUrl={item.documentUrl} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
+  );
+}
+
+function ReviewSummary({ r, relationship }: { r: ReviewRow; relationship: string }) {
+  return (
+    <div>
+      <p className="text-lg font-black">{r.locations?.name}</p>
+      <p className="text-slate">
+        {r.locations?.address} · {r.position} · {relationship}
+        {r.overall ? ` · ${r.overall}/5` : ""}
+      </p>
+      {r.body && <p className="mt-2 whitespace-pre-line">{r.body}</p>}
+    </div>
+  );
+}

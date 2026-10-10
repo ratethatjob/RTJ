@@ -11,6 +11,7 @@ const ITEMS = [
   { key: "locations", href: "/business/locations" },
   { key: "reviews", href: "/business/reviews" },
   { key: "invite", href: "/business/invite" },
+  { key: "index", href: "/business/index" },
   { key: "jobs", href: null },
   { key: "team", href: "/business/locations#team" },
   { key: "plan", href: "/business/locations#plan" },

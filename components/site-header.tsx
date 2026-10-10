@@ -1,11 +1,13 @@
-import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
+import { getPathname, Link } from "@/i18n/navigation";
+import { AccountLink } from "./account-link";
 import { SearchIcon } from "./icons";
 import { LocaleSwitch } from "./locale-switch";
 import { Logo } from "./logo";
 
 export async function SiteHeader({ withSearch = false }: { withSearch?: boolean }) {
   const t = await getTranslations("Nav");
+  const searchPath = getPathname({ href: "/search", locale: await getLocale() });
 
   return (
     <header className="mx-auto flex w-full max-w-6xl items-center gap-4 px-4 py-4 sm:px-6 lg:py-6">
@@ -15,7 +17,7 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
 
       {withSearch && (
         <form
-          action="/search"
+          action={searchPath}
           role="search"
           className="mx-auto hidden w-full max-w-md items-center gap-2 rounded-xl bg-white px-4 lg:flex"
         >
@@ -43,9 +45,7 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
         <span className={withSearch ? "" : "hidden sm:inline"}>
           <LocaleSwitch />
         </span>
-        <Link href="/app/sign-in" className="whitespace-nowrap px-1">
-          {t("signIn")}
-        </Link>
+        <AccountLink signInLabel={t("signIn")} />
         {!withSearch && (
           <Link
             href="/app/rate"

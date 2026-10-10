@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Bar, formatScore, ScoreTile } from "@/components/scores";
 import { getFeaturedLocations } from "@/lib/data";
-import { Link } from "@/i18n/navigation";
+import { getPathname, Link } from "@/i18n/navigation";
 import { locationPath } from "@/lib/format";
 import { localeAlternates } from "@/lib/seo";
 
@@ -46,7 +46,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             </p>
 
             <form
-              action="/search"
+              action={getPathname({ href: "/search", locale })}
               role="search"
               className="mt-8 flex flex-col rounded-3xl border border-mist/40 bg-white p-3 lg:flex-row lg:items-center lg:p-2"
             >

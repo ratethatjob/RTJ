@@ -8,7 +8,7 @@ const intl = createMiddleware(routing);
 export default async function proxy(request: NextRequest) {
   const response = intl(request);
   // Only signed-in areas need the session; public pages stay cacheable.
-  if (/^\/(?:[a-z]{2}\/)?(?:app|business)(?:\/|$)/.test(request.nextUrl.pathname)) {
+  if (/^\/(?:[a-z]{2}\/)?(?:app|business|admin)(?:\/|$)/.test(request.nextUrl.pathname)) {
     return refreshSession(request, response);
   }
   return response;

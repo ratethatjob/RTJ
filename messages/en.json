@@ -1,7 +1,8 @@
 {
   "Metadata": {
     "title": "RateThatJob – Know before you go",
-    "description": "Verified reviews from people who actually worked there. Pay, hours, managers and how workplaces treat applicants."
+    "description": "Verified reviews from people who actually worked there. Pay, hours, managers and how workplaces treat applicants.",
+    "tagline": "Know before you go"
   },
   "Nav": {
     "findWorkplaces": "Find workplaces",
@@ -347,7 +348,8 @@
       "jobs": "Jobs",
       "team": "Team & roles",
       "plan": "Plan & billing",
-      "soon": "Soon"
+      "soon": "Soon",
+      "index": "RateThatJob Index"
     },
     "signedInAs": "Signed in as {role}",
     "roles": {
@@ -468,5 +470,107 @@
     "chains": "<b>Chains (10+ locations):</b> custom pricing and onboarding.",
     "billingSoon": "Paid plans are coming soon. Everything is free until then.",
     "comingSoon": "Coming soon"
+  },
+  "Account": {
+    "title": "Your account",
+    "shownAs": "Shown as <name></name>",
+    "change": "Change",
+    "myReviews": "Your reviews",
+    "noReviews": "You haven't rated a workplace yet.",
+    "rateOne": "Rate a job",
+    "status": {
+      "draft": "Draft",
+      "pending_moderation": "Being checked",
+      "scheduled": "Scheduled",
+      "published": "Live",
+      "rejected": "Not published",
+      "removed": "Removed"
+    },
+    "waitingForLeave": "Goes live after you leave",
+    "goesLiveOn": "Goes live around {date}",
+    "leftJob": "I've left this job",
+    "leftWhen": "Last month there",
+    "save": "Save",
+    "export": "Download my data",
+    "exportHint": "Your profile and reviews as a JSON file.",
+    "signOut": "Sign out",
+    "deleteTitle": "Delete account",
+    "deleteBody": "Your account and sign-in details are deleted for good.",
+    "keepReviews": "Keep my reviews as \"Former member\"",
+    "removeReviews": "Delete my reviews too",
+    "deleteConfirm": "Type DELETE to confirm",
+    "deleteButton": "Delete my account",
+    "error": "Something went wrong. Please try again.",
+    "admin": "Admin"
+  },
+  "NavAccount": {
+    "account": "My account"
+  },
+  "Admin": {
+    "title": "Admin",
+    "tabs": {
+      "claims": "Claims",
+      "moderation": "Moderation",
+      "verifications": "Documents",
+      "disputes": "Disputes"
+    },
+    "empty": "Nothing waiting.",
+    "approve": "Approve",
+    "reject": "Reject",
+    "keep": "Keep review",
+    "remove": "Remove review",
+    "openDocument": "Open document",
+    "legalEntity": "Legal entity on the document",
+    "notAdmin": "This area is for admins only.",
+    "error": "Something went wrong. Please try again."
+  },
+  "Search": {
+    "title": "Find a workplace",
+    "metaTitle": "Search workplaces",
+    "results": "{count, plural, =0 {No workplaces found} one {# workplace} other {# workplaces}}",
+    "all": "All",
+    "addMissing": "Can't find it? Add the workplace"
+  },
+  "City": {
+    "metaTitle": "Workplaces in {city} – reviews, pay, hours",
+    "metaTitleCategory": "{category} in {city} – reviews, pay, hours",
+    "title": "Workplaces in {city}",
+    "titleCategory": "{category} in {city}",
+    "count": "{count, plural, one {# workplace} other {# workplaces}}"
+  },
+  "Index": {
+    "title": "RateThatJob Index",
+    "body": "Embed on your careers page and job ads. Every badge links back to your workplace profile and updates automatically.",
+    "variant": "Variant",
+    "variants": {
+      "compact-light": "Compact · light",
+      "compact-dark": "Compact · dark",
+      "wide-light": "Wide card · light",
+      "wide-dark": "Wide card · dark",
+      "strip": "Inline strip · job ads",
+      "seal": "Top Rated seal"
+    },
+    "imageCode": "Image badge (works anywhere)",
+    "scriptCode": "Live widget (careers page)",
+    "copy": "Copy code",
+    "copied": "Copied",
+    "sealNotEarned": "The Top Rated seal is earned at 4.0+ with at least 10 verified reviews in the last 12 months.",
+    "fewReviews": "Until you have 5 reviews, the badge asks visitors to rate you.",
+    "badge": {
+      "name": "RateThatJob Index",
+      "verified": "{count, plural, one {# verified review} other {# verified reviews}}",
+      "rateUs": "Rate us on RateThatJob",
+      "workedHere": "Worked here? Share your experience.",
+      "stripScore": "{score} on RateThatJob",
+      "stripPaid": "Paid on time {pct}%",
+      "stripReplies": "Replies to {pct}% of applicants",
+      "paidOnTime": "Paid on time",
+      "replies": "Replies to applicants",
+      "topRated": "Top Rated Employer",
+      "footer": "RateThatJob.com · Know before you go"
+    },
+    "theme": "Theme",
+    "preview": "Preview",
+    "jsonCode": "JSON API (your own design)"
   }
 }

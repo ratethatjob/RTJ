@@ -1,7 +1,8 @@
 {
   "Metadata": {
     "title": "RateThatJob – Know before you go",
-    "description": "Igazolt értékelések olyanoktól, akik tényleg ott dolgoztak. Bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel."
+    "description": "Igazolt értékelések olyanoktól, akik tényleg ott dolgoztak. Bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel.",
+    "tagline": "Know before you go"
   },
   "Nav": {
     "findWorkplaces": "Munkahelyek",
@@ -347,7 +348,8 @@
       "jobs": "Állások",
       "team": "Csapat és szerepkörök",
       "plan": "Csomag és számlázás",
-      "soon": "Hamarosan"
+      "soon": "Hamarosan",
+      "index": "RateThatJob Index"
     },
     "signedInAs": "Belépve mint {role}",
     "roles": {
@@ -468,5 +470,107 @@
     "chains": "<b>Láncok (10+ telephely):</b> egyedi ár és bevezetés.",
     "billingSoon": "A fizetős csomagok hamarosan jönnek. Addig minden ingyenes.",
     "comingSoon": "Hamarosan"
+  },
+  "Account": {
+    "title": "Fiókod",
+    "shownAs": "Így látszol: <name></name>",
+    "change": "Módosítás",
+    "myReviews": "Értékeléseid",
+    "noReviews": "Még nem értékeltél munkahelyet.",
+    "rateOne": "Értékelj",
+    "status": {
+      "draft": "Piszkozat",
+      "pending_moderation": "Ellenőrzés alatt",
+      "scheduled": "Időzítve",
+      "published": "Megjelent",
+      "rejected": "Nem jelent meg",
+      "removed": "Eltávolítva"
+    },
+    "waitingForLeave": "Miután eljöttél, megjelenik",
+    "goesLiveOn": "Várhatóan {date} körül jelenik meg",
+    "leftJob": "Eljöttem innen",
+    "leftWhen": "Utolsó hónap ott",
+    "save": "Mentés",
+    "export": "Adataim letöltése",
+    "exportHint": "A profilod és az értékeléseid JSON-fájlban.",
+    "signOut": "Kilépés",
+    "deleteTitle": "Fiók törlése",
+    "deleteBody": "A fiókodat és a belépési adataidat véglegesen töröljük.",
+    "keepReviews": "Az értékeléseim maradjanak „Volt tag” néven",
+    "removeReviews": "Az értékeléseimet is töröljétek",
+    "deleteConfirm": "A megerősítéshez írd be: TÖRLÉS",
+    "deleteButton": "Fiók törlése",
+    "error": "Valami hiba történt. Próbáld újra.",
+    "admin": "Admin"
+  },
+  "NavAccount": {
+    "account": "Fiókom"
+  },
+  "Admin": {
+    "title": "Admin",
+    "tabs": {
+      "claims": "Igénylések",
+      "moderation": "Moderálás",
+      "verifications": "Dokumentumok",
+      "disputes": "Vitatások"
+    },
+    "empty": "Nincs teendő.",
+    "approve": "Jóváhagyom",
+    "reject": "Elutasítom",
+    "keep": "Marad",
+    "remove": "Eltávolítom",
+    "openDocument": "Dokumentum megnyitása",
+    "legalEntity": "A dokumentumon szereplő cég",
+    "notAdmin": "Ez a rész csak adminoknak szól.",
+    "error": "Valami hiba történt. Próbáld újra."
+  },
+  "Search": {
+    "title": "Munkahely keresése",
+    "metaTitle": "Munkahelyek keresése",
+    "results": "{count, plural, =0 {Nincs találat} other {# munkahely}}",
+    "all": "Mind",
+    "addMissing": "Nem találod? Vedd fel a munkahelyet"
+  },
+  "City": {
+    "metaTitle": "Munkahelyek – {city}: értékelések, bér, beosztás",
+    "metaTitleCategory": "{category} – {city}: értékelések, bér, beosztás",
+    "title": "Munkahelyek – {city}",
+    "titleCategory": "{category} – {city}",
+    "count": "{count} munkahely"
+  },
+  "Index": {
+    "title": "RateThatJob Index",
+    "body": "Tedd ki a karrieroldaladra és az álláshirdetéseidbe. Minden jelvény a munkahelyi profilodra mutat, és magától frissül.",
+    "variant": "Változat",
+    "variants": {
+      "compact-light": "Kompakt · világos",
+      "compact-dark": "Kompakt · sötét",
+      "wide-light": "Széles kártya · világos",
+      "wide-dark": "Széles kártya · sötét",
+      "strip": "Csík · álláshirdetés",
+      "seal": "Top Rated pecsét"
+    },
+    "imageCode": "Képes jelvény (mindenhol működik)",
+    "scriptCode": "Élő widget (karrieroldal)",
+    "copy": "Kód másolása",
+    "copied": "Kimásolva",
+    "sealNotEarned": "A Top Rated pecsét 4,0 feletti pontszámmal és az elmúlt 12 hónapban legalább 10 igazolt értékeléssel jár.",
+    "fewReviews": "Amíg nincs 5 értékelésed, a jelvény értékelésre hívja a látogatókat.",
+    "badge": {
+      "name": "RateThatJob Index",
+      "verified": "{count} igazolt értékelés",
+      "rateUs": "Értékelj minket a RateThatJobon",
+      "workedHere": "Dolgoztál itt? Oszd meg a tapasztalatod.",
+      "stripScore": "{score} a RateThatJobon",
+      "stripPaid": "Időben fizet: {pct}%",
+      "stripReplies": "A jelentkezők {pct}%-ának válaszol",
+      "paidOnTime": "Időben fizet",
+      "replies": "Válaszol a jelentkezőknek",
+      "topRated": "Top Rated Employer",
+      "footer": "RateThatJob.com · Know before you go"
+    },
+    "theme": "Téma",
+    "preview": "Előnézet",
+    "jsonCode": "JSON API (saját dizájnhoz)"
   }
 }

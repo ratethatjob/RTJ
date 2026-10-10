@@ -21,6 +21,10 @@ Next.js (App Router, `cacheComponents`) + TypeScript, Tailwind CSS v4, next-intl
 - Publishing: reviews are inserted as `pending_moderation`; a DB trigger (`private.moderate_review`) schedules them (anonymity delay, manual queue for contact details/links), and pg_cron runs `publish_due_reviews()` every 15 minutes. Verification files go to the private `verifications` storage bucket under `<user id>/`.
 
 - Workplaces: reviewers add missing ones via `create_workplace()` (`/app/rate/new`); company pages at `app/[locale]/[company]`.
+- Account (`/app/account`): reviews and statuses, "I've left this job" (`mark_job_ended`), JSON export, sign out, delete account (`delete_my_account`).
+- Admin (`app/[locale]/admin`, noindex): claims, moderation, documents, disputes tabs, calling the `admin_*` RPCs. Admins are rows in `public.admins`. Decided verification files are deleted from storage.
+- Discovery & SEO: `/search` (noindex, follow), city hubs `/city/[city]` and `/city/[city]/[category]` (`CATEGORY_SLUGS` in `lib/format.ts`), sitemap index `app/sitemap.xml/route.ts` → `app/sitemaps/*`, `app/robots.ts`, OG image per location (`opengraph-image.tsx`, Archivo fonts in `assets/fonts`).
+- RateThatJob Index: `lib/rtj-index.ts` (SVG badges), `/embed/[id].svg?style=&locale=`, `/embed/[id]` (iframe card), `/embed/[id]/seal.svg`, `/api/public/locations/[id]/index` (JSON, CORS open), `public/widget.js`, generator at `/business/index`. Score shown from 5 reviews; seal at 4.0+ with 10+ verified.
 - Employers (`app/[locale]/business/`, noindex): `/employers` landing → `/business/claim` (claim requests, approved by an admin with `select private.approve_claim('<claim id>')`) → dashboard (overview, reviews & replies/disputes, invite link, locations/team/plan). Data loader: `lib/business.ts`. Invite links: `/r/[token]` → `/app/rate/[id]?invite=` → `attach_invite()` marks the review invited and delays it.
 
 ## Working with the founder

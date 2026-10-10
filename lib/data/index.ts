@@ -2,7 +2,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { supabaseKey, supabaseUrl } from "@/lib/supabase/env";
 import { sampleLocations, sampleReviews } from "./sample";
 import { applyReviewFilter, publicClient, toLocation, toReview } from "./supabase";
-import type { LocationSummary, Review, ReviewFilter } from "./types";
+import type { Category, LocationSummary, Review, ReviewFilter } from "./types";
 
 // Data access for public pages. Reads the Supabase public_* views when the
 // project is configured, otherwise falls back to the sample data.
@@ -16,7 +16,7 @@ export async function getLocation(
 ): Promise<LocationSummary | null> {
   "use cache";
   cacheLife("hours");
-  cacheTag(`location:${companySlug}/${locationSlug}`);
+  cacheTag(`location:${companySlug}/${locationSlug}`, "locations");
   if (!useSupabase) {
     return (
       sampleLocations.find(
@@ -37,6 +37,7 @@ export async function getLocation(
 export async function getLocationById(id: string): Promise<LocationSummary | null> {
   "use cache";
   cacheLife("hours");
+  cacheTag("locations");
   if (!useSupabase) return sampleLocations.find((l) => l.id === id) ?? null;
   if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
   const { data, error } = await publicClient()
@@ -75,7 +76,7 @@ export async function getCompany(
 ): Promise<{ name: string; slug: string; locations: LocationSummary[] } | null> {
   "use cache";
   cacheLife("hours");
-  cacheTag(`company:${slug}`);
+  cacheTag(`company:${slug}`, "locations");
   let locations: LocationSummary[];
   if (!useSupabase) {
     locations = sampleLocations.filter((l) => l.companySlug === slug);
@@ -115,6 +116,7 @@ export async function getLocationPaths() {
 export async function getFeaturedLocations(): Promise<LocationSummary[]> {
   "use cache";
   cacheLife("hours");
+  cacheTag("locations");
   if (!useSupabase) return sampleLocations.filter((l) => l.scores).slice(0, 4);
   const { data, error } = await publicClient()
     .from("public_locations")
@@ -164,4 +166,117 @@ export async function getReviews(
     .range(start, start + REVIEWS_PER_PAGE - 1);
   if (error) throw error;
   return { reviews: data.map(toReview), total: count ?? 0 };
+}
+
+const CATEGORY_KEYS = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
+
+export function isCategory(value: unknown): value is Category {
+  return CATEGORY_KEYS.includes(value as Category);
+}
+
+/** Search page: workplace name, where (city/street/area) and category. */
+export async function findLocations(
+  q: string,
+  where: string,
+  category: Category | null,
+): Promise<LocationSummary[]> {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("locations");
+  const term = q.trim().toLowerCase();
+  const place = where.trim().toLowerCase();
+  if (!useSupabase) {
+    return sampleLocations.filter(
+      (l) =>
+        (!term || `${l.name} ${l.companyName}`.toLowerCase().includes(term)) &&
+        (!place || `${l.address} ${l.city}`.toLowerCase().includes(place)) &&
+        (!category || l.category === category),
+    );
+  }
+  // Escape LIKE wildcards and PostgREST filter syntax characters.
+  const safe = (s: string) => s.replace(/[%_\\,()]/g, " ");
+  let query = publicClient().from("public_locations").select("*");
+  if (term) query = query.or(`name.ilike.%${safe(term)}%,company_name.ilike.%${safe(term)}%`);
+  if (place) query = query.or(`city.ilike.%${safe(place)}%,address.ilike.%${safe(place)}%`);
+  if (category) query = query.eq("category", category);
+  const { data, error } = await query.order("review_count", { ascending: false }).limit(50);
+  if (error) throw error;
+  return data.map(toLocation);
+}
+
+/** City hub: all workplaces in a city, optionally one category. */
+export async function getCity(
+  citySlug: string,
+  category: Category | null,
+): Promise<{ name: string; locations: LocationSummary[] } | null> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("locations");
+  let locations: LocationSummary[];
+  if (!useSupabase) {
+    locations = sampleLocations.filter((l) => l.citySlug === citySlug);
+  } else {
+    const { data, error } = await publicClient()
+      .from("public_locations")
+      .select("*")
+      .eq("city_slug", citySlug)
+      .order("review_count", { ascending: false })
+      .limit(500);
+    if (error) throw error;
+    locations = data.map(toLocation);
+  }
+  if (!locations.length) return null;
+  return {
+    name: locations[0].city,
+    locations: category ? locations.filter((l) => l.category === category) : locations,
+  };
+}
+
+export type SitemapLocation = {
+  companySlug: string;
+  slug: string;
+  citySlug: string;
+  category: Category;
+  reviewCount: number;
+  isSeeded: boolean;
+  updatedAt: string;
+};
+
+/** Every workplace for the XML sitemaps. */
+export async function getSitemapLocations(): Promise<SitemapLocation[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("locations");
+  if (!useSupabase) {
+    return sampleLocations.map((l) => ({
+      companySlug: l.companySlug,
+      slug: l.slug,
+      citySlug: l.citySlug,
+      category: l.category,
+      reviewCount: l.scores?.reviewCount ?? 0,
+      isSeeded: false,
+      updatedAt: "",
+    }));
+  }
+  const rows: SitemapLocation[] = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await publicClient()
+      .from("public_locations")
+      .select("company_slug, slug, city_slug, category, review_count, is_seeded, updated_at, scores_updated_at")
+      .order("id")
+      .range(from, from + 999);
+    if (error) throw error;
+    for (const r of data) {
+      rows.push({
+        companySlug: r.company_slug,
+        slug: r.slug,
+        citySlug: r.city_slug,
+        category: r.category,
+        reviewCount: r.review_count,
+        isSeeded: r.is_seeded,
+        updatedAt: [r.updated_at, r.scores_updated_at].filter(Boolean).sort().at(-1) ?? r.updated_at,
+      });
+    }
+    if (data.length < 1000) return rows;
+  }
 }
