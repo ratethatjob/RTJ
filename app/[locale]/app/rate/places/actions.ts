@@ -1,62 +1,17 @@
 "use server";
 
-import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
-import { isOsmId, osmAutocomplete, type SearchArea } from "@/lib/osm";
+import { isOsmId, osmAutocomplete } from "@/lib/osm";
 import { autocomplete, type PlaceDetails, placesProvider } from "@/lib/places";
 import { expireWorkplaces } from "@/lib/cache";
 import { isCategory } from "@/lib/categories";
 import { searchLocations } from "@/lib/data";
-import { visitorArea } from "@/lib/visitor-area";
 import { rateLimited } from "@/lib/rate-limit";
-import { isAreaId, parseGeo, SEARCH_AREAS } from "@/lib/search-areas";
+import { caller, knownLocations, resolveArea } from "@/lib/place-search";
 import { createPlaceWorkplace, placeDetailsAny } from "@/lib/workplaces";
 
 export type Suggestion = { placeId: string; main: string; secondary: string; locationId: string | null };
-
-// OSM ids are stored without the "osm:" prefix.
-const osmKey = (id: string) => id.slice(4);
-
-/** Workplaces already on RateThatJob for these Google place ids or OSM ids. */
-async function knownLocations(supabase: Awaited<ReturnType<typeof getUser>>["supabase"], ids: string[]) {
-  const osm = ids.filter(isOsmId);
-  const google = ids.filter((id) => !isOsmId(id));
-  const [g, o] = await Promise.all([
-    google.length ? supabase.rpc("locations_by_place", { p_place_ids: google }) : { data: [] },
-    osm.length ? supabase.rpc("locations_by_osm", { p_osm_ids: osm.map(osmKey) }) : { data: [] },
-  ]);
-  return new Map<string, string>([
-    ...((g.data ?? []) as { place_id: string; location_id: string }[]).map((r) => [r.place_id, r.location_id] as const),
-    ...((o.data ?? []) as { osm_id: string; location_id: string }[]).map((r) => [`osm:${r.osm_id}`, r.location_id] as const),
-  ]);
-}
-
-/** Signed-in user id, or the visitor's IP address, as the rate-limit key. */
-async function caller() {
-  const { supabase, user } = await getUser();
-  const h = await headers();
-  const ip = h.get("x-forwarded-for")?.split(",")[0].trim() || h.get("x-real-ip") || "unknown";
-  return { supabase, key: user ? `u:${user.id}` : `ip:${ip}` };
-}
-
-/** Where to look first: the person's pick, their browser location (rounded), or Vercel's IP location,
- *  else the page language (hu → Budapest). "any" searches everywhere. */
-async function resolveArea(choice: string, locale: string): Promise<SearchArea | null> {
-  if (choice === "any") return null;
-  if (isAreaId(choice)) return { ...SEARCH_AREAS[choice], strict: true };
-  const geo = parseGeo(choice);
-  if (geo) return geo;
-  const h = await headers();
-  const lat = Number(h.get("x-vercel-ip-latitude"));
-  const lon = Number(h.get("x-vercel-ip-longitude"));
-  if (h.get("x-vercel-ip-latitude") && Number.isFinite(lat) && Number.isFinite(lon)) {
-    return { lat, lon, country: h.get("x-vercel-ip-country") ?? undefined };
-  }
-  // No IP location: the same guess as the home page (time zone cookie, then page language).
-  const visitor = await visitorArea(locale);
-  return visitor.kind === "area" ? { ...SEARCH_AREAS[visitor.id] } : null;
-}
 
 export type OwnResult = {
   id: string;

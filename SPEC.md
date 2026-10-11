@@ -69,6 +69,9 @@ Rules:
 - Slug changes keep a **301 redirect** table (`slug_redirects`).
 - Locales: default English at root, other languages under prefix: `/hu/{company-slug}/{location-slug}`. Every page outputs `hreflang` alternates and a canonical URL.
 
+### Search
+- `/search` shows workplaces already on RateThatJob first (with score), then map places (Google Places, OpenStreetMap fallback) under "Pick the one you mean", using "Where" as the place bias. Opening a map place that isn't on RateThatJob creates its workplace page on the click (one per place id, rate-limited). Empty search shows popular places nearby. Map API calls are counted per day for the monthly budget.
+
 ### SEO checklist per location page
 - SSR/ISR, revalidate on new review or reply.
 - `<title>`: `Working at {Company} ({Location}) – reviews, pay, hours | RateThatJob`

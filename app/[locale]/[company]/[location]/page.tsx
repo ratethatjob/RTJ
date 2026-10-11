@@ -135,9 +135,22 @@ export default async function LocationPage({ params }: Props) {
         </div>
       </section>
 
+      {!s && (
+        <section className="mt-6 flex flex-col items-start gap-5 rounded-[2rem] bg-ink p-6 text-paper sm:p-10">
+          <h2 className="max-w-3xl text-3xl font-black leading-tight tracking-brand sm:text-5xl">{t("emptyTitle")}</h2>
+          <p className="max-w-2xl text-lg text-mist">{t("emptyBody")}</p>
+          <Link
+            href={rateHref}
+            className="w-full rounded-2xl bg-signal px-8 py-5 text-center text-xl font-black text-ink sm:w-auto"
+          >
+            {t("emptyCta")}
+          </Link>
+        </section>
+      )}
+
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_380px] lg:items-start">
         <aside className="flex flex-col gap-4 lg:order-2">
-          {s ? (
+          {s && (
             <>
               <FactBars facts={s.facts} />
               {ghosting && (
@@ -149,17 +162,6 @@ export default async function LocationPage({ params }: Props) {
               )}
               <CategoryScores scores={s} />
             </>
-          ) : (
-            <section className="rounded-3xl bg-white p-6">
-              <h2 className="text-2xl font-black tracking-brand">{t("noReviewsTitle")}</h2>
-              <p className="mt-2 text-slate">{t("noReviewsBody")}</p>
-              <Link
-                href={rateHref}
-                className="mt-4 inline-block rounded-2xl bg-ink px-6 py-3 font-black text-paper"
-              >
-                {t("beTheFirst")}
-              </Link>
-            </section>
           )}
           {!data.claimed && (
             <section className="rounded-3xl border-2 border-dashed border-mist/60 p-6">

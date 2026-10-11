@@ -1,6 +1,7 @@
 import { cacheLife } from "next/cache";
 import { categoryFromOsm } from "@/lib/categories";
 import { regionName } from "@/lib/intl-names";
+import { recordPlacesCall } from "@/lib/places-usage";
 import type { PlaceDetails, PlaceSuggestion } from "@/lib/places";
 
 // OpenStreetMap workplace search, used while there is no GOOGLE_PLACES_API_KEY.
@@ -75,6 +76,7 @@ export async function osmAutocomplete(input: string, locale: string, area: Searc
     qs.set("zoom", "12");
   }
   for (const key of SKIP_KEYS) qs.append("osm_tag", `!${key}`);
+  await recordPlacesCall("osm", "autocomplete");
   const res = await fetch(`${PHOTON}/api/?${qs}`, { headers: HEADERS });
   if (!res.ok) throw new Error(`photon ${res.status}`);
   const found = suggestionsFromPhoton(await res.json(), locale);
@@ -136,6 +138,7 @@ export async function osmDetails(id: string, locale: string): Promise<PlaceDetai
     "accept-language": locale,
   });
   await nominatimSlot();
+  await recordPlacesCall("osm", "details");
   const res = await fetch(`${NOMINATIM}/lookup?${qs}`, { headers: HEADERS });
   if (!res.ok) throw new Error(`nominatim ${res.status}`);
   const [place] = (await res.json()) as NominatimPlace[];

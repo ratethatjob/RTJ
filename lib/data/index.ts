@@ -190,7 +190,7 @@ export async function findLocations(
   if (!useSupabase) {
     return sampleLocations.filter(
       (l) =>
-        (!term || `${l.name} ${l.companyName}`.toLowerCase().includes(term)) &&
+        (!term || term.split(/\s+/).every((w) => `${l.name} ${l.companyName}`.toLowerCase().includes(w))) &&
         (!place || `${l.address} ${l.city}`.toLowerCase().includes(place)) &&
         (!category || l.category === category),
     );
@@ -198,7 +198,10 @@ export async function findLocations(
   // Escape LIKE wildcards and PostgREST filter syntax characters.
   const safe = (s: string) => s.replace(/[%_\\,()]/g, " ");
   let query = publicClient().from("public_locations").select("*");
-  if (term) query = query.or(`name.ilike.%${safe(term)}%,company_name.ilike.%${safe(term)}%`);
+  // Every word of the name must match the workplace or company name ("Simons burger").
+  for (const word of safe(term).split(/\s+/).filter(Boolean).slice(0, 5)) {
+    query = query.or(`name.ilike.%${word}%,company_name.ilike.%${word}%`);
+  }
   if (place) query = query.or(`city.ilike.%${safe(place)}%,address.ilike.%${safe(place)}%`);
   if (category) query = query.eq("category", category);
   const { data, error } = await query.order("review_count", { ascending: false }).limit(50);

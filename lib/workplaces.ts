@@ -69,13 +69,14 @@ export async function createManualWorkplace(
 
 /** Workplace from Google's or OpenStreetMap's data, fetched again here (never taken from the client). */
 export async function createPlaceWorkplace(
-  userId: string,
+  userId: string | null,
   w: Extract<PendingWorkplace, { kind: "place" }>,
   locale: string,
+  sessionToken?: string,
 ): Promise<{ id?: string; error?: WorkplaceError }> {
   const db = adminClient();
   if (!db) return { error: "generic" };
-  const place = await placeDetailsAny(w.placeId, locale).catch(() => null);
+  const place = await placeDetailsAny(w.placeId, locale, sessionToken).catch(() => null);
   if (!place || !place.name || !place.address || !place.city || !place.country) return { error: "invalid" };
   const osm = isOsmId(place.placeId);
   const { data, error } = await db.rpc(osm ? "workplace_from_osm" : "workplace_from_place", {

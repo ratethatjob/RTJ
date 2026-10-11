@@ -485,6 +485,11 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     embeds: number;
   };
   const metrics = tab === "metrics" ? ((await supabase.rpc("admin_metrics")).data as Metrics | null) : null;
+  // Map search calls per month (Google Places budget).
+  const placesUsage =
+    tab === "metrics"
+      ? (((await supabase.rpc("admin_places_usage")).data ?? []) as { month: string; provider: string; kind: string; calls: number }[])
+      : [];
   const demo =
     tab === "demo"
       ? ((await supabase.rpc("admin_demo_summary")).data as Record<"companies" | "locations" | "reviews" | "jobs" | "users", number> | null)
@@ -571,6 +576,35 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
                   ))}
                 </tbody>
               </table>
+            </div>
+            <div className="overflow-x-auto rounded-3xl bg-white p-5">
+              <h2 className="mb-2 font-black">{t("metrics.placesTitle")}</h2>
+              {placesUsage.length === 0 ? (
+                <p className="text-sm text-slate">{t("metrics.placesNone")}</p>
+              ) : (
+                <table className="w-full min-w-[420px] text-left">
+                  <thead className="text-sm text-slate">
+                    <tr>
+                      <th className="py-2 font-black">{t("metrics.month")}</th>
+                      <th className="py-2 font-black">{t("metrics.placesProvider")}</th>
+                      <th className="py-2 font-black">{t("metrics.placesKind")}</th>
+                      <th className="py-2 text-right font-black">{t("metrics.placesCalls")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {placesUsage.map((u) => (
+                      <tr key={`${u.month}-${u.provider}-${u.kind}`} className="border-t border-[#E8E6E1]">
+                        <td className="py-2.5 font-black">
+                          {format.dateTime(new Date(`${u.month}T12:00:00Z`), { year: "numeric", month: "long" })}
+                        </td>
+                        <td className="py-2.5">{u.provider === "google" ? "Google Places" : "OpenStreetMap"}</td>
+                        <td className="py-2.5">{u.kind}</td>
+                        <td className="py-2.5 text-right font-black">{u.calls}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </section>
         )

@@ -1,5 +1,6 @@
 import type { Category } from "@/lib/data/types";
 import { categoryFromGoogle } from "@/lib/categories";
+import { recordPlacesCall } from "@/lib/places-usage";
 
 // Google Places API (New), server side only. Off until GOOGLE_PLACES_API_KEY is set.
 const KEY = process.env.GOOGLE_PLACES_API_KEY;
@@ -32,6 +33,7 @@ export async function autocomplete(
   const locationBias = area
     ? { circle: { center: { latitude: area.lat, longitude: area.lon }, radius: 30000 } }
     : undefined;
+  await recordPlacesCall("google", "autocomplete");
   const res = await fetch(`${BASE}/v1/places:autocomplete`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Goog-Api-Key": KEY },
@@ -66,6 +68,7 @@ const NUMBER_FIRST = new Set(["US", "CA", "GB", "IE", "AU", "NZ", "FR"]);
 export async function placeDetails(placeId: string, locale: string, sessionToken?: string): Promise<PlaceDetails | null> {
   if (!KEY || !/^[\w-]{10,300}$/.test(placeId)) return null;
   const qs = new URLSearchParams({ languageCode: locale, ...(sessionToken && { sessionToken }) });
+  await recordPlacesCall("google", "details");
   const res = await fetch(`${BASE}/v1/places/${encodeURIComponent(placeId)}?${qs}`, {
     headers: {
       "X-Goog-Api-Key": KEY,

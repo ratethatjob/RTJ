@@ -209,7 +209,10 @@
     "fromEmployer": "A munkáltatótól",
     "website": "A weboldaluk",
     "nearby": "Hasonló munkahelyek itt: {city}",
-    "following": "Követed"
+    "following": "Követed",
+    "emptyTitle": "Ennek a munkahelynek még nincs értékelése. Legyél te az első!",
+    "emptyBody": "Nagyjából egy perc, és senki nem látja, ki írta – a munkáltató sem.",
+    "emptyCta": "Értékelem"
   },
   "Reviews": {
     "metaTitle": "{company} ({location}) értékelések",
@@ -818,7 +821,12 @@
       "reviews": "Megjelent értékelések",
       "verified": "Igazolt",
       "users": "Új fiókok",
-      "applications": "Jelentkezések"
+      "applications": "Jelentkezések",
+      "placesTitle": "Térképes keresési hívások",
+      "placesNone": "Még nem volt térképes keresés.",
+      "placesProvider": "Szolgáltatás",
+      "placesKind": "Hívás",
+      "placesCalls": "Darab"
     },
     "orderUpgrade": "bővítés erről: {from}",
     "markPaid": "Fizetve",
@@ -886,7 +894,12 @@
     "metaTitle": "Munkahelyek keresése",
     "results": "{count, plural, =0 {Nincs találat} other {# munkahely}}",
     "all": "Mind",
-    "addMissing": "Nem találod? Vedd fel a munkahelyet"
+    "addMissing": "Nem találod? Vedd fel a munkahelyet",
+    "pickOne": "Válaszd ki, melyikre gondolsz",
+    "pickOneHint": "A térképről. Ha még nincs fent a RateThatJobon, megnyitáskor létrehozzuk az oldalát.",
+    "mapSearching": "Keresés a térképen…",
+    "opening": "Megnyitás…",
+    "noneAnywhere": "Nincs találat. Ellenőrizd a nevet, vagy próbáld hely nélkül."
   },
   "City": {
     "metaTitle": "Munkahelyek – {city}: értékelések, bér, beosztás",

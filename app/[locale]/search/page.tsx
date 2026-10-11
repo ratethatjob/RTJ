@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CategoryChips } from "@/components/category-chips";
+import { Suspense } from "react";
+import { NearYou, NearYouFallback } from "@/components/home/near-you";
 import { LocationList } from "@/components/location-list";
+import { MapResults, MapResultsFallback } from "@/components/search/map-results";
 import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
 import { findLocations, isCategory } from "@/lib/data";
+import { placesProvider } from "@/lib/places";
 import { localeAlternates } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/search">;
@@ -33,6 +37,9 @@ export default async function SearchPage({ params, searchParams }: Props) {
   const th = await getTranslations("Home");
   const searched = Boolean(q.trim() || where.trim() || category);
   const results = searched ? await findLocations(q, where, category) : [];
+  // Map places too (3+ characters of a name), like the review finder.
+  const provider = await placesProvider();
+  const mapSearch = q.trim().length >= 3;
   const query = (c: string | null) => ({
     ...(q && { q }),
     ...(where && { where }),
@@ -92,11 +99,27 @@ export default async function SearchPage({ params, searchParams }: Props) {
           }
         />
 
-        {searched && (
+        {searched && (results.length > 0 || !mapSearch) && (
           <>
             <p className="font-black text-slate">{t("results", { count: results.length })}</p>
             <LocationList locations={results} />
           </>
+        )}
+        {mapSearch && provider && (
+          <Suspense fallback={<MapResultsFallback />}>
+            <MapResults
+              q={q}
+              where={where}
+              provider={provider}
+              own={{ ids: results.map((l) => l.id), keys: results.map((l) => `${l.name} ${l.address}`) }}
+            />
+          </Suspense>
+        )}
+        {!searched && (
+          // Nothing typed yet: popular places near the visitor instead of an empty page.
+          <Suspense fallback={<NearYouFallback />}>
+            <NearYou locale={locale} />
+          </Suspense>
         )}
         <Link href="/app/rate/new" className="font-black underline underline-offset-4">
           {t("addMissing")}
