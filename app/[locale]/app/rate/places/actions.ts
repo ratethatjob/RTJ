@@ -3,14 +3,13 @@
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
-import type { Category } from "@/lib/data/types";
+import { isCategory } from "@/lib/categories";
+import { categorize } from "@/lib/categorize";
 import { isOsmId, osmAutocomplete, osmDetails, type SearchArea } from "@/lib/osm";
 import { autocomplete, type PlaceDetails, placeDetails, placesConfigured } from "@/lib/places";
 import { rateLimited } from "@/lib/rate-limit";
 import { isAreaId, parseGeo, SEARCH_AREAS } from "@/lib/search-areas";
 import { adminClient } from "@/lib/supabase/admin";
-
-const CATEGORIES: Category[] = ["restaurant", "retail", "warehouse", "factory", "office"];
 
 export type Suggestion = { placeId: string; main: string; secondary: string; locationId: string | null };
 
@@ -102,7 +101,7 @@ export async function confirmPlace(
   placeId: string,
   category: string,
 ): Promise<{ locationId?: string; error?: "invalid" | "limit" | "generic" }> {
-  if (!CATEGORIES.includes(category as Category)) return { error: "invalid" };
+  if (category !== "" && !isCategory(category)) return { error: "invalid" };
   const { user } = await getUser();
   const db = adminClient();
   if (!user || !db) return { error: "generic" };
@@ -116,7 +115,10 @@ export async function confirmPlace(
     p_address: place.address,
     p_city: place.city,
     p_country: place.country,
-    p_category: category,
+    // "Let us decide": the map type, else Claude from the name and map types.
+    p_category: isCategory(category)
+      ? category
+      : (place.category ?? (await categorize({ name: place.name, city: place.city, types: place.types }))),
     p_lat: place.lat,
     p_lng: place.lng,
   });

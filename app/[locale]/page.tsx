@@ -1,3 +1,4 @@
+import { CategoryChips } from "@/components/category-chips";
 import { DemoChip } from "@/components/demo-badge";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -12,14 +13,6 @@ import { getAllJobs } from "@/lib/data/jobs";
 import { getPathname, Link } from "@/i18n/navigation";
 import { locationPath } from "@/lib/format";
 import { localeAlternates } from "@/lib/seo";
-
-const CATEGORIES = [
-  "restaurant",
-  "retail",
-  "warehouse",
-  "factory",
-  "office",
-] as const;
 
 export async function generateMetadata({
   params,
@@ -97,18 +90,13 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               </button>
             </form>
 
-            <ul className="mt-5 flex flex-wrap gap-3">
-              {CATEGORIES.map((c) => (
-                <li key={c}>
-                  <Link
-                    href={{ pathname: "/search", query: { category: c } }}
-                    className="inline-block rounded-full border border-mist/60 px-5 py-3 font-black"
-                  >
-                    {tc(`${c}Plural`)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <div className="mt-5">
+              <CategoryChips
+                active={null}
+                href={(c) => ({ pathname: "/search", query: { category: c } })}
+                wrap
+              />
+            </div>
           </div>
 
           {example?.scores && (

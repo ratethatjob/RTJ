@@ -13,7 +13,7 @@ declare
         "scores": [5,4,5,4,4,5,4,3,5,4,4,5], "verified": 11, "replies": 3},
        {"slug": "marina-walk-1", "address": "Marina Walk 1", "city": "Dubai", "country": "AE", "plan": "paid",
         "scores": [5,5,5,5,4,5,5,5,5,5,5,4,5,5,5], "verified": 12, "replies": 2}]},
-    {"slug": "demo-sample-supermarket", "name": "Sample Supermarket", "category": "retail",
+    {"slug": "demo-sample-supermarket", "name": "Sample Supermarket", "category": "supermarket",
      "positions": ["Cashier", "Shelf stacker", "Shift lead"],
      "locations": [
        {"slug": "vaci-ut-10", "address": "Váci út 10", "city": "Budapest", "country": "HU", "plan": "free",

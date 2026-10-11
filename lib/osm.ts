@@ -1,5 +1,5 @@
 import { cacheLife } from "next/cache";
-import type { Category } from "@/lib/data/types";
+import { categoryFromOsm } from "@/lib/categories";
 import type { PlaceDetails, PlaceSuggestion } from "@/lib/places";
 
 // OpenStreetMap workplace search, used while there is no GOOGLE_PLACES_API_KEY.
@@ -126,6 +126,7 @@ export function detailsFromNominatim(p: NominatimPlace): PlaceDetails | null {
     lat: Number.isFinite(lat) ? lat : null,
     lng: Number.isFinite(lng) ? lng : null,
     category: categoryFromOsm(p.category ?? "", p.type ?? ""),
+    types: p.category && p.type ? [`${p.category}=${p.type}`] : [],
   };
 }
 
@@ -154,17 +155,4 @@ function streetLine(street?: string, number?: string, country?: string) {
   if (!street) return "";
   const parts = NUMBER_FIRST.has((country ?? "").toUpperCase()) ? [number, street] : [street, number];
   return parts.filter(Boolean).join(" ");
-}
-
-const RESTAURANT = ["restaurant", "cafe", "bar", "pub", "fast_food", "food_court", "ice_cream", "biergarten", "bakery"];
-const OFFICE_AMENITIES = ["bank", "bureau_de_change"];
-
-/** Best guess from the OSM tag; the person confirms it. */
-export function categoryFromOsm(key: string, value: string): Category | null {
-  if (RESTAURANT.includes(value)) return "restaurant";
-  if (key === "shop" || ["fuel", "pharmacy", "marketplace"].includes(value)) return "retail";
-  if (value === "warehouse" || value === "logistics") return "warehouse";
-  if (["works", "factory"].includes(value) || key === "craft" || key === "industrial") return "factory";
-  if (key === "office" || OFFICE_AMENITIES.includes(value)) return "office";
-  return null;
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { CategoryChips } from "@/components/category-chips";
 import { LocationList } from "@/components/location-list";
 import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
@@ -9,8 +10,6 @@ import { localeAlternates } from "@/lib/seo";
 type Props = PageProps<"/[locale]/search">;
 
 export const instant = false;
-
-const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -32,7 +31,6 @@ export default async function SearchPage({ params, searchParams }: Props) {
   const category = isCategory(sp.category) ? sp.category : null;
   const t = await getTranslations("Search");
   const th = await getTranslations("Home");
-  const tc = await getTranslations("Categories");
   const searched = Boolean(q.trim() || where.trim() || category);
   const results = searched ? await findLocations(q, where, category) : [];
   const query = (c: string | null) => ({
@@ -76,21 +74,23 @@ export default async function SearchPage({ params, searchParams }: Props) {
           </button>
         </form>
 
-        <ul className="-mx-4 flex gap-2 overflow-x-auto px-4">
-          {[null, ...CATEGORIES].map((c) => (
-            <li key={c ?? "all"} className="shrink-0">
+        <CategoryChips
+          active={category}
+          href={(c) => ({ pathname: "/search", query: query(c) })}
+          lead={
+            <li className="shrink-0">
               <Link
-                href={{ pathname: "/search", query: query(c) }}
-                aria-current={c === category ? "page" : undefined}
+                href={{ pathname: "/search", query: query(null) }}
+                aria-current={category === null ? "page" : undefined}
                 className={`inline-block rounded-full px-5 py-2.5 font-black ${
-                  c === category ? "bg-ink text-paper" : "border border-mist/60"
+                  category === null ? "bg-ink text-paper" : "border border-mist/60"
                 }`}
               >
-                {c ? tc(`${c}Plural`) : t("all")}
+                {t("all")}
               </Link>
             </li>
-          ))}
-        </ul>
+          }
+        />
 
         {searched && (
           <>

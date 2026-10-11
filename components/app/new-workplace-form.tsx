@@ -4,23 +4,21 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { createWorkplace } from "@/app/[locale]/app/actions";
+import { CategorySelect } from "@/components/category-select";
 import { COUNTRIES } from "@/lib/countries";
-
-const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
 
 /** `claim`: employer flow – the new workplace goes straight to the claim form. */
 type Props = { initialName: string; defaultCountry: string; rateBase: string; claim?: boolean };
 
 export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim = false }: Props) {
   const t = useTranslations("NewWorkplace");
-  const tc = useTranslations("Categories");
   const tn = useTranslations("Countries");
   const [form, setForm] = useState({
     company: initialName,
     address: "",
     city: "",
     country: defaultCountry,
-    category: "restaurant",
+    category: "",
   });
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -67,24 +65,14 @@ export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim 
           </select>
         </label>
       </div>
-      <fieldset>
-        <legend className="mb-2 font-black">{t("category")}</legend>
-        <div className="flex flex-wrap gap-2">
-          {CATEGORIES.map((c) => (
-            <button
-              key={c}
-              type="button"
-              aria-pressed={form.category === c}
-              onClick={() => setForm((f) => ({ ...f, category: c }))}
-              className={`rounded-full px-5 py-3 font-black ${
-                form.category === c ? "bg-ink text-paper" : "border border-mist/60 bg-white"
-              }`}
-            >
-              {tc(c)}
-            </button>
-          ))}
-        </div>
-      </fieldset>
+      <label className="flex flex-col gap-2">
+        <span className="font-black">{t("category")}</span>
+        <CategorySelect
+          value={form.category}
+          onChange={(category) => setForm((f) => ({ ...f, category }))}
+          className={input}
+        />
+      </label>
       {error && (
         <p role="alert" className="rounded-2xl bg-ink px-4 py-3 font-black text-paper">
           {error}

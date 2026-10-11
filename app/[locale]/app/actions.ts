@@ -3,6 +3,8 @@
 import { after } from "next/server";
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
+import { isCategory } from "@/lib/categories";
+import { categorize } from "@/lib/categorize";
 import { COUNTRIES } from "@/lib/countries";
 import { getLocationById } from "@/lib/data";
 import { parseReview, type ReviewInput } from "@/lib/review-input";
@@ -66,8 +68,6 @@ export async function submitReview(
   return { id: data.id };
 }
 
-const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
-
 export async function createWorkplace(form: {
   company: string;
   address: string;
@@ -85,7 +85,7 @@ export async function createWorkplace(form: {
     address.length < 2 ||
     city.length < 2 ||
     !COUNTRIES.includes(form.country as (typeof COUNTRIES)[number]) ||
-    !CATEGORIES.includes(form.category as (typeof CATEGORIES)[number])
+    (form.category !== "" && !isCategory(form.category))
   ) {
     return { error: "invalid" };
   }
@@ -94,7 +94,8 @@ export async function createWorkplace(form: {
     p_address: address,
     p_city: city,
     p_country: form.country,
-    p_category: form.category,
+    // "Let us decide": Claude picks from the name (Other without AI).
+    p_category: isCategory(form.category) ? form.category : await categorize({ name: company, city }),
   });
   if (error) return { error: error.code === "54000" ? "limit" : error.code === "22023" ? "invalid" : "generic" };
   return { id: data as string };

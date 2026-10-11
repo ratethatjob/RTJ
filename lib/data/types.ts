@@ -3,12 +3,8 @@
 
 export type Locale = "en" | "hu";
 
-export type Category =
-  | "restaurant"
-  | "retail"
-  | "warehouse"
-  | "factory"
-  | "office";
+export type { Category } from "@/lib/categories";
+import type { Category } from "@/lib/categories";
 
 export type Relationship = "applicant" | "trial_shift" | "current" | "former";
 export type WorkType = "permanent" | "temporary";

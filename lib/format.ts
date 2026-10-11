@@ -37,15 +37,4 @@ export function slugify(value: string) {
 }
 
 /** URL segment for a category on city hubs: /city/budapest/restaurants. */
-export const CATEGORY_SLUGS = {
-  restaurant: "restaurants",
-  retail: "retail",
-  warehouse: "warehouses",
-  factory: "factories",
-  office: "offices",
-} as const;
-
-export function categoryFromSlug(slug: string) {
-  const entry = Object.entries(CATEGORY_SLUGS).find(([, s]) => s === slug);
-  return entry ? (entry[0] as keyof typeof CATEGORY_SLUGS) : null;
-}
+export { CATEGORY_SLUGS, categoryFromSlug } from "@/lib/categories";

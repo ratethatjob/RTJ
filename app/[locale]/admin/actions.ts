@@ -2,6 +2,7 @@
 
 import { revalidateTag } from "next/cache";
 import { getUser } from "@/lib/auth";
+import { isCategory } from "@/lib/categories";
 import { sendClaimEmail } from "@/lib/claim-emails";
 
 type Result = { ok?: true; error?: true };
@@ -127,6 +128,15 @@ export async function setSlug(kind: "company" | "location", id: string, slug: st
   if (error) return { error: true };
   revalidateTag("locations", "max");
   revalidateTag("redirects", "max");
+  return { ok: true };
+}
+
+export async function setLocationCategory(id: string, category: string): Promise<Result> {
+  if (!isCategory(category)) return { error: true };
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("admin_set_location_category", { p_location_id: id, p_category: category });
+  if (error) return { error: true };
+  revalidateTag("locations", "max");
   return { ok: true };
 }
 

@@ -168,11 +168,7 @@ export async function getReviews(
   return { reviews: data.map(toReview), total: count ?? 0 };
 }
 
-const CATEGORY_KEYS = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
-
-export function isCategory(value: unknown): value is Category {
-  return CATEGORY_KEYS.includes(value as Category);
-}
+export { isCategory } from "@/lib/categories";
 
 /** Search page: workplace name, where (city/street/area) and category. */
 export async function findLocations(

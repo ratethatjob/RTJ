@@ -1,5 +1,5 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
-import { CsvImport, EntityForm, SlugEditor, UnverifyEntity } from "@/components/admin/tools";
+import { CategoryEditor, CsvImport, EntityForm, SlugEditor, UnverifyEntity } from "@/components/admin/tools";
 import { Decision } from "@/components/admin/decision";
 import { PurgeDemo } from "@/components/admin/purge-demo";
 import { Link } from "@/i18n/navigation";
@@ -432,6 +432,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
       address: string;
       city: string;
       country: string;
+      category: string;
       location_entity_links: {
         id: string;
         source: string;
@@ -446,7 +447,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
           await supabase
             .from("companies")
             .select(
-              "id, name, slug, locations(id, slug, address, city, country, location_entity_links(id, source, verified_at, legal_entities(name, registry_id)))",
+              "id, name, slug, locations(id, slug, address, city, country, category, location_entity_links(id, source, verified_at, legal_entities(name, registry_id)))",
             )
             .ilike("name", `%${q.replace(/[%_\\,()]/g, " ")}%`)
             .order("name")
@@ -625,6 +626,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
                       {l.address}, {l.city}
                     </p>
                     <SlugEditor kind="location" id={l.id} slug={l.slug} prefix={`/${c.slug}/`} />
+                    <CategoryEditor id={l.id} category={l.category} />
                   </li>
                 ))}
               </ul>

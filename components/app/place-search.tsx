@@ -4,18 +4,16 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { choosePlace, confirmPlace, searchPlaces, type Suggestion } from "@/app/[locale]/app/rate/places/actions";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { CategorySelect } from "@/components/category-select";
 import type { PlacesProvider } from "@/lib/places";
 import { locate, readArea, saveArea, subscribeArea } from "@/lib/area-client";
 import { type AreaChoice, SEARCH_AREAS } from "@/lib/search-areas";
-
-const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
 
 type Place = { placeId: string; name: string; address: string; city: string; category: string | null };
 
 /** Find a workplace on Google Maps or OpenStreetMap; one RateThatJob page per place. */
 export function PlaceSearch({ initialQuery = "", provider }: { initialQuery?: string; provider: PlacesProvider }) {
   const t = useTranslations("Places");
-  const tc = useTranslations("Categories");
   const router = useRouter();
   const pathname = usePathname();
   const [query, setQuery] = useState(initialQuery);
@@ -67,7 +65,7 @@ export function PlaceSearch({ initialQuery = "", provider }: { initialQuery?: st
   }
 
   function confirm() {
-    if (!place || !category) return;
+    if (!place) return;
     startTransition(async () => {
       const result = await confirmPlace(place.placeId, category);
       if (result.error || !result.locationId) {
@@ -86,27 +84,19 @@ export function PlaceSearch({ initialQuery = "", provider }: { initialQuery?: st
             {place.address}, {place.city}
           </p>
         </div>
-        <fieldset>
-          <legend className="mb-2 font-black">{t("category")}</legend>
-          <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map((c) => (
-              <button
-                key={c}
-                type="button"
-                aria-pressed={category === c}
-                onClick={() => setCategory(c)}
-                className={`rounded-2xl px-4 py-2.5 font-black ${category === c ? "bg-ink text-paper" : "border border-mist/60"}`}
-              >
-                {tc(c)}
-              </button>
-            ))}
-          </div>
-        </fieldset>
+        <label className="flex flex-col gap-2">
+          <span className="font-black">{t("category")}</span>
+          <CategorySelect
+            value={category}
+            onChange={setCategory}
+            className="w-full rounded-2xl border border-mist/60 bg-white px-4 py-3 text-lg outline-none focus:border-ink"
+          />
+        </label>
         {error && <p className="font-black">{error}</p>}
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            disabled={pending || !category}
+            disabled={pending}
             onClick={confirm}
             className="rounded-2xl bg-ink px-6 py-3 font-black text-paper disabled:opacity-50"
           >

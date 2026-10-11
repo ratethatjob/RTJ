@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { CategoryChips } from "@/components/category-chips";
 import { JobCard } from "@/components/jobs/job-card";
 import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
@@ -11,8 +12,6 @@ import { localeAlternates } from "@/lib/seo";
 type Props = PageProps<"/[locale]/jobs">;
 
 export const instant = false;
-
-const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -39,7 +38,6 @@ export default async function JobsPage({ params, searchParams }: Props) {
   const lang = isLanguageCode(sp.lang) ? sp.lang : null;
   const t = await getTranslations("Jobs");
   const th = await getTranslations("Home");
-  const tc = await getTranslations("Categories");
   const jobs = await findJobs(q, where, category, quick, lang);
   const query = (c: string | null, quickOnly = quick) => ({
     ...(q && { q }),
@@ -92,35 +90,39 @@ export default async function JobsPage({ params, searchParams }: Props) {
           </button>
         </form>
 
-        <ul className="-mx-4 flex gap-2 overflow-x-auto px-4">
-          <li className="shrink-0">
-            <Link
-              href={{ pathname: "/jobs", query: query(category, !quick) }}
-              aria-pressed={quick}
-              className={`inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 font-black ${
-                quick ? "bg-ink text-signal" : "border border-ink"
-              }`}
-            >
-              <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden="true">
-                <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
-              </svg>
-              {t("quickOnly")}
-            </Link>
-          </li>
-          {[null, ...CATEGORIES].map((c) => (
-            <li key={c ?? "all"} className="shrink-0">
-              <Link
-                href={{ pathname: "/jobs", query: query(c) }}
-                aria-current={c === category ? "page" : undefined}
-                className={`inline-block rounded-full px-5 py-2.5 font-black ${
-                  c === category ? "bg-ink text-paper" : "border border-mist/60"
-                }`}
-              >
-                {c ? tc(`${c}Plural`) : t("allJobs")}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <CategoryChips
+          active={category}
+          href={(c) => ({ pathname: "/jobs", query: query(c) })}
+          lead={
+            <>
+              <li className="shrink-0">
+                <Link
+                  href={{ pathname: "/jobs", query: query(category, !quick) }}
+                  aria-pressed={quick}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 font-black ${
+                    quick ? "bg-ink text-signal" : "border border-ink"
+                  }`}
+                >
+                  <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden="true">
+                    <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
+                  </svg>
+                  {t("quickOnly")}
+                </Link>
+              </li>
+              <li className="shrink-0">
+                <Link
+                  href={{ pathname: "/jobs", query: query(null) }}
+                  aria-current={category === null ? "page" : undefined}
+                  className={`inline-block rounded-full px-5 py-2.5 font-black ${
+                    category === null ? "bg-ink text-paper" : "border border-mist/60"
+                  }`}
+                >
+                  {t("allJobs")}
+                </Link>
+              </li>
+            </>
+          }
+        />
 
         <p className="font-black text-slate">{t("count", { count: jobs.length })}</p>
         {jobs.length === 0 ? (

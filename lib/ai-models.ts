@@ -6,6 +6,7 @@ import Anthropic from "@anthropic-ai/sdk";
 export const AI_MODELS = {
   translate: "claude-haiku-5-5",
   moderate: "claude-haiku-5-5",
+  categorize: "claude-haiku-5-5",
   candidate: "claude-sonnet-5-5",
 } as const;
 
@@ -13,6 +14,7 @@ export const AI_MAX_TOKENS = {
   // Up to 5 000 characters of text, in every locale.
   translate: 8000,
   moderate: 200,
+  categorize: 50,
   summary: 3000,
   followups: 1000,
 } as const;

@@ -1,4 +1,5 @@
 import type { Category } from "@/lib/data/types";
+import { categoryFromGoogle } from "@/lib/categories";
 
 // Google Places API (New), server side only. Off until GOOGLE_PLACES_API_KEY is set.
 const KEY = process.env.GOOGLE_PLACES_API_KEY;
@@ -16,6 +17,8 @@ export type PlaceDetails = {
   lat: number | null;
   lng: number | null;
   category: Category | null;
+  /** Map types or tags ("restaurant", "shop=bakery"), a hint for the AI category guess. */
+  types: string[];
 };
 
 export async function autocomplete(
@@ -66,7 +69,7 @@ export async function placeDetails(placeId: string, locale: string, sessionToken
   const res = await fetch(`${BASE}/v1/places/${encodeURIComponent(placeId)}?${qs}`, {
     headers: {
       "X-Goog-Api-Key": KEY,
-      "X-Goog-FieldMask": "id,displayName,formattedAddress,addressComponents,location,types",
+      "X-Goog-FieldMask": "id,displayName,formattedAddress,addressComponents,location,types,primaryType",
     },
     cache: "no-store",
   });
@@ -78,6 +81,7 @@ export async function placeDetails(placeId: string, locale: string, sessionToken
     addressComponents?: Component[];
     location?: { latitude: number; longitude: number };
     types?: string[];
+    primaryType?: string;
   };
   const part = (type: string, short = false) => {
     const c = p.addressComponents?.find((x) => x.types.includes(type));
@@ -98,25 +102,9 @@ export async function placeDetails(placeId: string, locale: string, sessionToken
     country,
     lat: p.location?.latitude ?? null,
     lng: p.location?.longitude ?? null,
-    category: categoryFromTypes(p.types ?? []),
+    category: categoryFromGoogle(p.types ?? [], p.primaryType),
+    types: p.types ?? [],
   };
-}
-
-const RESTAURANT = ["restaurant", "cafe", "bar", "bakery", "meal_takeaway", "meal_delivery", "food", "coffee_shop", "pub"];
-const RETAIL = ["store", "supermarket", "shopping_mall", "pharmacy", "drugstore", "gas_station", "market"];
-const WAREHOUSE = ["storage", "moving_company", "courier_service", "warehouse_store", "logistics_service"];
-const OFFICE = ["corporate_office", "accounting", "lawyer", "insurance_agency", "real_estate_agency", "bank", "consultant", "finance"];
-
-/** Best guess from Google place types; the person confirms it. */
-export function categoryFromTypes(types: string[]): Category | null {
-  const has = (list: string[], suffix?: string) =>
-    types.some((t) => list.includes(t) || (suffix ? t.endsWith(suffix) : false));
-  if (has(WAREHOUSE)) return "warehouse";
-  if (has(RESTAURANT, "_restaurant")) return "restaurant";
-  if (has(RETAIL, "_store")) return "retail";
-  if (types.includes("manufacturer") || types.includes("factory")) return "factory";
-  if (has(OFFICE)) return "office";
-  return null;
 }
 
 export type PlacesProvider = "google" | "osm";

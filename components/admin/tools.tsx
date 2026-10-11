@@ -3,7 +3,36 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { type ImportRow, importLocations, linkEntity, setSlug, unverifyEntity } from "@/app/[locale]/admin/actions";
+import { type ImportRow, importLocations, linkEntity, setLocationCategory, setSlug, unverifyEntity } from "@/app/[locale]/admin/actions";
+import { CategorySelect } from "@/components/category-select";
+
+/** Admin override of a workplace's category; saved on change. */
+export function CategoryEditor({ id, category }: { id: string; category: string }) {
+  const t = useTranslations("Admin");
+  const router = useRouter();
+  const [value, setValue] = useState(category);
+  const [error, setError] = useState(false);
+  const [pending, startTransition] = useTransition();
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-2">
+      <CategorySelect
+        auto={false}
+        value={value}
+        onChange={(next) => {
+          setValue(next);
+          startTransition(async () => {
+            setError(false);
+            const result = await setLocationCategory(id, next);
+            if (result.error) return setError(true);
+            router.refresh();
+          });
+        }}
+        className={`rounded-xl border border-mist/60 bg-white px-3 py-2 text-sm outline-none focus:border-ink ${pending ? "opacity-60" : ""}`}
+      />
+      {error && <span className="text-sm font-black">{t("categoryError")}</span>}
+    </div>
+  );
+}
 
 export function SlugEditor({
   kind,
