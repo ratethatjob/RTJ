@@ -146,7 +146,8 @@ export async function reactivatePro(locationId: string): Promise<{ ok?: true; er
   try {
     const sub = await locationSubscription(s, org.id, locationId);
     if (!sub || !["active", "trialing"].includes(sub.status)) return { error: "generic" };
-    await s.subscriptions.update(sub.id, { cancel_at_period_end: false, ...(sub.cancel_at && { cancel_at: "" }) });
+    // Stripe takes only one of the two: a set end date is cleared, else the period-end flag.
+    await s.subscriptions.update(sub.id, sub.cancel_at ? { cancel_at: "" } : { cancel_at_period_end: false });
     // The webhook mirrors it too; this keeps the page right on the redirect.
     await adminClient()?.from("location_plans").update({ cancel_at_period_end: false }).eq("location_id", locationId);
     return { ok: true };
