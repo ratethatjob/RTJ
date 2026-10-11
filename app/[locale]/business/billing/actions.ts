@@ -14,6 +14,7 @@ import {
   portalConfiguration,
   proPriceId,
   stripe,
+  syncTaxExempt,
   toMinor,
 } from "@/lib/stripe";
 import { adminClient } from "@/lib/supabase/admin";
@@ -43,6 +44,7 @@ export async function startProCheckout(locationId: string, interval: Interval): 
   try {
     const currency = billingCurrency(location.country);
     const customer = await orgCustomer(s, org.id, user.email ?? null, locale);
+    await syncTaxExempt(s, customer);
     // Not charged before the free trial (or a period paid by transfer) ends. Checkout needs a
     // trial end at least 48 hours away, so a trial ending sooner runs up to that point.
     const now = Math.floor(Date.now() / 1000);
@@ -64,7 +66,7 @@ export async function startProCheckout(locationId: string, interval: Interval): 
       metadata: { location_id: location.id, org_id: org.id, kind: "pro" },
       client_reference_id: location.id,
       billing_address_collection: "required",
-      tax_id_collection: { enabled: true },
+      tax_id_collection: { enabled: true, required: "if_supported" },
       customer_update: { name: "auto", address: "auto" },
       locale: locale === "hu" ? "hu" : "en",
       success_url: `${base}?checkout=success#plan`,
@@ -129,6 +131,8 @@ export async function payForJob(jobId: string, tier: JobTier): Promise<JobPaymen
     const { currency, amount } = jobOrderPrice(place.country, order.tier, order.previous_tier);
     const unitAmount = toMinor(amount, currency);
     const customer = await orgCustomer(s, job.org_id, user.email ?? null, locale);
+    // Returning buyers: reverse charge / exempt is set before Checkout finalizes the invoice.
+    await syncTaxExempt(s, customer);
     const base = `${SITE_URL}${localePath(locale)}/business/jobs/${jobId}`;
     const t = await getTranslations("Billing");
     const tj = await getTranslations("BusinessJobs");
@@ -146,7 +150,7 @@ export async function payForJob(jobId: string, tier: JobTier): Promise<JobPaymen
       invoice_creation: { enabled: true, invoice_data: { metadata: meta } },
       client_reference_id: order.order_id,
       billing_address_collection: "required",
-      tax_id_collection: { enabled: true },
+      tax_id_collection: { enabled: true, required: "if_supported" },
       customer_update: { name: "auto", address: "auto" },
       locale: locale === "hu" ? "hu" : "en",
       success_url: `${base}?checkout=success`,

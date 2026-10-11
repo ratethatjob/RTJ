@@ -1825,7 +1825,14 @@
     "cancelsOn": "Cancelled – Pro until {date}",
     "paymentFailed": "Payment failed – please update your card",
     "checkoutSuccess": "Thanks! Your subscription is being set up – it shows here in a moment.",
-    "billingNoteCards": "Pay by card (Stripe): monthly or yearly, renews automatically, cancel any time for the end of the period. You can also ask for an invoice."
+    "billingNoteCards": "Pay by card (Stripe): monthly or yearly, renews automatically, cancel any time for the end of the period. You can also ask for an invoice.",
+    "billingDetails": "Billing details",
+    "billingName": "Billing name",
+    "billingAddress": "Address",
+    "billingTaxId": "Tax ID",
+    "billingUnavailable": "We couldn't load your billing details right now.",
+    "billingEdit": "Change your billing details and download your invoices in the billing portal.",
+    "myInvoices": "My invoices"
   },
   "Demo": {
     "label": "Demo data",

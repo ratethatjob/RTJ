@@ -1825,7 +1825,14 @@
     "cancelsOn": "Lemondva – Pro eddig: {date}",
     "paymentFailed": "Sikertelen fizetés – frissítsd a kártyádat",
     "checkoutSuccess": "Köszönjük! Az előfizetésed beállítása folyamatban, pillanatokon belül itt látszik.",
-    "billingNoteCards": "Kártyás fizetés (Stripe): havi vagy éves, automatikusan megújul, bármikor lemondható az időszak végére. Kérhetsz számlát is."
+    "billingNoteCards": "Kártyás fizetés (Stripe): havi vagy éves, automatikusan megújul, bármikor lemondható az időszak végére. Kérhetsz számlát is.",
+    "billingDetails": "Számlázási adatok",
+    "billingName": "Számlázási név",
+    "billingAddress": "Cím",
+    "billingTaxId": "Adószám",
+    "billingUnavailable": "A számlázási adatokat most nem tudtuk betölteni.",
+    "billingEdit": "A számlázási adatokat a számlázási portálon módosíthatod, és ott töltheted le a számláidat is.",
+    "myInvoices": "Számláim"
   },
   "Demo": {
     "label": "Demó adat",

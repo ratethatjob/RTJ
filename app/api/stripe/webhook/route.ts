@@ -3,11 +3,12 @@ import { getTranslations } from "next-intl/server";
 import type Stripe from "stripe";
 import { sendEmail } from "@/lib/email";
 import { SITE_URL } from "@/lib/seo";
-import { stripe } from "@/lib/stripe";
+import { stripe, syncTaxExempt } from "@/lib/stripe";
 import { adminClient } from "@/lib/supabase/admin";
 
 // Stripe webhook (https://ratethatjob.com/api/stripe/webhook). Verifies the signature, handles each
-// event once (stripe_events), and mirrors payments into job_orders and location_plans.
+// event once (stripe_events), mirrors payments into job_orders and location_plans, and keeps the
+// customer's tax_exempt (reverse charge / exempt) in line with its billing country and tax IDs.
 // Errors return 500 so Stripe retries.
 
 type Db = NonNullable<ReturnType<typeof adminClient>>;
@@ -49,6 +50,8 @@ async function handle(event: Stripe.Event, s: Stripe, db: Db) {
       } else if (session.mode === "subscription" && session.subscription) {
         await syncSubscription(s, db, idOf(session.subscription));
       }
+      // The billing address and tax ID were just collected: set reverse charge / exempt.
+      if (session.customer) await syncTaxExempt(s, idOf(session.customer));
       return;
     }
     case "invoice.paid":
@@ -61,6 +64,17 @@ async function handle(event: Stripe.Event, s: Stripe, db: Db) {
       if (event.type === "invoice.payment_failed" && result && (invoice.attempt_count ?? 1) <= 1) {
         await notifyPaymentFailed(db, result.locationId, result.orgId);
       }
+      return;
+    }
+    // Billing country or tax ID changed (Checkout, Customer Portal): reverse charge / exempt.
+    case "customer.updated":
+      await syncTaxExempt(s, event.data.object.id);
+      return;
+    case "customer.tax_id.created":
+    case "customer.tax_id.updated":
+    case "customer.tax_id.deleted": {
+      const customer = event.data.object.customer;
+      if (customer) await syncTaxExempt(s, idOf(customer));
       return;
     }
     case "customer.subscription.created":

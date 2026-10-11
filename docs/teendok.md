@@ -20,7 +20,10 @@
 ## Fejlesztés
 - [x] E-mailes meghívók (Resend): beillesztés / CSV, EN/HU sablon, egy emlékeztető 5 nap után (napi cron), titkosított címek, leiratkozás
 - [x] Stripe: Pro előfizetés telephelyenként (Checkout, havi/éves, HUF/EUR, a próba végén első terhelés), Customer Portal, álláscsomagok egyszeri fizetése, webhook. Kulcsok a Vercelen (production)
-- [ ] Stripe webhook: a https://ratethatjob.com/api/stripe/webhook végponton ezek az események legyenek bejelölve: checkout.session.completed, checkout.session.async_payment_succeeded, invoice.paid, invoice.payment_failed, customer.subscription.created, customer.subscription.updated, customer.subscription.deleted
+- [x] Stripe webhook: a https://ratethatjob.com/api/stripe/webhook végponton bejelölve: checkout.session.completed, checkout.session.async_payment_succeeded, invoice.paid, invoice.payment_failed, customer.subscription.created, customer.subscription.updated, customer.subscription.deleted
+- [ ] Stripe webhook (fordított ÁFA): ugyanitt még bejelölendő: customer.updated, customer.tax_id.created, customer.tax_id.updated, customer.tax_id.deleted
+- [ ] Fordított ÁFA: első vásárlásnál (új vevő) a Checkout a számlát a fizetéskor véglegesíti, mielőtt a webhook beállítja a „reverse”/„exempt” státuszt – ilyenkor az első számlán nem lesz „Reverse charge” jelölés (a Dashboardban beállított lábléc rajta van). Visszatérő vevőnél és az előfizetés megújításainál már helyes. Könyvelővel egyeztetni, hogy ez így elég-e
+- [ ] Stripe Tax (automatic_tax) szándékosan nincs bekapcsolva (fizetős)
 - [ ] `20261012040000_payment_failed_notice.sql` lefuttatása (sikertelen fizetés értesítés az alkalmazásban; addig csak e-mail megy)
 - [ ] ÁSZF 5a. pont (Fizetés) és a Pro megújítás/lemondás/visszatérítés szabályai átnézése (`content/legal/terms.*.md`)
 - [ ] Stripe Dashboardon: cégadatok a számlán (név, cím, adószám), számlák e-mailben küldése (Settings → Customer emails), sikertelen fizetésnél újrapróbálás (Settings → Billing → Retries)

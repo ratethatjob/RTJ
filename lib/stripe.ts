@@ -137,3 +137,56 @@ export async function portalConfiguration(s: Stripe) {
 export function dashboardUrl(kind: "customers" | "subscriptions" | "payments", id: string) {
   return `https://dashboard.stripe.com/${kind}/${id}`;
 }
+
+// ---------------------------------------------------------------------------
+// VAT status of the buyer (no Stripe Tax: the invoice footer text is set in the Stripe Dashboard).
+// EU business with an EU VAT number → reverse charge; outside the EU and the UAE → exempt;
+// UAE (and EU without a VAT number) → none.
+// ---------------------------------------------------------------------------
+
+const EU = new Set([
+  "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU",
+  "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK",
+]);
+
+export function taxExemptFor(country: string | null | undefined, taxIdTypes: string[]): Stripe.Customer.TaxExempt | null {
+  const c = (country ?? "").toUpperCase();
+  if (!c) return null;
+  if (c === "AE") return "none";
+  if (EU.has(c)) return taxIdTypes.includes("eu_vat") ? "reverse" : "none";
+  return "exempt";
+}
+
+/** Sets the customer's tax_exempt from its billing country and tax IDs (no-op when unchanged).
+ *  Run before each Checkout and from the webhook, so invoices carry the right status. */
+export async function syncTaxExempt(s: Stripe, customerId: string) {
+  const customer = await s.customers.retrieve(customerId, { expand: ["tax_ids"] });
+  if (customer.deleted) return;
+  const wanted = taxExemptFor(
+    customer.address?.country,
+    (customer.tax_ids?.data ?? []).map((t) => t.type),
+  );
+  if (wanted && wanted !== customer.tax_exempt) await s.customers.update(customerId, { tax_exempt: wanted });
+}
+
+export type BillingDetails = {
+  name: string | null;
+  address: string[];
+  taxIds: { type: string; value: string }[];
+};
+
+/** Billing name, address and tax IDs as Stripe has them (shown on the plan page). */
+export async function billingDetails(s: Stripe, customerId: string): Promise<BillingDetails | null> {
+  const customer = await s.customers.retrieve(customerId, { expand: ["tax_ids"] });
+  if (customer.deleted) return null;
+  const a = customer.address;
+  return {
+    name: customer.name ?? null,
+    address: a
+      ? [a.line1, a.line2, [a.postal_code, a.city].filter(Boolean).join(" "), a.state, a.country].filter(
+          (x): x is string => Boolean(x),
+        )
+      : [],
+    taxIds: (customer.tax_ids?.data ?? []).map((t) => ({ type: t.type, value: t.value })),
+  };
+}

@@ -5,7 +5,8 @@ import { ManageBilling, SubscribePro } from "@/components/business/subscribe-pro
 import { PlanBadge } from "@/components/business/plan-badge";
 import { TrialBanner } from "@/components/business/trial-banner";
 import { daysLeft, getBusiness } from "@/lib/business";
-import { billingCurrency, proPrice } from "@/lib/stripe";
+import { billingCurrency, billingDetails, proPrice, stripe } from "@/lib/stripe";
+import { adminClient } from "@/lib/supabase/admin";
 
 export const instant = false;
 
@@ -31,6 +32,17 @@ export default async function LocationsPage({ params, searchParams }: PageProps<
     Boolean(l.subscription && ["active", "trialing", "past_due"].includes(l.subscription.status));
 
   const { data: members } = await supabase.from("org_members").select("role").eq("org_id", org.id);
+  // Billing name, address and tax ID as Stripe has them (owners and HR only).
+  const s = stripe();
+  const db = adminClient();
+  const { data: account } =
+    billing && s && db && org.billingAccount
+      ? await db.from("orgs").select("stripe_customer_id").eq("id", org.id).single()
+      : { data: null };
+  const details =
+    s && account?.stripe_customer_id
+      ? await billingDetails(s, account.stripe_customer_id).catch(() => null)
+      : null;
   const count = (role: string) => (members ?? []).filter((m) => m.role === role).length;
   const bold = (chunks: React.ReactNode) => <b className="font-black text-paper">{chunks}</b>;
 
@@ -139,9 +151,27 @@ export default async function LocationsPage({ params, searchParams }: PageProps<
             {checkout === "success" && <p className="font-black text-signal">{tp("checkoutSuccess")}</p>}
             <p className="text-sm text-mist">{tp(cards ? "billingNoteCards" : "billingNote")}</p>
             {billing && cards && org.billingAccount && (
-              <span>
-                <ManageBilling label={tp("invoices")} dark />
-              </span>
+              <div className="flex flex-col gap-3 rounded-2xl border border-white/15 p-4">
+                <h3 className="font-black">{tp("billingDetails")}</h3>
+                {details ? (
+                  <dl className="grid gap-x-4 gap-y-1 text-sm sm:grid-cols-[auto_1fr]">
+                    <dt className="text-mist">{tp("billingName")}</dt>
+                    <dd className="break-words">{details.name ?? "–"}</dd>
+                    <dt className="text-mist">{tp("billingAddress")}</dt>
+                    <dd className="break-words">{details.address.length ? details.address.join(", ") : "–"}</dd>
+                    <dt className="text-mist">{tp("billingTaxId")}</dt>
+                    <dd className="break-words">
+                      {details.taxIds.length ? details.taxIds.map((x) => x.value).join(", ") : "–"}
+                    </dd>
+                  </dl>
+                ) : (
+                  <p className="text-sm text-mist">{tp("billingUnavailable")}</p>
+                )}
+                <p className="text-sm text-mist">{tp("billingEdit")}</p>
+                <span>
+                  <ManageBilling label={tp("myInvoices")} dark />
+                </span>
+              </div>
             )}
           </div>
         </section>
