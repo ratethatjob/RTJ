@@ -543,7 +543,29 @@
     "comingSoon": "Coming soon",
     "warningCategory": "{category} is down {delta} in the last 60 days ({recent} vs {baseline}).",
     "seeStats": "See statistics",
-    "emailSoon": "Email invites with CSV upload are coming soon."
+    "emailTitle": "Email invites",
+    "emailHint": "Paste email addresses (one per line, or separated by commas) or upload a CSV. Private addresses are fine. An optional language column (en / hu) sets the email's language per person.",
+    "emailPlaceholder": "anna@example.com, hu\njohn@example.com",
+    "csvUpload": "Upload CSV",
+    "emailLanguage": "Email language",
+    "emailLanguageHint": "Used when the CSV has no language for someone and they don't have a RateThatJob account yet.",
+    "emailSend": "{count, plural, =0 {Send invites} one {Send # invite} other {Send # invites}}",
+    "emailSending": "Sending…",
+    "emailTooMany": "Up to {max} addresses at a time.",
+    "emailResult": "{sent, plural, one {# invite sent.} other {# invites sent.}} {skipped, plural, =0 {} other {# skipped (already invited in the last 90 days, unsubscribed, or not delivered).}}",
+    "emailError": {
+      "config": "Email invites aren't set up yet. Please try again later.",
+      "limit": "You've reached the invite limit for now. Please try again later.",
+      "tooMany": "Up to {max} addresses at a time.",
+      "invalid": "We couldn't find a valid email address.",
+      "generic": "Something went wrong. Please try again."
+    },
+    "emailPrivacy": "Each person gets one email and, if they haven't used it, one reminder after 5 days. Then we delete the address. You only see totals per batch, and reviews received only from 5.",
+    "emailPreview": "Preview the email",
+    "batchesTitle": "Email batches",
+    "batchDate": "Sent",
+    "batchSent": "Invites",
+    "batchReceived": "Reviews"
   },
   "Account": {
     "title": "Your account",
@@ -1571,5 +1593,18 @@
   "Demo": {
     "label": "Demo data",
     "banner": "This workplace, its reviews and jobs are made up to show how RateThatJob works. They are not real."
+  },
+  "InviteEmail": {
+    "subject": "{company} asks you to rate your workplace",
+    "body": "Hi,\n\n{company} ({location}) invited its team to rate their workplace on RateThatJob. It takes about a minute, writing is optional.\n\nYour employer never sees who wrote a review or who used this invite. Invited reviews go live with a delay, and you choose when: now, later, or only after you leave.\n\nRate your workplace: {link}\n\nYou got this email because {company} added your address. We send one reminder at most, then delete your address.\nUnsubscribe: {unsubscribe}\n\nRateThatJob – Know before you go",
+    "reminderSubject": "Reminder: rate your workplace at {company}",
+    "reminderBody": "Hi,\n\nA few days ago {company} ({location}) invited you to rate your workplace on RateThatJob. If you'd like to, it takes about a minute.\n\nYour employer never sees who wrote a review or who used this invite.\n\nRate your workplace: {link}\n\nThis is the only reminder. We're now deleting your address.\nUnsubscribe: {unsubscribe}\n\nRateThatJob – Know before you go"
+  },
+  "Unsubscribe": {
+    "title": "Stop invite emails?",
+    "body": "We won't send you any more invites to rate a workplace on RateThatJob.",
+    "confirm": "Unsubscribe",
+    "doneTitle": "You're unsubscribed",
+    "doneBody": "You won't get any more invite emails from us. Your invite link still works if you change your mind."
   }
 }

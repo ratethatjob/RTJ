@@ -543,7 +543,29 @@
     "comingSoon": "Hamarosan",
     "warningCategory": "{category}: {delta}-del csökkent az utolsó 60 napban ({recent}, korábban {baseline}).",
     "seeStats": "Statisztika",
-    "emailSoon": "Az e-mailes meghívás CSV-feltöltéssel hamarosan jön."
+    "emailTitle": "E-mailes meghívók",
+    "emailHint": "Illeszd be az e-mail-címeket (soronként egyet vagy vesszővel elválasztva), vagy tölts fel CSV-t. Magáncím is jó. Egy nem kötelező nyelv oszlop (en / hu) személyenként beállítja az e-mail nyelvét.",
+    "emailPlaceholder": "anna@pelda.hu, hu\njohn@example.com",
+    "csvUpload": "CSV feltöltése",
+    "emailLanguage": "Az e-mail nyelve",
+    "emailLanguageHint": "Akkor használjuk, ha a CSV-ben nincs megadva a nyelv, és a címzettnek még nincs RateThatJob-fiókja.",
+    "emailSend": "{count, plural, =0 {Meghívók küldése} other {# meghívó küldése}}",
+    "emailSending": "Küldés…",
+    "emailTooMany": "Egyszerre legfeljebb {max} cím.",
+    "emailResult": "{sent} meghívó elküldve. {skipped, plural, =0 {} other {# kihagyva (90 napon belül már meghívtad, leiratkozott vagy nem kézbesíthető).}}",
+    "emailError": {
+      "config": "Az e-mailes meghívók még nincsenek beállítva. Próbáld újra később.",
+      "limit": "Most elérted a meghívási korlátot. Próbáld újra később.",
+      "tooMany": "Egyszerre legfeljebb {max} cím.",
+      "invalid": "Nem találtunk érvényes e-mail-címet.",
+      "generic": "Valami hiba történt. Próbáld újra."
+    },
+    "emailPrivacy": "Mindenki egy e-mailt kap, és ha nem használta, 5 nap múlva egy emlékeztetőt. Utána töröljük a címet. Te csak a küldésenkénti összesítést látod, a beérkezett értékeléseket is csak 5-től.",
+    "emailPreview": "Az e-mail előnézete",
+    "batchesTitle": "E-mailes küldések",
+    "batchDate": "Küldve",
+    "batchSent": "Meghívó",
+    "batchReceived": "Értékelés"
   },
   "Account": {
     "title": "Fiókod",
@@ -1571,5 +1593,18 @@
   "Demo": {
     "label": "Demó adat",
     "banner": "Ez a munkahely, az értékelései és az állásai kitaláltak, csak azt mutatják, hogyan működik a RateThatJob. Nem valódiak."
+  },
+  "InviteEmail": {
+    "subject": "A(z) {company} arra kér, értékeld a munkahelyedet",
+    "body": "Szia!\n\nA(z) {company} ({location}) arra kérte a csapatát, hogy értékeljék a munkahelyüket a RateThatJobon. Nagyjából egy perc, írni nem kötelező.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót. A meghívásra írt értékelések késleltetve jelennek meg, és te döntöd el, mikor: most, később, vagy csak miután eljöttél.\n\nÉrtékeld a munkahelyedet: {link}\n\nAzért kaptad ezt az e-mailt, mert a(z) {company} megadta a címedet. Legfeljebb egy emlékeztetőt küldünk, utána töröljük a címedet.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Know before you go",
+    "reminderSubject": "Emlékeztető: értékeld a munkahelyedet ({company})",
+    "reminderBody": "Szia!\n\nPár napja a(z) {company} ({location}) meghívott, hogy értékeld a munkahelyedet a RateThatJobon. Ha szeretnéd, nagyjából egy perc.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót.\n\nÉrtékeld a munkahelyedet: {link}\n\nEz az egyetlen emlékeztető. A címedet most töröljük.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Know before you go"
+  },
+  "Unsubscribe": {
+    "title": "Leiratkozol a meghívókról?",
+    "body": "Nem küldünk több meghívót munkahely értékelésére a RateThatJobról.",
+    "confirm": "Leiratkozás",
+    "doneTitle": "Leiratkoztál",
+    "doneBody": "Nem kapsz tőlünk több meghívó e-mailt. Ha meggondolod magad, a meghívó linked továbbra is működik."
   }
 }

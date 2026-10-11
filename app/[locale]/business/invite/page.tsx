@@ -1,9 +1,11 @@
 import { headers } from "next/headers";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CopyLink } from "@/components/business/copy-link";
+import { EmailInvites } from "@/components/business/email-invites";
 import { LocationSelect } from "@/components/business/location-select";
 import { getPathname } from "@/i18n/navigation";
 import { getBusiness, pickLocation } from "@/lib/business";
+import { SITE_URL } from "@/lib/seo";
 
 export const instant = false;
 
@@ -16,10 +18,22 @@ export default async function InviteTeamPage({ params, searchParams }: PageProps
   const t = await getTranslations("Business");
 
   const location = pickLocation(org.locations, query.location) ?? org.locations[0];
-  const [{ data: token }, { data: stats }] = await Promise.all([
+  const [{ data: token }, { data: stats }, { data: batchRows }] = await Promise.all([
     supabase.rpc("location_invite_token", { p_location_id: location.id }),
     supabase.rpc("invite_batch_stats", { p_location_id: location.id }),
+    supabase.rpc("invite_batch_list", { p_location_id: location.id }),
   ]);
+  const batches = (batchRows ?? []) as { id: string; created_at: string; sent: number; reviews_received: number | null }[];
+  const emailLocale = location.country === "HU" ? "hu" : "en";
+  const te = await getTranslations({ locale: emailLocale, namespace: "InviteEmail" });
+  const sample = `${SITE_URL}${emailLocale === "en" ? "" : "/hu"}/r/…`;
+  const previewValues = {
+    company: location.companyName,
+    location: location.name === location.companyName ? location.address : `${location.name}, ${location.address}`,
+    link: sample,
+    unsubscribe: `${sample}/unsubscribe`,
+  };
+  const date = new Intl.DateTimeFormat(locale, { dateStyle: "medium" });
   const host = (await headers()).get("host");
   const origin = `${host?.startsWith("localhost") ? "http" : "https"}://${host}`;
   const url = token ? `${origin}${getPathname({ href: `/r/${token}`, locale })}` : null;
@@ -45,7 +59,14 @@ export default async function InviteTeamPage({ params, searchParams }: PageProps
             </p>
             {url ? <CopyLink url={url} /> : <p className="text-slate">{t("error")}</p>}
           </div>
-          <p className="mt-4 text-slate">{t("emailSoon")}</p>
+          <div className="mt-4">
+            <EmailInvites key={location.id} locationId={location.id} defaultLocale={emailLocale} />
+          </div>
+          <details className="mt-4 rounded-2xl border border-mist/60 p-5">
+            <summary className="cursor-pointer font-black">{t("emailPreview")}</summary>
+            <p className="mt-3 font-black">{te("subject", previewValues)}</p>
+            <p className="mt-2 whitespace-pre-line break-words text-slate">{te("body", previewValues)}</p>
+          </details>
         </section>
       </div>
 
@@ -64,6 +85,29 @@ export default async function InviteTeamPage({ params, searchParams }: PageProps
           </dl>
           <p className="mt-3 text-sm text-mist">{t("countsNote")}</p>
         </section>
+        {batches.length > 0 && (
+          <section className="rounded-3xl bg-white p-6">
+            <h2 className="text-sm font-black uppercase tracking-tagline text-slate">{t("batchesTitle")}</h2>
+            <table className="mt-3 w-full text-left">
+              <thead className="text-sm text-slate">
+                <tr>
+                  <th className="pb-2 font-medium">{t("batchDate")}</th>
+                  <th className="pb-2 text-right font-medium">{t("batchSent")}</th>
+                  <th className="pb-2 text-right font-medium">{t("batchReceived")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {batches.map((b) => (
+                  <tr key={b.id} className="border-t border-mist/40">
+                    <td className="py-2">{date.format(new Date(b.created_at))}</td>
+                    <td className="py-2 text-right font-black">{b.sent}</td>
+                    <td className="py-2 text-right font-black">{b.reviews_received ?? "< 5"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        )}
         <section className="rounded-3xl bg-white p-6">
           <h2 className="text-xl font-black">{t("whyTitle")}</h2>
           <p className="mt-2 text-slate">{t("whyBody")}</p>

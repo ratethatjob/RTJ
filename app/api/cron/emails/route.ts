@@ -1,9 +1,12 @@
 import { getTranslations } from "next-intl/server";
 import { sendEmail } from "@/lib/email";
+import { decryptEmail } from "@/lib/invite-crypto";
+import { type InviteToSend, sendInviteEmails } from "@/lib/invite-emails";
 import { SITE_URL } from "@/lib/seo";
 import { adminClient } from "@/lib/supabase/admin";
 
-// Daily: emails the Pro trial notices (written in-app by process_trials()) to owners and HR.
+// Daily: emails the Pro trial notices (written in-app by process_trials()) to owners and HR,
+// and the one reminder for email invites sent 5+ days ago and not used yet (then the address is cleared).
 // Needs SUPABASE_SECRET_KEY and RESEND_API_KEY; without them the notices stay in-app only.
 const KINDS = ["trial_ending", "trial_ended"];
 
@@ -45,5 +48,25 @@ export async function GET(request: Request) {
     // Marked either way so a missing address doesn't retry forever.
     await db.from("notifications").update({ emailed_at: new Date().toISOString() }).eq("id", n.id);
   }
-  return Response.json({ sent });
+  return Response.json({ sent, reminders: await sendInviteReminders(db) });
+}
+
+async function sendInviteReminders(db: NonNullable<ReturnType<typeof adminClient>>) {
+  const due = new Date(Date.now() - 5 * 24 * 3600 * 1000).toISOString();
+  const { data: rows } = await db
+    .from("invites")
+    .select("id, token, locale, contact_encrypted, invite_batches!inner(location_id)")
+    .eq("channel", "email")
+    .is("reminded_at", null)
+    .is("used_at", null)
+    .not("contact_encrypted", "is", null)
+    .lte("sent_at", due)
+    .limit(500);
+  const invites: InviteToSend[] = [];
+  for (const r of rows ?? []) {
+    const email = decryptEmail(r.contact_encrypted as string);
+    const batch = r.invite_batches as unknown as { location_id: string };
+    if (email) invites.push({ id: r.id, token: r.token, locale: r.locale ?? "en", email, locationId: batch.location_id });
+  }
+  return invites.length ? sendInviteEmails(db, invites, true) : 0;
 }

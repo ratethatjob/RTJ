@@ -14,12 +14,12 @@
 - [ ] Régi Vercel projekt („rtj”) és a supabase-cyan-kettle Supabase projekt törlése
 
 - [x] Üzemeltető: ABOVO JOBS MENA L.L.C-FZ beírva (`lib/site-config.ts`). (TRN: 105494925800001, irányadó jog: DIFC).
-- [ ] Álláscsomag árak: `JOB_PRICING` (`lib/site-config.ts`) – javaslat: 4 990 / 14 990 / 29 990 Ft, 19 / 49 / 99 EUR
+- [x] Álláscsomag árak: `JOB_PRICING` (`lib/site-config.ts`) – jóváhagyva: 4 990 / 14 990 / 29 990 Ft, 19 / 49 / 99 EUR
 - [x] `RESEND_API_KEY` a Vercelen, újraépítve (`EMAIL_FROM` nem kötelező, alapból no-reply@ratethatjob.com)
 - [ ] Jogi szövegek átnézése: `content/legal/` (ÁSZF, adatvédelem, sütik, impresszum – HU és EN). Az adatfeldolgozók (Stripe, Resend, Anthropic jelentkezés-összefoglaló) felvéve
 
 - [ ] Élesítés előtt: demó adatok törlése (admin → Demó adatok → „Minden demó adat törlése”, vagy `select private.purge_demo();`)
 
 ## Fejlesztés
-- [ ] E-mailes meghívók (Resend) – a kulcs megvan, a küldés még hátravan
+- [x] E-mailes meghívók (Resend): beillesztés / CSV, EN/HU sablon, egy emlékeztető 5 nap után (napi cron), titkosított címek, leiratkozás
 - [ ] Stripe: Pro előfizetés (helyszínenként, havi/éves; most 30 nap próba, utána `plan_orders` + kézi számla, admin „Előfizetések” fül) és álláscsomagok fizetése (most `job_orders` + kézi számla) – kulcsok kellenek
