@@ -6,7 +6,7 @@ const BASE = process.env.PLACES_API_BASE ?? "https://places.googleapis.com";
 
 export const placesConfigured = Boolean(KEY);
 
-export type PlaceSuggestion = { placeId: string; main: string; secondary: string };
+export type PlaceSuggestion = { placeId: string; main: string; secondary: string; country?: string };
 export type PlaceDetails = {
   placeId: string;
   name: string;
@@ -18,12 +18,21 @@ export type PlaceDetails = {
   category: Category | null;
 };
 
-export async function autocomplete(input: string, locale: string, sessionToken: string): Promise<PlaceSuggestion[]> {
+export async function autocomplete(
+  input: string,
+  locale: string,
+  sessionToken: string,
+  area: { lat: number; lon: number } | null = null,
+): Promise<PlaceSuggestion[]> {
   if (!KEY) return [];
+  // Prefer places within ~30 km of the chosen or detected area.
+  const locationBias = area
+    ? { circle: { center: { latitude: area.lat, longitude: area.lon }, radius: 30000 } }
+    : undefined;
   const res = await fetch(`${BASE}/v1/places:autocomplete`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Goog-Api-Key": KEY },
-    body: JSON.stringify({ input, languageCode: locale, sessionToken, includeQueryPredictions: false }),
+    body: JSON.stringify({ input, languageCode: locale, sessionToken, includeQueryPredictions: false, locationBias }),
     cache: "no-store",
   });
   if (!res.ok) throw new Error(`places autocomplete ${res.status}`);

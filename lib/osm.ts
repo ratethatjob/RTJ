@@ -31,12 +31,15 @@ type PhotonFeature = {
     name?: string;
     street?: string;
     housenumber?: string;
+    postcode?: string;
     city?: string;
     district?: string;
+    country?: string;
     countrycode?: string;
   };
 };
 
+/** Full address under each result: street and number, postcode and city, country. */
 export function suggestionsFromPhoton(data: { features?: PhotonFeature[] }): PlaceSuggestion[] {
   const seen = new Set<string>();
   const out: PlaceSuggestion[] = [];
@@ -48,19 +51,33 @@ export function suggestionsFromPhoton(data: { features?: PhotonFeature[] }): Pla
     if (seen.has(id)) continue;
     seen.add(id);
     const street = streetLine(p.street, p.housenumber, p.countrycode);
-    out.push({ placeId: id, main: p.name, secondary: [street, p.city ?? p.district].filter(Boolean).join(", ") });
+    const city = [p.postcode, p.city ?? p.district].filter(Boolean).join(" ");
+    out.push({ placeId: id, main: p.name, secondary: [street, city, p.country].filter(Boolean).join(", "), country: p.countrycode?.toUpperCase() });
   }
   return out;
 }
 
-export async function osmAutocomplete(input: string, locale: string): Promise<PlaceSuggestion[]> {
+/** Results near this point come first; with `country`, other countries are left out when there are local ones. */
+export type SearchArea = { lat: number; lon: number; country?: string; strict?: boolean };
+
+export async function osmAutocomplete(input: string, locale: string, area: SearchArea | null): Promise<PlaceSuggestion[]> {
   "use cache";
   cacheLife("days");
-  const qs = new URLSearchParams({ q: input, limit: "8", lang: locale === "en" ? "en" : "default" });
+  // Photon has no Hungarian: local names in Hungary, English elsewhere (Arabic-only names otherwise in the UAE).
+  const local = locale === "hu" && (!area?.country || area.country === "HU");
+  const qs = new URLSearchParams({ q: input, limit: area?.strict ? "15" : "8", lang: local ? "default" : "en" });
+  if (area) {
+    qs.set("lat", area.lat.toFixed(2));
+    qs.set("lon", area.lon.toFixed(2));
+    qs.set("zoom", "12");
+  }
   for (const key of SKIP_KEYS) qs.append("osm_tag", `!${key}`);
   const res = await fetch(`${PHOTON}/api/?${qs}`, { headers: HEADERS });
   if (!res.ok) throw new Error(`photon ${res.status}`);
-  return suggestionsFromPhoton(await res.json());
+  const found = suggestionsFromPhoton(await res.json());
+  if (!area?.strict || !area.country) return found;
+  const inCountry = found.filter((f) => f.country === area.country);
+  return (inCountry.length ? inCountry : found).slice(0, 8);
 }
 
 // Nominatim allows one request per second; spaced out per server instance (lookups are rare and cached).

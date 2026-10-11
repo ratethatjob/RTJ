@@ -3,6 +3,7 @@
 import { after } from "next/server";
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
+import { COUNTRIES } from "@/lib/countries";
 import { getLocationById } from "@/lib/data";
 import { parseReview, type ReviewInput } from "@/lib/review-input";
 import { processNewReview } from "@/lib/translation-jobs";
@@ -66,7 +67,6 @@ export async function submitReview(
 }
 
 const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
-const COUNTRIES = ["HU", "US", "AT", "DE", "SK", "RO", "GB"] as const;
 
 export async function createWorkplace(form: {
   company: string;

@@ -78,12 +78,12 @@
     "retail": "Retail",
     "warehouse": "Warehouse",
     "factory": "Factory",
-    "office": "Office",
+    "office": "Office & startup",
     "restaurantPlural": "Restaurants",
     "retailPlural": "Retail",
     "warehousePlural": "Warehouses",
     "factoryPlural": "Factories",
-    "officePlural": "Startups"
+    "officePlural": "Offices & startups"
   },
   "Location": {
     "metaTitle": "Working at {company} ({location}) – reviews, pay, hours",
@@ -336,6 +336,7 @@
   },
   "Countries": {
     "HU": "Hungary",
+    "AE": "United Arab Emirates",
     "US": "United States",
     "AT": "Austria",
     "DE": "Germany",
@@ -1300,7 +1301,26 @@
     "manualTitle": "Or enter it yourself",
     "titleOsm": "Find it on the map",
     "poweredByOsm": "Map data © <osm>OpenStreetMap</osm> contributors · Search by Photon",
-    "notOnMapOsm": "Not on the map?"
+    "notOnMapOsm": "Not on the map?",
+    "near": "Near",
+    "areaAuto": "Automatic",
+    "areaHere": "My location",
+    "areaAny": "Anywhere",
+    "areaHereError": "We couldn't get your location. Pick a city instead.",
+    "areas": {
+      "budapest": "Budapest",
+      "debrecen": "Debrecen",
+      "szeged": "Szeged",
+      "pecs": "Pécs",
+      "gyor": "Győr",
+      "miskolc": "Miskolc",
+      "dubai": "Dubai",
+      "abudhabi": "Abu Dhabi",
+      "sharjah": "Sharjah",
+      "vienna": "Vienna",
+      "london": "London",
+      "newyork": "New York"
+    }
   },
   "Footer": {
     "workers": "For workers",

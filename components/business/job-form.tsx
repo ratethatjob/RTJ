@@ -29,7 +29,7 @@ type Props = {
 const WORK = ["permanent", "temporary"] as const;
 const SCHEDULE = ["full_time", "part_time", "shifts", "flexible"] as const;
 const PERIOD = ["hour", "day", "week", "month", "year"] as const;
-const CURRENCIES = ["HUF", "EUR", "USD", "GBP", "RON", "CZK", "PLN"];
+const CURRENCIES = ["HUF", "EUR", "AED", "USD", "GBP", "RON", "CZK", "PLN"];
 
 export function JobForm({
   orgId,

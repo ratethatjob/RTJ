@@ -4,9 +4,9 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { createWorkplace } from "@/app/[locale]/app/actions";
+import { COUNTRIES } from "@/lib/countries";
 
 const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
-const COUNTRIES = ["HU", "US", "AT", "DE", "SK", "RO", "GB"] as const;
 
 type Props = { initialName: string; defaultCountry: string; rateBase: string };
 

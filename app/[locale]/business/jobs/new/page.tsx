@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { JobForm } from "@/components/business/job-form";
 import { getBusiness, pickLocation } from "@/lib/business";
+import { MONTHLY_PAY } from "@/lib/countries";
 import { currencyFor } from "@/lib/currency";
 
 export const instant = false;
@@ -28,7 +29,7 @@ export default async function NewJobPage({ params, searchParams }: PageProps<"/[
           payMin: "",
           payMax: "",
           payCurrency: currencyFor(location.country),
-          payPeriod: location.country === "HU" ? "month" : "hour",
+          payPeriod: MONTHLY_PAY.has(location.country) ? "month" : "hour",
           description: "",
           responsibilities: "",
           requirements: "",

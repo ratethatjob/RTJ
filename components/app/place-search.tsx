@@ -1,12 +1,38 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { choosePlace, confirmPlace, searchPlaces, type Suggestion } from "@/app/[locale]/app/rate/places/actions";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import type { PlacesProvider } from "@/lib/places";
+import { type AreaChoice, isAreaId, SEARCH_AREAS } from "@/lib/search-areas";
 
 const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
+
+const AREA_KEY = "rtj:area";
+const areaListeners = new Set<() => void>();
+let memoryArea: AreaChoice = "auto";
+
+function readArea(): AreaChoice {
+  try {
+    const saved = localStorage.getItem(AREA_KEY);
+    if (saved && (saved === "any" || isAreaId(saved) || /^geo:-?[\d.]+,-?[\d.]+$/.test(saved))) return saved as AreaChoice;
+  } catch {}
+  return memoryArea;
+}
+
+function saveArea(value: AreaChoice) {
+  memoryArea = value;
+  try {
+    localStorage.setItem(AREA_KEY, value);
+  } catch {}
+  areaListeners.forEach((l) => l());
+}
+
+function subscribeArea(listener: () => void) {
+  areaListeners.add(listener);
+  return () => areaListeners.delete(listener);
+}
 
 type Place = { placeId: string; name: string; address: string; city: string; category: string | null };
 
@@ -24,13 +50,28 @@ export function PlaceSearch({ initialQuery = "", provider }: { initialQuery?: st
   const [pending, startTransition] = useTransition();
   // One billing session per search: autocomplete calls plus the chosen place's details.
   const session = useRef<string>("");
+  // Where to look first; the last choice is remembered on this device.
+  const area = useSyncExternalStore(subscribeArea, readArea, () => "auto" as AreaChoice);
+  const [areaError, setAreaError] = useState(false);
+
+  function chooseArea(value: string) {
+    setAreaError(false);
+    const remember = (v: AreaChoice) => saveArea(v);
+    if (value !== "here") return remember(value as AreaChoice);
+    // Browser location only when the person asks for it; rounded to about 1 km.
+    navigator.geolocation?.getCurrentPosition(
+      (pos) => remember(`geo:${pos.coords.latitude.toFixed(2)},${pos.coords.longitude.toFixed(2)}`),
+      () => setAreaError(true),
+      { maximumAge: 600_000, timeout: 10_000 },
+    );
+  }
 
   useEffect(() => {
     if (!session.current) session.current = crypto.randomUUID();
     const text = query.trim();
     if (text.length < 3 || place) return;
     const timer = setTimeout(async () => {
-      const result = await searchPlaces(text, session.current);
+      const result = await searchPlaces(text, session.current, area);
       if (result.error === "signin") {
         return router.push({ pathname: "/app/sign-in", query: { next: pathname } });
       }
@@ -39,7 +80,7 @@ export function PlaceSearch({ initialQuery = "", provider }: { initialQuery?: st
       setSuggestions(result.suggestions ?? []);
     }, 300);
     return () => clearTimeout(timer);
-  }, [query, place, router, pathname, t]);
+  }, [query, place, area, router, pathname, t]);
 
   function pick(s: Suggestion) {
     if (s.locationId) return router.push(`/app/rate/${s.locationId}`);
@@ -109,13 +150,33 @@ export function PlaceSearch({ initialQuery = "", provider }: { initialQuery?: st
 
   return (
     <div className="flex flex-col gap-3">
-      <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder={t("placeholder")}
-        aria-label={t("placeholder")}
-        className="w-full rounded-2xl border border-mist/60 bg-white px-4 py-3 text-lg outline-none focus:border-ink"
-      />
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={t("placeholder")}
+          aria-label={t("placeholder")}
+          className="w-full min-w-0 flex-1 rounded-2xl border border-mist/60 bg-white px-4 py-3 text-lg outline-none focus:border-ink"
+        />
+        <label className="flex items-center gap-2 text-sm font-black text-slate">
+          {t("near")}
+          <select
+            value={area.startsWith("geo:") ? "here" : area}
+            onChange={(e) => chooseArea(e.target.value)}
+            className="min-w-0 flex-1 rounded-2xl border border-mist/60 bg-white px-3 py-3 text-base font-medium text-ink sm:flex-none"
+          >
+            <option value="auto">{t("areaAuto")}</option>
+            <option value="here">{t("areaHere")}</option>
+            {Object.keys(SEARCH_AREAS).map((id) => (
+              <option key={id} value={id}>
+                {t(`areas.${id}`)}
+              </option>
+            ))}
+            <option value="any">{t("areaAny")}</option>
+          </select>
+        </label>
+      </div>
+      {areaError && <p className="text-sm font-black">{t("areaHereError")}</p>}
       {error && <p className="font-black">{error}</p>}
       {suggestions.length > 0 && (
         <ul className="flex flex-col gap-2">

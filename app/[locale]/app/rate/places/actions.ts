@@ -1,11 +1,13 @@
 "use server";
 
+import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
 import type { Category } from "@/lib/data/types";
-import { isOsmId, osmAutocomplete, osmDetails } from "@/lib/osm";
+import { isOsmId, osmAutocomplete, osmDetails, type SearchArea } from "@/lib/osm";
 import { autocomplete, type PlaceDetails, placeDetails, placesConfigured } from "@/lib/places";
 import { rateLimited } from "@/lib/rate-limit";
+import { isAreaId, SEARCH_AREAS } from "@/lib/search-areas";
 import { adminClient } from "@/lib/supabase/admin";
 
 const CATEGORIES: Category[] = ["restaurant", "retail", "warehouse", "factory", "office"];
@@ -32,10 +34,31 @@ async function knownLocations(supabase: Awaited<ReturnType<typeof getUser>>["sup
 const details = (id: string, locale: string, sessionToken?: string) =>
   isOsmId(id) ? osmDetails(id, locale) : placeDetails(id, locale, sessionToken);
 
+/** Where to look first: the person's pick, their browser location (rounded), or Vercel's IP location,
+ *  else the page language (hu → Budapest). "any" searches everywhere. */
+async function resolveArea(choice: string, locale: string): Promise<SearchArea | null> {
+  if (choice === "any") return null;
+  if (isAreaId(choice)) return { ...SEARCH_AREAS[choice], strict: true };
+  const geo = /^geo:(-?\d{1,2}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)$/.exec(choice);
+  if (geo) {
+    const lat = Number(geo[1]);
+    const lon = Number(geo[2]);
+    if (Math.abs(lat) <= 90 && Math.abs(lon) <= 180) return { lat, lon };
+  }
+  const h = await headers();
+  const lat = Number(h.get("x-vercel-ip-latitude"));
+  const lon = Number(h.get("x-vercel-ip-longitude"));
+  if (h.get("x-vercel-ip-latitude") && Number.isFinite(lat) && Number.isFinite(lon)) {
+    return { lat, lon, country: h.get("x-vercel-ip-country") ?? undefined };
+  }
+  return locale === "hu" ? { ...SEARCH_AREAS.budapest } : null;
+}
+
 /** Map suggestions (Google, or OpenStreetMap without a Google key), marked when already on RateThatJob. */
 export async function searchPlaces(
   input: string,
   sessionToken: string,
+  areaChoice = "auto",
 ): Promise<{ suggestions?: Suggestion[]; error?: "signin" | "generic" }> {
   const text = input.trim().slice(0, 100);
   if (text.length < 3) return { suggestions: [] };
@@ -45,9 +68,19 @@ export async function searchPlaces(
   if (!placesConfigured && rateLimited(`osm-search:${user.id}`, 30)) return { suggestions: [] };
   try {
     const locale = await getLocale();
-    const found = placesConfigured ? await autocomplete(text, locale, sessionToken) : await osmAutocomplete(text, locale);
+    const area = await resolveArea(String(areaChoice).slice(0, 40), locale);
+    const found = placesConfigured
+      ? await autocomplete(text, locale, sessionToken, area)
+      : await osmAutocomplete(text, locale, area);
     const known = await knownLocations(supabase, found.map((f) => f.placeId));
-    return { suggestions: found.map((f) => ({ ...f, locationId: known.get(f.placeId) ?? null })) };
+    return {
+      suggestions: found.map((f) => ({
+        placeId: f.placeId,
+        main: f.main,
+        secondary: f.secondary,
+        locationId: known.get(f.placeId) ?? null,
+      })),
+    };
   } catch (e) {
     console.error("searchPlaces", e);
     return { error: "generic" };

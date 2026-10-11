@@ -78,12 +78,12 @@
     "retail": "Kiskereskedelem",
     "warehouse": "Raktár",
     "factory": "Gyár",
-    "office": "Iroda",
+    "office": "Iroda és startup",
     "restaurantPlural": "Vendéglátás",
     "retailPlural": "Kiskereskedelem",
     "warehousePlural": "Raktárak",
     "factoryPlural": "Gyárak",
-    "officePlural": "Startupok"
+    "officePlural": "Irodák és startupok"
   },
   "Location": {
     "metaTitle": "{company} ({location}) – értékelések, bér, beosztás",
@@ -336,6 +336,7 @@
   },
   "Countries": {
     "HU": "Magyarország",
+    "AE": "Egyesült Arab Emírségek",
     "US": "Egyesült Államok",
     "AT": "Ausztria",
     "DE": "Németország",
@@ -1300,7 +1301,26 @@
     "manualTitle": "Vagy add meg te",
     "titleOsm": "Keresd meg a térképen",
     "poweredByOsm": "Térképadatok © <osm>OpenStreetMap</osm>-közreműködők · Keresés: Photon",
-    "notOnMapOsm": "Nincs rajta a térképen?"
+    "notOnMapOsm": "Nincs rajta a térképen?",
+    "near": "Hol?",
+    "areaAuto": "Automatikus",
+    "areaHere": "A helyzetem",
+    "areaAny": "Bárhol",
+    "areaHereError": "Nem sikerült lekérni a helyzeted. Válassz várost.",
+    "areas": {
+      "budapest": "Budapest",
+      "debrecen": "Debrecen",
+      "szeged": "Szeged",
+      "pecs": "Pécs",
+      "gyor": "Győr",
+      "miskolc": "Miskolc",
+      "dubai": "Dubaj",
+      "abudhabi": "Abu-Dzabi",
+      "sharjah": "Sardzsa",
+      "vienna": "Bécs",
+      "london": "London",
+      "newyork": "New York"
+    }
   },
   "Footer": {
     "workers": "Munkavállalóknak",
