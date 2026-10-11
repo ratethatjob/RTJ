@@ -10,6 +10,8 @@ Effective: 10 October 2026
 
 Employers never learn who wrote a review or who responded to their invite. Public pages only show the display name you choose. Apart from the published reviews themselves, employers only see aggregate numbers; invite results and statistics only from 5 reviews.
 
+**Early signals.** An employer with Pro (or a Pro trial) may see anonymous, aggregated themes from reviews that haven't gone live yet and from reviews published in the last 60 days (for example “incoming reviews about pay point downward”). This needs at least 5 reviews waiting to go live; a theme only shows when at least 3 different reviewers mention it; and the employer never sees the text, scores, dates or counts of single reviews. Reviews sent with “Only after I leave this job” are left out. It doesn't affect publishing: an employer can't hold back or delay any review.
+
 ## 3. What we process and why
 
 - **Account:** email address, display name, language. Purpose: sign-in and providing the service. Legal basis: providing the service (contract).
@@ -29,6 +31,8 @@ Employers never learn who wrote a review or who responded to their invite. Publi
 Review text is checked by an AI model (Anthropic Claude) for personal data, threats and similar content. Review and employer reply text is translated into other languages by the same service. The model only receives the text, not your account details. When a review is held, a person decides.
 
 If an employer uses the Basic or Pro job ad package, an AI model (Anthropic Claude) summarizes your application for the employer (your answers and, if you uploaded one, your CV) and, with Pro, asks you 2–3 follow-up questions. The summary only supports the employer; the decision is made by a person.
+
+The themes of early signals (see section 2) are summarized from review text by the same service, with only an anonymous label per reviewer (no account details). Numbers, quotes, dates, job titles and copied wording are filtered out of the result afterwards.
 
 ## 5. Processors
 

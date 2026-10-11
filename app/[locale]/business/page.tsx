@@ -1,5 +1,6 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { LocationSelect } from "@/components/business/location-select";
+import { EarlySignals } from "@/components/business/early-signals";
 import { BusinessOnboarding } from "@/components/business/onboarding";
 import { PendingClaims } from "@/components/business/pending-claims";
 import { PlanBadge } from "@/components/business/plan-badge";
@@ -137,6 +138,8 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
           </Link>
         </section>
       )}
+
+      <EarlySignals supabase={supabase} locations={locs} />
 
       <section className="mt-6 overflow-x-auto rounded-3xl bg-white">
         <table className="w-full min-w-[720px] text-left">

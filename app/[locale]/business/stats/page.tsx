@@ -1,5 +1,6 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { BarChart } from "@/components/business/bar-chart";
+import { EarlySignals } from "@/components/business/early-signals";
 import { LocationSelect } from "@/components/business/location-select";
 import { ProGate } from "@/components/business/trial-banner";
 import { getBusiness, pickLocation } from "@/lib/business";
@@ -29,6 +30,7 @@ export default async function StatsPage({ params, searchParams }: PageProps<"/[l
           {org.locations.length > 1 && <LocationSelect locations={org.locations} selected={location.id} allowAll={false} />}
         </div>
         <ProGate feature="stats" />
+        <EarlySignals supabase={supabase} locations={[location]} />
       </main>
     );
   }
@@ -128,6 +130,7 @@ export default async function StatsPage({ params, searchParams }: PageProps<"/[l
           {categories.length === 0 && <p className="mt-3 text-slate">{t("noData")}</p>}
         </div>
       </section>
+      <EarlySignals supabase={supabase} locations={[location]} />
     </main>
   );
 }

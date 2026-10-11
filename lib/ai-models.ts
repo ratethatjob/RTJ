@@ -17,6 +17,7 @@ export const AI_MAX_TOKENS = {
   categorize: 50,
   summary: 3000,
   followups: 1000,
+  signals: 900,
 } as const;
 
 let client: Anthropic | null = null;

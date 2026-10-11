@@ -408,7 +408,8 @@
       "jobAlertsNote": "Optional. We don't send these emails yet – this only saves your consent for when we start. Turn it off any time on your account page.",
       "verifyAndSend": "Confirm and send review",
       "sending": "Sending…"
-    }
+    },
+    "signalsNote": "Before your review goes live, the employer may see anonymous, aggregated themes – never your text."
   },
   "NewWorkplace": {
     "title": "Add a workplace",
@@ -1990,5 +1991,29 @@
     "approved": "Once it's approved, you can use the business dashboard right away with this account.",
     "statusButton": "Request status",
     "home": "Back to the home page"
+  },
+  "EarlySignals": {
+    "title": "Early signals",
+    "intro": "Anonymous, aggregated themes from reviews that haven't gone live yet and from the last 60 days. No review text, scores, dates or counts are shown, and they don't affect publishing: no review can be held back or delayed. Updated daily.",
+    "locked": "With Pro you see early signals: themes from reviews before they go live.",
+    "lockedShort": "With Pro you see early signals here.",
+    "cta": "Get Pro",
+    "notReady": "Not enough reviews are waiting to go live yet. Themes appear once several reviewers say similar things.",
+    "nothing": "No themes stand out right now.",
+    "themes": "Themes",
+    "direction": {
+      "worse": "incoming reviews point downward",
+      "better": "incoming reviews point upward"
+    },
+    "topicCategories": {
+      "workload": "Workload",
+      "training": "Training",
+      "safety": "Safety",
+      "other": "Other"
+    }
+  },
+  "EarlySignalsEmail": {
+    "subject": "New early signal – {location}",
+    "body": "Hi,\n\nA new theme has appeared in the early signals for {location}: anonymous, aggregated themes from reviews that haven't gone live yet.\n\nSee it in your business dashboard: {link}\n\nRateThatJob – Know before you go"
   }
 }

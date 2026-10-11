@@ -10,6 +10,8 @@ Hatályos: 2026. október 10.
 
 A munkáltatók soha nem tudják meg, ki írt egy értékelést, és ki válaszolt a meghívójukra. A nyilvános oldalakon csak a választott megjelenő neved látszik. A megjelent értékeléseken túl a munkáltatók csak összesített számokat látnak; a meghívók eredményét és a statisztikát csak legalább 5 értékeléstől.
 
+**Korai jelzések.** A Pro csomagot (vagy próbaidőt) használó munkáltató a még meg nem jelent és az elmúlt 60 napban megjelent értékelésekből névtelen, összesített témákat láthat (például „a fizetésről szóló beérkező értékelések romló irányt mutatnak”). Ehhez legalább 5 megjelenésre váró értékelés kell; egy téma csak akkor látszik, ha legalább 3 különböző értékelő említi; és a munkáltató soha nem lát egyedi szöveget, pontszámot, dátumot vagy darabszámot. A „Csak miután eljöttem innen” módon küldött értékelések kimaradnak. A megjelenést ez nem befolyásolja: a munkáltató egyetlen értékelést sem tud visszatartani vagy késleltetni.
+
 ## 3. Milyen adatokat kezelünk és miért
 
 - **Fiók:** e-mail-cím, megjelenő név, nyelv. Cél: belépés és a szolgáltatás nyújtása. Jogalap: a szolgáltatás nyújtása (szerződés).
@@ -29,6 +31,8 @@ A munkáltatók soha nem tudják meg, ki írt egy értékelést, és ki válaszo
 Az értékelések szövegét egy MI-modell (Anthropic Claude) ellenőrzi személyes adatok, fenyegetés és hasonló tartalom szempontjából; az értékeléseket és a munkáltatói válaszokat ugyanez a szolgáltatás fordítja le más nyelvekre. A modell csak a szöveget kapja meg, a fiókod adatait nem. Ha egy értékelés fennakad, ember dönt róla.
 
 Ha a munkáltató Basic vagy Pro álláscsomagot használ, egy MI-modell (Anthropic Claude) összefoglalja neki a jelentkezésedet (a válaszaidat és, ha feltöltöttél, az önéletrajzodat), Pro csomagnál pedig 2–3 kiegészítő kérdést tesz fel neked. Az összefoglaló csak segíti a munkáltatót, a döntést ember hozza meg.
+
+A korai jelzések témáit (lásd a 2. pontot) ugyanez a szolgáltatás foglalja össze az értékelések szövegéből, értékelőnként csak egy névtelen jelölővel (a fiókod adatai nélkül). Az eredményből utólag is kiszűrjük a számokat, idézeteket, dátumokat, beosztásokat és a szó szerint átvett részeket.
 
 ## 5. Adatfeldolgozók
 

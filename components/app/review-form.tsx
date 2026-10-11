@@ -470,6 +470,7 @@ export function ReviewForm({
               ))}
             </div>
           </Field>
+          <p className="mt-3 text-sm text-slate">{t("signalsNote")}</p>
 
           {displayName === null ? (
             <p className="mt-4 rounded-3xl bg-white p-4 text-slate">{t("anonName")}</p>

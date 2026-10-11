@@ -408,7 +408,8 @@
       "jobAlertsNote": "Nem kötelező. Ilyen e-mailt még nem küldünk – most csak a hozzájárulásodat mentjük el arra az időre, amikor elindul. A fiókod oldalán bármikor kikapcsolhatod.",
       "verifyAndSend": "Megerősítem és beküldöm",
       "sending": "Küldés…"
-    }
+    },
+    "signalsNote": "A munkáltató a megjelenés előtt névtelen, összesített témákat láthat, a szövegedet soha."
   },
   "NewWorkplace": {
     "title": "Munkahely felvétele",
@@ -1990,5 +1991,29 @@
     "approved": "Jóváhagyás után ezzel a fiókkal azonnal használhatod a céges felületet.",
     "statusButton": "Igénylés állapota",
     "home": "Vissza a főoldalra"
+  },
+  "EarlySignals": {
+    "title": "Korai jelzések",
+    "intro": "Névtelen, összesített témák a még meg nem jelent és az elmúlt 60 nap értékeléseiből. Egyedi szöveget, pontszámot, dátumot és darabszámot nem mutatunk, és a megjelenést nem befolyásolják: értékelést nem lehet visszatartani vagy késleltetni. Naponta frissül.",
+    "locked": "Pro-val látod a korai jelzéseket: a témákat még az értékelések megjelenése előtt.",
+    "lockedShort": "Pro-val itt látod a korai jelzéseket.",
+    "cta": "Pro bekapcsolása",
+    "notReady": "Még nem vár elég értékelés megjelenésre. Témák akkor jelennek meg, ha több értékelő is hasonlót ír.",
+    "nothing": "Most nincs kiemelkedő téma.",
+    "themes": "Témák",
+    "direction": {
+      "worse": "a beérkező értékelések romló irányt mutatnak",
+      "better": "a beérkező értékelések javuló irányt mutatnak"
+    },
+    "topicCategories": {
+      "workload": "Terhelés",
+      "training": "Betanítás",
+      "safety": "Biztonság",
+      "other": "Egyéb"
+    }
+  },
+  "EarlySignalsEmail": {
+    "subject": "Új korai jelzés – {location}",
+    "body": "Szia!\n\nÚj téma jelent meg a korai jelzések között itt: {location}. Ezek névtelen, összesített témák a még meg nem jelent értékelésekből.\n\nNézd meg a céges felületen: {link}\n\nRateThatJob – Know before you go"
   }
 }
