@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { MapPick } from "@/components/search/map-pick";
 import { findMapPlaces } from "@/lib/place-search";
@@ -25,6 +26,8 @@ export async function MapResults({
   provider: PlacesProvider;
   own: { ids: string[]; keys: string[] };
 }) {
+  // Per request (visitor's area, a fresh session token), never part of a prerender.
+  await connection();
   const t = await getTranslations("Search");
   const tp = await getTranslations("Places");
   const sessionToken = crypto.randomUUID();
