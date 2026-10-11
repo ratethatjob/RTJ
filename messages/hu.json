@@ -305,7 +305,8 @@
     "usernameInvalid": "3–30 kisbetű, szám vagy _ lehet.",
     "ownership": "A fiók a tiéd marad munkahelyváltáskor is. Minden munkahelyet egy profilból értékelhetsz.",
     "continue": "Tovább",
-    "genericError": "Valami hiba történt. Próbáld újra."
+    "genericError": "Valami hiba történt. Próbáld újra.",
+    "reviewSent": "Az értékelésedet megkaptuk, most ellenőrizzük. Utolsó lépés: milyen néven jelenj meg?"
   },
   "RatePicker": {
     "title": "Melyik munkahely?",
@@ -393,9 +394,25 @@
     "errors": {
       "required": "Töltsd ki a kiemelt mezőket.",
       "dates": "Nézd meg a dátumokat: a vége nem lehet a kezdete előtt, és nem lehet jövőbeli.",
-      "generic": "Valami hiba történt. Próbáld újra."
+      "generic": "Valami hiba történt. Próbáld újra.",
+      "invalid": "Ezt a munkahelyet nem sikerült felvenni. Lépj vissza, és ellenőrizd az adatokat.",
+      "limit": "Ma már sok munkahelyet vettél fel. Próbáld újra holnap."
     },
-    "stillHere": "Még itt dolgozom"
+    "stillHere": "Még itt dolgozom",
+    "anonName": "Egy anonim, generált néven jelensz meg (pl. „Quiet Oak 42”). Az e-mail megerősítése után megváltoztathatod.",
+    "continueToSend": "Tovább a beküldéshez",
+    "signIn": {
+      "title": "Erősítsd meg az e-mail-címed a beküldéshez",
+      "points": {
+        "anonymous": "Az értékelésed névtelen: sem a neved, sem az e-mail-címed nem jelenik meg mellette.",
+        "employer": "A munkáltató nem látja, ki írta – akkor sem, ha ő hívott meg.",
+        "why": "Az e-mail-címedre azért van szükség, hogy szólhassunk, ha a munkahely válaszol, és hogy az értékelések valódiak maradjanak (egy ember, egy fiók)."
+      },
+      "jobAlerts": "Mutassatok nekem állásokat a környékemen",
+      "jobAlertsNote": "Nem kötelező. Időnként e-mail a közeli állásokról. A fiókod oldalán bármikor kikapcsolhatod.",
+      "verifyAndSend": "Megerősítem és beküldöm",
+      "sending": "Küldés…"
+    }
   },
   "NewWorkplace": {
     "title": "Munkahely felvétele",
@@ -700,7 +717,10 @@
     "admin": "Admin",
     "applications": "Jelentkezéseim",
     "following": "Követett munkahelyek",
-    "noFollowing": "Kövess egy munkahelyet, és szólunk, ha új értékelés vagy állás jelenik meg."
+    "noFollowing": "Kövess egy munkahelyet, és szólunk, ha új értékelés vagy állás jelenik meg.",
+    "jobAlerts": "E-mailek a környékem állásairól",
+    "jobAlertsNote": "Időnként e-mail a közeli állásokról. Nem kötelező, alapból ki van kapcsolva.",
+    "jobAlertsError": "Nem sikerült menteni. Próbáld újra."
   },
   "NavAccount": {
     "account": "Fiókom",

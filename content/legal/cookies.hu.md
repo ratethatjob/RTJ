@@ -14,7 +14,7 @@ Csak a működéshez szükséges sütiket használunk. Nincs hirdetési vagy kö
 
 ## Böngészőben tárolt adatok
 
-- **Értékelés piszkozata** (sessionStorage) – hogy ne vesszen el a félig kitöltött értékelés. A lap bezárásakor törlődik.
+- **Értékelés piszkozata** (localStorage) – hogy ne vesszen el a félig kitöltött értékelés, az e-mail-cím megerősítése alatt sem. Csak az eszközödön marad, és az értékelés beküldésekor törlődik.
 
 ## Beágyazott jelvények
 

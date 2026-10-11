@@ -13,6 +13,8 @@ export default async function WelcomePage({ params, searchParams }: PageProps<"/
   const query = await searchParams;
   const next = safeNext(query.next, getPathname({ href: "/", locale }));
   const editing = query.edit === "1";
+  // Arrived right after sending a review written before signing in.
+  const sent = query.sent === "1";
 
   const { supabase, user } = await requireUser(
     locale,
@@ -31,6 +33,11 @@ export default async function WelcomePage({ params, searchParams }: PageProps<"/
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-4">
       <BackLink href={next} />
+      {sent && (
+        <p role="status" className="mt-4 rounded-2xl bg-ink px-4 py-3 font-black text-paper">
+          {t("reviewSent")}
+        </p>
+      )}
       <h1 className="mt-4 text-4xl font-black leading-[1.05] tracking-brand">{t("title")}</h1>
       <p className="mt-3 text-lg text-slate">{t("subtitle")}</p>
       <DisplayNameForm

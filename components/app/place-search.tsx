@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
-import { choosePlace, confirmPlace, searchPlaces, type Suggestion } from "@/app/[locale]/app/rate/places/actions";
+import { choosePlace, searchPlaces, type Suggestion } from "@/app/[locale]/app/rate/places/actions";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { CategorySelect } from "@/components/category-select";
 import type { PlacesProvider } from "@/lib/places";
@@ -42,9 +42,6 @@ export function PlaceSearch({ initialQuery = "", provider }: { initialQuery?: st
     if (text.length < 3 || place) return;
     const timer = setTimeout(async () => {
       const result = await searchPlaces(text, session.current, area);
-      if (result.error === "signin") {
-        return router.push({ pathname: "/app/sign-in", query: { next: pathname } });
-      }
       if (result.error) return setError(t("error"));
       setError(null);
       setSuggestions(result.suggestions ?? []);
@@ -64,16 +61,20 @@ export function PlaceSearch({ initialQuery = "", provider }: { initialQuery?: st
     });
   }
 
+  // The workplace is only created when the review is sent (after signing in).
   function confirm() {
     if (!place) return;
-    startTransition(async () => {
-      const result = await confirmPlace(place.placeId, category);
-      if (result.error || !result.locationId) {
-        return setError(result.error === "limit" ? t("limit") : t("error"));
-      }
-      router.push(`/app/rate/${result.locationId}`);
+    router.push({
+      pathname: "/app/rate/pending",
+      query: {
+        place: place.placeId,
+        name: place.name,
+        address: [place.address, place.city].filter(Boolean).join(", "),
+        ...(category && { category }),
+      },
     });
   }
+
 
   if (place) {
     return (

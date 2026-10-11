@@ -305,7 +305,8 @@
     "usernameInvalid": "Use 3–30 lowercase letters, numbers or _.",
     "ownership": "Your account stays yours when you change jobs. Rate every workplace from one profile.",
     "continue": "Continue",
-    "genericError": "Something went wrong. Please try again."
+    "genericError": "Something went wrong. Please try again.",
+    "reviewSent": "Your review was sent. It's being checked now – last step: how should you appear?"
   },
   "RatePicker": {
     "title": "Which workplace?",
@@ -393,9 +394,25 @@
     "errors": {
       "required": "Please fill in the highlighted fields.",
       "dates": "Check the dates: the end can't be before the start, and dates can't be in the future.",
-      "generic": "Something went wrong. Please try again."
+      "generic": "Something went wrong. Please try again.",
+      "invalid": "This workplace couldn't be added. Go back and check the details.",
+      "limit": "You've added a lot of workplaces today. Try again tomorrow."
     },
-    "stillHere": "I still work here"
+    "stillHere": "I still work here",
+    "anonName": "You'll appear under an anonymous generated name (e.g. \"Quiet Oak 42\"). You can change it after confirming your email.",
+    "continueToSend": "Continue to send",
+    "signIn": {
+      "title": "Confirm your email to send it",
+      "points": {
+        "anonymous": "Your review is anonymous: your name or email is never shown with it.",
+        "employer": "The employer can't see who wrote it – not even if they invited you.",
+        "why": "We need your email so we can tell you when the workplace replies, and to keep reviews real (one person, one account)."
+      },
+      "jobAlerts": "Also show me jobs in my area",
+      "jobAlertsNote": "Optional. Occasional emails about jobs near you. Turn it off any time on your account page.",
+      "verifyAndSend": "Confirm and send review",
+      "sending": "Sending…"
+    }
   },
   "NewWorkplace": {
     "title": "Add a workplace",
@@ -700,7 +717,10 @@
     "admin": "Admin",
     "applications": "My applications",
     "following": "Workplaces you follow",
-    "noFollowing": "Follow a workplace to hear about new reviews and jobs there."
+    "noFollowing": "Follow a workplace to hear about new reviews and jobs there.",
+    "jobAlerts": "Emails about jobs in my area",
+    "jobAlertsNote": "Occasional emails about jobs near you. Optional, off by default.",
+    "jobAlertsError": "Couldn't save. Try again."
   },
   "NavAccount": {
     "account": "My account",

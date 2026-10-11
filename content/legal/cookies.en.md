@@ -14,7 +14,7 @@ We only use cookies the site needs to work. There are no advertising or tracking
 
 ## Stored in your browser
 
-- **Review draft** (sessionStorage) – so a half-finished review isn't lost. Cleared when you close the tab.
+- **Review draft** (localStorage) – so a half-finished review isn't lost, also while you confirm your email. Stays only on your device and is deleted when the review is sent.
 
 ## Embedded badges
 

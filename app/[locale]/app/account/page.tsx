@@ -1,5 +1,5 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
-import { AccountActions, JobEndedForm } from "@/components/app/account-actions";
+import { AccountActions, JobAlertsToggle, JobEndedForm } from "@/components/app/account-actions";
 import { getPathname, Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { initials } from "@/lib/format";
@@ -24,7 +24,7 @@ export default async function AccountPage({ params }: PageProps<"/[locale]/app/a
   setRequestLocale(locale);
   const { supabase, user } = await requireUser(locale, "/app/account");
   const [{ data: profile }, { data: rows }, { data: admin }, { data: follows }] = await Promise.all([
-    supabase.from("profiles").select("display_mode, generated_name, username").eq("user_id", user.id).single(),
+    supabase.from("profiles").select("display_mode, generated_name, username, job_alerts").eq("user_id", user.id).single(),
     supabase
       .from("reviews")
       .select("id, status, relationship, publish_mode, publish_at, period_start, position, overall, created_at, locations(name, address)")
@@ -144,6 +144,8 @@ export default async function AccountPage({ params }: PageProps<"/[locale]/app/a
           </ul>
         )}
       </section>
+
+      <JobAlertsToggle initial={Boolean(profile?.job_alerts)} />
 
       <AccountActions exportHref={`${self}/export`} home={getPathname({ href: "/", locale })} />
     </main>

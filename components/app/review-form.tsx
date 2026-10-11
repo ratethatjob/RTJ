@@ -1,7 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { submitReview } from "@/app/[locale]/app/actions";
 import { MonthYearSelect, thisMonth } from "@/components/month-year-select";
 import { initials } from "@/lib/format";
@@ -12,18 +13,27 @@ import {
   type ReviewInput,
 } from "@/lib/review-input";
 import { createClient } from "@/lib/supabase/client";
+import type { PendingWorkplace } from "@/lib/workplaces";
 import { ChevronLeftIcon, GlobeIcon } from "../icons";
+import { ReviewSignIn } from "./review-sign-in";
 
+/** Without `userId` the whole review is filled in first and the last step signs in by email code.
+ *  `workplace`: picked or typed but not in the database yet (created when the review is sent). */
 type Props = {
-  userId: string;
+  userId: string | null;
   inviteToken?: string;
-  location: { id: string; name: string; address: string };
-  displayName: string;
+  location: { id: string | null; name: string; address: string };
+  workplace?: PendingWorkplace;
+  displayName: string | null;
   changeNameHref: string;
   locationHref: string;
+  /** This page (localized, with its query): where an email sign-in link comes back to. */
+  returnPath: string;
+  welcomePath: string;
 };
 
 const DOC_TYPES = ["payslip", "contract", "employment_letter", "other"] as const;
+const SIGN_IN_STEP = 5;
 
 const empty = (locationId: string): ReviewInput => ({
   locationId,
@@ -42,35 +52,66 @@ const empty = (locationId: string): ReviewInput => ({
   publishMode: "now",
 });
 
-export function ReviewForm({ userId, inviteToken, location, displayName, changeNameHref, locationHref }: Props) {
+export function ReviewForm({
+  userId,
+  inviteToken,
+  location,
+  workplace,
+  displayName,
+  changeNameHref,
+  locationHref,
+  returnPath,
+  welcomePath,
+}: Props) {
   const t = useTranslations("ReviewForm");
-  const storageKey = `rtj-review-${location.id}`;
+  const router = useRouter();
+  const target =
+    location.id ??
+    (workplace?.kind === "place"
+      ? workplace.placeId
+      : [workplace?.company, workplace?.address, workplace?.city, workplace?.country].join("|"));
+  const storageKey = `rtj-review:${target}`;
+  const locationId = location.id ?? "";
   const [step, setStep] = useState(1);
-  const [input, setInput] = useState<ReviewInput>(() => empty(location.id));
+  const [input, setInput] = useState<ReviewInput>(() => empty(locationId));
+  const [jobAlerts, setJobAlerts] = useState(false);
+  const [doneHref, setDoneHref] = useState(locationHref);
   const [file, setFile] = useState<File | null>(null);
   const [docType, setDocType] = useState<(typeof DOC_TYPES)[number]>("payslip");
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const [pending, startTransition] = useTransition();
 
-  // Keep a draft so changing the display name mid-way loses nothing.
+  // The draft stays in this browser (also through signing in by an email link in another tab).
+  // Back on the sign-in step while signed in: the person just signed in, so send it now.
+  const restored = useRef(false);
   useEffect(() => {
+    if (restored.current) return;
+    restored.current = true;
     try {
-      const saved = sessionStorage.getItem(storageKey);
-      if (saved) {
-        const { input: savedInput, step: savedStep } = JSON.parse(saved);
-        // sessionStorage only exists in the browser, so restore after mount.
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setInput({ ...savedInput, locationId: location.id });
-        setStep(savedStep);
+      const saved = localStorage.getItem(storageKey);
+      if (!saved) return;
+      const draft = JSON.parse(saved) as { input: ReviewInput; step: number; jobAlerts?: boolean };
+      const savedInput = { ...draft.input, locationId };
+      // localStorage only exists in the browser, so restore after mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setInput(savedInput);
+      setJobAlerts(Boolean(draft.jobAlerts));
+      if (draft.step === SIGN_IN_STEP && userId) {
+        setStep(4);
+        send(savedInput, Boolean(draft.jobAlerts), userId);
+      } else {
+        setStep(Math.min(draft.step, userId ? 4 : SIGN_IN_STEP));
       }
     } catch {}
-  }, [storageKey, location.id]);
+    // Runs once after mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     try {
-      if (!done) sessionStorage.setItem(storageKey, JSON.stringify({ input, step }));
+      if (!done) localStorage.setItem(storageKey, JSON.stringify({ input, step, jobAlerts }));
     } catch {}
-  }, [input, step, done, storageKey]);
+  }, [input, step, jobAlerts, done, storageKey]);
 
   const set = <K extends keyof ReviewInput>(key: K, value: ReviewInput[K]) => {
     setError(null);
@@ -108,26 +149,45 @@ export function ReviewForm({ userId, inviteToken, location, displayName, changeN
   }
 
   function submit() {
+    if (!userId) {
+      // Not signed in yet: the email step, then it is sent automatically.
+      setError(null);
+      setStep(SIGN_IN_STEP);
+      window.scrollTo(0, 0);
+      return;
+    }
+    send(input, jobAlerts, userId);
+  }
+
+  function send(data: ReviewInput, alerts: boolean, uid: string) {
     setError(null);
     startTransition(async () => {
-      const result = await submitReview(input, inviteToken);
-      if (result.error || !result.id) return setError(t(`errors.${result.error ?? "generic"}`));
-      if (file) {
-        const ok = await uploadDocument(result.id);
-        if (!ok) setError(t("uploadFailed"));
+      const result = await submitReview(data, inviteToken, workplace, alerts || undefined);
+      if (result.error || !result.id) {
+        setStep(4);
+        return setError(t(`errors.${result.error ?? "generic"}`));
       }
+      let uploadOk = true;
+      if (file) uploadOk = await uploadDocument(result.id, uid);
       try {
-        sessionStorage.removeItem(storageKey);
+        localStorage.removeItem(storageKey);
       } catch {}
+      // A new reviewer still picks how they are shown (generated name by default).
+      if (!result.nameConfirmed) {
+        const next = result.href ?? locationHref;
+        return router.push(`${welcomePath}?next=${encodeURIComponent(next)}&sent=1`);
+      }
+      if (!uploadOk) setError(t("uploadFailed"));
+      if (result.href) setDoneHref(result.href);
       setDone(true);
       window.scrollTo(0, 0);
     });
   }
 
-  async function uploadDocument(reviewId: string) {
+  async function uploadDocument(reviewId: string, uid: string) {
     const supabase = createClient();
     const ext = file!.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "bin";
-    const path = `${userId}/${reviewId}/${crypto.randomUUID()}.${ext}`;
+    const path = `${uid}/${reviewId}/${crypto.randomUUID()}.${ext}`;
     const upload = await supabase.storage.from("verifications").upload(path, file!);
     if (upload.error) return false;
     const { error } = await supabase
@@ -143,7 +203,7 @@ export function ReviewForm({ userId, inviteToken, location, displayName, changeN
         <p className="mt-4 text-lg text-slate">{t("doneBody")}</p>
         {error && <ErrorBox>{error}</ErrorBox>}
         <a
-          href={locationHref}
+          href={doneHref}
           className="mt-auto rounded-2xl bg-ink py-4 text-center text-lg font-black text-paper"
         >
           {t("doneBack", { name: location.name })}
@@ -431,25 +491,39 @@ export function ReviewForm({ userId, inviteToken, location, displayName, changeN
             </div>
           </Field>
 
-          <div className="mt-4 flex items-center gap-3 rounded-3xl bg-white p-4">
-            <span className="grid size-12 shrink-0 place-items-center rounded-full bg-[#E8E6E1] font-black">
-              {initials(displayName || "?")}
-            </span>
-            <span className="flex-1 text-slate">
-              {t.rich("shownAs", {
-                name: () => <strong className="font-black text-ink">{displayName}</strong>,
-              })}
-            </span>
-            <a href={changeNameHref} className="font-black underline underline-offset-4">
-              {t("change")}
-            </a>
-          </div>
+          {displayName === null ? (
+            <p className="mt-4 rounded-3xl bg-white p-4 text-slate">{t("anonName")}</p>
+          ) : (
+            <div className="mt-4 flex items-center gap-3 rounded-3xl bg-white p-4">
+              <span className="grid size-12 shrink-0 place-items-center rounded-full bg-[#E8E6E1] font-black">
+                {initials(displayName || "?")}
+              </span>
+              <span className="flex-1 text-slate">
+                {t.rich("shownAs", {
+                  name: () => <strong className="font-black text-ink">{displayName}</strong>,
+                })}
+              </span>
+              <a href={changeNameHref} className="font-black underline underline-offset-4">
+                {t("change")}
+              </a>
+            </div>
+          )}
         </>
+      )}
+
+      {step === SIGN_IN_STEP && (
+        <ReviewSignIn
+          returnPath={returnPath}
+          jobAlerts={jobAlerts}
+          onJobAlerts={setJobAlerts}
+          onSignedIn={(uid) => send(input, jobAlerts, uid)}
+          busy={pending}
+        />
       )}
 
       {error && <ErrorBox>{error}</ErrorBox>}
 
-      <div className="mt-auto pt-8">
+      <div className={`mt-auto pt-8 ${step === SIGN_IN_STEP ? "hidden" : ""}`}>
         {step < 4 ? (
           <button
             type="button"
@@ -465,7 +539,7 @@ export function ReviewForm({ userId, inviteToken, location, displayName, changeN
             disabled={pending}
             className="w-full rounded-2xl bg-signal py-4 text-lg font-black text-ink disabled:opacity-60"
           >
-            {pending ? t("submitting") : t("submit")}
+            {pending ? t("submitting") : t(userId ? "submit" : "continueToSend")}
           </button>
         )}
       </div>

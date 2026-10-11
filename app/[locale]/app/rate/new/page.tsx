@@ -3,7 +3,6 @@ import { BackLink } from "@/components/app/back-link";
 import { NewWorkplaceForm } from "@/components/app/new-workplace-form";
 import { PlaceSearch } from "@/components/app/place-search";
 import { getPathname } from "@/i18n/navigation";
-import { requireUser } from "@/lib/auth";
 import { placesProvider } from "@/lib/places";
 
 export const instant = false;
@@ -12,7 +11,6 @@ export default async function NewWorkplacePage({ params, searchParams }: PagePro
   const { locale } = await params;
   setRequestLocale(locale);
   const { q } = await searchParams;
-  await requireUser(locale, "/app/rate/new");
   const t = await getTranslations("NewWorkplace");
   const tp = await getTranslations("Places");
   const provider = await placesProvider();

@@ -3,13 +3,11 @@
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
-import { isCategory } from "@/lib/categories";
-import { categorize } from "@/lib/categorize";
-import { isOsmId, osmAutocomplete, osmDetails, type SearchArea } from "@/lib/osm";
-import { autocomplete, type PlaceDetails, placeDetails, placesConfigured } from "@/lib/places";
+import { isOsmId, osmAutocomplete, type SearchArea } from "@/lib/osm";
+import { autocomplete, type PlaceDetails, placesConfigured } from "@/lib/places";
 import { rateLimited } from "@/lib/rate-limit";
 import { isAreaId, parseGeo, SEARCH_AREAS } from "@/lib/search-areas";
-import { adminClient } from "@/lib/supabase/admin";
+import { placeDetailsAny } from "@/lib/workplaces";
 
 export type Suggestion = { placeId: string; main: string; secondary: string; locationId: string | null };
 
@@ -30,8 +28,13 @@ async function knownLocations(supabase: Awaited<ReturnType<typeof getUser>>["sup
   ]);
 }
 
-const details = (id: string, locale: string, sessionToken?: string) =>
-  isOsmId(id) ? osmDetails(id, locale) : placeDetails(id, locale, sessionToken);
+/** Signed-in user id, or the visitor's IP address, as the rate-limit key. */
+async function caller() {
+  const { supabase, user } = await getUser();
+  const h = await headers();
+  const ip = h.get("x-forwarded-for")?.split(",")[0].trim() || h.get("x-real-ip") || "unknown";
+  return { supabase, key: user ? `u:${user.id}` : `ip:${ip}` };
+}
 
 /** Where to look first: the person's pick, their browser location (rounded), or Vercel's IP location,
  *  else the page language (hu → Budapest). "any" searches everywhere. */
@@ -54,13 +57,14 @@ export async function searchPlaces(
   input: string,
   sessionToken: string,
   areaChoice = "auto",
-): Promise<{ suggestions?: Suggestion[]; error?: "signin" | "generic" }> {
+): Promise<{ suggestions?: Suggestion[]; error?: "generic" }> {
   const text = input.trim().slice(0, 100);
   if (text.length < 3) return { suggestions: [] };
-  const { supabase, user } = await getUser();
-  if (!user) return { error: "signin" };
+  // Works before signing in: limited per person, or per IP address for visitors.
+  const { supabase, key } = await caller();
+  if (rateLimited(`places-search:${key}`, 60)) return { suggestions: [] };
   // OSM's free services ask for fair use.
-  if (!placesConfigured && rateLimited(`osm-search:${user.id}`, 30)) return { suggestions: [] };
+  if (!placesConfigured && rateLimited(`osm-search:${key}`, 30)) return { suggestions: [] };
   try {
     const locale = await getLocale();
     const area = await resolveArea(String(areaChoice).slice(0, 40), locale);
@@ -87,41 +91,10 @@ export async function choosePlace(
   placeId: string,
   sessionToken: string,
 ): Promise<{ locationId?: string; place?: PlaceDetails; error?: "generic" }> {
-  const { supabase, user } = await getUser();
-  if (!user) return { error: "generic" };
+  const { supabase, key } = await caller();
   const existing = (await knownLocations(supabase, [placeId])).get(placeId);
   if (existing) return { locationId: existing };
-  if (isOsmId(placeId) && rateLimited(`osm-details:${user.id}`, 10)) return { error: "generic" };
-  const place = await details(placeId, await getLocale(), sessionToken).catch(() => null);
+  if (rateLimited(`place-details:${key}`, isOsmId(placeId) ? 10 : 20)) return { error: "generic" };
+  const place = await placeDetailsAny(placeId, await getLocale(), sessionToken).catch(() => null);
   return place ? { place } : { error: "generic" };
-}
-
-/** Creates the workplace from Google's or OpenStreetMap's data (fetched again here, never from the client). */
-export async function confirmPlace(
-  placeId: string,
-  category: string,
-): Promise<{ locationId?: string; error?: "invalid" | "limit" | "generic" }> {
-  if (category !== "" && !isCategory(category)) return { error: "invalid" };
-  const { user } = await getUser();
-  const db = adminClient();
-  if (!user || !db) return { error: "generic" };
-  const place = await details(placeId, await getLocale()).catch(() => null);
-  if (!place || !place.name || !place.address || !place.city || !place.country) return { error: "invalid" };
-  const osm = isOsmId(place.placeId);
-  const { data, error } = await db.rpc(osm ? "workplace_from_osm" : "workplace_from_place", {
-    p_user_id: user.id,
-    ...(osm ? { p_osm_id: osmKey(place.placeId) } : { p_place_id: place.placeId }),
-    p_name: place.name,
-    p_address: place.address,
-    p_city: place.city,
-    p_country: place.country,
-    // "Let us decide": the map type, else Claude from the name and map types.
-    p_category: isCategory(category)
-      ? category
-      : (place.category ?? (await categorize({ name: place.name, city: place.city, types: place.types }))),
-    p_lat: place.lat,
-    p_lng: place.lng,
-  });
-  if (error) return { error: error.code === "54000" ? "limit" : error.code === "22023" ? "invalid" : "generic" };
-  return { locationId: data as string };
 }

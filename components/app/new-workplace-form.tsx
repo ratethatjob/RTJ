@@ -29,6 +29,11 @@ export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim 
   function submit(event: React.FormEvent) {
     event.preventDefault();
     setError(null);
+    if (!claim) {
+      // Reviewers: the workplace is created only when the review is sent (after signing in).
+      const query = new URLSearchParams(Object.entries(form).filter(([, v]) => v.trim()));
+      return router.push(`${rateBase}/pending?${query}`);
+    }
     startTransition(async () => {
       const result = await createWorkplace(form);
       if (result.error || !result.id) return setError(t(`errors.${result.error ?? "generic"}`));

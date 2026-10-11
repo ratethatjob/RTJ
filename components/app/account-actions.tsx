@@ -4,7 +4,45 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { deleteAccount, markJobEnded, signOut } from "@/app/[locale]/app/account/actions";
+import { setJobAlerts } from "@/app/[locale]/app/actions";
 import { MonthYearSelect } from "@/components/month-year-select";
+
+/** Emails about jobs near me: opt-in, off by default, switched off here any time. */
+export function JobAlertsToggle({ initial }: { initial: boolean }) {
+  const t = useTranslations("Account");
+  const [on, setOn] = useState(initial);
+  const [error, setError] = useState(false);
+  const [pending, startTransition] = useTransition();
+  return (
+    <section className="rounded-3xl bg-white p-5">
+      <label className="flex items-start gap-3">
+        <input
+          type="checkbox"
+          checked={on}
+          disabled={pending}
+          onChange={(e) => {
+            const next = e.target.checked;
+            setOn(next);
+            setError(false);
+            startTransition(async () => {
+              const result = await setJobAlerts(next);
+              if (result.error) {
+                setOn(!next);
+                setError(true);
+              }
+            });
+          }}
+          className="mt-1 size-5 shrink-0 accent-ink"
+        />
+        <span>
+          <span className="block font-black">{t("jobAlerts")}</span>
+          <span className="text-sm text-slate">{t("jobAlertsNote")}</span>
+        </span>
+      </label>
+      {error && <p className="mt-2 text-sm font-black">{t("jobAlertsError")}</p>}
+    </section>
+  );
+}
 
 export function JobEndedForm({ reviewId, min }: { reviewId: string; min: string }) {
   const t = useTranslations("Account");
