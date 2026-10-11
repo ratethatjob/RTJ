@@ -71,6 +71,37 @@
       "employerA": "No. Employers can reply and dispute unverified reviews, but they can't delete, hide or buy reviews.",
       "freeQ": "Does it cost anything?",
       "freeA": "No. Reading, reviewing and applying are free for workers."
+    },
+    "near": {
+      "title": "Workplaces and jobs {place}",
+      "popular": "Popular on RateThatJob",
+      "jobs": "Open jobs",
+      "seeCity": "All workplaces in this city",
+      "seeAll": "Search all workplaces",
+      "widened": "Nothing {place} yet, so here's a wider view.",
+      "inCity": "in {city}",
+      "inCountryOther": "in {country}",
+      "in": {
+        "budapest": "in Budapest",
+        "debrecen": "in Debrecen",
+        "szeged": "in Szeged",
+        "pecs": "in Pécs",
+        "gyor": "in Győr",
+        "miskolc": "in Miskolc",
+        "dubai": "in Dubai",
+        "abudhabi": "in Abu Dhabi",
+        "sharjah": "in Sharjah",
+        "vienna": "in Vienna",
+        "london": "in London",
+        "newyork": "in New York"
+      },
+      "inCountry": {
+        "HU": "in Hungary",
+        "AE": "in the United Arab Emirates",
+        "AT": "in Austria",
+        "GB": "in the United Kingdom",
+        "US": "in the United States"
+      }
     }
   },
   "Categories": {
@@ -1353,7 +1384,8 @@
       "vienna": "Vienna",
       "london": "London",
       "newyork": "New York"
-    }
+    },
+    "areaLabel": "City"
   },
   "Footer": {
     "workers": "For workers",

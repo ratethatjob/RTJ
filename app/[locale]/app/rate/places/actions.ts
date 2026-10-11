@@ -7,7 +7,7 @@ import type { Category } from "@/lib/data/types";
 import { isOsmId, osmAutocomplete, osmDetails, type SearchArea } from "@/lib/osm";
 import { autocomplete, type PlaceDetails, placeDetails, placesConfigured } from "@/lib/places";
 import { rateLimited } from "@/lib/rate-limit";
-import { isAreaId, SEARCH_AREAS } from "@/lib/search-areas";
+import { isAreaId, parseGeo, SEARCH_AREAS } from "@/lib/search-areas";
 import { adminClient } from "@/lib/supabase/admin";
 
 const CATEGORIES: Category[] = ["restaurant", "retail", "warehouse", "factory", "office"];
@@ -39,12 +39,8 @@ const details = (id: string, locale: string, sessionToken?: string) =>
 async function resolveArea(choice: string, locale: string): Promise<SearchArea | null> {
   if (choice === "any") return null;
   if (isAreaId(choice)) return { ...SEARCH_AREAS[choice], strict: true };
-  const geo = /^geo:(-?\d{1,2}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)$/.exec(choice);
-  if (geo) {
-    const lat = Number(geo[1]);
-    const lon = Number(geo[2]);
-    if (Math.abs(lat) <= 90 && Math.abs(lon) <= 180) return { lat, lon };
-  }
+  const geo = parseGeo(choice);
+  if (geo) return geo;
   const h = await headers();
   const lat = Number(h.get("x-vercel-ip-latitude"));
   const lon = Number(h.get("x-vercel-ip-longitude"));

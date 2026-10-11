@@ -179,3 +179,20 @@ export async function getAllJobs(): Promise<Job[]> {
   if (error) throw error;
   return data.map(toJob);
 }
+
+/** Up to 3 open jobs in these cities / this country (featured first), or the newest anywhere. */
+export async function findJobsIn(column: "city_slug" | "country" | null, values: string[]): Promise<Job[]> {
+  if (!useSupabase) {
+    return sampleJobs
+      .filter((j) => !column || values.includes(column === "city_slug" ? j.location.citySlug : j.location.country))
+      .slice(0, 3);
+  }
+  let query = publicClient().from("public_jobs").select("*");
+  if (column) query = query.in(column, values);
+  const { data, error } = await query.order("published_at", { ascending: false }).limit(12);
+  if (error) throw error;
+  return data
+    .map(toJob)
+    .sort((a, b) => Number(b.featured) - Number(a.featured))
+    .slice(0, 3);
+}

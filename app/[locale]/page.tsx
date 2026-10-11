@@ -1,6 +1,8 @@
 import { DemoChip } from "@/components/demo-badge";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Suspense } from "react";
+import { NearYou, NearYouFallback } from "@/components/home/near-you";
 import { SiteHeader } from "@/components/site-header";
 import { Bar, formatScore, ScoreTile } from "@/components/scores";
 import { Faq } from "@/components/faq";
@@ -157,6 +159,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             </Link>
           )}
         </section>
+
+        {/* Personal part, streamed: the static page above and below stays the same for everyone. */}
+        <Suspense fallback={<NearYouFallback />}>
+          <NearYou locale={locale} />
+        </Suspense>
 
         {featured.length > 0 && (
           <section className="lg:hidden">

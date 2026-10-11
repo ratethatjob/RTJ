@@ -1,6 +1,8 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { getPathname, Link } from "@/i18n/navigation";
+import { areaPickerLabels } from "@/lib/area-labels";
 import { AccountLink } from "./account-link";
+import { AreaPicker } from "./home/area-picker";
 import { SearchIcon } from "./icons";
 import { LocaleSwitch } from "./locale-switch";
 import { MobileMenu } from "./mobile-menu";
@@ -46,6 +48,9 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
             </Link>
           </>
         )}
+        <span className="hidden lg:inline">
+          <AreaPicker labels={await areaPickerLabels()} />
+        </span>
         <span className="hidden lg:inline">
           <LocaleSwitch />
         </span>

@@ -19,6 +19,7 @@ Employers never learn who wrote a review or who responded to their invite. Publi
 - **Employer accounts:** team members' names, email addresses and roles.
 - **Workplace claims:** name, role, phone number, company website, the signed-in email address and, if you choose the registry extract method, the uploaded document. Used only to check that you represent the workplace. The document is kept in a private store that only our team can open, and is deleted once the claim is decided.
 - **Follows, notifications, helpful votes, reports:** to run the service.
+- **Your area (home page “near you”):** the approximate city from your connection (provided by our host, Vercel, not stored), or the city you pick, kept only in a cookie on your device (see [Cookies](/cookies)). Your exact location is only used if you choose “My location”, rounded to about 1 km.
 - **Technical data:** logs needed for security and fraud prevention (for example when an account was created and when reviews were posted).
 
 ## 4. Automated checks and translation

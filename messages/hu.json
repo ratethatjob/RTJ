@@ -71,6 +71,37 @@
       "employerA": "Nem. Válaszolhat, és vitathatja az igazolatlan értékeléseket, de törölni, elrejteni vagy megvenni nem tudja őket.",
       "freeQ": "Kerül valamibe?",
       "freeA": "Nem. Az olvasás, az értékelés és a jelentkezés ingyenes."
+    },
+    "near": {
+      "title": "Munkahelyek és állások {place}",
+      "popular": "Népszerű a RateThatJobon",
+      "jobs": "Nyitott állások",
+      "seeCity": "A város összes munkahelye",
+      "seeAll": "Keresés az összes munkahely között",
+      "widened": "{place} még nincs adat, ezért tágabban mutatjuk.",
+      "inCity": "itt: {city}",
+      "inCountryOther": "itt: {country}",
+      "in": {
+        "budapest": "Budapesten",
+        "debrecen": "Debrecenben",
+        "szeged": "Szegeden",
+        "pecs": "Pécsett",
+        "gyor": "Győrben",
+        "miskolc": "Miskolcon",
+        "dubai": "Dubajban",
+        "abudhabi": "Abu-Dzabiban",
+        "sharjah": "Sardzsában",
+        "vienna": "Bécsben",
+        "london": "Londonban",
+        "newyork": "New Yorkban"
+      },
+      "inCountry": {
+        "HU": "Magyarországon",
+        "AE": "az Egyesült Arab Emírségekben",
+        "AT": "Ausztriában",
+        "GB": "az Egyesült Királyságban",
+        "US": "az Egyesült Államokban"
+      }
     }
   },
   "Categories": {
@@ -1353,7 +1384,8 @@
       "vienna": "Bécs",
       "london": "London",
       "newyork": "New York"
-    }
+    },
+    "areaLabel": "Város"
   },
   "Footer": {
     "workers": "Munkavállalóknak",

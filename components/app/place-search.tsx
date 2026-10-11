@@ -5,34 +5,10 @@ import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from
 import { choosePlace, confirmPlace, searchPlaces, type Suggestion } from "@/app/[locale]/app/rate/places/actions";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import type { PlacesProvider } from "@/lib/places";
-import { type AreaChoice, isAreaId, SEARCH_AREAS } from "@/lib/search-areas";
+import { locate, readArea, saveArea, subscribeArea } from "@/lib/area-client";
+import { type AreaChoice, SEARCH_AREAS } from "@/lib/search-areas";
 
 const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
-
-const AREA_KEY = "rtj:area";
-const areaListeners = new Set<() => void>();
-let memoryArea: AreaChoice = "auto";
-
-function readArea(): AreaChoice {
-  try {
-    const saved = localStorage.getItem(AREA_KEY);
-    if (saved && (saved === "any" || isAreaId(saved) || /^geo:-?[\d.]+,-?[\d.]+$/.test(saved))) return saved as AreaChoice;
-  } catch {}
-  return memoryArea;
-}
-
-function saveArea(value: AreaChoice) {
-  memoryArea = value;
-  try {
-    localStorage.setItem(AREA_KEY, value);
-  } catch {}
-  areaListeners.forEach((l) => l());
-}
-
-function subscribeArea(listener: () => void) {
-  areaListeners.add(listener);
-  return () => areaListeners.delete(listener);
-}
 
 type Place = { placeId: string; name: string; address: string; city: string; category: string | null };
 
@@ -59,11 +35,7 @@ export function PlaceSearch({ initialQuery = "", provider }: { initialQuery?: st
     const remember = (v: AreaChoice) => saveArea(v);
     if (value !== "here") return remember(value as AreaChoice);
     // Browser location only when the person asks for it; rounded to about 1 km.
-    navigator.geolocation?.getCurrentPosition(
-      (pos) => remember(`geo:${pos.coords.latitude.toFixed(2)},${pos.coords.longitude.toFixed(2)}`),
-      () => setAreaError(true),
-      { maximumAge: 600_000, timeout: 10_000 },
-    );
+    locate().then(remember, () => setAreaError(true));
   }
 
   useEffect(() => {

@@ -19,6 +19,7 @@ A munkáltatók soha nem tudják meg, ki írt egy értékelést, és ki válaszo
 - **Munkáltatói fiókok:** a munkatársak neve, e-mail-címe, szerepköre.
 - **Munkahely-igénylések:** név, beosztás, telefonszám, a cég weboldala, a belépett e-mail-cím, és ha a cégkivonatos módot választod, a feltöltött dokumentum. Csak arra használjuk, hogy ellenőrizzük: te képviseled a munkahelyet. A dokumentumot zárt tárhelyen tartjuk, amelyet csak a csapatunk nyithat meg, és az igénylés elbírálása után töröljük.
 - **Követések, értesítések, „Hasznos” szavazatok, jelentések:** a szolgáltatás működéséhez.
+- **A környéked (a főoldal „közelben” része):** a kapcsolatod alapján becsült város (a tárhelyszolgáltatónktól, a Vercel-től; nem tároljuk), vagy az általad választott város, amelyet csak egy süti őriz az eszközödön (lásd [Sütik](/cookies)). A pontos helyzetedet csak akkor használjuk, ha az „A helyzetem” lehetőséget választod, kb. 1 km-re kerekítve.
 - **Technikai adatok:** a biztonsághoz és a csalások kiszűréséhez szükséges naplók (pl. fiók létrehozásának ideje, értékelések időzítése).
 
 ## 4. Automatizált ellenőrzés és fordítás
