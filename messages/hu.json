@@ -313,7 +313,7 @@
     "placeholder": "Munkahely neve",
     "search": "Keresés",
     "noResults": "Nincs találat.",
-    "hint": "Keress név alapján, aztán válaszd ki a telephelyet."
+    "hint": "Írd be a nevét: egyszerre keresünk a RateThatJobon és a térképen."
   },
   "ReviewForm": {
     "step": "{step}/3",
@@ -540,7 +540,7 @@
     "noOrgBody": "Vedd át ingyen a munkahelyed, hogy válaszolhass az értékelésekre és meghívhasd a csapatod.",
     "pendingClaims": "Ellenőrzés alatt álló igénylések",
     "claimTitle": "Munkahely átvétele",
-    "claimSearchHint": "Keresd meg a munkahelyed, aztán válaszd ki a telephelyet.",
+    "claimSearchHint": "Írd be a munkahelyed nevét: egyszerre keresünk a RateThatJobon és a térképen.",
     "claimNotListed": "Még nincs fent? Vedd fel, aztán vedd át.",
     "claimFormTitle": "{name} átvétele",
     "claimFormBody": "Mondd el, ki vagy. Minden igénylést kézzel ellenőrzünk, általában 2 munkanapon belül.",
@@ -1434,7 +1434,7 @@
     "limit": "Ma már sok munkahelyet felvettél. Próbáld újra holnap.",
     "poweredBy": "A keresést a Google biztosítja",
     "notOnMap": "Nincs fent a Google Térképen?",
-    "manualTitle": "Vagy add meg te",
+    "manualTitle": "Add meg kézzel",
     "titleOsm": "Keresd meg a térképen",
     "poweredByOsm": "Térképadatok © <osm>OpenStreetMap</osm>-közreműködők · Keresés: Photon",
     "notOnMapOsm": "Nincs rajta a térképen?",
@@ -1457,7 +1457,21 @@
       "london": "London",
       "newyork": "New York"
     },
-    "areaLabel": "Város"
+    "areaLabel": "Város",
+    "finderPlaceholder": "Munkahely neve, pl. Spar Váci út",
+    "nearPlace": "{place} közelében",
+    "nearMe": "A helyzetem közelében",
+    "everywhere": "Keresés mindenhol",
+    "change": "módosítás",
+    "areaAutoPlace": "Automatikus ({place})",
+    "searching": "Keresés…",
+    "noResults": "Nincs találat.",
+    "notListed": "Nincs a listában?",
+    "addManually": "Add meg kézzel",
+    "reviews": "{count} értékelés",
+    "fromMap": "Térkép",
+    "addAndClaim": "Felveszem és átveszem",
+    "clear": "Törlés"
   },
   "Footer": {
     "workers": "Munkavállalóknak",

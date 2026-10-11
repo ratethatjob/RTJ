@@ -313,7 +313,7 @@
     "placeholder": "Workplace name",
     "search": "Search",
     "noResults": "No workplaces found.",
-    "hint": "Search by name, then pick the location."
+    "hint": "Type the name. We look on RateThatJob and on the map at once."
   },
   "ReviewForm": {
     "step": "{step}/3",
@@ -540,7 +540,7 @@
     "noOrgBody": "Claim your workplace for free to reply to reviews and invite your team.",
     "pendingClaims": "Claims we're checking",
     "claimTitle": "Claim your workplace",
-    "claimSearchHint": "Search for your workplace, then pick the location.",
+    "claimSearchHint": "Type the name of your workplace. We look on RateThatJob and on the map at once.",
     "claimNotListed": "Not listed yet? Add it first, then claim it.",
     "claimFormTitle": "Claim {name}",
     "claimFormBody": "Tell us who you are. We check every claim by hand, usually within 2 working days.",
@@ -1434,7 +1434,7 @@
     "limit": "You have added many workplaces today. Try again tomorrow.",
     "poweredBy": "Search powered by Google",
     "notOnMap": "Not on Google Maps?",
-    "manualTitle": "Or enter it yourself",
+    "manualTitle": "Add it yourself",
     "titleOsm": "Find it on the map",
     "poweredByOsm": "Map data © <osm>OpenStreetMap</osm> contributors · Search by Photon",
     "notOnMapOsm": "Not on the map?",
@@ -1457,7 +1457,21 @@
       "london": "London",
       "newyork": "New York"
     },
-    "areaLabel": "City"
+    "areaLabel": "City",
+    "finderPlaceholder": "Workplace name, e.g. Spar Váci út",
+    "nearPlace": "Near {place}",
+    "nearMe": "Near my location",
+    "everywhere": "Searching everywhere",
+    "change": "change",
+    "areaAutoPlace": "Automatic ({place})",
+    "searching": "Searching…",
+    "noResults": "No workplaces found.",
+    "notListed": "Not in the list?",
+    "addManually": "Add it yourself",
+    "reviews": "{count, plural, one {# review} other {# reviews}}",
+    "fromMap": "Map",
+    "addAndClaim": "Add and claim",
+    "clear": "Clear"
   },
   "Footer": {
     "workers": "For workers",

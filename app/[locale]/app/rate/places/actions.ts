@@ -4,10 +4,13 @@ import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
 import { isOsmId, osmAutocomplete, type SearchArea } from "@/lib/osm";
-import { autocomplete, type PlaceDetails, placesConfigured } from "@/lib/places";
+import { autocomplete, type PlaceDetails, placesProvider } from "@/lib/places";
+import { isCategory } from "@/lib/categories";
+import { searchLocations } from "@/lib/data";
+import { visitorArea } from "@/lib/visitor-area";
 import { rateLimited } from "@/lib/rate-limit";
 import { isAreaId, parseGeo, SEARCH_AREAS } from "@/lib/search-areas";
-import { placeDetailsAny } from "@/lib/workplaces";
+import { createPlaceWorkplace, placeDetailsAny } from "@/lib/workplaces";
 
 export type Suggestion = { placeId: string; main: string; secondary: string; locationId: string | null };
 
@@ -49,41 +52,75 @@ async function resolveArea(choice: string, locale: string): Promise<SearchArea |
   if (h.get("x-vercel-ip-latitude") && Number.isFinite(lat) && Number.isFinite(lon)) {
     return { lat, lon, country: h.get("x-vercel-ip-country") ?? undefined };
   }
-  return locale === "hu" ? { ...SEARCH_AREAS.budapest } : null;
+  // No IP location: the same guess as the home page (time zone cookie, then page language).
+  const visitor = await visitorArea(locale);
+  return visitor.kind === "area" ? { ...SEARCH_AREAS[visitor.id] } : null;
 }
 
-/** Map suggestions (Google, or OpenStreetMap without a Google key), marked when already on RateThatJob. */
-export async function searchPlaces(
+export type OwnResult = {
+  id: string;
+  name: string;
+  address: string;
+  city: string;
+  score: number | null;
+  reviewCount: number;
+};
+
+/** One search for the workplace finder: workplaces already on RateThatJob first, then map places
+ *  (Google, or OpenStreetMap without a Google key) that aren't on RateThatJob yet. */
+export async function findWorkplaces(
   input: string,
   sessionToken: string,
   areaChoice = "auto",
-): Promise<{ suggestions?: Suggestion[]; error?: "generic" }> {
+): Promise<{ own: OwnResult[]; map: Suggestion[]; error?: "generic" }> {
   const text = input.trim().slice(0, 100);
-  if (text.length < 3) return { suggestions: [] };
+  if (text.length < 2) return { own: [], map: [] };
   // Works before signing in: limited per person, or per IP address for visitors.
   const { supabase, key } = await caller();
-  if (rateLimited(`places-search:${key}`, 60)) return { suggestions: [] };
+  if (rateLimited(`places-search:${key}`, 60)) return { own: [], map: [] };
+
+  const own: OwnResult[] = (await searchLocations(text).catch(() => [])).slice(0, 8).map((l) => ({
+    id: l.id,
+    name: l.name,
+    address: l.address,
+    city: l.city,
+    score: l.scores?.overall ?? null,
+    reviewCount: l.scores?.reviewCount ?? 0,
+  }));
+  const provider = await placesProvider();
   // OSM's free services ask for fair use.
-  if (!placesConfigured && rateLimited(`osm-search:${key}`, 30)) return { suggestions: [] };
+  if (!provider || text.length < 3 || (provider === "osm" && rateLimited(`osm-search:${key}`, 30))) {
+    return { own, map: [] };
+  }
   try {
     const locale = await getLocale();
     const area = await resolveArea(String(areaChoice).slice(0, 40), locale);
-    const found = placesConfigured
+    const found = provider === "google"
       ? await autocomplete(text, locale, sessionToken, area)
       : await osmAutocomplete(text, locale, area);
     const known = await knownLocations(supabase, found.map((f) => f.placeId));
-    return {
-      suggestions: found.map((f) => ({
-        placeId: f.placeId,
-        main: f.main,
-        secondary: f.secondary,
-        locationId: known.get(f.placeId) ?? null,
-      })),
-    };
+    const shown = new Set(own.map((o) => o.id));
+    const map = found
+      .map((f) => ({ placeId: f.placeId, main: f.main, secondary: f.secondary, locationId: known.get(f.placeId) ?? null }))
+      // A map place that is already on RateThatJob and in the list above appears only once.
+      .filter((m) => !m.locationId || !shown.has(m.locationId));
+    return { own, map };
   } catch (e) {
-    console.error("searchPlaces", e);
-    return { error: "generic" };
+    console.error("findWorkplaces", e);
+    return { own, map: [], error: "generic" };
   }
+}
+
+/** Employer claim flow: creates the picked map place right away and returns it for the claim form. */
+export async function claimPlace(
+  placeId: string,
+  category: string,
+): Promise<{ locationId?: string; error?: "invalid" | "limit" | "generic" }> {
+  if (category !== "" && !isCategory(category)) return { error: "invalid" };
+  const { user } = await getUser();
+  if (!user) return { error: "generic" };
+  const created = await createPlaceWorkplace(user.id, { kind: "place", placeId, category }, await getLocale());
+  return created.id ? { locationId: created.id } : { error: created.error ?? "generic" };
 }
 
 /** Picks a suggestion: an existing workplace, or the place details to confirm. */

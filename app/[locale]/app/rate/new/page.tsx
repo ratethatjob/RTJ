@@ -1,8 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BackLink } from "@/components/app/back-link";
-import { NewWorkplaceForm } from "@/components/app/new-workplace-form";
-import { PlaceSearch } from "@/components/app/place-search";
+import { WorkplaceFinder } from "@/components/app/workplace-finder";
 import { getPathname } from "@/i18n/navigation";
+import { autoAreaName } from "@/lib/area-labels";
 import { placesProvider } from "@/lib/places";
 
 export const instant = false;
@@ -12,26 +12,24 @@ export default async function NewWorkplacePage({ params, searchParams }: PagePro
   setRequestLocale(locale);
   const { q } = await searchParams;
   const t = await getTranslations("NewWorkplace");
-  const tp = await getTranslations("Places");
-  const provider = await placesProvider();
+  const tp = await getTranslations("RatePicker");
+  const [provider, autoArea] = await Promise.all([placesProvider(), autoAreaName(locale)]);
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-4">
       <BackLink href={getPathname({ href: "/app/rate", locale })} />
       <h1 className="mt-4 text-4xl font-black tracking-brand">{t("title")}</h1>
-      <p className="mt-2 text-lg text-slate">{t("subtitle")}</p>
-      {provider && (
-        <section className="mt-6 flex flex-col gap-3">
-          <h2 className="text-xl font-black">{tp(provider === "osm" ? "titleOsm" : "title")}</h2>
-          <PlaceSearch provider={provider} initialQuery={typeof q === "string" ? q.slice(0, 100) : ""} />
-          <h2 className="mt-6 text-xl font-black">{tp("manualTitle")}</h2>
-        </section>
-      )}
-      <NewWorkplaceForm
-        initialName={typeof q === "string" ? q.slice(0, 100) : ""}
-        defaultCountry={locale === "hu" ? "HU" : "US"}
-        rateBase={getPathname({ href: "/app/rate", locale })}
-      />
+      <p className="mt-2 text-slate">{tp("hint")}</p>
+      <div className="mt-6">
+        <WorkplaceFinder
+          mode="rate"
+          provider={provider}
+          initialQuery={typeof q === "string" ? q.slice(0, 100) : ""}
+          autoArea={autoArea}
+          defaultCountry={locale === "hu" ? "HU" : "US"}
+          manualBase={getPathname({ href: "/app/rate", locale })}
+        />
+      </div>
     </main>
   );
 }

@@ -52,21 +52,27 @@ export async function getLocationById(id: string): Promise<LocationSummary | nul
 export async function searchLocations(q: string): Promise<LocationSummary[]> {
   "use cache";
   cacheLife("minutes");
-  const term = q.trim().toLowerCase();
-  if (!term) return [];
+  // Every word must match the name, company, address or city ("Spar Váci út").
+  // LIKE wildcards and PostgREST filter syntax characters are dropped.
+  const words = q
+    .trim()
+    .toLowerCase()
+    .replace(/[%_\\,()."':]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 5);
+  if (!words.length) return [];
   if (!useSupabase) {
-    return sampleLocations.filter((l) =>
-      `${l.name} ${l.address} ${l.city}`.toLowerCase().includes(term),
-    );
+    return sampleLocations.filter((l) => {
+      const text = `${l.name} ${l.companyName} ${l.address} ${l.city}`.toLowerCase();
+      return words.every((w) => text.includes(w));
+    });
   }
-  // Escape LIKE wildcards and PostgREST filter syntax characters.
-  const safe = term.replace(/[%_\\,()]/g, " ");
-  const { data, error } = await publicClient()
-    .from("public_locations")
-    .select("*")
-    .or(`name.ilike.%${safe}%,company_name.ilike.%${safe}%,address.ilike.%${safe}%`)
-    .order("review_count", { ascending: false })
-    .limit(20);
+  let query = publicClient().from("public_locations").select("*");
+  for (const w of words) {
+    query = query.or(`name.ilike.%${w}%,company_name.ilike.%${w}%,address.ilike.%${w}%,city.ilike.%${w}%`);
+  }
+  const { data, error } = await query.order("review_count", { ascending: false }).limit(20);
   if (error) throw error;
   return data.map(toLocation);
 }
