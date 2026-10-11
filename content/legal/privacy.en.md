@@ -17,6 +17,7 @@ Employers never learn who wrote a review or who responded to their invite. Publi
 - **Verification document (optional):** payslip, contract and similar. Used only to check the review and deleted after the decision, at the latest within 30 days.
 - **Applications:** name, email or phone, your answers. They go to the employer you apply to. Legal basis: your request (contract).
 - **Employer accounts:** team members' names, email addresses and roles.
+- **Workplace claims:** name, role, phone number, company website, the signed-in email address and, if you choose the registry extract method, the uploaded document. Used only to check that you represent the workplace. The document is kept in a private store that only our team can open, and is deleted once the claim is decided.
 - **Follows, notifications, helpful votes, reports:** to run the service.
 - **Technical data:** logs needed for security and fraud prevention (for example when an account was created and when reviews were posted).
 

@@ -2,14 +2,45 @@
 
 import { revalidateTag } from "next/cache";
 import { getUser } from "@/lib/auth";
+import { sendClaimEmail } from "@/lib/claim-emails";
 
 type Result = { ok?: true; error?: true };
 
+type ClaimInfo = { user_id: string; account_email: string | null; locale: string; locations: { name: string; address: string } | null };
+
+async function claimInfo(supabase: Awaited<ReturnType<typeof getUser>>["supabase"], id: string) {
+  const { data } = await supabase
+    .from("claim_requests")
+    .select("user_id, account_email, locale, locations(name, address)")
+    .eq("id", id)
+    .single();
+  const c = data as unknown as ClaimInfo | null;
+  return c && { ...c, mail: { email: c.account_email, locale: c.locale, location: [c.locations?.name, c.locations?.address].filter(Boolean).join(", ") } };
+}
+
 export async function decideClaim(id: string, approve: boolean): Promise<Result> {
   const { supabase } = await getUser();
+  const claim = await claimInfo(supabase, id);
   const { error } = await supabase.rpc("admin_decide_claim", { p_claim_id: id, p_approve: approve });
-  if (error) return { error: true };
+  if (error || !claim) return { error: true };
+  // Documents are deleted as soon as the claim is decided.
+  const folder = `${claim.user_id}/${id}`;
+  const { data: files } = await supabase.storage.from("claim-documents").list(folder);
+  if (files?.length) await supabase.storage.from("claim-documents").remove(files.map((f) => `${folder}/${f.name}`));
+  await sendClaimEmail(claim.mail, approve ? "approved" : "rejected");
   revalidateTag("locations", "max");
+  return { ok: true };
+}
+
+/** Keeps the claim open and asks the claimant for more (shown on /business, sent by email). */
+export async function requestClaimInfo(id: string, message: string): Promise<Result> {
+  const text = message.trim().slice(0, 2000);
+  if (!text) return { error: true };
+  const { supabase } = await getUser();
+  const claim = await claimInfo(supabase, id);
+  const { error } = await supabase.rpc("admin_claim_request_info", { p_claim_id: id, p_body: text });
+  if (error || !claim) return { error: true };
+  await sendClaimEmail(claim.mail, "info", text);
   return { ok: true };
 }
 

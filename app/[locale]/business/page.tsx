@@ -1,5 +1,6 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { LocationSelect } from "@/components/business/location-select";
+import { PendingClaims } from "@/components/business/pending-claims";
 import { PlanBadge } from "@/components/business/plan-badge";
 import { TrialBanner } from "@/components/business/trial-banner";
 import { Link } from "@/i18n/navigation";
@@ -16,11 +17,6 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
   const format = await getFormatter();
 
   if (!org) {
-    const { data: claims } = await supabase
-      .from("claim_requests")
-      .select("id, org_name, created_at, locations(name, address)")
-      .eq("user_id", user.id)
-      .eq("status", "open");
     return (
       <main className="mx-auto w-full max-w-xl px-4 py-12">
         <h1 className="text-4xl font-black tracking-brand">{t("noOrgTitle")}</h1>
@@ -28,21 +24,7 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
         <Link href="/business/claim" className="mt-6 inline-block rounded-2xl bg-ink px-7 py-4 text-lg font-black text-paper">
           {t("claimTitle")}
         </Link>
-        {claims && claims.length > 0 && (
-          <section className="mt-10">
-            <h2 className="text-sm font-black uppercase tracking-tagline text-slate">{t("pendingClaims")}</h2>
-            <ul className="mt-3 flex flex-col gap-2">
-              {claims.map((c) => {
-                const l = c.locations as unknown as { name: string; address: string } | null;
-                return (
-                  <li key={c.id} className="rounded-2xl bg-white p-4">
-                    <span className="font-black">{l?.name}</span> · {l?.address}
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        )}
+        <PendingClaims supabase={supabase} userId={user.id} />
       </main>
     );
   }
@@ -101,6 +83,8 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
           </Link>
         </div>
       </header>
+
+      <PendingClaims supabase={supabase} userId={user.id} />
 
       <div className="mt-6">
         <TrialBanner locations={org.locations} />

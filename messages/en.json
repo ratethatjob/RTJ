@@ -449,17 +449,16 @@
     "jobTitlePlaceholder": "e.g. Owner, HR manager",
     "method": "How can we verify you?",
     "methods": {
-      "email_domain": "Business email on the company's domain",
+      "email_domain": "My signed-in email is on the company's domain",
       "phone": "Call the workplace's listed phone number",
       "document": "Send a company registry extract"
     },
-    "businessEmail": "Business email",
     "phone": "Phone number",
     "note": "Anything else we should know?",
     "submitClaim": "Send claim",
     "claimSent": "Thanks! We'll check your claim and email you when it's approved.",
     "claimExists": "You already have an open claim for this workplace.",
-    "claimError": "Please fill in your company, your name and how we can verify you.",
+    "claimError": "Please fill in your company, your name, a phone number and your website (or tick that you don't have one).",
     "overviewTitle": "Overview",
     "allLocations": "All locations",
     "last12": "last 12 months",
@@ -566,7 +565,22 @@
     "batchesTitle": "Email batches",
     "batchDate": "Sent",
     "batchSent": "Invites",
-    "batchReceived": "Reviews"
+    "batchReceived": "Reviews",
+    "website": "Company website",
+    "websitePlaceholder": "e.g. example.com",
+    "noWebsite": "We don't have a website",
+    "accountEmailHint": "We'll use the email you're signed in with: <b>{email}</b>. It's already confirmed with a code. If it's on your company's domain, approval is quicker.",
+    "document": "Company registry extract",
+    "documentHint": "PDF, JPG or PNG, up to 10 MB. Only our team sees it, and we delete it once we've decided.",
+    "documentError": "Please attach a PDF, JPG or PNG file of up to 10 MB.",
+    "claimReply": "Your answer",
+    "claimAddDocument": "Add or replace the document (optional)",
+    "claimSendReply": "Send",
+    "claimNeedsInfo": "We need a bit more information – see below.",
+    "claimChecking": "We're checking it.",
+    "claimDocumentReceived": "document received",
+    "claimFromUs": "RateThatJob",
+    "claimFromYou": "You"
   },
   "Account": {
     "title": "Your account",
@@ -705,7 +719,21 @@
       "confirm": "Delete ALL demo data (companies, reviews, jobs, demo users)? This can't be undone.",
       "error": "Couldn't delete. Please try again.",
       "sql": "Same in SQL: select private.purge_demo(); (supabase/demo/purge_demo.sql). Load it again with supabase/demo/seed_demo.sql."
-    }
+    },
+    "accountEmail": "Signed-in email",
+    "domainCheck": "Domain",
+    "domainMatch": "✓ {domain} matches the website",
+    "domainFreemail": "✗ {domain} is a free email provider",
+    "domainMismatch": "✗ {domain} ≠ {site}",
+    "domainNoSite": "✗ {domain}, no website to compare",
+    "document": "Document",
+    "documentAttached": "Attached",
+    "infoAsked": "We asked",
+    "infoAnswer": "Claimant's answer",
+    "infoQuestion": "What do you need? (emailed to the claimant, the claim stays open)",
+    "sendInfoRequest": "Send request",
+    "requestInfo": "Ask for more info",
+    "cancel": "Cancel"
   },
   "Search": {
     "title": "Find a workplace",
@@ -1611,5 +1639,13 @@
     "confirm": "Unsubscribe",
     "doneTitle": "You're unsubscribed",
     "doneBody": "You won't get any more invite emails from us. Your invite link still works if you change your mind."
+  },
+  "ClaimEmail": {
+    "infoSubject": "We need a bit more information about your claim – {location}",
+    "infoBody": "Hi,\n\nThanks for claiming {location} on RateThatJob. Before we can approve it, we need a bit more information:\n\n{message}\n\nReply or add a document here: {link}\n\nRateThatJob – Know before you go",
+    "approvedSubject": "Your claim is approved – {location}",
+    "approvedBody": "Hi,\n\nGood news: your claim for {location} is approved. You can now reply to reviews, invite your team and post jobs. Your free 30-day Pro trial has started.\n\nOpen your dashboard: {link}\n\nRateThatJob – Know before you go",
+    "rejectedSubject": "We couldn't approve your claim – {location}",
+    "rejectedBody": "Hi,\n\nWe couldn't confirm that you represent {location}, so we couldn't approve your claim. You're welcome to send a new claim with a business email on your company's domain or a company registry extract.\n\n{link}\n\nRateThatJob – Know before you go"
   }
 }

@@ -4,6 +4,7 @@ import { Decision } from "@/components/admin/decision";
 import { PurgeDemo } from "@/components/admin/purge-demo";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
+import { domainCheck } from "@/lib/claim-check";
 import { jobPricing, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
 
 export const instant = false;
@@ -86,14 +87,25 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
   if (tab === "claims") {
     const { data } = await supabase
       .from("claim_requests")
-      .select("id, created_at, org_name, contact_name, job_title, business_email, phone, method, note, locations(name, address)")
+      .select(
+        "id, created_at, org_name, contact_name, job_title, account_email, phone, website, no_website, method, note, document_path, locations(name, address), claim_messages(id, from_admin, body, created_at)",
+      )
       .eq("status", "open")
       .order("created_at");
+    const paths = (data ?? []).map((c) => c.document_path).filter((p): p is string => Boolean(p));
+    const { data: signed } = paths.length
+      ? await supabase.storage.from("claim-documents").createSignedUrls(paths, 600)
+      : { data: [] };
+    const urls = new Map((signed ?? []).map((x) => [x.path, x.signedUrl]));
     items = (data ?? []).map((c) => {
       const place = c.locations as unknown as Place;
+      const check = domainCheck(c.account_email, c.website);
+      const messages = ((c.claim_messages ?? []) as { id: string; from_admin: boolean; body: string; created_at: string }[])
+        .sort((a, b) => a.created_at.localeCompare(b.created_at));
       return {
         id: c.id,
         created_at: c.created_at,
+        documentUrl: c.document_path ? urls.get(c.document_path) : null,
         content: (
           <>
             <p className="text-lg font-black">{c.org_name}</p>
@@ -103,10 +115,58 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
               <dd>{c.contact_name}{c.job_title ? `, ${c.job_title}` : ""}</dd>
               <dt className="font-black">{tb("method")}</dt>
               <dd>{tb(`methods.${c.method}`)}</dd>
-              {c.business_email && (<><dt className="font-black">{tb("businessEmail")}</dt><dd className="break-all">{c.business_email}</dd></>)}
-              {c.phone && (<><dt className="font-black">{tb("phone")}</dt><dd>{c.phone}</dd></>)}
+              <dt className="font-black">{t("accountEmail")}</dt>
+              <dd className="break-all">{c.account_email ?? "–"}</dd>
+              <dt className="font-black">{tb("phone")}</dt>
+              <dd>{c.phone ? <a href={`tel:${c.phone.replace(/[^\d+]/g, "")}`} className="underline underline-offset-4">{c.phone}</a> : "–"}</dd>
+              <dt className="font-black">{tb("website")}</dt>
+              <dd className="break-all">
+                {c.website ? (
+                  <a href={c.website} target="_blank" rel="noopener noreferrer nofollow" className="underline underline-offset-4">
+                    {c.website}
+                  </a>
+                ) : c.no_website ? (
+                  tb("noWebsite")
+                ) : (
+                  "–"
+                )}
+              </dd>
+              {check && (
+                <>
+                  <dt className="font-black">{t("domainCheck")}</dt>
+                  <dd>
+                    <span
+                      className={`inline-block rounded-lg px-2.5 py-1 text-sm font-black ${
+                        check.match ? "bg-signal text-ink" : "bg-[#C8323C] text-white"
+                      }`}
+                    >
+                      {check.match
+                        ? t("domainMatch", { domain: check.emailDomain })
+                        : check.freemail
+                          ? t("domainFreemail", { domain: check.emailDomain })
+                          : check.siteHost
+                            ? t("domainMismatch", { domain: check.emailDomain, site: check.siteHost })
+                            : t("domainNoSite", { domain: check.emailDomain })}
+                    </span>
+                  </dd>
+                </>
+              )}
+              <dt className="font-black">{t("document")}</dt>
+              <dd>{c.document_path ? t("documentAttached") : "–"}</dd>
               {c.note && (<><dt className="font-black">{tb("note")}</dt><dd className="whitespace-pre-line">{c.note}</dd></>)}
             </dl>
+            {messages.length > 0 && (
+              <ul className="mt-3 flex flex-col gap-2">
+                {messages.map((m) => (
+                  <li key={m.id} className={`rounded-2xl p-3 ${m.from_admin ? "bg-paper" : "border border-mist/60"}`}>
+                    <p className="text-xs font-black uppercase tracking-tagline text-slate">
+                      {m.from_admin ? t("infoAsked") : t("infoAnswer")} · {date(m.created_at)}
+                    </p>
+                    <p className="mt-1 whitespace-pre-line break-words">{m.body}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
           </>
         ),
       };

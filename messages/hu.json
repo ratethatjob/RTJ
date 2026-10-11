@@ -449,17 +449,16 @@
     "jobTitlePlaceholder": "pl. tulajdonos, HR-vezető",
     "method": "Hogyan ellenőrizhetünk?",
     "methods": {
-      "email_domain": "Céges e-mail a cég domainjén",
+      "email_domain": "A belépett e-mail-címem a cég domainjén van",
       "phone": "Felhívjuk a munkahely nyilvános telefonszámát",
       "document": "Cégkivonatot küldök"
     },
-    "businessEmail": "Céges e-mail",
     "phone": "Telefonszám",
     "note": "Mit kell még tudnunk?",
     "submitClaim": "Igénylés elküldése",
     "claimSent": "Köszönjük! Ellenőrizzük az igénylést, és e-mailben jelezzük, ha jóváhagytuk.",
     "claimExists": "Ehhez a munkahelyhez már van nyitott igénylésed.",
-    "claimError": "Add meg a cégnevet, a neved és az ellenőrzés módját.",
+    "claimError": "Add meg a cég nevét, a neved, egy telefonszámot és a weboldalt (vagy jelöld, hogy nincs).",
     "overviewTitle": "Áttekintés",
     "allLocations": "Minden telephely",
     "last12": "utolsó 12 hónap",
@@ -566,7 +565,22 @@
     "batchesTitle": "E-mailes küldések",
     "batchDate": "Küldve",
     "batchSent": "Meghívó",
-    "batchReceived": "Értékelés"
+    "batchReceived": "Értékelés",
+    "website": "A cég weboldala",
+    "websitePlaceholder": "pl. pelda.hu",
+    "noWebsite": "Nincs weboldalunk",
+    "accountEmailHint": "A belépéshez használt e-mail-címedet használjuk: <b>{email}</b>. Ezt már kóddal igazoltad. Ha a céged domainjén van, gyorsabb a jóváhagyás.",
+    "document": "Cégkivonat",
+    "documentHint": "PDF, JPG vagy PNG, legfeljebb 10 MB. Csak a csapatunk látja, és a döntés után töröljük.",
+    "documentError": "Csatolj egy legfeljebb 10 MB-os PDF, JPG vagy PNG fájlt.",
+    "claimReply": "A válaszod",
+    "claimAddDocument": "Dokumentum csatolása vagy cseréje (nem kötelező)",
+    "claimSendReply": "Küldés",
+    "claimNeedsInfo": "Még egy kis információ kell – lásd lent.",
+    "claimChecking": "Ellenőrizzük.",
+    "claimDocumentReceived": "dokumentum megérkezett",
+    "claimFromUs": "RateThatJob",
+    "claimFromYou": "Te"
   },
   "Account": {
     "title": "Fiókod",
@@ -705,7 +719,21 @@
       "confirm": "Törlöd az ÖSSZES demó adatot (cégek, értékelések, állások, demó felhasználók)? Nem vonható vissza.",
       "error": "Nem sikerült törölni. Próbáld újra.",
       "sql": "SQL-ben ugyanez: select private.purge_demo(); (supabase/demo/purge_demo.sql). Újratöltés: supabase/demo/seed_demo.sql."
-    }
+    },
+    "accountEmail": "Belépett e-mail",
+    "domainCheck": "Domain",
+    "domainMatch": "✓ {domain} egyezik a weboldallal",
+    "domainFreemail": "✗ {domain} ingyenes levelezőszolgáltatás",
+    "domainMismatch": "✗ {domain} ≠ {site}",
+    "domainNoSite": "✗ {domain}, nincs weboldal az összevetéshez",
+    "document": "Dokumentum",
+    "documentAttached": "Csatolva",
+    "infoAsked": "Kérdésünk",
+    "infoAnswer": "Az igénylő válasza",
+    "infoQuestion": "Mire van szükség? (e-mailben megy az igénylőnek, az igénylés nyitva marad)",
+    "sendInfoRequest": "Kérés küldése",
+    "requestInfo": "Több infót kérek",
+    "cancel": "Mégse"
   },
   "Search": {
     "title": "Munkahely keresése",
@@ -1611,5 +1639,13 @@
     "confirm": "Leiratkozás",
     "doneTitle": "Leiratkoztál",
     "doneBody": "Nem kapsz tőlünk több meghívó e-mailt. Ha meggondolod magad, a meghívó linked továbbra is működik."
+  },
+  "ClaimEmail": {
+    "infoSubject": "Még egy kis információ kell az igénylésedhez – {location}",
+    "infoBody": "Szia!\n\nKöszönjük, hogy igényelted a(z) {location} munkahelyet a RateThatJobon. A jóváhagyáshoz még egy kis információ kell:\n\n{message}\n\nItt válaszolhatsz vagy csatolhatsz dokumentumot: {link}\n\nRateThatJob – Know before you go",
+    "approvedSubject": "Jóváhagytuk az igénylésedet – {location}",
+    "approvedBody": "Szia!\n\nJó hír: jóváhagytuk a(z) {location} igénylését. Mostantól válaszolhatsz az értékelésekre, meghívhatod a csapatodat és hirdethetsz állásokat. Elindult a 30 napos ingyenes Pro próbaidőszakod.\n\nIrányítópult: {link}\n\nRateThatJob – Know before you go",
+    "rejectedSubject": "Nem tudtuk jóváhagyni az igénylésedet – {location}",
+    "rejectedBody": "Szia!\n\nNem tudtuk megerősíteni, hogy te képviseled a(z) {location} munkahelyet, ezért nem hagytuk jóvá az igénylést. Küldhetsz új igénylést a céged domainjén lévő e-mail-címmel vagy cégkivonattal.\n\n{link}\n\nRateThatJob – Know before you go"
   }
 }

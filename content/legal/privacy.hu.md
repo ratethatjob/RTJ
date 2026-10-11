@@ -17,6 +17,7 @@ A munkáltatók soha nem tudják meg, ki írt egy értékelést, és ki válaszo
 - **Igazoló dokumentum (opcionális):** bérjegyzék, szerződés stb. Csak ellenőrzésre használjuk, a döntés után töröljük, legkésőbb 30 napon belül.
 - **Jelentkezések:** név, e-mail vagy telefon, a válaszaid. Ezeket megkapja az a munkáltató, ahová jelentkeztél. Jogalap: a te kérésed (szerződés).
 - **Munkáltatói fiókok:** a munkatársak neve, e-mail-címe, szerepköre.
+- **Munkahely-igénylések:** név, beosztás, telefonszám, a cég weboldala, a belépett e-mail-cím, és ha a cégkivonatos módot választod, a feltöltött dokumentum. Csak arra használjuk, hogy ellenőrizzük: te képviseled a munkahelyet. A dokumentumot zárt tárhelyen tartjuk, amelyet csak a csapatunk nyithat meg, és az igénylés elbírálása után töröljük.
 - **Követések, értesítések, „Hasznos” szavazatok, jelentések:** a szolgáltatás működéséhez.
 - **Technikai adatok:** a biztonsághoz és a csalások kiszűréséhez szükséges naplók (pl. fiók létrehozásának ideje, értékelések időzítése).
 

@@ -11,6 +11,7 @@ import {
   decideReport,
   decideVerification,
   moderateReview,
+  requestClaimInfo,
 } from "@/app/[locale]/admin/actions";
 
 type Props = {
@@ -30,6 +31,8 @@ export function Decision({ kind, id, documentUrl }: Props) {
   const t = useTranslations("Admin");
   const router = useRouter();
   const [entity, setEntity] = useState("");
+  const [asking, setAsking] = useState(false);
+  const [question, setQuestion] = useState("");
   const [error, setError] = useState(false);
   const [pending, startTransition] = useTransition();
 
@@ -55,6 +58,17 @@ export function Decision({ kind, id, documentUrl }: Props) {
     });
   }
 
+  function askForInfo() {
+    setError(false);
+    startTransition(async () => {
+      const result = await requestClaimInfo(id, question);
+      if (result.error) return setError(true);
+      setQuestion("");
+      setAsking(false);
+      router.refresh();
+    });
+  }
+
   const keepOrRemove = kind === "disputes" || kind === "reports";
   const order = kind === "orders" || kind === "plans";
   const yesLabel = order
@@ -70,6 +84,38 @@ export function Decision({ kind, id, documentUrl }: Props) {
 
   return (
     <div className="mt-4 flex flex-col gap-3 border-t border-[#E8E6E1] pt-4">
+      {kind === "claims" && documentUrl && (
+        <a href={documentUrl} target="_blank" rel="noreferrer" className="font-black underline underline-offset-4">
+          {t("openDocument")}
+        </a>
+      )}
+      {kind === "claims" && asking && (
+        <div className="flex flex-col gap-2">
+          <label className="flex flex-col gap-1">
+            <span className="text-sm font-black">{t("infoQuestion")}</span>
+            <textarea
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              rows={3}
+              maxLength={2000}
+              className="rounded-2xl border border-mist/60 px-4 py-3 outline-none focus:border-ink"
+            />
+          </label>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={pending || !question.trim()}
+              onClick={askForInfo}
+              className="rounded-2xl bg-ink px-5 py-3 font-black text-paper disabled:opacity-60"
+            >
+              {t("sendInfoRequest")}
+            </button>
+            <button type="button" onClick={() => setAsking(false)} className="rounded-2xl px-4 py-3 font-black">
+              {t("cancel")}
+            </button>
+          </div>
+        </div>
+      )}
       {kind === "verifications" && (
         <>
           {documentUrl && (
@@ -109,6 +155,16 @@ export function Decision({ kind, id, documentUrl }: Props) {
         >
           {noLabel}
         </button>
+        {kind === "claims" && !asking && (
+          <button
+            type="button"
+            disabled={pending}
+            onClick={() => setAsking(true)}
+            className="rounded-2xl px-4 py-3 font-black underline underline-offset-4 disabled:opacity-60"
+          >
+            {t("requestInfo")}
+          </button>
+        )}
         {error && <span className="font-black text-slate">{t("error")}</span>}
       </div>
     </div>

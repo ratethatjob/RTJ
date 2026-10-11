@@ -9,7 +9,7 @@ export const instant = false;
 export default async function ClaimPage({ params }: PageProps<"/[locale]/business/claim/[locationId]">) {
   const { locale, locationId } = await params;
   setRequestLocale(locale);
-  await requireUser(locale, `/business/claim/${locationId}`);
+  const { user } = await requireUser(locale, `/business/claim/${locationId}`);
   const location = await getLocationById(locationId);
   if (!location) notFound();
   const t = await getTranslations("Business");
@@ -21,7 +21,7 @@ export default async function ClaimPage({ params }: PageProps<"/[locale]/busines
         {location.address}, {location.city}
       </p>
       <p className="mt-3 text-lg text-slate">{t("claimFormBody")}</p>
-      <ClaimForm locationId={location.id} />
+      <ClaimForm locationId={location.id} userId={user.id} accountEmail={user.email ?? ""} />
     </main>
   );
 }
