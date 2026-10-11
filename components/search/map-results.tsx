@@ -1,6 +1,8 @@
 import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
+import { LocationList } from "@/components/location-list";
 import { MapPick } from "@/components/search/map-pick";
+import { getLocationById } from "@/lib/data";
 import { findMapPlaces } from "@/lib/place-search";
 import type { PlacesProvider } from "@/lib/places";
 
@@ -12,8 +14,9 @@ const norm = (s: string) =>
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
 
-/** "Pick the one you mean": map places under the workplaces already on RateThatJob (streamed).
- *  Places already listed above (same page, or same name and street) are left out. The session
+/** "Pick the one you mean": places found on Google / OpenStreetMap under the workplaces already on
+ *  RateThatJob (streamed). Ones already on RateThatJob join that list; listed ones (same page, or
+ *  same name and street) are left out. The session
  *  token found here is reused by the details call when one is opened (one Google session). */
 export async function MapResults({
   q,
@@ -36,18 +39,27 @@ export async function MapResults({
     return null;
   });
   const ownKeys = new Set(own.keys.map(norm));
-  const list = (found ?? []).filter(
+  const fresh = (found ?? []).filter(
     (r) => !(r.locationId && own.ids.includes(r.locationId)) && !ownKeys.has(norm(`${r.main} ${r.secondary.split(",")[0]}`)),
   );
+  // Places already on RateThatJob but not in the list above join that list; the rest are new.
+  const knownIds = [...new Set(fresh.map((r) => r.locationId).filter((id): id is string => Boolean(id)))];
+  const known = (await Promise.all(knownIds.map((id) => getLocationById(id)))).filter((l) => l !== null);
+  const list = fresh.filter((r) => !r.locationId);
 
-  if (!list.length) {
+  if (!list.length && !known.length) {
     return own.ids.length === 0 ? <p className="font-black text-slate">{t("noneAnywhere")}</p> : null;
   }
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-2xl font-black tracking-brand">{t("pickOne")}</h2>
-      <p className="text-slate">{t("pickOneHint")}</p>
-      <MapPick results={list} sessionToken={sessionToken} />
+      {known.length > 0 && <LocationList locations={known} />}
+      {list.length > 0 && (
+        <>
+          <h2 className="mt-2 text-2xl font-black tracking-brand">{t("pickOne")}</h2>
+          <p className="text-slate">{t("pickOneHint")}</p>
+          <MapPick results={list} sessionToken={sessionToken} />
+        </>
+      )}
       <p className="text-xs text-slate">
         {provider === "osm"
           ? tp.rich("poweredByOsm", {

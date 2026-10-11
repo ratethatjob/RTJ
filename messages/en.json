@@ -896,7 +896,7 @@
     "all": "All",
     "addMissing": "Can't find it? Add the workplace",
     "pickOne": "Pick the one you mean",
-    "pickOneHint": "From the map. Not on RateThatJob yet? Opening it creates its page.",
+    "pickOneHint": "These aren't on RateThatJob yet. Pick the right one and be the first to rate it.",
     "mapSearching": "Looking on the map…",
     "opening": "Opening…",
     "noneAnywhere": "No workplaces found. Check the spelling or try without the place."

@@ -896,7 +896,7 @@
     "all": "Mind",
     "addMissing": "Nem találod? Vedd fel a munkahelyet",
     "pickOne": "Válaszd ki, melyikre gondolsz",
-    "pickOneHint": "A térképről. Ha még nincs fent a RateThatJobon, megnyitáskor létrehozzuk az oldalát.",
+    "pickOneHint": "Ezek még nincsenek fent a RateThatJobon. Válaszd ki a megfelelőt, és elsőként értékelheted.",
     "mapSearching": "Keresés a térképen…",
     "opening": "Megnyitás…",
     "noneAnywhere": "Nincs találat. Ellenőrizd a nevet, vagy próbáld hely nélkül."
