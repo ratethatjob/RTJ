@@ -1,5 +1,5 @@
 {
-  "regions": ["syd1"],
+  "regions": ["fra1"],
   "crons": [
     { "path": "/api/cron/translate", "schedule": "17 4 * * *" },
     { "path": "/api/cron/emails", "schedule": "27 6 * * *" }

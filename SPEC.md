@@ -28,7 +28,7 @@ Later phase: job posting + easy, CV-free applying on the same platform (the appl
 | Layer | Choice | Notes |
 |---|---|---|
 | Framework | **Next.js (App Router) + TypeScript** | SSR/ISR for public pages, React Server Components |
-| Hosting | **Vercel** | Edge caching, ISR revalidation, OG image generation; functions in `syd1`, next to the database |
+| Hosting | **Vercel** | Edge caching, ISR revalidation, OG image generation; functions in `fra1`, next to the database (Supabase eu-central-1) |
 | Database | **Postgres (Supabase)** | Row Level Security on every table |
 | Auth | **Supabase Auth** | Apple, Google, Facebook, email OTP (passwordless) |
 | File storage | Supabase Storage, **private bucket** | Verification documents only; auto-delete after review |
