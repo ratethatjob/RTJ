@@ -115,11 +115,13 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     const { data } = await supabase
       .from("claim_requests")
       .select(
-        "id, created_at, org_name, contact_name, job_title, account_email, phone, website, no_website, method, note, document_path, locations(name, address), claim_messages(id, from_admin, body, created_at)",
+        "id, created_at, org_name, contact_name, job_title, account_email, phone, website, no_website, method, note, document_path, id_document_path, locations(name, address), claim_messages(id, from_admin, body, created_at)",
       )
       .eq("status", "open")
       .order("created_at");
-    const paths = (data ?? []).map((c) => c.document_path).filter((p): p is string => Boolean(p));
+    const paths = (data ?? [])
+      .flatMap((c) => [c.document_path, c.id_document_path])
+      .filter((p): p is string => Boolean(p));
     const { data: signed } = paths.length
       ? await supabase.storage.from("claim-documents").createSignedUrls(paths, 600)
       : { data: [] };
@@ -132,7 +134,6 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
       return {
         id: c.id,
         created_at: c.created_at,
-        documentUrl: c.document_path ? urls.get(c.document_path) : null,
         content: (
           <>
             <p className="text-lg font-black">{c.org_name}</p>
@@ -178,8 +179,26 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
                   </dd>
                 </>
               )}
-              <dt className="font-black">{t("document")}</dt>
-              <dd>{c.document_path ? t("documentAttached") : "–"}</dd>
+              <dt className="font-black">{c.method === "authorization" ? tb("documentAuthorization") : tb("documentRegistry")}</dt>
+              <dd>
+                {c.document_path && urls.get(c.document_path) ? (
+                  <a href={urls.get(c.document_path) ?? undefined} target="_blank" rel="noreferrer" className="font-black underline underline-offset-4">
+                    {t("openDocument")}
+                  </a>
+                ) : (
+                  "–"
+                )}
+              </dd>
+              <dt className="font-black">{tb("idDocument")}</dt>
+              <dd>
+                {c.id_document_path && urls.get(c.id_document_path) ? (
+                  <a href={urls.get(c.id_document_path) ?? undefined} target="_blank" rel="noreferrer" className="font-black underline underline-offset-4">
+                    {t("openDocument")}
+                  </a>
+                ) : (
+                  t("idMissing")
+                )}
+              </dd>
               {c.note && (<><dt className="font-black">{tb("note")}</dt><dd className="whitespace-pre-line">{c.note}</dd></>)}
             </dl>
             {messages.length > 0 && (

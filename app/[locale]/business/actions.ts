@@ -4,7 +4,7 @@ import { updateTag } from "next/cache";
 import { after } from "next/server";
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
-import { normalizeWebsite } from "@/lib/claim-check";
+import { domainCheck, normalizeWebsite } from "@/lib/claim-check";
 import { translateReply } from "@/lib/translation-jobs";
 
 export async function postReply(
@@ -45,7 +45,7 @@ export async function disputeReview(
   return error ? { error: true } : { ok: true };
 }
 
-const METHODS = ["email_domain", "phone", "document"] as const;
+const METHODS = ["email_domain", "document", "authorization"] as const;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 /** Is the uploaded file really in the claimant's folder for this claim? */
@@ -67,14 +67,17 @@ export async function submitClaim(form: {
   website: string;
   noWebsite: boolean;
   documentPath: string;
+  idDocumentPath: string;
   note: string;
-}): Promise<{ ok?: true; error?: "invalid" | "exists" | "generic" }> {
+}): Promise<{ ok?: true; error?: "invalid" | "exists" | "domain" | "generic" }> {
   const { supabase, user } = await getUser();
   if (!user) return { error: "generic" };
   const method = form.method as (typeof METHODS)[number];
   const phone = form.phone.trim();
   const website = form.noWebsite ? null : normalizeWebsite(form.website);
-  const documentPath = method === "document" ? form.documentPath : "";
+  const documentPath = method === "email_domain" ? "" : form.documentPath;
+  const idDocumentPath = form.idDocumentPath;
+  const inFolder = (path: string) => path.startsWith(`${user.id}/${form.id}/`);
   if (
     !UUID.test(form.id) ||
     form.orgName.trim().length < 2 ||
@@ -82,11 +85,14 @@ export async function submitClaim(form: {
     !METHODS.includes(method) ||
     phone.replace(/\D/g, "").length < 6 ||
     (!form.noWebsite && !website) ||
-    (method === "document" &&
-      (!documentPath.startsWith(`${user.id}/${form.id}/`) || !(await documentExists(supabase, documentPath))))
+    !inFolder(idDocumentPath) ||
+    !(await documentExists(supabase, idDocumentPath)) ||
+    (method !== "email_domain" && (!inFolder(documentPath) || !(await documentExists(supabase, documentPath))))
   ) {
     return { error: "invalid" };
   }
+  // Business email: the signed-in address must be on the company website's domain (never freemail).
+  if (method === "email_domain" && !domainCheck(user.email ?? null, website)?.match) return { error: "domain" };
   const { error } = await supabase.from("claim_requests").insert({
     id: form.id,
     location_id: form.locationId,
@@ -99,6 +105,7 @@ export async function submitClaim(form: {
     website,
     no_website: form.noWebsite,
     document_path: documentPath || null,
+    id_document_path: idDocumentPath,
     note: form.note.trim().slice(0, 2000) || null,
     locale: (await getLocale()) === "hu" ? "hu" : "en",
   });

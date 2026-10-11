@@ -10,7 +10,7 @@
 A workplace review platform focused on **location-level, frontline / hourly work** (restaurants, retail, warehouses, factories), also open to office jobs and startups.
 
 Core promise to workers: verified reviews and hard facts (pay on time, overtime paid, promised hours, does the employer reply to applicants).
-Core promise to employers: claim your workplace for free, reply to reviews, invite your team, see early warnings per location.
+Core promise to employers: free access to your workplace profile, reply to reviews, invite your team, see early warnings per location.
 
 Later phase: job posting + easy, CV-free applying on the same platform (the application flow also produces verified reviewers and the ghosting metric automatically).
 
@@ -176,7 +176,7 @@ Levels shown as badges: Not verified · Verified (document) · Verified (invited
 
 ## 7. Employer side (`/business`)
 
-- **Claim:** free. Verify by business email domain, phone call to listed number, or document (registry extract). Claim also confirms the legal entity link.
+- **Access request ("claim"):** free; public copy says "Request free access" / "Hozzáférés igénylése". Three ways to verify, each with a photo ID of the person (number and everything but photo and name may be covered): (a) business email – the signed-in, code-verified email's domain matches the company website (freemail never); (b) company registry extract / UAE trade license naming the person as director or owner; (c) letter of authorization signed by the legal representative (fillable PDF + DOCX form in EN/HU at `/forms/rtj-authorization-<locale>.pdf|docx`). No phone method. Documents go to the private `claim-documents` bucket, admins open them through signed links, deleted after the decision. The admin card shows the method, the domain match and both documents. Approval also confirms the legal entity link.
 - **Overview:** score, verified count, applicant reply rate, reviews awaiting reply, early warnings, per-location table.
 - **Early warnings (Pro):** detect drops in a category score (e.g. −0.5 within 60 days) or recurring topics (LLM topic clustering on recent reviews) per location; email + dashboard alert.
 - **Reviews & replies:** reply in any language (auto-translated for readers), dispute unverified reviews. No deletion.

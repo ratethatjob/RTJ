@@ -27,11 +27,11 @@ RateThatJob shows reviews of workplaces, facts (pay on time, overtime, hours, re
 
 ## 5. Employers
 
-- Claiming a workplace is free. We verify every claim.
+- Employer access to a workplace is free. We check every access request by hand. Accepted proof, each together with a photo ID of the person: a signed-in business email on the company website's domain (free email providers don't count), a company registry extract or trade license naming the person as a director or owner, or a letter of authorization signed by the company's legal representative (our form). Giving false information or documents ends the access.
 - Employers can reply to reviews and dispute unverified reviews. Reviews cannot be deleted, hidden or bought.
 - Employers must not try to identify reviewers or put pressure on their staff because of a review.
 - Pro is a paid plan per location. It includes the RateThatJob Index for your website (image badge, iframe card, Top Rated seal, the score in the JSON API), early warnings and statistics, and the other features listed on the [Pricing](/pricing) page.
-- Every location gets a 30-day free Pro trial, once, with no card needed. It starts automatically when the claim is approved.
+- Every location gets a 30-day free Pro trial, once, with no card needed. It starts automatically when the access request is approved.
 - After the trial, Pro is billed per location, monthly or yearly, at the prices on the [Pricing](/pricing) page. Hungarian locations are billed in forints, all others in euros.
 - If you subscribe by card during the trial, the first payment is taken when the trial ends, never earlier.
 - A Pro subscription renews automatically at the end of each period until you cancel it. You can cancel any time in your dashboard (Billing & invoices); Pro then stays on until the end of the period already paid and is not renewed.

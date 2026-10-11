@@ -41,9 +41,9 @@
       "ghostingTitle": "Ghosting meter",
       "ghostingBody": "See how often a workplace replies to applicants, and how fast."
     },
-    "claimTitle": "Run a workplace? Claim it for free.",
+    "claimTitle": "Do you run a workplace? Get free access.",
     "claimBody": "Reply to reviews, invite your team, and show candidates what it is really like to work with you.",
-    "claimCta": "Claim your workplace",
+    "claimCta": "Request free access",
     "rateBarTitle": "Worked somewhere?",
     "rateBarBody": "Rate it in 1 minute.",
     "paysOnTimeShort": "Pays on time",
@@ -196,9 +196,9 @@
       "schedule": "Schedule",
       "environment": "Environment"
     },
-    "claimTitle": "Is this your workplace?",
-    "claimBody": "Claim it for free to reply to reviews and invite your team.",
-    "claimCta": "Claim this workplace",
+    "claimTitle": "Do you run or own this workplace?",
+    "claimBody": "Get free access to reply to reviews and invite your team.",
+    "claimCta": "Request free access",
     "noReviewsTitle": "No reviews yet",
     "noReviewsBody": "Worked here? Be the first to share what it's really like.",
     "beTheFirst": "Be the first to rate",
@@ -426,7 +426,7 @@
     "country": "Country",
     "category": "Type",
     "submit": "Add and rate it",
-    "submitClaim": "Add and claim",
+    "submitClaim": "Add and request access",
     "cantFind": "Can't find it?",
     "addIt": "Add a workplace",
     "errors": {
@@ -466,12 +466,12 @@
     "noScore": "No reviews yet"
   },
   "Employers": {
-    "metaTitle": "RateThatJob for employers – claim your workplace for free",
-    "metaDescription": "Reply to reviews, invite your team and see early warnings for every location. Claiming your workplace is free.",
+    "metaTitle": "RateThatJob for employers – free access to your workplace profile",
+    "metaDescription": "Reply to reviews, invite your team and see early warnings for every location. Access is free.",
     "eyebrow": "For employers",
     "title": "A good workplace is the cheapest hiring advantage.",
-    "body": "Claim your workplaces for free. Reply to reviews, invite your team to rate you, and see what candidates see.",
-    "cta": "Claim your workplace",
+    "body": "Get free access to your workplaces. Reply to reviews, invite your team to rate you, and see what candidates see.",
+    "cta": "Request free access",
     "dashboard": "Go to your dashboard",
     "features": {
       "replyTitle": "Reply to every review",
@@ -484,10 +484,10 @@
       "indexBody": "Show your score on your careers page and job ads. It updates itself.",
       "indexLink": "How the Index works"
     },
-    "free": "Claiming is free. Reviews can never be bought or removed.",
+    "free": "Access is free. Reviews can never be bought or removed.",
     "howTitle": "How it works",
     "how": {
-      "claimTitle": "Claim your workplace",
+      "claimTitle": "Request access to your workplace",
       "claimBody": "Free. We verify it by business email, phone or a registry extract.",
       "engageTitle": "Reply and invite",
       "engageBody": "Answer reviews in your own language, share one invite link with your team, post jobs.",
@@ -495,7 +495,7 @@
       "improveBody": "See trends per location and get a warning when a score starts to drop."
     },
     "pricingTitle": "Free to start. Pro per location.",
-    "pricingBody": "Claiming and replies are free. Job ads start at a low posting fee. Pro adds early warnings, statistics, the RateThatJob Index and more.",
+    "pricingBody": "Access and replies are free. Job ads start at a low posting fee. Pro adds early warnings, statistics, the RateThatJob Index and more.",
     "pricingCta": "See pricing",
     "faqTitle": "Questions from employers",
     "faq": {
@@ -506,7 +506,7 @@
       "disputeQ": "What happens when we dispute a review?",
       "disputeA": "Our team checks it against the rules. Reviews that break them are removed; honest criticism stays.",
       "costQ": "What does it cost?",
-      "costA": "Claiming and the basic features are free. Pro is billed per location, monthly or yearly with 2 months free."
+      "costA": "Access and the basic features are free. Pro is billed per location, monthly or yearly with 2 months free."
     }
   },
   "Business": {
@@ -537,13 +537,13 @@
       "location_manager": "Own location only"
     },
     "noOrgTitle": "You don't manage a workplace yet",
-    "noOrgBody": "Claim your workplace for free to reply to reviews and invite your team.",
-    "pendingClaims": "Claims we're checking",
-    "claimTitle": "Claim your workplace",
+    "noOrgBody": "Request free access to your workplace to reply to reviews and invite your team.",
+    "pendingClaims": "Access requests we're checking",
+    "claimTitle": "Request access to your workplace",
     "claimSearchHint": "Type the name of your workplace. We look on RateThatJob and on the map at once.",
-    "claimNotListed": "Not listed yet? Add it first, then claim it.",
-    "claimFormTitle": "Claim {name}",
-    "claimFormBody": "Tell us who you are. We check every claim by hand, usually within 2 working days.",
+    "claimNotListed": "Not listed yet? Add it first, then request access.",
+    "claimFormTitle": "Request access: {name}",
+    "claimFormBody": "Tell us who you are. We check every request by hand, usually within 2 working days.",
     "orgName": "Company name",
     "orgNamePlaceholder": "e.g. Example Trade LLC",
     "contactName": "Your name",
@@ -551,16 +551,17 @@
     "jobTitlePlaceholder": "e.g. Owner, HR manager",
     "method": "How can we verify you?",
     "methods": {
-      "email_domain": "My signed-in email is on the company's domain",
+      "email_domain": "Business email + photo ID",
       "phone": "Call the workplace's listed phone number",
-      "document": "Send a company registry extract"
+      "document": "Company registry extract + photo ID",
+      "authorization": "Letter of authorization + photo ID"
     },
     "phone": "Phone number",
     "note": "Anything else we should know?",
-    "submitClaim": "Send claim",
-    "claimSent": "Thanks! We'll check your claim and email you when it's approved.",
-    "claimExists": "You already have an open claim for this workplace.",
-    "claimError": "Please fill in your company, your name, a phone number and your website (or tick that you don't have one).",
+    "submitClaim": "Send request",
+    "claimSent": "Thanks! We'll check your request and email you when it's approved.",
+    "claimExists": "You already have an open access request for this workplace.",
+    "claimError": "Please fill in your company, your name, a phone number and your website (or tick that you don't have one), and attach the documents.",
     "overviewTitle": "Overview",
     "allLocations": "All locations",
     "last12": "last 12 months",
@@ -671,7 +672,7 @@
     "website": "Company website",
     "websitePlaceholder": "e.g. example.com",
     "noWebsite": "We don't have a website",
-    "accountEmailHint": "We'll use the email you're signed in with: <b>{email}</b>. It's already confirmed with a code. If it's on your company's domain, approval is quicker.",
+    "accountEmailHint": "We check the email you're signed in with: <b>{email}</b> (confirmed with a code). Its domain must match the company website above.",
     "document": "Company registry extract",
     "documentHint": "PDF, JPG or PNG, up to 10 MB. Only our team sees it, and we delete it once we've decided.",
     "documentError": "Please attach a PDF, JPG or PNG file of up to 10 MB.",
@@ -682,7 +683,20 @@
     "claimChecking": "We're checking it.",
     "claimDocumentReceived": "document received",
     "claimFromUs": "RateThatJob",
-    "claimFromYou": "You"
+    "claimFromYou": "You",
+    "methodHelp": {
+      "email_domain": "Your signed-in email is on your company website's domain (not Gmail, Outlook or similar).",
+      "document": "You are named in it as a director or owner. In the UAE: trade license.",
+      "authorization": "Signed by the company's legal representative. Download the form below."
+    },
+    "documentRegistry": "Company registry extract or trade license",
+    "documentAuthorization": "Signed letter of authorization",
+    "authorizationForm": "Download the form:",
+    "formPdf": "PDF (fillable)",
+    "formDocx": "Word (DOCX)",
+    "idDocument": "Photo ID (ID card or passport)",
+    "idDocumentHint": "You can cover the document number and everything except your photo and name.",
+    "domainError": "Your signed-in email ({email}) isn't on the company website's domain. Pick another method, or sign in with your work email."
   },
   "Account": {
     "title": "Your account",
@@ -789,11 +803,11 @@
     "entitySources": {
       "document": "document",
       "registry": "registry",
-      "claim": "claim",
+      "claim": "access request",
       "admin": "admin"
     },
     "metrics": {
-      "claimed": "Claimed workplaces",
+      "claimed": "Workplaces with employer access",
       "rated": "Rated workplaces",
       "ofLocations": "of {count}",
       "invites": "Reviews from invites",
@@ -864,7 +878,8 @@
     "refreshPages": "Refresh public pages",
     "refreshPagesHint": "Changed workplace data with SQL or a migration? Public pages show it from the next visit.",
     "refreshPagesDone": "Done.",
-    "refreshPagesError": "Couldn't refresh."
+    "refreshPagesError": "Couldn't refresh.",
+    "idMissing": "Not attached (older request)"
   },
   "Search": {
     "title": "Find a workplace",
@@ -1474,7 +1489,7 @@
     "addManually": "Add it yourself",
     "reviews": "{count, plural, one {# review} other {# reviews}}",
     "fromMap": "Map",
-    "addAndClaim": "Add and claim",
+    "addAndClaim": "Add and request access",
     "clear": "Clear"
   },
   "Footer": {
@@ -1482,7 +1497,7 @@
     "employers": "For employers",
     "company": "RateThatJob",
     "account": "My account",
-    "claim": "Claim your workplace",
+    "claim": "Request free access",
     "index": "RateThatJob Index",
     "imprint": "Imprint",
     "terms": "Terms of use",
@@ -1505,7 +1520,7 @@
       "factsTitle": "Facts, not just stars",
       "factsBody": "Were you paid on time? Was overtime paid? Did they reply to applicants? Clear answers help people decide.",
       "fairTitle": "Fair to employers",
-      "fairBody": "Claiming is free, every employer can reply, and reviews can't be bought or removed – by anyone."
+      "fairBody": "Employer access is free, every employer can reply, and reviews can't be bought or removed – by anyone."
     },
     "whyTitle": "Why we built it",
     "why1": "Most job sites are built for office jobs and big brands. For hourly work, what matters is the specific location: the manager, the schedule, whether pay arrives on time.",
@@ -1517,8 +1532,8 @@
   "Pricing": {
     "metaTitle": "Pricing for employers",
     "eyebrow": "Pricing",
-    "title": "Free to claim. Pro when you need more.",
-    "intro": "Every employer can claim locations and reply to reviews for free. Pro is billed per location, job ads per ad.",
+    "title": "Free access. Pro when you need more.",
+    "intro": "Every employer gets free access to their locations and can reply to reviews. Pro is billed per location, job ads per ad.",
     "monthly": "Monthly",
     "yearly": "Yearly",
     "perMonth": "month per location",
@@ -1529,7 +1544,7 @@
       "name": "Free",
       "note": "Forever, for every location.",
       "features": {
-        "claim": "Claim your workplaces",
+        "claim": "Access to your workplaces",
         "reply": "Reply to every review",
         "dispute": "Dispute unverified reviews",
         "inviteLink": "Shareable invite link for your team",
@@ -1537,7 +1552,7 @@
         "profileBasic": "Team members and roles",
         "careersHub": "RateThatJob Careers Hub: your jobs on your website"
       },
-      "cta": "Claim for free"
+      "cta": "Request free access"
     },
     "pro": {
       "name": "Pro",
@@ -1570,7 +1585,7 @@
     "faqTitle": "Questions",
     "faq": {
       "q1": "Is Free really free?",
-      "q1a": "Yes. Claiming, replying, disputing and invite links are free with no time limit. Job ads have a low posting fee.",
+      "q1a": "Yes. Access, replying, disputing and invite links are free with no time limit. Job ads have a low posting fee.",
       "q2": "How is Pro billed?",
       "q2a": "Per location, monthly or yearly. Yearly gives you 2 months free.",
       "q3": "Can we mix Free and Pro locations?",
@@ -1578,7 +1593,7 @@
       "q4": "Does Pro affect our score?",
       "q4a": "No. Scores come only from reviews and applications, the same for everyone.",
       "trial": "Is there a free trial?",
-      "triala": "Yes. Every location gets 30 days of Pro free, with no card needed. It starts automatically when your claim is approved, once per location. After that, your embedded Index says \"currently unavailable\" until you activate Pro."
+      "triala": "Yes. Every location gets 30 days of Pro free, with no card needed. It starts automatically when your access request is approved, once per location. After that, your embedded Index says \"currently unavailable\" until you activate Pro."
     },
     "jobAds": {
       "title": "Job ads",
@@ -1687,10 +1702,10 @@
       "fewQ": "What if we have fewer than 5 reviews?",
       "fewA": "The badge says \"Rate us on RateThatJob\" and links to the review form for your location. Share your invite link with your team to get there.",
       "costQ": "Does it cost anything?",
-      "costA": "The Index for your website is part of Pro. Every location gets 30 days free with no card, starting when your claim is approved. After that Pro is billed per location; without it, your embedded badges stay but say the Index is currently unavailable. Your public profile and reviews are always visible."
+      "costA": "The Index for your website is part of Pro. Every location gets 30 days free with no card, starting when your access request is approved. After that Pro is billed per location; without it, your embedded badges stay but say the Index is currently unavailable. Your public profile and reviews are always visible."
     },
     "bottomTitle": "Let your people speak for you.",
-    "bottomBody": "Claim your workplace for free and try the Index on your careers page for 30 days, no card.",
+    "bottomBody": "Request free access to your workplace and try the Index on your careers page for 30 days, no card.",
     "trialNote": "Part of Pro · 30 days free, no card"
   },
   "CareersHub": {
@@ -1730,7 +1745,7 @@
     },
     "stepsTitle": "How it works",
     "steps": {
-      "claimTitle": "Claim your workplace",
+      "claimTitle": "Request access to your workplace",
       "claimBody": "It's free. Once approved, you get your employer dashboard.",
       "postTitle": "Post your jobs",
       "postBody": "Choose quick apply or CV, add your questions and pick a package.",
@@ -1757,7 +1772,7 @@
     "faqTitle": "Questions",
     "faq": {
       "costQ": "Does Careers Hub cost anything?",
-      "costA": "No. Careers Hub is free for every employer who has claimed their workplace, with or without Pro. Job ads are priced per ad – see Pricing.",
+      "costA": "No. Careers Hub is free for every employer who has access to their workplace, with or without Pro. Job ads are priced per ad – see Pricing.",
       "whereQ": "Where can I put it?",
       "whereA": "On any website where you can add HTML: your careers page, website builders that allow custom code, landing pages.",
       "noJobsQ": "What if we have no open jobs?",
@@ -1768,7 +1783,7 @@
       "dataA": "No cookies. We only record which websites show Careers Hub (the domain), so you can see where you're embedded."
     },
     "bottomTitle": "Put your jobs where your candidates already look.",
-    "bottomBody": "Claim your workplace for free, post a job and copy your Careers Hub code from your dashboard."
+    "bottomBody": "Request free access to your workplace, post a job and copy your Careers Hub code from your dashboard."
   },
   "Plan": {
     "status": "Status",
@@ -1830,12 +1845,12 @@
     "doneBody": "You won't get any more invite emails from us. Your invite link still works if you change your mind."
   },
   "ClaimEmail": {
-    "infoSubject": "We need a bit more information about your claim – {location}",
-    "infoBody": "Hi,\n\nThanks for claiming {location} on RateThatJob. Before we can approve it, we need a bit more information:\n\n{message}\n\nReply or add a document here: {link}\n\nRateThatJob – Know before you go",
-    "approvedSubject": "Your claim is approved – {location}",
-    "approvedBody": "Hi,\n\nGood news: your claim for {location} is approved. You can now reply to reviews, invite your team and post jobs. Your free 30-day Pro trial has started.\n\nOpen your dashboard: {link}\n\nRateThatJob – Know before you go",
-    "rejectedSubject": "We couldn't approve your claim – {location}",
-    "rejectedBody": "Hi,\n\nWe couldn't confirm that you represent {location}, so we couldn't approve your claim. You're welcome to send a new claim with a business email on your company's domain or a company registry extract.\n\n{link}\n\nRateThatJob – Know before you go"
+    "infoSubject": "We need a bit more information about your access request – {location}",
+    "infoBody": "Hi,\n\nThanks for requesting access to {location} on RateThatJob. Before we can approve it, we need a bit more information:\n\n{message}\n\nReply or add a document here: {link}\n\nRateThatJob – Know before you go",
+    "approvedSubject": "Your access is approved – {location}",
+    "approvedBody": "Hi,\n\nGood news: your access to {location} is approved. You can now reply to reviews, invite your team and post jobs. Your free 30-day Pro trial has started.\n\nOpen your dashboard: {link}\n\nRateThatJob – Know before you go",
+    "rejectedSubject": "We couldn't approve your access request – {location}",
+    "rejectedBody": "Hi,\n\nWe couldn't confirm that you represent {location}, so we couldn't approve your access request. You're welcome to send a new request with a business email on your company's domain, a company registry extract or a letter of authorization, each with a photo ID.\n\n{link}\n\nRateThatJob – Know before you go"
   },
   "Billing": {
     "proLine": "RateThatJob Pro – {location}",

@@ -41,9 +41,9 @@
       "ghostingTitle": "Ghosting-mutató",
       "ghostingBody": "Nézd meg, milyen gyakran és milyen gyorsan válaszol egy munkahely a jelentkezőknek."
     },
-    "claimTitle": "Munkahelyet vezetsz? Vedd át ingyen.",
+    "claimTitle": "Munkahelyet vezetsz? Igényelj ingyenes hozzáférést.",
     "claimBody": "Válaszolj az értékelésekre, hívd meg a csapatod, és mutasd meg a jelentkezőknek, milyen nálatok dolgozni.",
-    "claimCta": "Munkahely átvétele",
+    "claimCta": "Hozzáférés igénylése",
     "rateBarTitle": "Dolgoztál valahol?",
     "rateBarBody": "Értékeld 1 perc alatt.",
     "paysOnTimeShort": "Időben fizet",
@@ -170,24 +170,24 @@
   "Location": {
     "metaTitle": "{company} ({location}) – értékelések, bér, beosztás",
     "metaDescription": "{company}, {address}: {score} / 5, {count} értékelés alapján. Időben fizet: {paidOnTime}%. A jelentkezők {replyRate}%-ának válaszol.",
-    "metaDescriptionEmpty": "Dolgoztál itt: {company}, {address}? Értékeld elsőként a bért, a beosztást és a vezetőket a RateThatJobon.",
+    "metaDescriptionEmpty": "Dolgoztál már itt: {company}, {address}? Értékeld elsőként a fizetést, a beosztást és a vezetőket a RateThatJobon.",
     "outOf5": "/ 5",
     "operatedBy": "Üzemeltető: {entity}",
-    "last12Months": "Utolsó 12 hónap",
+    "last12Months": "Az elmúlt 12 hónap",
     "reviewCount": "{count} értékelés",
     "verifiedCount": "{count} igazolt",
     "follow": "Követés",
     "rateThisJob": "Értékelem",
     "readReviews": "Értékelések",
-    "seeAllReviews": "Összes értékelés",
+    "seeAllReviews": "Az összes értékelés",
     "theFacts": "A tények",
     "facts": {
       "paid_on_time": "Időben fizet",
       "paid_as_promised": "Annyit fizet, amennyit ígér",
       "overtime_paid": "Kifizeti a túlórát",
-      "hours_as_promised": "Megvannak az ígért órák"
+      "hours_as_promised": "Megkapod az ígért óraszámot"
     },
-    "ghostingMeter": "Ghosting-mutató",
+    "ghostingMeter": "Válaszol-e a jelentkezőknek?",
     "repliesTo": "A jelentkezők {rate}%-ának válaszol",
     "avgReplyTime": "Átlagos válaszidő: {days} nap",
     "categories": {
@@ -196,19 +196,19 @@
       "schedule": "Beosztás",
       "environment": "Légkör"
     },
-    "claimTitle": "Ez a te munkahelyed?",
-    "claimBody": "Vedd át ingyen, hogy válaszolhass az értékelésekre és meghívhasd a csapatod.",
-    "claimCta": "Munkahely átvétele",
+    "claimTitle": "Te vezeted vagy a tiéd ez a munkahely?",
+    "claimBody": "Igényelj ingyenes hozzáférést, hogy válaszolhass az értékelésekre és meghívhasd a csapatod.",
+    "claimCta": "Hozzáférés igénylése",
     "noReviewsTitle": "Még nincs értékelés",
-    "noReviewsBody": "Dolgoztál itt? Oszd meg elsőként, milyen valójában.",
+    "noReviewsBody": "Dolgoztál itt? Mondd el elsőként, milyen valójában.",
     "beTheFirst": "Értékeld elsőként",
     "repliesToApplicants": "Válaszol a jelentkezőknek",
-    "ghostingFromApplications": "{count} RateThatJobon keresztüli jelentkezés alapján",
+    "ghostingFromApplications": "{count}, a RateThatJobon beküldött jelentkezés alapján",
     "openJobs": "Nyitott állások",
     "seeJob": "Megnézem",
     "fromEmployer": "A munkáltatótól",
-    "website": "Weboldaluk",
-    "nearby": "Hasonló munkahelyek: {city}",
+    "website": "A weboldaluk",
+    "nearby": "Hasonló munkahelyek itt: {city}",
     "following": "Követed"
   },
   "Reviews": {
@@ -426,7 +426,7 @@
     "country": "Ország",
     "category": "Típus",
     "submit": "Felveszem és értékelem",
-    "submitClaim": "Felveszem és átveszem",
+    "submitClaim": "Felveszem és hozzáférést kérek",
     "cantFind": "Nem találod?",
     "addIt": "Munkahely felvétele",
     "errors": {
@@ -466,12 +466,12 @@
     "noScore": "Még nincs értékelés"
   },
   "Employers": {
-    "metaTitle": "RateThatJob munkáltatóknak – vedd át ingyen a munkahelyed",
-    "metaDescription": "Válaszolj az értékelésekre, hívd meg a csapatod, és lásd a korai figyelmeztetéseket minden telephelyen. Az átvétel ingyenes.",
+    "metaTitle": "RateThatJob munkáltatóknak – ingyenes hozzáférés a munkahelyed profiljához",
+    "metaDescription": "Válaszolj az értékelésekre, hívd meg a csapatod, és lásd a korai figyelmeztetéseket minden telephelyen. A hozzáférés ingyenes.",
     "eyebrow": "Munkáltatóknak",
     "title": "A jó munkahely ma a legolcsóbb toborzási előny.",
-    "body": "Vedd át ingyen a munkahelyeidet. Válaszolj az értékelésekre, hívd meg a csapatod, és nézd meg, mit látnak a jelentkezők.",
-    "cta": "Munkahely átvétele",
+    "body": "Igényelj ingyenes hozzáférést a munkahelyeidhez. Válaszolj az értékelésekre, hívd meg a csapatod, és nézd meg, mit látnak a jelentkezők.",
+    "cta": "Hozzáférés igénylése",
     "dashboard": "Irányítópult",
     "features": {
       "replyTitle": "Válaszolj minden értékelésre",
@@ -484,10 +484,10 @@
       "indexBody": "Mutasd meg a pontszámod a karrieroldaladon és az álláshirdetéseidben. Magától frissül.",
       "indexLink": "Így működik az Index"
     },
-    "free": "Az átvétel ingyenes. Értékelést nem lehet megvenni vagy eltávolítani.",
+    "free": "A hozzáférés ingyenes. Értékelést nem lehet megvenni vagy eltávolítani.",
     "howTitle": "Hogyan működik",
     "how": {
-      "claimTitle": "Vedd át a munkahelyed",
+      "claimTitle": "Igényelj hozzáférést a munkahelyedhez",
       "claimBody": "Ingyenes. Céges e-maillel, telefonon vagy cégkivonattal ellenőrizzük.",
       "engageTitle": "Válaszolj és hívd meg a csapatod",
       "engageBody": "Válaszolj a saját nyelveden, ossz meg egy meghívó linket a dolgozóiddal, adj fel állásokat.",
@@ -495,7 +495,7 @@
       "improveBody": "Lásd a trendeket telephelyenként, és kapj figyelmeztetést, ha egy pontszám romlani kezd."
     },
     "pricingTitle": "Ingyen indulhatsz. Pro telephelyenként.",
-    "pricingBody": "Az átvétel és a válaszok ingyenesek. Az álláshirdetés alacsony feladási díjjal indul. A Pro korai figyelmeztetést, statisztikát, RateThatJob Indexet és még többet ad.",
+    "pricingBody": "A hozzáférés és a válaszok ingyenesek. Az álláshirdetés alacsony feladási díjjal indul. A Pro korai figyelmeztetést, statisztikát, RateThatJob Indexet és még többet ad.",
     "pricingCta": "Árak",
     "faqTitle": "Munkáltatói kérdések",
     "faq": {
@@ -506,7 +506,7 @@
       "disputeQ": "Mi történik, ha vitatunk egy értékelést?",
       "disputeA": "A csapatunk a szabályok alapján megnézi. Ami sérti őket, lekerül; az őszinte kritika marad.",
       "costQ": "Mennyibe kerül?",
-      "costA": "Az átvétel és az alapfunkciók ingyenesek. A Pro telephelyenként fizetendő, havonta vagy évente, ami 2 hónapnyi kedvezményt ad."
+      "costA": "A hozzáférés és az alapfunkciók ingyenesek. A Pro telephelyenként fizetendő, havonta vagy évente – az éves díjban 2 hónap ingyenes."
     }
   },
   "Business": {
@@ -537,12 +537,12 @@
       "location_manager": "Csak a saját telephely"
     },
     "noOrgTitle": "Még nem kezelsz munkahelyet",
-    "noOrgBody": "Vedd át ingyen a munkahelyed, hogy válaszolhass az értékelésekre és meghívhasd a csapatod.",
-    "pendingClaims": "Ellenőrzés alatt álló igénylések",
-    "claimTitle": "Munkahely átvétele",
+    "noOrgBody": "Igényelj ingyenes hozzáférést a munkahelyedhez, hogy válaszolhass az értékelésekre és meghívhasd a csapatod.",
+    "pendingClaims": "Ellenőrzés alatt álló hozzáférés-igénylések",
+    "claimTitle": "Hozzáférés igénylése",
     "claimSearchHint": "Írd be a munkahelyed nevét: egyszerre keresünk a RateThatJobon és a térképen.",
-    "claimNotListed": "Még nincs fent? Vedd fel, aztán vedd át.",
-    "claimFormTitle": "{name} átvétele",
+    "claimNotListed": "Még nincs fent? Vedd fel, aztán igényelj hozzáférést.",
+    "claimFormTitle": "Hozzáférés igénylése: {name}",
     "claimFormBody": "Mondd el, ki vagy. Minden igénylést kézzel ellenőrzünk, általában 2 munkanapon belül.",
     "orgName": "Cégnév",
     "orgNamePlaceholder": "pl. Példa Kft.",
@@ -551,16 +551,17 @@
     "jobTitlePlaceholder": "pl. tulajdonos, HR-vezető",
     "method": "Hogyan ellenőrizhetünk?",
     "methods": {
-      "email_domain": "A belépett e-mail-címem a cég domainjén van",
+      "email_domain": "Céges e-mail + személyi igazolvány",
       "phone": "Felhívjuk a munkahely nyilvános telefonszámát",
-      "document": "Cégkivonatot küldök"
+      "document": "Cégkivonat + személyi igazolvány",
+      "authorization": "Meghatalmazás + személyi igazolvány"
     },
     "phone": "Telefonszám",
     "note": "Mit kell még tudnunk?",
     "submitClaim": "Igénylés elküldése",
     "claimSent": "Köszönjük! Ellenőrizzük az igénylést, és e-mailben jelezzük, ha jóváhagytuk.",
-    "claimExists": "Ehhez a munkahelyhez már van nyitott igénylésed.",
-    "claimError": "Add meg a cég nevét, a neved, egy telefonszámot és a weboldalt (vagy jelöld, hogy nincs).",
+    "claimExists": "Ehhez a munkahelyhez már van nyitott hozzáférés-igénylésed.",
+    "claimError": "Add meg a cég nevét, a neved, egy telefonszámot és a weboldalt (vagy jelöld, hogy nincs), és csatold a dokumentumokat.",
     "overviewTitle": "Áttekintés",
     "allLocations": "Minden telephely",
     "last12": "utolsó 12 hónap",
@@ -671,7 +672,7 @@
     "website": "A cég weboldala",
     "websitePlaceholder": "pl. pelda.hu",
     "noWebsite": "Nincs weboldalunk",
-    "accountEmailHint": "A belépéshez használt e-mail-címedet használjuk: <b>{email}</b>. Ezt már kóddal igazoltad. Ha a céged domainjén van, gyorsabb a jóváhagyás.",
+    "accountEmailHint": "A belépéshez használt e-mail-címedet ellenőrizzük: <b>{email}</b> (kóddal igazolva). A domainjének egyeznie kell a fent megadott céges weboldaléval.",
     "document": "Cégkivonat",
     "documentHint": "PDF, JPG vagy PNG, legfeljebb 10 MB. Csak a csapatunk látja, és a döntés után töröljük.",
     "documentError": "Csatolj egy legfeljebb 10 MB-os PDF, JPG vagy PNG fájlt.",
@@ -682,7 +683,20 @@
     "claimChecking": "Ellenőrizzük.",
     "claimDocumentReceived": "dokumentum megérkezett",
     "claimFromUs": "RateThatJob",
-    "claimFromYou": "Te"
+    "claimFromYou": "Te",
+    "methodHelp": {
+      "email_domain": "A belépett e-mail-címed a céged weboldalának domainjén van (nem Gmail, Outlook vagy hasonló).",
+      "document": "Szerepelsz benne vezető tisztségviselőként vagy tulajdonosként. Az Egyesült Arab Emírségekben: trade license.",
+      "authorization": "A cég törvényes képviselője írja alá. A nyomtatványt lent letöltheted."
+    },
+    "documentRegistry": "Cégkivonat vagy trade license",
+    "documentAuthorization": "Aláírt meghatalmazás",
+    "authorizationForm": "A nyomtatvány letöltése:",
+    "formPdf": "PDF (kitölthető)",
+    "formDocx": "Word (DOCX)",
+    "idDocument": "Személyi igazolvány vagy útlevél",
+    "idDocumentHint": "Az okmány számát és a fényképeden és a neveden kívül minden mást letakarhatsz.",
+    "domainError": "A belépett e-mail-címed ({email}) nem a céges weboldal domainjén van. Válassz másik módot, vagy lépj be a céges e-mail-címeddel."
   },
   "Account": {
     "title": "Fiókod",
@@ -789,11 +803,11 @@
     "entitySources": {
       "document": "dokumentum",
       "registry": "cégjegyzék",
-      "claim": "átvétel",
+      "claim": "hozzáférés-igénylés",
       "admin": "admin"
     },
     "metrics": {
-      "claimed": "Átvett munkahelyek",
+      "claimed": "Munkahelyek munkáltatói hozzáféréssel",
       "rated": "Értékelt munkahelyek",
       "ofLocations": "összesen {count}",
       "invites": "Meghívóból jött értékelések",
@@ -864,7 +878,8 @@
     "refreshPages": "Nyilvános oldalak frissítése",
     "refreshPagesHint": "SQL-lel vagy migrációval módosítottál munkahelyadatot? A nyilvános oldalak a következő látogatástól mutatják.",
     "refreshPagesDone": "Kész.",
-    "refreshPagesError": "Nem sikerült frissíteni."
+    "refreshPagesError": "Nem sikerült frissíteni.",
+    "idMissing": "Nincs csatolva (korábbi igénylés)"
   },
   "Search": {
     "title": "Munkahely keresése",
@@ -1474,7 +1489,7 @@
     "addManually": "Add meg kézzel",
     "reviews": "{count} értékelés",
     "fromMap": "Térkép",
-    "addAndClaim": "Felveszem és átveszem",
+    "addAndClaim": "Felveszem és hozzáférést kérek",
     "clear": "Törlés"
   },
   "Footer": {
@@ -1482,7 +1497,7 @@
     "employers": "Munkáltatóknak",
     "company": "RateThatJob",
     "account": "Fiókom",
-    "claim": "Munkahely átvétele",
+    "claim": "Hozzáférés igénylése",
     "index": "RateThatJob Index",
     "imprint": "Impresszum",
     "terms": "ÁSZF",
@@ -1505,7 +1520,7 @@
       "factsTitle": "Tények, nem csak csillagok",
       "factsBody": "Időben fizettek? Kifizették a túlórát? Válaszoltak a jelentkezőknek? A világos válaszok segítenek dönteni.",
       "fairTitle": "Korrekt a munkáltatókkal",
-      "fairBody": "Az átvétel ingyenes, minden munkáltató válaszolhat, és értékelést senki nem vehet meg vagy távolíthat el."
+      "fairBody": "A munkáltatói hozzáférés ingyenes, minden munkáltató válaszolhat, és értékelést senki nem vehet meg vagy távolíthat el."
     },
     "whyTitle": "Miért csináljuk",
     "why1": "A legtöbb állásoldal irodai munkákra és nagy márkákra készült. Órabéres munkánál a konkrét telephely számít: a vezető, a beosztás, és hogy időben jön-e a fizetés.",
@@ -1517,8 +1532,8 @@
   "Pricing": {
     "metaTitle": "Árak munkáltatóknak",
     "eyebrow": "Árak",
-    "title": "Az átvétel ingyenes. Pro, ha többre van szükséged.",
-    "intro": "Minden munkáltató ingyen átveheti a telephelyeit és válaszolhat az értékelésekre. A Pro telephelyenként, az álláshirdetés hirdetésenként fizetendő.",
+    "title": "Ingyenes hozzáférés. Pro, ha többre van szükséged.",
+    "intro": "Minden munkáltató ingyen hozzáférhet a telephelyeihez, és válaszolhat az értékelésekre. A Pro telephelyenként, az álláshirdetés hirdetésenként fizetendő.",
     "monthly": "Havi",
     "yearly": "Éves",
     "perMonth": "hó / telephely",
@@ -1529,7 +1544,7 @@
       "name": "Ingyenes",
       "note": "Örökre, minden telephelyre.",
       "features": {
-        "claim": "Munkahelyek átvétele",
+        "claim": "Hozzáférés a munkahelyeidhez",
         "reply": "Válasz minden értékelésre",
         "dispute": "Igazolatlan értékelések vitatása",
         "inviteLink": "Megosztható meghívó link a csapatnak",
@@ -1537,7 +1552,7 @@
         "profileBasic": "Csapattagok és szerepkörök",
         "careersHub": "RateThatJob Careers Hub: az állásaid a weboldaladon"
       },
-      "cta": "Ingyenes átvétel"
+      "cta": "Ingyenes hozzáférés igénylése"
     },
     "pro": {
       "name": "Pro",
@@ -1570,7 +1585,7 @@
     "faqTitle": "Kérdések",
     "faq": {
       "q1": "Tényleg ingyenes az ingyenes?",
-      "q1a": "Igen. Az átvétel, a válasz, a vitatás és a meghívó link időkorlát nélkül ingyenes. Az álláshirdetésnek alacsony feladási díja van.",
+      "q1a": "Igen. A hozzáférés, a válaszadás, a vitatás és a meghívó link időkorlát nélkül ingyenes. Az álláshirdetésnek alacsony feladási díja van.",
       "q2": "Hogyan fizetünk a Próért?",
       "q2a": "Telephelyenként, havonta vagy évente. Az éves 2 hónapot ingyen ad.",
       "q3": "Lehet vegyesen ingyenes és Pro telephelyünk?",
@@ -1578,7 +1593,7 @@
       "q4": "Befolyásolja a Pro a pontszámunkat?",
       "q4a": "Nem. A pontszám csak értékelésekből és jelentkezésekből jön, mindenkinél ugyanúgy.",
       "trial": "Van ingyenes próba?",
-      "triala": "Igen. Minden telephely 30 nap Prót kap ingyen, bankkártya nélkül. Automatikusan indul, amikor jóváhagyjuk az átvételt, telephelyenként egyszer. Utána a kitett Index „jelenleg nem elérhető” feliratot mutat, amíg be nem kapcsolod a Prót."
+      "triala": "Igen. Minden telephely 30 nap Prót kap ingyen, bankkártya nélkül. Automatikusan indul, amikor jóváhagyjuk a hozzáférés-igénylést, telephelyenként egyszer. Utána a kitett Index „jelenleg nem elérhető” feliratot mutat, amíg be nem kapcsolod a Prót."
     },
     "jobAds": {
       "title": "Álláshirdetések",
@@ -1687,10 +1702,10 @@
       "fewQ": "Mi van, ha 5-nél kevesebb értékelésünk van?",
       "fewA": "A jelvényen az áll, hogy „Értékelj minket a RateThatJobon”, és a telephelyed értékelő űrlapjára visz. Oszd meg a meghívó linkedet a csapatoddal, hogy összegyűljön az 5.",
       "costQ": "Kerül valamibe?",
-      "costA": "A weboldaladra kitehető Index a Pro része. Minden telephely 30 napot kap ingyen, bankkártya nélkül, az átvétel jóváhagyásától. Utána a Pro telephelyenként fizetős; nélküle a kitett jelvények megmaradnak, de azt mutatják, hogy az Index jelenleg nem elérhető. A nyilvános profilod és az értékelések mindig láthatók."
+      "costA": "A weboldaladra kitehető Index a Pro része. Minden telephely 30 napot kap ingyen, bankkártya nélkül, a hozzáférés jóváhagyásától. Utána a Pro telephelyenként fizetős; nélküle a kitett jelvények megmaradnak, de azt mutatják, hogy az Index jelenleg nem elérhető. A nyilvános profilod és az értékelések mindig láthatók."
     },
     "bottomTitle": "Hadd beszéljenek helyetted a dolgozóid.",
-    "bottomBody": "Vedd át ingyen a munkahelyed, és próbáld ki az Indexet a karrieroldaladon 30 napig, bankkártya nélkül.",
+    "bottomBody": "Igényelj ingyenes hozzáférést a munkahelyedhez, és próbáld ki az Indexet a karrieroldaladon 30 napig, bankkártya nélkül.",
     "trialNote": "A Pro része · 30 nap ingyen, bankkártya nélkül"
   },
   "CareersHub": {
@@ -1730,7 +1745,7 @@
     },
     "stepsTitle": "Hogyan működik",
     "steps": {
-      "claimTitle": "Vedd át a munkahelyed",
+      "claimTitle": "Igényelj hozzáférést a munkahelyedhez",
       "claimBody": "Ingyenes. Jóváhagyás után megkapod a munkáltatói vezérlőpultot.",
       "postTitle": "Add fel az állásaidat",
       "postBody": "Válassz gyors vagy önéletrajzos jelentkezést, add meg a kérdéseidet, és válassz csomagot.",
@@ -1757,7 +1772,7 @@
     "faqTitle": "Kérdések",
     "faq": {
       "costQ": "Kerül valamibe a Careers Hub?",
-      "costA": "Nem. A Careers Hub minden munkáltatónak ingyenes, aki átvette a munkahelyét, Pro csomaggal és nélküle is. Az álláshirdetéseknek hirdetésenkénti díja van – lásd az Árak oldalt.",
+      "costA": "Nem. A Careers Hub minden munkáltatónak ingyenes, akinek hozzáférése van a munkahelyéhez, Pro csomaggal és nélküle is. Az álláshirdetéseknek hirdetésenkénti díja van – lásd az Árak oldalt.",
       "whereQ": "Hová tehetem ki?",
       "whereA": "Bármely weboldalra, ahová HTML-t tudsz tenni: karrieroldalra, saját kódot engedő weboldal-készítőkbe, kampányoldalakra.",
       "noJobsQ": "Mi van, ha nincs nyitott állásunk?",
@@ -1768,7 +1783,7 @@
       "dataA": "Nincs süti. Csak azt rögzítjük, melyik weboldal mutatja a Careers Hubot (a domaint), hogy lásd, hol vagy kint."
     },
     "bottomTitle": "Tedd ki az állásaidat oda, ahol a jelöltek már keresnek.",
-    "bottomBody": "Vedd át ingyen a munkahelyed, adj fel egy állást, és másold ki a Careers Hub kódodat a vezérlőpultból."
+    "bottomBody": "Igényelj ingyenes hozzáférést a munkahelyedhez, adj fel egy állást, és másold ki a Careers Hub kódodat a vezérlőpultból."
   },
   "Plan": {
     "status": "Állapot",
@@ -1830,12 +1845,12 @@
     "doneBody": "Nem kapsz tőlünk több meghívó e-mailt. Ha meggondolod magad, a meghívó linked továbbra is működik."
   },
   "ClaimEmail": {
-    "infoSubject": "Még egy kis információ kell az igénylésedhez – {location}",
-    "infoBody": "Szia!\n\nKöszönjük, hogy igényelted a(z) {location} munkahelyet a RateThatJobon. A jóváhagyáshoz még egy kis információ kell:\n\n{message}\n\nItt válaszolhatsz vagy csatolhatsz dokumentumot: {link}\n\nRateThatJob – Know before you go",
-    "approvedSubject": "Jóváhagytuk az igénylésedet – {location}",
-    "approvedBody": "Szia!\n\nJó hír: jóváhagytuk a(z) {location} igénylését. Mostantól válaszolhatsz az értékelésekre, meghívhatod a csapatodat és hirdethetsz állásokat. Elindult a 30 napos ingyenes Pro próbaidőszakod.\n\nIrányítópult: {link}\n\nRateThatJob – Know before you go",
-    "rejectedSubject": "Nem tudtuk jóváhagyni az igénylésedet – {location}",
-    "rejectedBody": "Szia!\n\nNem tudtuk megerősíteni, hogy te képviseled a(z) {location} munkahelyet, ezért nem hagytuk jóvá az igénylést. Küldhetsz új igénylést a céged domainjén lévő e-mail-címmel vagy cégkivonattal.\n\n{link}\n\nRateThatJob – Know before you go"
+    "infoSubject": "Még egy kis információ kell a hozzáférés-igénylésedhez – {location}",
+    "infoBody": "Szia!\n\nKöszönjük, hogy hozzáférést igényeltél a(z) {location} munkahelyhez a RateThatJobon. A jóváhagyáshoz még egy kis információ kell:\n\n{message}\n\nItt válaszolhatsz vagy csatolhatsz dokumentumot: {link}\n\nRateThatJob – Know before you go",
+    "approvedSubject": "Jóváhagytuk a hozzáférésedet – {location}",
+    "approvedBody": "Szia!\n\nJó hír: jóváhagytuk a hozzáférésedet a(z) {location} munkahelyhez. Mostantól válaszolhatsz az értékelésekre, meghívhatod a csapatodat és hirdethetsz állásokat. Elindult a 30 napos ingyenes Pro próbaidőszakod.\n\nIrányítópult: {link}\n\nRateThatJob – Know before you go",
+    "rejectedSubject": "Nem tudtuk jóváhagyni a hozzáférés-igénylésedet – {location}",
+    "rejectedBody": "Szia!\n\nNem tudtuk megerősíteni, hogy te képviseled a(z) {location} munkahelyet, ezért nem hagytuk jóvá a hozzáférés-igénylést. Küldhetsz új igénylést céges e-mail-címmel (a céged domainjén), cégkivonattal vagy meghatalmazással – mindegyikhez személyazonosító okmánnyal.\n\n{link}\n\nRateThatJob – Know before you go"
   },
   "Billing": {
     "proLine": "RateThatJob Pro – {location}",

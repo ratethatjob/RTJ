@@ -27,11 +27,11 @@ A RateThatJob munkahelyekről szóló értékeléseket, tényeket (bérfizetés,
 
 ## 5. Munkáltatók
 
-- A munkahely átvétele ingyenes. Az átvételt ellenőrizzük.
+- A munkáltatói hozzáférés ingyenes. Minden hozzáférés-igénylést kézzel ellenőrzünk. Elfogadott igazolás – mindegyik az igénylő személyazonosító okmányával együtt: a cég weboldalának domainjén lévő, belépéssel igazolt céges e-mail-cím (ingyenes levelezőszolgáltatás nem fogadható el), olyan cégkivonat vagy trade license, amelyben az igénylő vezető tisztségviselőként vagy tulajdonosként szerepel, vagy a cég törvényes képviselője által aláírt meghatalmazás (a mi nyomtatványunkon). Valótlan adat vagy dokumentum esetén a hozzáférés megszűnik.
 - A munkáltató válaszolhat az értékelésekre, és vitathatja az igazolatlan értékeléseket. Értékelést törölni, elrejteni vagy megvásárolni nem lehet.
 - A munkáltató nem próbálhatja kideríteni az értékelők kilétét, és nem gyakorolhat nyomást a dolgozóira az értékelés miatt.
 - A Pro telephelyenkénti fizetős csomag. Benne van a RateThatJob Index a weboldaladra (képes jelvény, iframe kártya, Top Rated pecsét, a pontszám a JSON API-ban), a korai figyelmeztetés és a statisztika, valamint az [Árak](/pricing) oldalon felsorolt további funkciók.
-- Minden telephely egyszer 30 napos ingyenes Pro próbát kap, bankkártya nélkül. A próba automatikusan indul, amikor jóváhagyjuk az átvételt.
+- Minden telephely egyszer 30 napos ingyenes Pro próbát kap, bankkártya nélkül. A próba automatikusan indul, amikor jóváhagyjuk a hozzáférés-igénylést.
 - A próba után a Pro telephelyenként, havi vagy éves díjjal fizetős, az [Árak](/pricing) oldalon szereplő áron. A magyarországi telephelyek forintban, a többiek euróban fizetnek.
 - Ha a próba alatt fizetsz elő bankkártyával, az első terhelés a próba végén történik, korábban nem.
 - A Pro előfizetés minden időszak végén automatikusan megújul, amíg le nem mondod. Bármikor lemondhatod az irányítópulton (Számlázás és számlák); a Pro ilyenkor a már kifizetett időszak végéig működik, utána nem újul meg.
