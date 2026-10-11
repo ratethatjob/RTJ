@@ -519,7 +519,7 @@
       "invite": "Invite your team",
       "jobs": "Jobs",
       "team": "Team & roles",
-      "plan": "Plan & billing",
+      "plan": "Subscription",
       "soon": "Soon",
       "index": "RateThatJob Index",
       "stats": "Statistics",
@@ -1621,7 +1621,11 @@
     "trial_endedSubject": "Your Pro trial has ended – {location}",
     "trial_endedBody": "Hi,\n\nYour free Pro trial for {location} has ended. Your RateThatJob Index on your website now says \"currently unavailable\" instead of your score. Your public profile and reviews stay visible as always.\n\nActivate Pro to show your score again: {link}\n\nRateThatJob – Know before you go",
     "payment_failedSubject": "Payment failed for your Pro plan – {location}",
-    "payment_failedBody": "Hi,\n\nWe couldn't take the payment for RateThatJob Pro at {location}. Stripe will try again over the next days.\n\nPlease update your card here: {link}\n\nIf it isn't paid, Pro ends with the last paid period and your embedded RateThatJob Index will say \"currently unavailable\".\n\nRateThatJob – Know before you go"
+    "payment_failedBody": "Hi,\n\nWe couldn't take the payment for RateThatJob Pro at {location}. Stripe will try again over the next days.\n\nPlease update your card here: {link}\n\nIf it isn't paid, Pro ends with the last paid period and your embedded RateThatJob Index will say \"currently unavailable\".\n\nRateThatJob – Know before you go",
+    "renewal_upcomingSubject": "Your yearly Pro plan renews on {date} – {location}",
+    "renewal_upcomingBody": "Hi,\n\nYour yearly RateThatJob Pro plan for {location} renews automatically on {date} for {amount} (plus VAT where it applies), charged to the card on file.\n\nNothing to do if you want to keep it. To change or cancel it before then, go to: {link}\n\nRateThatJob – Know before you go",
+    "subscription_canceledSubject": "Your Pro plan is cancelled – {location}",
+    "subscription_canceledBody": "Hi,\n\nWe've cancelled RateThatJob Pro for {location}. Nothing more will be charged. You can keep using Pro until {date}; after that your RateThatJob Index on your website says \"currently unavailable\". Your public profile and reviews stay visible.\n\nChanged your mind? Reactivate it before {date}: {link}\n\nRateThatJob – Know before you go"
   },
   "JobsWidget": {
     "title": "Open jobs at {name}",
@@ -1867,5 +1871,66 @@
   "MonthYear": {
     "month": "Month",
     "year": "Year"
+  },
+  "BillingPage": {
+    "title": "Subscription",
+    "intro": "Pro is per location: your RateThatJob Index on your website, early warnings and statistics.",
+    "states": {
+      "trial": "Free trial",
+      "active": "Active",
+      "past_due": "Payment failed",
+      "canceling": "Cancelled",
+      "expired": "Expired",
+      "free": "Free"
+    },
+    "plan": "Pro · {price} / {interval}",
+    "planNone": "Pro · {month} / month or {year} / year",
+    "intervals": {
+      "month": "month",
+      "year": "year"
+    },
+    "daysLeft": "{days, plural, =0 {Ends today} one {# day left} other {# days left}}",
+    "trialUntil": "Until {date}",
+    "trialNoCard": "No card yet. When the trial ends, Pro switches off: your Index on your website says \"currently unavailable\" until you subscribe. Your profile and reviews stay visible.",
+    "trialSubscribed": "Subscribed. First charge: {date}{amount, select, none {} other { · {amount}}}",
+    "nextCharge": "Next charge",
+    "nextChargeValue": "{date}{amount, select, none {} other { · {amount}}}",
+    "card": "Card",
+    "cardValue": "{brand} •••• {last4} · expires {month}/{year}",
+    "cardNone": "No card saved",
+    "paidByTransfer": "Paid by bank transfer until {date}. It doesn't renew by itself.",
+    "cancelUntil": "Nothing more will be charged. You can use Pro until {date}.",
+    "pastDueBand": "The last charge didn't go through. Update your card and we'll try again.",
+    "pastDueAccess": "Pro works until {date}.",
+    "pastDueOff": "Pro is off until the payment goes through.",
+    "expiredBody": "Pro is off: your Index on your website says \"currently unavailable\". Subscribe to switch it back on.",
+    "freeBody": "Pro isn't on for this location.",
+    "start": "Start subscription",
+    "toYearly": "Switch to yearly – save {percent}%",
+    "changeCard": "Change card",
+    "updateCard": "Update card",
+    "cancel": "Cancel",
+    "reactivate": "Reactivate",
+    "reactivated": "Reactivated – it renews as before.",
+    "myInvoices": "My invoices",
+    "invoicesTitle": "Latest invoices",
+    "invoicesNone": "No invoices yet.",
+    "invoiceStatus": {
+      "paid": "Paid",
+      "open": "Due",
+      "void": "Void",
+      "uncollectible": "Uncollectible"
+    },
+    "pdf": "PDF",
+    "view": "View",
+    "managersOnly": "Only owners and HR can change the subscription.",
+    "error": "Something went wrong. Please try again.",
+    "checkoutSuccess": "Thanks! Your subscription is being set up – it shows here in a moment.",
+    "banner": {
+      "trial": "{days, plural, =0 {Your Pro trial ends today} one {# day left of your Pro trial} other {# days left of your Pro trial}}{count, plural, =1 {} other { (# locations)}}",
+      "ending": "{days, plural, =0 {Your Pro trial ends today} one {Your Pro trial ends tomorrow} other {Your Pro trial ends in # days}}{count, plural, =1 {} other { (# locations)}} – subscribe to keep your Index on your website.",
+      "pastDue": "{count, plural, one {A payment failed} other {# payments failed}} – update your card to keep Pro.",
+      "cta": "Subscription"
+    }
   }
 }

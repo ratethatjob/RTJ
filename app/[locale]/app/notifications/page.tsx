@@ -40,7 +40,7 @@ export default async function NotificationsPage({ params }: PageProps<"/[locale]
 
   const href = (r: Row) =>
     r.kind === "trial_ending" || r.kind === "trial_ended" || r.kind === "payment_failed"
-      ? "/business/locations#plan"
+      ? "/business/billing"
       : r.kind === "application_message"
       ? r.data.sender === "employer"
         ? `/app/applications/${r.data.application_id}`

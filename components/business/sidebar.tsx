@@ -16,7 +16,7 @@ const ITEMS = [
   { key: "index", href: "/business/index" },
   { key: "jobs", href: "/business/jobs" },
   { key: "team", href: "/business/team" },
-  { key: "plan", href: "/business/locations#plan" },
+  { key: "plan", href: "/business/billing" },
 ] as const;
 
 export function BusinessSidebar({ orgName, role, awaiting }: Props) {

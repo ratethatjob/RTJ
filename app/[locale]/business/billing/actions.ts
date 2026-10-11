@@ -1,6 +1,7 @@
 "use server";
 
 import { getLocale, getTranslations } from "next-intl/server";
+import type Stripe from "stripe";
 import { getUser } from "@/lib/auth";
 import { getBusiness } from "@/lib/business";
 import { SITE_URL } from "@/lib/seo";
@@ -53,7 +54,7 @@ export async function startProCheckout(locationId: string, interval: Interval): 
       plan?.paid_until ? Math.floor(Date.parse(plan.paid_until) / 1000) : 0,
     );
     const trialEnd = coveredUntil > now ? Math.max(coveredUntil, now + 2 * DAY + 3600) : undefined;
-    const base = `${SITE_URL}${localePath(locale)}/business/locations`;
+    const base = `${SITE_URL}${localePath(locale)}/business/billing`;
     const session = await s.checkout.sessions.create({
       mode: "subscription",
       customer,
@@ -69,8 +70,8 @@ export async function startProCheckout(locationId: string, interval: Interval): 
       tax_id_collection: { enabled: true, required: "if_supported" },
       customer_update: { name: "auto", address: "auto" },
       locale: locale === "hu" ? "hu" : "en",
-      success_url: `${base}?checkout=success#plan`,
-      cancel_url: `${base}?checkout=cancelled#plan`,
+      success_url: `${base}?checkout=success`,
+      cancel_url: `${base}?checkout=cancelled`,
     });
     return session.url ? { url: session.url } : { error: "generic" };
   } catch (e) {
@@ -79,28 +80,92 @@ export async function startProCheckout(locationId: string, interval: Interval): 
   }
 }
 
-/** Stripe Customer Portal: card, invoices, billing details, cancel. Owners and HR only. */
-export async function openBillingPortal(): Promise<Result> {
+export type PortalFlow = "home" | "card" | "cancel" | "yearly";
+
+/** Stripe Customer Portal, straight into one flow where Stripe has one: card change, cancelling a
+ *  location's Pro, or switching it to yearly; "home" shows invoices and billing details.
+ *  Owners and HR only. */
+export async function openBillingPortal(flow: PortalFlow = "home", locationId?: string): Promise<Result> {
   const s = stripe();
   if (!s) return { error: "config" };
   const locale = await getLocale();
-  const { org } = await getBusiness(locale, "/business/locations");
+  const { org } = await getBusiness(locale, "/business/billing");
   if (!org || (org.role !== "owner" && org.role !== "hr")) return { error: "generic" };
   const db = adminClient();
   const { data } = db ? await db.from("orgs").select("stripe_customer_id").eq("id", org.id).single() : { data: null };
   if (!data?.stripe_customer_id) return { error: "generic" };
+  const returnUrl = `${SITE_URL}${localePath(locale)}/business/billing`;
   try {
+    let flowData: Stripe.BillingPortal.SessionCreateParams.FlowData | undefined;
+    if (flow === "card") {
+      flowData = { type: "payment_method_update", after_completion: { type: "redirect", redirect: { return_url: returnUrl } } };
+    } else if (flow === "cancel" || flow === "yearly") {
+      const sub = await locationSubscription(s, org.id, locationId);
+      if (!sub) return { error: "generic" };
+      if (flow === "cancel") {
+        flowData = {
+          type: "subscription_cancel",
+          subscription_cancel: { subscription: sub.id },
+          after_completion: { type: "redirect", redirect: { return_url: returnUrl } },
+        };
+      } else {
+        const item = sub.items.data[0];
+        flowData = {
+          type: "subscription_update_confirm",
+          subscription_update_confirm: {
+            subscription: sub.id,
+            items: [{ id: item.id, price: await proPriceId(s, sub.currency === "huf" ? "huf" : "eur", "year"), quantity: 1 }],
+          },
+          after_completion: { type: "redirect", redirect: { return_url: returnUrl } },
+        };
+      }
+    }
     const session = await s.billingPortal.sessions.create({
       customer: data.stripe_customer_id,
       configuration: await portalConfiguration(s),
       locale: locale === "hu" ? "hu" : "en",
-      return_url: `${SITE_URL}${localePath(locale)}/business/locations#plan`,
+      return_url: returnUrl,
+      ...(flowData && { flow_data: flowData }),
     });
     return { url: session.url };
   } catch (e) {
-    console.error("openBillingPortal", e);
+    console.error("openBillingPortal", flow, e);
     return { error: "generic" };
   }
+}
+
+/** Undo "cancel at the period end" before the period is over. Owners and HR only. */
+export async function reactivatePro(locationId: string): Promise<{ ok?: true; error?: "generic" }> {
+  const s = stripe();
+  if (!s) return { error: "generic" };
+  const locale = await getLocale();
+  const { org } = await getBusiness(locale, "/business/billing");
+  if (!org || (org.role !== "owner" && org.role !== "hr")) return { error: "generic" };
+  try {
+    const sub = await locationSubscription(s, org.id, locationId);
+    if (!sub || !["active", "trialing"].includes(sub.status)) return { error: "generic" };
+    await s.subscriptions.update(sub.id, { cancel_at_period_end: false, ...(sub.cancel_at && { cancel_at: "" }) });
+    // The webhook mirrors it too; this keeps the page right on the redirect.
+    await adminClient()?.from("location_plans").update({ cancel_at_period_end: false }).eq("location_id", locationId);
+    return { ok: true };
+  } catch (e) {
+    console.error("reactivatePro", e);
+    return { error: "generic" };
+  }
+}
+
+/** The location's Stripe subscription, only if it belongs to this org's customer. */
+async function locationSubscription(s: Stripe, orgId: string, locationId?: string) {
+  const db = adminClient();
+  if (!db || !locationId) return null;
+  const [{ data: plan }, { data: org }] = await Promise.all([
+    db.from("location_plans").select("org_id, stripe_subscription_id").eq("location_id", locationId).maybeSingle(),
+    db.from("orgs").select("stripe_customer_id").eq("id", orgId).single(),
+  ]);
+  if (!plan?.stripe_subscription_id || plan.org_id !== orgId) return null;
+  const sub = await s.subscriptions.retrieve(plan.stripe_subscription_id);
+  const customer = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+  return customer === org?.stripe_customer_id ? sub : null;
 }
 
 export type JobPayment = { url?: string; pending?: true; error?: "generic" | "upgrade" };

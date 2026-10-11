@@ -10,10 +10,12 @@ export function SubscribePro({
   locationId,
   prices,
   invoicePending,
+  align = "end",
 }: {
   locationId: string;
   prices: { month: string; year: string };
   invoicePending: "month" | "year" | null;
+  align?: "start" | "end";
 }) {
   const t = useTranslations("Plan");
   const [error, setError] = useState(false);
@@ -29,8 +31,8 @@ export function SubscribePro({
       setError(true);
     });
   return (
-    <span className="flex flex-col items-end gap-2">
-      <span className="flex flex-wrap justify-end gap-2">
+    <span className={`flex flex-col gap-2 ${align === "start" ? "items-start" : "items-end"}`}>
+      <span className={`flex flex-wrap gap-2 ${align === "start" ? "justify-start" : "justify-end"}`}>
         {(["month", "year"] as const).map((i) => (
           <button
             key={i}

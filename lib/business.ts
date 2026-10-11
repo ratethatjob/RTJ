@@ -16,6 +16,7 @@ export type BusinessLocation = LocationSummary & {
   trialEndsAt: string | null;
   paidUntil: string | null;
   trialUsed: boolean;
+  trialStartedAt: string | null;
   /** Activation requested and waiting for payment. */
   pendingOrder: "month" | "year" | null;
   /** The location's Stripe subscription, if any. */
@@ -95,6 +96,7 @@ const loadBusiness = cache(async (locale: string, path: string) => {
             trialEndsAt: p?.trial_ends_at ?? null,
             paidUntil: p?.paid_until ?? null,
             trialUsed: Boolean(p?.trial_started_at),
+            trialStartedAt: p?.trial_started_at ?? null,
             pendingOrder: pending.get(l.id) ?? null,
             subscription: p?.stripe_status
               ? {

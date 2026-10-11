@@ -27,3 +27,7 @@
 - [ ] `20261012040000_payment_failed_notice.sql` lefuttatása (sikertelen fizetés értesítés az alkalmazásban; addig csak e-mail megy)
 - [ ] ÁSZF 5a. pont (Fizetés) és a Pro megújítás/lemondás/visszatérítés szabályai átnézése (`content/legal/terms.*.md`)
 - [ ] Stripe Dashboardon: cégadatok a számlán (név, cím, adószám), számlák e-mailben küldése (Settings → Customer emails), sikertelen fizetésnél újrapróbálás (Settings → Billing → Retries)
+- [ ] Stripe Dashboard – előfizetések (lásd a lépéseket a chatben): Smart Retries és a végső lépés (lemondás), Stripe saját vevői e-mailjei közül a nálunk is meglévők kikapcsolása (sikertelen fizetés, közelgő megújulás), hogy ne menjen dupla e-mail
+- [ ] Customer Portal: a kódunk saját portálkonfigurációt használ (metadata rtj=v2: lemondás az időszak végén, havi↔éves váltás, kártyacsere, számlák, adószám) – a Dashboard alapértelmezett portál-beállításai erre nem hatnak
+- [ ] Telephely törlése vagy más szervezethez kerülése futó előfizetés mellett: az előfizetést a napi cron azonnal lemondja (visszatérítés nélkül) – ha visszatérítés kell, kézzel a Stripe Dashboardon
+

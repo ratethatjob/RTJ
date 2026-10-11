@@ -1,6 +1,7 @@
 import { revalidateTag } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import type Stripe from "stripe";
+import { sendBillingNotice } from "@/lib/billing-notices";
 import { sendEmail } from "@/lib/email";
 import { SITE_URL } from "@/lib/seo";
 import { stripe, syncTaxExempt } from "@/lib/stripe";
@@ -80,7 +81,7 @@ async function handle(event: Stripe.Event, s: Stripe, db: Db) {
     case "customer.subscription.created":
     case "customer.subscription.updated":
     case "customer.subscription.deleted":
-      await syncSubscription(s, db, event.data.object.id);
+      await syncSubscription(s, db, event.data.object.id, event.id);
       return;
   }
 }
@@ -104,25 +105,46 @@ async function fulfillJobOrder(db: Db, session: Stripe.Checkout.Session) {
 }
 
 /** Re-reads the subscription (events can arrive out of order) and mirrors it on the location. */
-async function syncSubscription(s: Stripe, db: Db, subscriptionId: string) {
+async function syncSubscription(s: Stripe, db: Db, subscriptionId: string, eventId?: string) {
   const sub = await s.subscriptions.retrieve(subscriptionId);
   const locationId = sub.metadata?.location_id;
   if (!locationId) return null;
   const item = sub.items.data[0];
   const periodEnd = Math.max(0, ...sub.items.data.map((i) => i.current_period_end ?? 0));
+  // Cancelling in the Customer Portal sets cancel_at_period_end or, on newer API versions, cancel_at.
+  const live = sub.status === "active" || sub.status === "trialing";
+  const cancelling = live && (sub.cancel_at_period_end || Boolean(sub.cancel_at));
+  const endsAt = sub.cancel_at ?? periodEnd;
+  const { data: before } = await db
+    .from("location_plans")
+    .select("cancel_at_period_end, stripe_subscription_id")
+    .eq("location_id", locationId)
+    .maybeSingle();
   const { data: orgId, error } = await db.rpc("stripe_sync_subscription", {
     p_location_id: locationId,
     p_subscription_id: sub.id,
     p_customer_id: idOf(sub.customer),
     p_status: sub.status,
     p_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
-    p_cancel_at_period_end: sub.cancel_at_period_end,
+    p_cancel_at_period_end: cancelling,
     p_interval: item?.price.recurring?.interval ?? null,
     p_currency: sub.currency,
   });
   if (error) throw error;
   // Pro decides what the embedded Index shows.
   revalidateTag("locations", "max");
+  // Just cancelled (for the period end): one confirmation to owners and HR.
+  const newlyCancelled =
+    cancelling && before && !(before.cancel_at_period_end && before.stripe_subscription_id === sub.id);
+  if (orgId && newlyCancelled && eventId) {
+    await sendBillingNotice(db, {
+      locationId,
+      orgId: orgId as string,
+      kind: "subscription_canceled",
+      ref: eventId,
+      endsAt: endsAt ? new Date(endsAt * 1000).toISOString() : null,
+    });
+  }
   return orgId ? { locationId, orgId: orgId as string } : null;
 }
 
@@ -146,7 +168,7 @@ async function notifyPaymentFailed(db: Db, locationId: string, orgId: string) {
       const { data: profile } = await db.from("profiles").select("preferred_locale").eq("user_id", m.user_id).maybeSingle();
       const locale = profile?.preferred_locale === "hu" ? "hu" : "en";
       const t = await getTranslations({ locale, namespace: "Email" });
-      const link = `${SITE_URL}${locale === "en" ? "" : `/${locale}`}/business/locations#plan`;
+      const link = `${SITE_URL}${locale === "en" ? "" : `/${locale}`}/business/billing`;
       await sendEmail(email, t("payment_failedSubject", { location }), t("payment_failedBody", { location, link }));
     }
   } catch (e) {

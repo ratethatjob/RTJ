@@ -5,8 +5,7 @@ import { ManageBilling, SubscribePro } from "@/components/business/subscribe-pro
 import { PlanBadge } from "@/components/business/plan-badge";
 import { TrialBanner } from "@/components/business/trial-banner";
 import { daysLeft, getBusiness } from "@/lib/business";
-import { billingCurrency, billingDetails, proPrice, stripe } from "@/lib/stripe";
-import { adminClient } from "@/lib/supabase/admin";
+import { billingCurrency, proPrice } from "@/lib/stripe";
 
 export const instant = false;
 
@@ -20,6 +19,7 @@ export default async function LocationsPage({ params, searchParams }: PageProps<
   if (!org) return null;
   const t = await getTranslations("Business");
   const tp = await getTranslations("Plan");
+  const tb = await getTranslations("BillingPage.banner");
   const format = await getFormatter();
   const date = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "medium" });
   const billing = org.role === "owner" || org.role === "hr";
@@ -32,17 +32,6 @@ export default async function LocationsPage({ params, searchParams }: PageProps<
     Boolean(l.subscription && ["active", "trialing", "past_due"].includes(l.subscription.status));
 
   const { data: members } = await supabase.from("org_members").select("role").eq("org_id", org.id);
-  // Billing name, address and tax ID as Stripe has them (owners and HR only).
-  const s = stripe();
-  const db = adminClient();
-  const { data: account } =
-    billing && s && db && org.billingAccount
-      ? await db.from("orgs").select("stripe_customer_id").eq("id", org.id).single()
-      : { data: null };
-  const details =
-    s && account?.stripe_customer_id
-      ? await billingDetails(s, account.stripe_customer_id).catch(() => null)
-      : null;
   const count = (role: string) => (members ?? []).filter((m) => m.role === role).length;
   const bold = (chunks: React.ReactNode) => <b className="font-black text-paper">{chunks}</b>;
 
@@ -150,29 +139,9 @@ export default async function LocationsPage({ params, searchParams }: PageProps<
           <div className="mt-4 flex flex-col gap-3 border-t border-white/15 pt-4">
             {checkout === "success" && <p className="font-black text-signal">{tp("checkoutSuccess")}</p>}
             <p className="text-sm text-mist">{tp(cards ? "billingNoteCards" : "billingNote")}</p>
-            {billing && cards && org.billingAccount && (
-              <div className="flex flex-col gap-3 rounded-2xl border border-white/15 p-4">
-                <h3 className="font-black">{tp("billingDetails")}</h3>
-                {details ? (
-                  <dl className="grid gap-x-4 gap-y-1 text-sm sm:grid-cols-[auto_1fr]">
-                    <dt className="text-mist">{tp("billingName")}</dt>
-                    <dd className="break-words">{details.name ?? "–"}</dd>
-                    <dt className="text-mist">{tp("billingAddress")}</dt>
-                    <dd className="break-words">{details.address.length ? details.address.join(", ") : "–"}</dd>
-                    <dt className="text-mist">{tp("billingTaxId")}</dt>
-                    <dd className="break-words">
-                      {details.taxIds.length ? details.taxIds.map((x) => x.value).join(", ") : "–"}
-                    </dd>
-                  </dl>
-                ) : (
-                  <p className="text-sm text-mist">{tp("billingUnavailable")}</p>
-                )}
-                <p className="text-sm text-mist">{tp("billingEdit")}</p>
-                <span>
-                  <ManageBilling label={tp("myInvoices")} dark />
-                </span>
-              </div>
-            )}
+            <Link href="/business/billing" className="self-start rounded-xl bg-signal px-4 py-3 text-sm font-black text-ink">
+              {tb("cta")}
+            </Link>
           </div>
         </section>
       </div>

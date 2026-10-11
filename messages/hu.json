@@ -519,7 +519,7 @@
       "invite": "Csapat meghívása",
       "jobs": "Állások",
       "team": "Csapat és szerepkörök",
-      "plan": "Csomag és számlázás",
+      "plan": "Előfizetés",
       "soon": "Hamarosan",
       "index": "RateThatJob Index",
       "stats": "Statisztika",
@@ -1621,7 +1621,11 @@
     "trial_endedSubject": "Lejárt a Pro próbád – {location}",
     "trial_endedBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája lejárt. A weboldaladon lévő RateThatJob Index most pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”. A nyilvános profilod és az értékelések továbbra is láthatók.\n\nKapcsold be a Prót, hogy újra látszódjon a pontszámod: {link}\n\nRateThatJob – Know before you go",
     "payment_failedSubject": "Sikertelen fizetés a Pro csomagodnál – {location}",
-    "payment_failedBody": "Szia!\n\nNem sikerült beszedni a RateThatJob Pro díját ennél a telephelynél: {location}. A Stripe a következő napokban újrapróbálja.\n\nItt frissítheted a kártyádat: {link}\n\nHa nem sikerül, a Pro az utolsó kifizetett időszak végén lejár, és a weboldaladra beágyazott RateThatJob Index „jelenleg nem elérhető” feliratot mutat.\n\nRateThatJob – Know before you go"
+    "payment_failedBody": "Szia!\n\nNem sikerült beszedni a RateThatJob Pro díját ennél a telephelynél: {location}. A Stripe a következő napokban újrapróbálja.\n\nItt frissítheted a kártyádat: {link}\n\nHa nem sikerül, a Pro az utolsó kifizetett időszak végén lejár, és a weboldaladra beágyazott RateThatJob Index „jelenleg nem elérhető” feliratot mutat.\n\nRateThatJob – Know before you go",
+    "renewal_upcomingSubject": "Hamarosan megújul az éves Pro előfizetésed – {location}",
+    "renewal_upcomingBody": "Szia!\n\nA(z) {location} éves RateThatJob Pro előfizetése automatikusan megújul, a mentett kártyádról.\nMegújulás: {date}\nÖsszeg: {amount} (adott esetben ÁFA-val)\n\nHa meg szeretnéd tartani, nincs teendőd. Ha addig módosítanád vagy lemondanád: {link}\n\nRateThatJob – Know before you go",
+    "subscription_canceledSubject": "Lemondtad a Pro előfizetést – {location}",
+    "subscription_canceledBody": "Szia!\n\nLemondtuk a(z) {location} RateThatJob Pro előfizetését, több terhelés nem lesz. A Prót eddig még használhatod: {date}\n\nUtána a weboldaladon lévő RateThatJob Index „jelenleg nem elérhető” feliratot mutat. A nyilvános profilod és az értékelések láthatók maradnak.\n\nMeggondoltad magad? A fenti dátumig újraaktiválhatod: {link}\n\nRateThatJob – Know before you go"
   },
   "JobsWidget": {
     "title": "Nyitott állások: {name}",
@@ -1867,5 +1871,66 @@
   "MonthYear": {
     "month": "Hónap",
     "year": "Év"
+  },
+  "BillingPage": {
+    "title": "Előfizetés",
+    "intro": "A Pro telephelyenként jár: a RateThatJob Index a weboldaladon, korai figyelmeztetések és statisztika.",
+    "states": {
+      "trial": "Próbaidőszak",
+      "active": "Aktív",
+      "past_due": "Fizetés sikertelen",
+      "canceling": "Lemondva",
+      "expired": "Lejárt",
+      "free": "Ingyenes"
+    },
+    "plan": "Pro · {price} / {interval}",
+    "planNone": "Pro · havi {month} vagy évi {year}",
+    "intervals": {
+      "month": "hó",
+      "year": "év"
+    },
+    "daysLeft": "{days, plural, =0 {Ma jár le} other {Még # nap van hátra}}",
+    "trialUntil": "Eddig: {date}",
+    "trialNoCard": "Még nincs kártya megadva. A próba végén a Pro kikapcsol: a weboldaladon az Index „jelenleg nem elérhető” lesz, amíg elő nem fizetsz. A profilod és az értékelések láthatók maradnak.",
+    "trialSubscribed": "Előfizettél. Az első terhelés: {date}{amount, select, none {} other { · {amount}}}",
+    "nextCharge": "Következő terhelés",
+    "nextChargeValue": "{date}{amount, select, none {} other { · {amount}}}",
+    "card": "Kártya",
+    "cardValue": "{brand} •••• {last4} · lejár: {month}/{year}",
+    "cardNone": "Nincs mentett kártya",
+    "paidByTransfer": "Átutalással fizetve, magától nem újul meg. Érvényes eddig: {date}",
+    "cancelUntil": "Több terhelés nem lesz. Eddig használhatod: {date}",
+    "pastDueBand": "A legutóbbi terhelés nem sikerült. Frissítsd a kártyádat, és újra megpróbáljuk.",
+    "pastDueAccess": "A Pro eddig működik: {date}",
+    "pastDueOff": "A Pro ki van kapcsolva, amíg a fizetés nem sikerül.",
+    "expiredBody": "A Pro ki van kapcsolva: a weboldaladon az Index „jelenleg nem elérhető”. Fizess elő, hogy újra bekapcsoljon.",
+    "freeBody": "Ennél a telephelynél nincs bekapcsolva a Pro.",
+    "start": "Előfizetés indítása",
+    "toYearly": "Váltás évesre – {percent}% megtakarítás",
+    "changeCard": "Kártya módosítása",
+    "updateCard": "Kártya frissítése",
+    "cancel": "Lemondás",
+    "reactivate": "Újraaktiválás",
+    "reactivated": "Újraaktiválva – a megszokott módon megújul.",
+    "myInvoices": "Számláim",
+    "invoicesTitle": "Legutóbbi számlák",
+    "invoicesNone": "Még nincs számla.",
+    "invoiceStatus": {
+      "paid": "Fizetve",
+      "open": "Fizetendő",
+      "void": "Érvénytelenítve",
+      "uncollectible": "Behajthatatlan"
+    },
+    "pdf": "PDF",
+    "view": "Megnézem",
+    "managersOnly": "Az előfizetést csak a tulajdonos és a HR módosíthatja.",
+    "error": "Valami hiba történt. Próbáld újra.",
+    "checkoutSuccess": "Köszönjük! Az előfizetés beállítása folyamatban – mindjárt megjelenik itt.",
+    "banner": {
+      "trial": "{days, plural, =0 {Ma lejár a Pro próbaidőszakod} other {Még # nap van hátra a Pro próbaidőszakodból}}{count, plural, =1 {} other { (# telephely)}}",
+      "ending": "{days, plural, =0 {Ma lejár a Pro próbaidőszakod} one {Holnap lejár a Pro próbaidőszakod} other {# nap múlva lejár a Pro próbaidőszakod}}{count, plural, =1 {} other { (# telephely)}} – fizess elő, hogy az Indexed a weboldaladon maradjon.",
+      "pastDue": "{count, plural, one {Egy fizetés nem sikerült} other {# fizetés nem sikerült}} – frissítsd a kártyádat, hogy megmaradjon a Pro.",
+      "cta": "Előfizetés"
+    }
   }
 }

@@ -103,33 +103,43 @@ export async function orgCustomer(s: Stripe, orgId: string, email: string | null
 
 let portalConfig: string | null = null;
 
-/** Customer Portal: card change, invoices, billing details and cancelling at the period end. */
+/** Customer Portal (our own configuration, so the Dashboard's default portal settings don't apply):
+ *  card change, invoices, billing details incl. tax ID, cancelling at the period end, and switching
+ *  between monthly and yearly Pro (the difference is invoiced right away). */
 export async function portalConfiguration(s: Stripe) {
   if (portalConfig) return portalConfig;
   const existing = (await s.billingPortal.configurations.list({ active: true, limit: 100 })).data.find(
-    (c) => c.metadata?.rtj === "v1",
+    (c) => c.metadata?.rtj === "v2",
   );
-  portalConfig =
-    existing?.id ??
-    (
-      await s.billingPortal.configurations.create(
-        {
-          business_profile: {
-            privacy_policy_url: `${SITE_URL}/privacy`,
-            terms_of_service_url: `${SITE_URL}/terms`,
-          },
-          features: {
-            customer_update: { enabled: true, allowed_updates: ["name", "email", "address", "tax_id"] },
-            invoice_history: { enabled: true },
-            payment_method_update: { enabled: true },
-            subscription_cancel: { enabled: true, mode: "at_period_end" },
-          },
-          default_return_url: `${SITE_URL}/business/locations`,
-          metadata: { rtj: "v1" },
+  if (existing) return (portalConfig = existing.id);
+  const prices = await Promise.all(
+    (["huf", "eur"] as const).flatMap((c) => (["month", "year"] as const).map((i) => proPriceId(s, c, i))),
+  );
+  portalConfig = (
+    await s.billingPortal.configurations.create(
+      {
+        business_profile: {
+          privacy_policy_url: `${SITE_URL}/privacy`,
+          terms_of_service_url: `${SITE_URL}/terms`,
         },
-        { idempotencyKey: "portal-config-v1" },
-      )
-    ).id;
+        features: {
+          customer_update: { enabled: true, allowed_updates: ["name", "email", "address", "tax_id"] },
+          invoice_history: { enabled: true },
+          payment_method_update: { enabled: true },
+          subscription_cancel: { enabled: true, mode: "at_period_end" },
+          subscription_update: {
+            enabled: true,
+            default_allowed_updates: ["price"],
+            products: [{ product: PRO_PRODUCT, prices }],
+            proration_behavior: "always_invoice",
+          },
+        },
+        default_return_url: `${SITE_URL}/business/billing`,
+        metadata: { rtj: "v2" },
+      },
+      { idempotencyKey: "portal-config-v2" },
+    )
+  ).id;
   return portalConfig;
 }
 

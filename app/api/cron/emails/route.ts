@@ -2,10 +2,14 @@ import { getTranslations } from "next-intl/server";
 import { sendEmail } from "@/lib/email";
 import { decryptEmail } from "@/lib/invite-crypto";
 import { type InviteToSend, sendInviteEmails } from "@/lib/invite-emails";
+import { sendPendingBillingNotices } from "@/lib/billing-notices";
 import { SITE_URL } from "@/lib/seo";
+import { stripe } from "@/lib/stripe";
 import { adminClient } from "@/lib/supabase/admin";
 
-// Daily: emails the Pro trial notices (written in-app by process_trials()) to owners and HR,
+// Daily: emails the Pro trial notices (written in-app by process_trials()) and billing notices
+// (yearly renewal reminders from process_renewals()) to owners and HR, cancels the Stripe
+// subscriptions of locations that left their org (stripe_cancel_queue),
 // and the one reminder for email invites sent 5+ days ago and not used yet (then the address is cleared).
 // Needs SUPABASE_SECRET_KEY and RESEND_API_KEY; without them the notices stay in-app only.
 const KINDS = ["trial_ending", "trial_ended"];
@@ -37,7 +41,7 @@ export async function GET(request: Request) {
       const t = await getTranslations({ locale, namespace: "Email" });
       const data = n.data as { location?: string; days?: number };
       const values = { location: data.location ?? "", days: data.days ?? 0 };
-      const link = `${SITE_URL}${locale === "en" ? "" : `/${locale}`}/business/locations#plan`;
+      const link = `${SITE_URL}${locale === "en" ? "" : `/${locale}`}/business/billing`;
       const ok = await sendEmail(
         email,
         t(`${n.kind}Subject`, values),
@@ -48,7 +52,36 @@ export async function GET(request: Request) {
     // Marked either way so a missing address doesn't retry forever.
     await db.from("notifications").update({ emailed_at: new Date().toISOString() }).eq("id", n.id);
   }
-  return Response.json({ sent, reminders: await sendInviteReminders(db) });
+  return Response.json({
+    sent,
+    billing: await sendPendingBillingNotices(db),
+    cancelled: await cancelOrphanSubscriptions(db),
+    reminders: await sendInviteReminders(db),
+  });
+}
+
+/** Subscriptions of locations that left the org (stripe_cancel_queue): cancelled now, no new charges. */
+async function cancelOrphanSubscriptions(db: NonNullable<ReturnType<typeof adminClient>>) {
+  const s = stripe();
+  if (!s) return 0;
+  const { data: rows } = await db.from("stripe_cancel_queue").select("subscription_id").is("done_at", null).limit(50);
+  let n = 0;
+  for (const r of rows ?? []) {
+    try {
+      const sub = await s.subscriptions.retrieve(r.subscription_id);
+      if (sub.status !== "canceled" && sub.status !== "incomplete_expired") {
+        await s.subscriptions.cancel(r.subscription_id, { invoice_now: false, prorate: false });
+      }
+      await db.from("stripe_cancel_queue").update({ done_at: new Date().toISOString(), error: null }).eq("subscription_id", r.subscription_id);
+      n += 1;
+    } catch (e) {
+      await db
+        .from("stripe_cancel_queue")
+        .update({ error: e instanceof Error ? e.message.slice(0, 300) : "error" })
+        .eq("subscription_id", r.subscription_id);
+    }
+  }
+  return n;
 }
 
 async function sendInviteReminders(db: NonNullable<ReturnType<typeof adminClient>>) {

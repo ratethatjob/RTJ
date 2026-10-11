@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "migrate": "node scripts/migrate.mjs",
-    "check:messages": "node scripts/check-client-messages.mjs"
+    "check:messages": "node scripts/check-client-messages.mjs",
+    "test": "node --test lib/*.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.133.0",
