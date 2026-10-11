@@ -271,7 +271,7 @@
   },
   "Auth": {
     "title": "Fiók egy koppintással.",
-    "titleEmail": "Fiók egy e-mail-címmel.",
+    "titleEmail": "Belépés munkavállalóként",
     "subtitle": "Az e-mail-címed soha nem jelenik meg nyilvánosan. A munkáltató csak akkor látja a neved és az elérhetőséged, ha jelentkezel hozzá.",
     "continueWith": "Folytatás: {provider}",
     "or": "vagy",
@@ -279,7 +279,7 @@
     "emailPlaceholder": "te@pelda.hu",
     "sendCode": "Kérem a kódot",
     "codeTitle": "Írd be a kódot",
-    "codeSent": "Küldtünk egy 6 jegyű kódot ide: {target}.",
+    "codeSent": "Küldtünk egy belépőkódot ide: {target}.",
     "code": "Kód",
     "verify": "Tovább",
     "resend": "Másik e-mail vagy új kód",
@@ -288,12 +288,13 @@
     "errorCode": "Ez a kód nem jó. Ellenőrizd, vagy kérj újat.",
     "errorLink": "A belépési link lejárt. Próbáld újra.",
     "businessEyebrow": "Munkáltatóknak",
-    "businessTitle": "Munkáltatói belépés",
-    "businessSubtitle": "Lépj be vagy regisztrálj a céges e-mail-címeddel. Küldünk egy 6 jegyű kódot – jelszó nem kell.",
+    "businessTitle": "Belépés munkáltatóként",
+    "businessSubtitle": "Lépj be vagy regisztrálj a céges e-mail-címeddel. Küldünk egy belépőkódot – jelszó nem kell.",
     "businessEmail": "Céges e-mail",
     "businessPlaceholder": "nev@cegneved.hu",
     "notEmployer": "A saját munkavállalói fiókodat keresed?",
-    "workerSignIn": "Belépés itt"
+    "workerSignIn": "Belépés itt",
+    "employeeEyebrow": "Munkavállalóknak"
   },
   "Welcome": {
     "title": "Milyen néven jelenj meg?",
@@ -466,7 +467,7 @@
     "title": "A jó munkahely ma a legolcsóbb toborzási előny.",
     "body": "Igényelj ingyenes hozzáférést a munkahelyeidhez. Válaszolj az értékelésekre, hívd meg a csapatod, és nézd meg, mit látnak a jelentkezők.",
     "cta": "Hozzáférés igénylése",
-    "dashboard": "Vezérlőpult",
+    "dashboard": "Belépés munkáltatóként",
     "features": {
       "replyTitle": "Válaszolj minden értékelésre",
       "replyBody": "Írj a saját nyelveden, az olvasók fordítva látják. Az igazolatlan értékeléseket vitathatod.",
@@ -738,9 +739,11 @@
     "business": "Céges felület",
     "pending": "Igénylés folyamatban",
     "signOut": "Kilépés",
-    "signIn": "Belépés",
-    "businessSignIn": "Belépés munkáltatóként",
-    "shownAs": "Így látszol: {name}"
+    "shownAs": "Így látszol: {name}",
+    "signInEmployee": "Belépés munkavállalóként",
+    "signInEmployeeHint": "Értékelés írása, saját értékeléseid",
+    "signInEmployer": "Belépés munkáltatóként",
+    "signInEmployerHint": "Céges felület, válaszok, előfizetés"
   },
   "Admin": {
     "title": "Admin",

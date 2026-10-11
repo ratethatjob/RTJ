@@ -7,6 +7,7 @@ import { getPathname, Link, usePathname } from "@/i18n/navigation";
 import { useBusinessStatus } from "@/lib/business-status";
 import { initials } from "@/lib/format";
 import { BriefcaseIcon } from "./business-access";
+import { SignInChoices } from "./sign-in-choices";
 
 /** Round avatar in the header: the person's initials (a plain person icon when signed out), a red
  *  count for unread notifications, and a menu with the account pages, the business dashboard and
@@ -72,7 +73,7 @@ export function AccountMenu() {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-11 z-50 flex w-64 flex-col gap-0.5 rounded-2xl border border-mist/50 bg-white p-2 text-[15px] font-semibold shadow-lg"
+          className="absolute right-0 top-11 z-50 flex w-72 flex-col gap-0.5 rounded-2xl border border-mist/50 bg-white p-2 text-[15px] font-semibold shadow-lg"
         >
           {signedIn ? (
             <>
@@ -112,18 +113,7 @@ export function AccountMenu() {
               </button>
             </>
           ) : (
-            <>
-              <Link role="menuitem" href="/app/sign-in" className={item}>
-                {t("signIn")}
-              </Link>
-              <Link
-                role="menuitem"
-                href={{ pathname: "/app/sign-in", query: { for: "business", next: getPathname({ href: "/business", locale }) } }}
-                className={item}
-              >
-                {t("businessSignIn")}
-              </Link>
-            </>
+            <SignInChoices role="menuitem" />
           )}
         </div>
       )}

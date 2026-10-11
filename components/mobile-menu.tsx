@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { MenuBusinessLink } from "./business-access";
+import { SignInChoices } from "./sign-in-choices";
+import { useBusinessStatus } from "@/lib/business-status";
 import { LocaleSwitch } from "./locale-switch";
 
 /** Menu for phones: the header only has room for the logo and sign-in. */
@@ -62,6 +64,7 @@ export function MobileMenu() {
               {t("rateAJob")}
             </Link>
             <MenuBusinessLink />
+            <SignedOutChoices />
           </div>
           <nav className="mt-4 flex flex-col">
             {links.map((l) => (
@@ -80,6 +83,17 @@ export function MobileMenu() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/** Signed out: the two sign-ins under the main action. */
+function SignedOutChoices() {
+  const status = useBusinessStatus();
+  if (!status || status.signedIn) return null;
+  return (
+    <div className="mt-2 flex flex-col gap-1 rounded-xl border border-white/15 p-1 text-paper">
+      <SignInChoices dark />
     </div>
   );
 }

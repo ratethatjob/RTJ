@@ -36,8 +36,10 @@ export default async function SignInPage({ params, searchParams }: PageProps<"/[
       <SiteHeader />
       <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-2">
       <BackButton fallback={fallback} label={tn("back")} />
-      {business && <p className="mt-4 text-sm font-black uppercase tracking-tagline text-slate">{t("businessEyebrow")}</p>}
-      <h1 className={`${business ? "mt-2" : "mt-4"} text-4xl font-black leading-[1.05] tracking-brand`}>
+      <p className="mt-4 text-sm font-black uppercase tracking-tagline text-slate">
+        {t(business ? "businessEyebrow" : "employeeEyebrow")}
+      </p>
+      <h1 className={`mt-2 text-4xl font-black leading-[1.05] tracking-brand`}>
         {business ? t("businessTitle") : t(AUTH_PROVIDERS.length ? "title" : "titleEmail")}
       </h1>
       <p className="mt-3 text-lg text-slate">{business ? t("businessSubtitle") : t("subtitle")}</p>

@@ -5,7 +5,7 @@ import { BusinessOnboarding } from "@/components/business/onboarding";
 import { PendingClaims } from "@/components/business/pending-claims";
 import { PlanBadge } from "@/components/business/plan-badge";
 import { TrialBanner } from "@/components/business/trial-banner";
-import { Link } from "@/i18n/navigation";
+import { Link, redirect } from "@/i18n/navigation";
 import { getBusiness, pickLocation } from "@/lib/business";
 
 export const instant = false;
@@ -19,6 +19,14 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
   const format = await getFormatter();
 
   if (!org) {
+    // Signed in as an employer without a membership: straight to the access request, unless
+    // one is already waiting (its status is shown here).
+    const { count: open } = await supabase
+      .from("claim_requests")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .eq("status", "open");
+    if (!open) redirect({ href: "/business/claim", locale });
     return (
       <main className="w-full py-12">
         <h1 className="text-4xl font-black tracking-brand">{t("noOrgTitle")}</h1>

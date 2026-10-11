@@ -271,7 +271,7 @@
   },
   "Auth": {
     "title": "Create your account in one tap.",
-    "titleEmail": "Your account, with just an email.",
+    "titleEmail": "Sign in as an employee",
     "subtitle": "Your email is never shown publicly. Employers only see your name and contact details if you apply to their job.",
     "continueWith": "Continue with {provider}",
     "or": "or",
@@ -279,7 +279,7 @@
     "emailPlaceholder": "you@example.com",
     "sendCode": "Send me a code",
     "codeTitle": "Enter your code",
-    "codeSent": "We sent a 6-digit code to {target}.",
+    "codeSent": "We sent a sign-in code to {target}.",
     "code": "Code",
     "verify": "Continue",
     "resend": "Change email or get a new code",
@@ -288,12 +288,13 @@
     "errorCode": "That code didn't work. Check it or send a new one.",
     "errorLink": "That sign-in link has expired. Please try again.",
     "businessEyebrow": "For employers",
-    "businessTitle": "Employer sign-in",
-    "businessSubtitle": "Sign in or create your employer account with your work email address. We'll email you a 6-digit code – no password needed.",
+    "businessTitle": "Sign in as an employer",
+    "businessSubtitle": "Sign in or create your employer account with your work email address. We'll email you a sign-in code – no password needed.",
     "businessEmail": "Work email",
     "businessPlaceholder": "you@yourcompany.com",
     "notEmployer": "Looking for your own worker account?",
-    "workerSignIn": "Sign in here"
+    "workerSignIn": "Sign in here",
+    "employeeEyebrow": "For employees"
   },
   "Welcome": {
     "title": "How should we show you?",
@@ -466,7 +467,7 @@
     "title": "A good workplace is the cheapest hiring advantage.",
     "body": "Get free access to your workplaces. Reply to reviews, invite your team to rate you, and see what candidates see.",
     "cta": "Request free access",
-    "dashboard": "Go to your dashboard",
+    "dashboard": "Sign in as an employer",
     "features": {
       "replyTitle": "Reply to every review",
       "replyBody": "Write in your language, readers see it translated. You can dispute unverified reviews.",
@@ -738,9 +739,11 @@
     "business": "Business dashboard",
     "pending": "Request in progress",
     "signOut": "Sign out",
-    "signIn": "Sign in",
-    "businessSignIn": "Employer sign-in",
-    "shownAs": "Shown as {name}"
+    "shownAs": "Shown as {name}",
+    "signInEmployee": "Sign in as an employee",
+    "signInEmployeeHint": "Rate your workplace, your reviews",
+    "signInEmployer": "Sign in as an employer",
+    "signInEmployerHint": "Business dashboard, replies, subscription"
   },
   "Admin": {
     "title": "Admin",
