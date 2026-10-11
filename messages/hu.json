@@ -1,7 +1,7 @@
 {
   "Metadata": {
     "title": "RateThatJob – Know before you go",
-    "description": "Igazolt értékelések olyanoktól, akik tényleg ott dolgoztak. Bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel.",
+    "description": "Értékelések olyanoktól, akik ott dolgoztak vagy oda jelentkeztek, ahol lehet, igazolva. Bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel.",
     "tagline": "Know before you go"
   },
   "Nav": {
@@ -58,7 +58,7 @@
       "rateBody": "Dolgoztál valahol? Oszd meg névtelenül. A munkáltató soha nem látja, ki írta."
     },
     "jobsTitle": "Friss állások",
-    "jobsBody": "Jelentkezz 2 perc alatt önéletrajz nélkül, és nézd meg az értékeléseket az állás mellett.",
+    "jobsBody": "Sok állásra 2 perc alatt, önéletrajz nélkül jelentkezhetsz, az értékeléseket pedig az állás mellett látod.",
     "allJobs": "Összes állás",
     "citiesTitle": "Munkahelyek városonként",
     "faqTitle": "Kérdések",
@@ -78,8 +78,8 @@
       "jobs": "Nyitott állások",
       "seeCity": "A város összes munkahelye",
       "seeAll": "Keresés az összes munkahely között",
-      "widened": "{place} még nincs adat, ezért tágabban mutatjuk.",
-      "inCity": "itt: {city}",
+      "widened": "{place} még nincs találat, ezért tágabban mutatjuk.",
+      "inCity": "{city} környékén",
       "inCountryOther": "itt: {country}",
       "in": {
         "budapest": "Budapesten",
@@ -134,7 +134,7 @@
     "agriculture": "Mezőgazdaság",
     "events": "Rendezvény és szórakoztatás",
     "other": "Egyéb",
-    "restaurantPlural": "Vendéglátás",
+    "restaurantPlural": "Éttermek és kávézók",
     "fast_foodPlural": "Gyorséttermek",
     "barPlural": "Bárok és szórakozóhelyek",
     "hotelPlural": "Szállodák",
@@ -169,7 +169,6 @@
   },
   "Location": {
     "metaTitle": "{company} ({location}) – értékelések, bér, beosztás",
-    "metaDescription": "{company}, {address}: {score} / 5, {count} értékelés alapján. Időben fizet: {paidOnTime}%. A jelentkezők {replyRate}%-ának válaszol.",
     "metaDescriptionEmpty": "Dolgoztál már itt: {company}, {address}? Értékeld elsőként a fizetést, a beosztást és a vezetőket a RateThatJobon.",
     "outOf5": "/ 5",
     "operatedBy": "Üzemeltető: {entity}",
@@ -185,9 +184,9 @@
       "paid_on_time": "Időben fizet",
       "paid_as_promised": "Annyit fizet, amennyit ígér",
       "overtime_paid": "Kifizeti a túlórát",
-      "hours_as_promised": "Megkapod az ígért óraszámot"
+      "hours_as_promised": "Megadja az ígért óraszámot"
     },
-    "ghostingMeter": "Válaszol-e a jelentkezőknek?",
+    "ghostingMeter": "Ghosting-mutató",
     "repliesTo": "A jelentkezők {rate}%-ának válaszol",
     "avgReplyTime": "Átlagos válaszidő: {days} nap",
     "categories": {
@@ -199,20 +198,20 @@
     "claimTitle": "Te vezeted vagy a tiéd ez a munkahely?",
     "claimBody": "Igényelj ingyenes hozzáférést, hogy válaszolhass az értékelésekre és meghívhasd a csapatod.",
     "claimCta": "Hozzáférés igénylése",
-    "noReviewsTitle": "Még nincs értékelés",
-    "noReviewsBody": "Dolgoztál itt? Mondd el elsőként, milyen valójában.",
     "beTheFirst": "Értékeld elsőként",
     "repliesToApplicants": "Válaszol a jelentkezőknek",
-    "ghostingFromApplications": "{count}, a RateThatJobon beküldött jelentkezés alapján",
+    "ghostingFromApplications": "{count} RateThatJobon beküldött jelentkezés alapján",
     "openJobs": "Nyitott állások",
-    "seeJob": "Megnézem",
     "fromEmployer": "A munkáltatótól",
     "website": "A weboldaluk",
     "nearby": "Hasonló munkahelyek itt: {city}",
     "following": "Követed",
     "emptyTitle": "Ennek a munkahelynek még nincs értékelése. Legyél te az első!",
     "emptyBody": "Nagyjából egy perc, és senki nem látja, ki írta – a munkáltató sem.",
-    "emptyCta": "Értékelem"
+    "emptyCta": "Értékelem",
+    "metaScore": "{company}, {address}: {score} / 5, {count} értékelés alapján.",
+    "metaPaid": "Időben fizet: {paidOnTime}%.",
+    "metaReplies": "A jelentkezők {replyRate}%-ának válaszol."
   },
   "Reviews": {
     "metaTitle": "{company} ({location}) értékelések",
@@ -262,7 +261,8 @@
     "verifiedApplication": "Igazolt · Itt jelentkezett",
     "helpful": "Hasznos",
     "originalLanguage": "Eredeti: {language}",
-    "translated": "Fordítva"
+    "translated": "Fordítva",
+    "formerMember": "Volt tag"
   },
   "NotFound": {
     "title": "Az oldal nem található",
@@ -272,7 +272,7 @@
   "Auth": {
     "title": "Fiók egy koppintással.",
     "titleEmail": "Fiók egy e-mail-címmel.",
-    "subtitle": "A neved és az elérhetőséged soha nem jelenik meg nyilvánosan, és a munkáltatók sem látják.",
+    "subtitle": "Az e-mail-címed soha nem jelenik meg nyilvánosan. A munkáltató csak akkor látja a neved és az elérhetőséged, ha jelentkezel hozzá.",
     "continueWith": "Folytatás: {provider}",
     "or": "vagy",
     "email": "E-mail",
@@ -282,8 +282,8 @@
     "codeSent": "Küldtünk egy 6 jegyű kódot ide: {target}.",
     "code": "Kód",
     "verify": "Tovább",
-    "resend": "Új kód küldése",
-    "footer": "Nem kell jelszó. A folytatással elfogadod a <terms>Felhasználási feltételeket</terms> és az <privacy>Adatvédelmi tájékoztatót</privacy>.",
+    "resend": "Másik e-mail vagy új kód",
+    "footer": "Nem kell jelszó. A folytatással elfogadod az <terms>ÁSZF-et</terms> és az <privacy>Adatvédelmi tájékoztatót</privacy>.",
     "errorGeneric": "Valami hiba történt. Próbáld újra.",
     "errorCode": "Ez a kód nem jó. Ellenőrizd, vagy kérj újat.",
     "errorLink": "A belépési link lejárt. Próbáld újra.",
@@ -296,9 +296,9 @@
     "workerSignIn": "Belépés itt"
   },
   "Welcome": {
-    "title": "Hogyan jelenjünk meg?",
+    "title": "Milyen néven jelenj meg?",
     "subtitle": "Ez a név látszik az értékeléseiden. Bármikor módosíthatod.",
-    "anonymous": "Névtelen név",
+    "anonymous": "Generált álnév",
     "recommended": "Ajánlott",
     "shuffle": "Másik név",
     "username": "Saját felhasználónév",
@@ -313,9 +313,6 @@
   },
   "RatePicker": {
     "title": "Melyik munkahely?",
-    "placeholder": "Munkahely neve",
-    "search": "Keresés",
-    "noResults": "Nincs találat.",
     "hint": "Írd be a nevét: egyszerre keresünk a RateThatJobon és a térképen."
   },
   "ReviewForm": {
@@ -382,8 +379,8 @@
     "verifiedNote": "Csak a csapatunk látja, ellenőrzés után töröljük.",
     "whenLive": "Mikor jelenjen meg?",
     "publish": {
-      "now": "Most",
-      "delayed": "Pár hét múlva, másokkal együtt",
+      "now": "Amint lehet",
+      "delayed": "Pár hét múlva, véletlenszerű időpontban",
       "after_leaving": "Csak miután eljöttem innen"
     },
     "shownAs": "Így látszol: <name></name>",
@@ -409,17 +406,16 @@
       "points": {
         "anonymous": "Az értékelésed névtelen: sem a neved, sem az e-mail-címed nem jelenik meg mellette.",
         "employer": "A munkáltató nem látja, ki írta – akkor sem, ha ő hívott meg.",
-        "why": "Az e-mail-címedre azért van szükség, hogy szólhassunk, ha a munkahely válaszol, és hogy az értékelések valódiak maradjanak (egy ember, egy fiók)."
+        "why": "Az e-mail-címedre azért van szükség, hogy újra be tudj lépni és a fiókodban lásd a munkahely válaszát, és hogy az értékelések valódiak maradjanak (egy ember, egy fiók)."
       },
-      "jobAlerts": "Mutassatok nekem állásokat a környékemen",
-      "jobAlertsNote": "Nem kötelező. Időnként e-mail a közeli állásokról. A fiókod oldalán bármikor kikapcsolhatod.",
+      "jobAlerts": "Küldjetek e-mailt a környékem állásairól",
+      "jobAlertsNote": "Nem kötelező. Ilyen e-mailt még nem küldünk – most csak a hozzájárulásodat mentjük el arra az időre, amikor elindul. A fiókod oldalán bármikor kikapcsolhatod.",
       "verifyAndSend": "Megerősítem és beküldöm",
       "sending": "Küldés…"
     }
   },
   "NewWorkplace": {
     "title": "Munkahely felvétele",
-    "subtitle": "Nem találod? Vedd fel, és értékeld elsőként.",
     "company": "Munkahely vagy cég neve",
     "companyPlaceholder": "pl. Joe's Pizzeria",
     "address": "Cím (utca, házszám)",
@@ -430,8 +426,6 @@
     "category": "Típus",
     "submit": "Felveszem és értékelem",
     "submitClaim": "Felveszem és hozzáférést kérek",
-    "cantFind": "Nem találod?",
-    "addIt": "Munkahely felvétele",
     "errors": {
       "invalid": "Tölts ki minden mezőt.",
       "limit": "Ma már sok munkahelyet felvettél. Próbáld újra holnap.",
@@ -457,7 +451,7 @@
     "minuteTitle": "Egy perc",
     "minuteBody": "Néhány koppintás. Írni nem kötelező.",
     "liveTitle": "Te döntöd el, mikor jelenik meg",
-    "liveBody": "Most, később, vagy csak miután eljöttél.",
+    "liveBody": "Amint lehet, pár hét múlva, vagy csak miután eljöttél.",
     "start": "Kezdjük",
     "footer": "A meghívásra írt értékelések jelölést kapnak.",
     "invalidTitle": "Ez a meghívólink nem működik",
@@ -470,12 +464,12 @@
   },
   "Employers": {
     "metaTitle": "RateThatJob munkáltatóknak – ingyenes hozzáférés a munkahelyed profiljához",
-    "metaDescription": "Válaszolj az értékelésekre, hívd meg a csapatod, és lásd a korai figyelmeztetéseket minden telephelyen. A hozzáférés ingyenes.",
+    "metaDescription": "Válaszolj az értékelésekre, hívd meg a csapatod, adj fel állásokat. A hozzáférés ingyenes, a Pro korai figyelmeztetést és statisztikát ad.",
     "eyebrow": "Munkáltatóknak",
     "title": "A jó munkahely ma a legolcsóbb toborzási előny.",
     "body": "Igényelj ingyenes hozzáférést a munkahelyeidhez. Válaszolj az értékelésekre, hívd meg a csapatod, és nézd meg, mit látnak a jelentkezők.",
     "cta": "Hozzáférés igénylése",
-    "dashboard": "Irányítópult",
+    "dashboard": "Vezérlőpult",
     "features": {
       "replyTitle": "Válaszolj minden értékelésre",
       "replyBody": "Írj a saját nyelveden, az olvasók fordítva látják. Az igazolatlan értékeléseket vitathatod.",
@@ -487,15 +481,15 @@
       "indexBody": "Mutasd meg a pontszámod a karrieroldaladon és az álláshirdetéseidben. Magától frissül.",
       "indexLink": "Így működik az Index"
     },
-    "free": "A hozzáférés ingyenes. Értékelést nem lehet megvenni vagy eltávolítani.",
+    "free": "A hozzáférés ingyenes. Munkáltató nem vehet és nem távolíthat el értékelést.",
     "howTitle": "Hogyan működik",
     "how": {
       "claimTitle": "Igényelj hozzáférést a munkahelyedhez",
-      "claimBody": "Ingyenes. Céges e-maillel, telefonon vagy cégkivonattal ellenőrizzük.",
+      "claimBody": "Ingyenes. Céges e-maillel, cégkivonattal vagy meghatalmazással ellenőrizzük, a személyi igazolványoddal együtt.",
       "engageTitle": "Válaszolj és hívd meg a csapatod",
       "engageBody": "Válaszolj a saját nyelveden, ossz meg egy meghívó linket a dolgozóiddal, adj fel állásokat.",
       "improveTitle": "Vedd észre időben a gondokat",
-      "improveBody": "Lásd a trendeket telephelyenként, és kapj figyelmeztetést, ha egy pontszám romlani kezd."
+      "improveBody": "Pro csomaggal telephelyenként látod a trendeket, és a vezérlőpult jelez, ha egy pontszám romlani kezd."
     },
     "pricingTitle": "Ingyen indulhatsz. Pro telephelyenként.",
     "pricingBody": "A hozzáférés és a válaszok ingyenesek. Az álláshirdetés alacsony feladási díjjal indul. A Pro korai figyelmeztetést, statisztikát, RateThatJob Indexet és még többet ad.",
@@ -523,7 +517,6 @@
       "jobs": "Állások",
       "team": "Csapat és szerepkörök",
       "plan": "Előfizetés",
-      "soon": "Hamarosan",
       "index": "RateThatJob Index",
       "stats": "Statisztika",
       "profile": "Munkahelyi profil"
@@ -536,7 +529,7 @@
     },
     "roleDescriptions": {
       "owner": "Minden telephely, számlázás, szerepkörök",
-      "hr": "Minden telephely, válaszok, meghívók",
+      "hr": "Minden telephely, válaszok, meghívók, számlázás",
       "location_manager": "Csak a saját telephely"
     },
     "noOrgTitle": "Még nem kezelsz munkahelyet",
@@ -544,7 +537,6 @@
     "pendingClaims": "Ellenőrzés alatt álló hozzáférés-igénylések",
     "claimTitle": "Hozzáférés igénylése",
     "claimSearchHint": "Írd be a munkahelyed nevét: egyszerre keresünk a RateThatJobon és a térképen.",
-    "claimNotListed": "Még nincs fent? Vedd fel, aztán igényelj hozzáférést.",
     "claimFormTitle": "Hozzáférés igénylése: {name}",
     "claimFormBody": "Mondd el, ki vagy. Minden igénylést kézzel ellenőrzünk, általában 2 munkanapon belül.",
     "orgName": "Cégnév",
@@ -570,7 +562,7 @@
     "last12": "utolsó 12 hónap",
     "location": "Telephely",
     "avgScore": "Átlagos pontszám",
-    "vsLastQuarter": "{delta} az előző negyedévhez képest",
+    "vsLastQuarter": "{delta} a 3 hónappal korábbihoz képest",
     "verifiedReviews": "Igazolt értékelés",
     "ofTotal": "összesen {total}",
     "repliesToApplicants": "Válasz a jelentkezőknek",
@@ -579,8 +571,6 @@
     "replyNow": "Válaszolok",
     "earlyWarning": "Korai figyelmeztetés",
     "warningTitle": "Romlik a pontszám: {location}",
-    "warningBody": "{delta} az előző időszakhoz képest.",
-    "seeReviews": "Értékelések",
     "table": {
       "location": "Telephely",
       "score": "Pontszám",
@@ -595,7 +585,6 @@
       "pro": "Pro",
       "trial": "Pro próba"
     },
-    "upgrade": "Váltás Pro-ra",
     "inviteTeam": "Csapat meghívása",
     "reviewsTitle": "Értékelések és válaszok",
     "reviewsBody": "Bármelyik értékelésre válaszolhatsz, az igazolatlanokat vitathatod. Munkáltató nem távolíthat el értékelést.",
@@ -629,24 +618,16 @@
     "thisLocation": "Ez a telephely",
     "invitesSent": "Kiküldött meghívó",
     "reviewsReceived": "Beérkezett értékelés",
-    "countsNote": "A számok csak 5 értékelés után látszanak. Azt soha nem látod, ki válaszolt.",
+    "countsNote": "A beérkezett értékelések 5-től látszanak. Azt soha nem látod, ki értékelt.",
     "whyTitle": "Miért hívj meg mindenkit?",
-    "whyBody": "A profilodon látszik, hány embert hívtál meg és hányan értékeltek. Ha az egész csapatot meghívod, a jelentkezők jobban bíznak a pontszámodban.",
-    "locationsTitle": "Telephelyek, csapat és csomag",
+    "whyBody": "A meghívásos értékelések igazoltként jelennek meg. Minél többen értékelnek a csapatodból, annál jobban bíznak a jelöltek a pontszámodban.",
+    "locationsTitle": "Telephelyek és csapat",
     "locationsBody": "Minden telephelynek ingyenes profilja van. Azokat válts Pro-ra, amelyeket aktívan kezelnél.",
-    "price": "Ár",
-    "manager": "Vezető",
-    "notAssigned": "Nincs kijelölve",
-    "priceSoon": "Az ár hamarosan",
     "teamTitle": "Csapat és szerepkörök",
     "inviteMember": "Tag meghívása",
-    "planTitle": "Csomag és számlázás",
-    "monthly": "Havi",
-    "yearly": "Éves · 2 hónap ingyen",
-    "proIncludes": "<b>Pro telephelyenként:</b> korai figyelmeztetés, csapatmeghívók, RateThatJob Index a weboldaladra, statisztikák, egyedi profil, konkurens ajánlók nélkül.",
+    "planTitle": "Előfizetés",
+    "proIncludes": "<b>Pro telephelyenként:</b> korai figyelmeztetés, statisztika és RateThatJob Index a weboldaladra.",
     "chains": "<b>Láncok (10+ telephely):</b> egyedi ár és bevezetés.",
-    "billingSoon": "A fizetős csomagok hamarosan jönnek. Addig minden ingyenes.",
-    "comingSoon": "Hamarosan",
     "warningCategory": "{category}: {delta}-del csökkent az utolsó 60 napban ({recent}, korábban {baseline}).",
     "seeStats": "Statisztika",
     "emailTitle": "E-mailes meghívók",
@@ -676,7 +657,6 @@
     "websitePlaceholder": "pl. pelda.hu",
     "noWebsite": "Nincs weboldalunk",
     "accountEmailHint": "A belépéshez használt e-mail-címedet ellenőrizzük: <b>{email}</b> (kóddal igazolva). A domainjének egyeznie kell a fent megadott céges weboldaléval.",
-    "document": "Cégkivonat",
     "documentHint": "PDF, JPG vagy PNG, legfeljebb 10 MB. Csak a csapatunk látja, és a döntés után töröljük.",
     "documentError": "Csatolj egy legfeljebb 10 MB-os PDF, JPG vagy PNG fájlt.",
     "claimReply": "A válaszod",
@@ -709,7 +689,6 @@
     "noReviews": "Még nem értékeltél munkahelyet.",
     "rateOne": "Értékelj",
     "status": {
-      "draft": "Piszkozat",
       "pending_moderation": "Ellenőrzés alatt",
       "scheduled": "Időzítve",
       "published": "Megjelent",
@@ -736,7 +715,7 @@
     "following": "Követett munkahelyek",
     "noFollowing": "Kövess egy munkahelyet, és szólunk, ha új értékelés vagy állás jelenik meg.",
     "jobAlerts": "E-mailek a környékem állásairól",
-    "jobAlertsNote": "Időnként e-mail a közeli állásokról. Nem kötelező, alapból ki van kapcsolva.",
+    "jobAlertsNote": "Nem kötelező, alapból ki van kapcsolva. Ilyen e-mailt még nem küldünk; ez a hozzájárulásodat menti el arra az időre, amikor elindul.",
     "jobAlertsError": "Nem sikerült menteni. Próbáld újra."
   },
   "NavAccount": {
@@ -816,7 +795,7 @@
       "invites": "Meghívóból jött értékelések",
       "inviteLinks": "{count} meghívó link",
       "openJobs": "Nyitott állások",
-      "embeds": "Weboldalak jelvénnyel",
+      "embeds": "Weboldalak jelvénnyel vagy Careers Hubbal",
       "month": "Hónap",
       "reviews": "Megjelent értékelések",
       "verified": "Igazolt",
@@ -925,7 +904,7 @@
     "scriptCode": "Élő widget (karrieroldal)",
     "copy": "Kód másolása",
     "copied": "Kimásolva",
-    "sealNotEarned": "A Top Rated pecsét 4,0 feletti pontszámmal és az elmúlt 12 hónapban legalább 10 igazolt értékeléssel jár.",
+    "sealNotEarned": "A Top Rated pecsét legalább 4,0-s pontszámmal és az elmúlt 12 hónapban legalább 10 igazolt értékeléssel jár.",
     "fewReviews": "Amíg nincs 5 értékelésed, a jelvény értékelésre hívja a látogatókat.",
     "badge": {
       "name": "RateThatJob Index",
@@ -940,7 +919,7 @@
       "topRated": "Top Rated Employer",
       "footer": "RateThatJob.com · Know before you go",
       "unavailable": "A RateThatJob Index jelenleg nem elérhető.",
-      "unavailableHint": "Kérjük, lépjen be a fiókjába az aktiváláshoz."
+      "unavailableHint": "Munkáltató: lépjen be a fiókjába az aktiváláshoz."
     },
     "theme": "Téma",
     "preview": "Előnézet",
@@ -987,16 +966,15 @@
     "noPending": "Nincs függő meghívó.",
     "invite": "Tag meghívása",
     "role": "Szerepkör",
-    "locations": "Helyszínek",
+    "locations": "Telephelyek",
     "createLink": "Meghívó link létrehozása",
     "linkHint": "Küldd el ezt a linket a kollégádnak. Egyszer használható, és 7 nap múlva lejár.",
     "expires": "Lejár: {date}",
     "revoke": "Visszavonás",
     "remove": "Eltávolítás",
     "save": "Mentés",
-    "saved": "Mentve",
-    "allLocations": "Minden helyszín",
-    "pickLocation": "Válassz legalább egy helyszínt.",
+    "allLocations": "Minden telephely",
+    "pickLocation": "Válassz legalább egy telephelyet.",
     "error": "Valami hiba történt. Próbáld újra.",
     "lastOwner": "A cégnek legalább egy tulajdonosra szüksége van.",
     "joinTitle": "Csatlakozás: {org} a RateThatJobon",
@@ -1008,10 +986,8 @@
   "Jobs": {
     "title": "Állások",
     "metaTitle": "Állások – értékelésekkel olyanoktól, akik ott dolgoztak",
-    "metaDescription": "Nyitott állások éttermekben, boltokban, raktárakban és máshol. Jelentkezz 2 perc alatt önéletrajz nélkül, és nézd meg, mit mondanak, akik ott dolgoztak.",
+    "metaDescription": "Nyitott állások éttermekben, boltokban, raktárakban és máshol. Sokra 2 perc alatt, önéletrajz nélkül jelentkezhetsz, és látod, mit mondanak, akik ott dolgoztak.",
     "count": "{count, plural, =0 {Nincs nyitott állás} other {# nyitott állás}}",
-    "openJobs": "Nyitott állások",
-    "jobsHere": "{count} nyitott állás itt",
     "noJobs": "Most nincs a keresésnek megfelelő nyitott állás.",
     "schedule": {
       "full_time": "Teljes munkaidő",
@@ -1032,16 +1008,13 @@
     "payNotListed": "Bér nincs megadva",
     "posted": "Feladva: {date}",
     "closes": "Jelentkezési határidő: {date}",
-    "apply": "Jelentkezés 2 perc alatt",
-    "noCv": "Önéletrajz nélkül",
     "aboutJob": "A munkáról",
     "theWorkplace": "A munkahely",
     "seeWorkplace": "A munkahely összes értékelése",
     "noReviewsYet": "Erről a munkahelyről még nincs értékelés.",
     "metaJobTitle": "{title} – {company}, {location}",
-    "metaJobDescription": "{title} – {company}, {address}. {pay}. Jelentkezz önéletrajz nélkül, és nézd meg, mit mondanak, akik ott dolgoztak.",
+    "metaJobDescription": "{title} – {company}, {address}. {pay}. Jelentkezés előtt nézd meg, mit mondanak, akik ott dolgoztak.",
     "allJobs": "Összes állás",
-    "browseJobs": "Állások",
     "searchLabel": "Munkakör vagy cég",
     "quickApply": "Gyors jelentkezés",
     "quickOnly": "Csak gyors jelentkezés",
@@ -1165,7 +1138,7 @@
     "body": "Adj fel állást alacsony díjért. A jelöltek percek alatt jelentkeznek, és az állás mellett látják az értékeléseidet.",
     "newJob": "Állás feladása",
     "editJob": "Állás szerkesztése",
-    "noJobs": "Ennél a helyszínnél még nincs állás.",
+    "noJobs": "Ennél a telephelynél még nincs állás.",
     "status": {
       "draft": "Piszkozat",
       "open": "Nyitott",
@@ -1174,11 +1147,10 @@
     "applicants": "{count, plural, =0 {Nincs jelentkező} other {# jelentkező}}",
     "newCount": "{count} új",
     "edit": "Szerkesztés",
-    "applications": "Jelentkezések",
     "publicPage": "Nyilvános oldal",
     "jobTitle": "Munkakör",
     "titlePlaceholder": "pl. Szakács",
-    "location": "Helyszín",
+    "location": "Telephely",
     "workType": "Szerződés",
     "workTypes": {
       "permanent": "Határozatlan",
@@ -1209,11 +1181,9 @@
     "optional": "nem kötelező",
     "closesAt": "Jelentkezési határidő",
     "saveDraft": "Mentés piszkozatként",
-    "publish": "Közzététel",
     "save": "Mentés",
     "close": "Állás lezárása",
     "reopen": "Újranyitás",
-    "saved": "Mentve",
     "error": "Valami hiba történt. Próbáld újra.",
     "invalid": "Adj meg munkakört és leírást, és ellenőrizd a bértartományt.",
     "applicationsTitle": "Jelentkezések",
@@ -1236,7 +1206,7 @@
       "hired": "Felvéve",
       "withdrawn": "Visszavonta"
     },
-    "replyNote": "A jelölteket e-mailben vagy telefonon keresd. Minden itt jelölt döntés válasznak számít a ghosting mérőben, és a jelölt is látja.",
+    "replyNote": "Itt hívhatod vagy üzenhetsz a jelölteknek. Az üzenetek és minden itt jelölt döntés válasznak számít a ghosting-mutatóban (a hívás nem), és a jelölt is látja.",
     "appliedOn": "Jelentkezett: {date}",
     "lists": {
       "responsibilities": "Feladatok",
@@ -1306,7 +1276,7 @@
       "billing": "Közzétételkor fizetsz, a hirdetés a kifizetés után jelenik meg. Később válthatsz nagyobb csomagra.",
       "upgradeOnly": "Ez a hirdetés már él: nagyobb csomagra válthatsz, és csak a különbözetet fizeted.",
       "standard": {
-        "name": "Alap",
+        "name": "Standard",
         "body": "Alacsony feladási díj magáért a hirdetésért."
       },
       "basic": {
@@ -1315,7 +1285,7 @@
       },
       "pro": {
         "name": "Pro",
-        "body": "Az AI a jelentkezőket is kérdezi, a hirdetésed pedig a lista tetején áll."
+        "body": "Az AI minden jelentkezőnek feltesz pár további kérdést, a hirdetésed pedig a lista tetején áll."
       },
       "features": {
         "ad": "Álláshirdetés az értékeléseid mellett",
@@ -1456,21 +1426,15 @@
     }
   },
   "Places": {
-    "title": "Keresd meg a Google Térképen",
-    "placeholder": "Munkahely neve és utca, pl. McDonald’s Blaha",
     "onRtj": "Már fent van",
     "category": "Milyen munkahely ez?",
-    "addAndRate": "Hozzáadom és értékelem",
+    "addAndRate": "Felveszem és értékelem",
     "back": "Vissza",
     "error": "Valami hiba történt. Próbáld újra.",
     "limit": "Ma már sok munkahelyet felvettél. Próbáld újra holnap.",
     "poweredBy": "A keresést a Google biztosítja",
-    "notOnMap": "Nincs fent a Google Térképen?",
     "manualTitle": "Add meg kézzel",
-    "titleOsm": "Keresd meg a térképen",
     "poweredByOsm": "Térképadatok © <osm>OpenStreetMap</osm>-közreműködők · Keresés: Photon",
-    "notOnMapOsm": "Nincs rajta a térképen?",
-    "near": "Hol?",
     "areaAuto": "Automatikus",
     "areaHere": "A helyzetem",
     "areaAny": "Bárhol",
@@ -1516,8 +1480,8 @@
     "terms": "ÁSZF",
     "privacy": "Adatvédelem",
     "cookies": "Sütik",
-    "about": "Igazolt értékelések és tények a frontvonalbeli munkahelyekről: bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel.",
-    "noAds": "Értékelést nem lehet megvenni vagy eltávolítani.",
+    "about": "Igazolt értékelések és tények éttermekről, boltokról, raktárakról és gyárakról: bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel.",
+    "noAds": "A munkáltatók nem vehetnek és nem törölhetnek értékelést.",
     "careersHub": "Careers Hub"
   },
   "About": {
@@ -1533,7 +1497,7 @@
       "factsTitle": "Tények, nem csak csillagok",
       "factsBody": "Időben fizettek? Kifizették a túlórát? Válaszoltak a jelentkezőknek? A világos válaszok segítenek dönteni.",
       "fairTitle": "Korrekt a munkáltatókkal",
-      "fairBody": "A munkáltatói hozzáférés ingyenes, minden munkáltató válaszolhat, és értékelést senki nem vehet meg vagy távolíthat el."
+      "fairBody": "A munkáltatói hozzáférés ingyenes, minden munkáltató válaszolhat, és egyik sem veheti meg, rejtheti el vagy törölheti az értékeléseket."
     },
     "whyTitle": "Miért csináljuk",
     "why1": "A legtöbb állásoldal irodai munkákra és nagy márkákra készült. Órabéres munkánál a konkrét telephely számít: a vezető, a beosztás, és hogy időben jön-e a fizetés.",
@@ -1546,7 +1510,7 @@
     "metaTitle": "Árak munkáltatóknak",
     "eyebrow": "Árak",
     "title": "Ingyenes hozzáférés. Pro, ha többre van szükséged.",
-    "intro": "Minden munkáltató ingyen hozzáférhet a telephelyeihez, és válaszolhat az értékelésekre. A Pro telephelyenként, az álláshirdetés hirdetésenként fizetendő.",
+    "intro": "Minden munkáltató ingyen hozzáférhet a telephelyeihez, és válaszolhat az értékelésekre. A Pro telephelyenként, az álláshirdetés hirdetésenként fizetendő. A magyarországi telephelyek forintban, a többiek euróban fizetnek.",
     "monthly": "Havi",
     "yearly": "Éves",
     "perMonth": "hó / telephely",
@@ -1563,7 +1527,9 @@
         "inviteLink": "Megosztható meghívó link a csapatnak",
         "jobs": "Álláshirdetés alacsony feladási díjjal",
         "profileBasic": "Csapattagok és szerepkörök",
-        "careersHub": "RateThatJob Careers Hub: az állásaid a weboldaladon"
+        "careersHub": "RateThatJob Careers Hub: az állásaid a weboldaladon",
+        "invites": "E-mailes meghívók egy emlékeztetővel",
+        "profile": "Munkahelyi profil fotókkal és juttatásokkal"
       },
       "cta": "Ingyenes hozzáférés igénylése"
     },
@@ -1574,10 +1540,7 @@
       "features": {
         "warnings": "Korai figyelmeztetés, ha romlik egy pontszám",
         "stats": "Statisztika és trendek telephelyenként",
-        "invites": "E-mailes meghívók emlékeztetővel",
-        "index": "RateThatJob Index jelvény és widget",
-        "profile": "Egyedi profil fotókkal és juttatásokkal",
-        "noCompetitors": "Nincs konkurens ajánló az oldaladon"
+        "index": "RateThatJob Index jelvény és widget"
       },
       "cta": "Ingyenes próba indítása",
       "trial": "30 nap ingyen, bankkártya nélkül"
@@ -1589,7 +1552,7 @@
       "features": {
         "allPro": "Pro minden telephelyen",
         "rollout": "Segítség a beállításban és a meghívókban",
-        "manager": "Telephelyvezetők saját hozzáféréssel",
+        "manager": "Egy kapcsolattartó minden telephelyre",
         "invoice": "Egy számla minden telephelyre"
       },
       "cta": "Beszéljünk"
@@ -1619,7 +1582,7 @@
     "message": "Üzenet",
     "placeholderEmployer": "Írj a jelöltnek…",
     "placeholderApplicant": "Írj választ…",
-    "employerHint": "A jelölt a fiókjában kapja meg, és e-mailben is, ha megadta. A ghosting-mérőben válasznak számít.",
+    "employerHint": "A jelölt a fiókjában kapja meg, és e-mailben is, ha megadta. A ghosting-mutatódban válasznak számít.",
     "send": "Küldés",
     "sending": "Küldés…",
     "write": "Üzenet a jelöltnek",
@@ -1636,8 +1599,8 @@
     "payment_failedSubject": "Sikertelen fizetés a Pro csomagodnál – {location}",
     "payment_failedBody": "Szia!\n\nNem sikerült beszedni a RateThatJob Pro díját ennél a telephelynél: {location}. A Stripe a következő napokban újrapróbálja.\n\nItt frissítheted a kártyádat: {link}\n\nHa nem sikerül, a Pro az utolsó kifizetett időszak végén lejár, és a weboldaladra beágyazott RateThatJob Index „jelenleg nem elérhető” feliratot mutat.\n\nRateThatJob – Know before you go",
     "renewal_upcomingSubject": "Hamarosan megújul az éves Pro előfizetésed – {location}",
-    "renewal_upcomingBody": "Szia!\n\nA(z) {location} éves RateThatJob Pro előfizetése automatikusan megújul, a mentett kártyádról.\nMegújulás: {date}\nÖsszeg: {amount} (adott esetben ÁFA-val)\n\nHa meg szeretnéd tartani, nincs teendőd. Ha addig módosítanád vagy lemondanád: {link}\n\nRateThatJob – Know before you go",
-    "subscription_canceledSubject": "Lemondtad a Pro előfizetést – {location}",
+    "renewal_upcomingBody": "Szia!\n\nA(z) {location} éves RateThatJob Pro előfizetése automatikusan megújul, a mentett kártyádról.\nMegújulás: {date}\nÖsszeg: {amount}\n\nHa meg szeretnéd tartani, nincs teendőd. Ha addig módosítanád vagy lemondanád: {link}\n\nRateThatJob – Know before you go",
+    "subscription_canceledSubject": "Lemondva: a Pro előfizetésed – {location}",
     "subscription_canceledBody": "Szia!\n\nLemondtuk a(z) {location} RateThatJob Pro előfizetését, több terhelés nem lesz. A Prót eddig még használhatod: {date}\n\nUtána a weboldaladon lévő RateThatJob Index „jelenleg nem elérhető” feliratot mutat. A nyilvános profilod és az értékelések láthatók maradnak.\n\nMeggondoltad magad? A fenti dátumig újraaktiválhatod: {link}\n\nRateThatJob – Know before you go"
   },
   "JobsWidget": {
@@ -1703,7 +1666,7 @@
     "cannotTitle": "Ami nem működik",
     "cannotBody": "A munkáltató nem törölhet értékelést, és jobb pontszámot sem lehet venni. Az ellenőrizetlen értékelést vitathatod, erről a moderátoraink döntenek.",
     "warningTitle": "Lásd előre a bajt",
-    "warningBody": "Pro csomaggal a vezérlőpultod szól, ha a vezető, a fizetés, a beosztás vagy a környezet értékelése az elmúlt 60 napban legalább 0,5-tel romlott a korábbihoz képest (mindkét időszakban legalább 5 értékeléssel). Így észreveszed, ha romlik a hangulat, mielőtt az Indexedet is lehúzza.",
+    "warningBody": "Pro csomaggal a vezérlőpultod szól, ha az összpontszám, a vezető, a fizetés, a beosztás vagy a környezet értékelése az elmúlt 60 napban legalább 0,5-tel romlott a korábbihoz képest (mindkét időszakban legalább 5 értékeléssel). Így észreveszed, ha romlik a hangulat, mielőtt az Indexedet is lehúzza.",
     "sealTitle": "Top Rated Employer pecsét",
     "sealBody": "Egy telephely akkor kapja meg a pecsétet, ha az Indexe legalább 4,0, és az elmúlt 12 hónapban legalább 10 ellenőrzött értékelése van. A pecsét az aktuális évet mutatja, és eltűnik, ha a telephely már nem felel meg.",
     "topTitle": "4,8 felett: nagyon szűk kör",
@@ -1808,7 +1771,7 @@
     "paidUntil": "Fizetve eddig: {date}",
     "trialUntil": "Próba eddig: {date}",
     "trialDays": "Még {days} nap az ingyenes próbából ({date}-ig)",
-    "trialEnded": "A próba lejárt – a kitett Index „nem elérhető” feliratot mutat",
+    "trialEnded": "A próba lejárt – a kitett Index „jelenleg nem elérhető” feliratot mutat",
     "noPro": "Nincs Pro",
     "trialOffer": "Minden telephely: 30 nap Pro ingyen, bankkártya nélkül.",
     "billingNote": "Amíg nincs online fizetés, számlát küldünk, és a befizetés után kapcsoljuk be a Prót.",
@@ -1821,8 +1784,6 @@
       "year": "éves"
     },
     "error": "Valami hiba történt. Próbáld újra.",
-    "trialLeft": "Még {days} nap az ingyenes Pro próbából",
-    "trialBody": "A RateThatJob Index, a korai figyelmeztetés és a statisztika be van kapcsolva. Kapcsold be a Prót, hogy megmaradjanak.",
     "endedTitle": "{count, plural, one {Lejárt a Pro próbád} other {# telephelyen lejárt a Pro próba}}",
     "endedBody": "A kitett RateThatJob Indexed most pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”. Kapcsold be a Prót, hogy újra látszódjon.",
     "gate": {
@@ -1835,7 +1796,6 @@
     "subscribe_year": "Éves · {price}",
     "payByInvoice": "Inkább számlára fizetek",
     "manage": "Előfizetés kezelése",
-    "invoices": "Számlázás és számlák",
     "subscribed": "Előfizetve",
     "renewsOn": "Előfizetve ({interval}) – megújul: {date}",
     "firstPaymentOn": "Előfizetve – első terhelés {date}, a próbaidő végén",
@@ -1848,8 +1808,7 @@
     "billingAddress": "Cím",
     "billingTaxId": "Adószám",
     "billingUnavailable": "A számlázási adatokat most nem tudtuk betölteni.",
-    "billingEdit": "A számlázási adatokat a számlázási portálon módosíthatod, és ott töltheted le a számláidat is.",
-    "myInvoices": "Számláim"
+    "billingEdit": "A számlázási adatokat a számlázási portálon módosíthatod, és ott töltheted le a számláidat is."
   },
   "Demo": {
     "label": "Demó adat",
@@ -1857,7 +1816,7 @@
   },
   "InviteEmail": {
     "subject": "A(z) {company} arra kér, értékeld a munkahelyedet",
-    "body": "Szia!\n\nA(z) {company} ({location}) arra kérte a csapatát, hogy értékeljék a munkahelyüket a RateThatJobon. Nagyjából egy perc, írni nem kötelező.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót. A meghívásra írt értékelések késleltetve jelennek meg, és te döntöd el, mikor: most, később, vagy csak miután eljöttél.\n\nÉrtékeld a munkahelyedet: {link}\n\nAzért kaptad ezt az e-mailt, mert a(z) {company} megadta a címedet. Legfeljebb egy emlékeztetőt küldünk, utána töröljük a címedet.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Know before you go",
+    "body": "Szia!\n\nA(z) {company} ({location}) arra kérte a csapatát, hogy értékeljék a munkahelyüket a RateThatJobon. Nagyjából egy perc, írni nem kötelező.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót. A meghívásra írt értékelések mindig néhány nap véletlenszerű késleltetéssel jelennek meg, vagy később, ha így döntesz: pár hét múlva, vagy csak miután eljöttél.\n\nÉrtékeld a munkahelyedet: {link}\n\nAzért kaptad ezt az e-mailt, mert a(z) {company} megadta a címedet. Legfeljebb egy emlékeztetőt küldünk, utána töröljük a címedet.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Know before you go",
     "reminderSubject": "Emlékeztető: értékeld a munkahelyedet ({company})",
     "reminderBody": "Szia!\n\nPár napja a(z) {company} ({location}) meghívott, hogy értékeld a munkahelyedet a RateThatJobon. Ha szeretnéd, nagyjából egy perc.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót.\n\nÉrtékeld a munkahelyedet: {link}\n\nEz az egyetlen emlékeztető. A címedet most töröljük.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Know before you go"
   },
@@ -1872,7 +1831,7 @@
     "infoSubject": "Még egy kis információ kell a hozzáférés-igénylésedhez – {location}",
     "infoBody": "Szia!\n\nKöszönjük, hogy hozzáférést igényeltél a(z) {location} munkahelyhez a RateThatJobon. A jóváhagyáshoz még egy kis információ kell:\n\n{message}\n\nItt válaszolhatsz vagy csatolhatsz dokumentumot: {link}\n\nRateThatJob – Know before you go",
     "approvedSubject": "Jóváhagytuk a hozzáférésedet – {location}",
-    "approvedBody": "Szia!\n\nJó hír: jóváhagytuk a hozzáférésedet a(z) {location} munkahelyhez. Mostantól válaszolhatsz az értékelésekre, meghívhatod a csapatodat és hirdethetsz állásokat. Elindult a 30 napos ingyenes Pro próbaidőszakod.\n\nIrányítópult: {link}\n\nRateThatJob – Know before you go",
+    "approvedBody": "Szia!\n\nJó hír: jóváhagytuk a hozzáférésedet a(z) {location} munkahelyhez. Mostantól válaszolhatsz az értékelésekre, meghívhatod a csapatodat és hirdethetsz állásokat. Ha ennél a telephelynél még nem volt, elindult a 30 napos ingyenes Pro próbaidőszakod.\n\nVezérlőpult: {link}\n\nRateThatJob – Know before you go",
     "rejectedSubject": "Nem tudtuk jóváhagyni a hozzáférés-igénylésedet – {location}",
     "rejectedBody": "Szia!\n\nNem tudtuk megerősíteni, hogy te képviseled a(z) {location} munkahelyet, ezért nem hagytuk jóvá a hozzáférés-igénylést. Küldhetsz új igénylést céges e-mail-címmel (a céged domainjén), cégkivonattal vagy meghatalmazással – mindegyikhez személyazonosító okmánnyal.\n\n{link}\n\nRateThatJob – Know before you go"
   },

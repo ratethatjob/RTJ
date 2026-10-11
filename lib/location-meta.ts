@@ -12,15 +12,20 @@ export async function locationMetadata(
   const format = await getFormatter({ locale });
   const s = location.scores;
   const title = t("metaTitle", { company: location.companyName, location: location.address });
+  // Only the facts we have: no "Paid on time –%".
   const description = s
-    ? t("metaDescription", {
-        company: location.companyName,
-        address: `${location.address}, ${location.city}`,
-        score: format.number(s.overall, { maximumFractionDigits: 1 }),
-        count: s.reviewCount,
-        paidOnTime: s.facts.paid_on_time ?? "–",
-        replyRate: s.replyRate ?? "–",
-      })
+    ? [
+        t("metaScore", {
+          company: location.companyName,
+          address: `${location.address}, ${location.city}`,
+          score: format.number(s.overall, { maximumFractionDigits: 1 }),
+          count: s.reviewCount,
+        }),
+        s.facts.paid_on_time != null && t("metaPaid", { paidOnTime: s.facts.paid_on_time }),
+        s.replyRate != null && t("metaReplies", { replyRate: s.replyRate }),
+      ]
+        .filter(Boolean)
+        .join(" ")
     : t("metaDescriptionEmpty", {
         company: location.companyName,
         address: `${location.address}, ${location.city}`,

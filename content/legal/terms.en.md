@@ -12,7 +12,7 @@ RateThatJob shows reviews of workplaces, facts (pay on time, overtime, hours, re
 
 ## 3. Your account
 
-- You need an account to review, apply and follow workplaces. You sign in with a code we send to your email address; there is no password.
+- You need an account to review, apply, follow workplaces, report reviews and vote them helpful. You sign in with a code we send to your email address; there is no password.
 - Public pages only show the display name you choose. Your name and contact details are never shown, and employers never learn who wrote a review.
 - Your account belongs to you, not to your employer. You can download your data and delete your account at any time on the My account page.
 
@@ -22,7 +22,7 @@ RateThatJob shows reviews of workplaces, facts (pay on time, overtime, hours, re
 - Not allowed: names or personal details of other people, threats, hate, harassment, advertising, fake or paid reviews, and manipulating your own or a competitor's workplace.
 - Every review is checked automatically, and by a person when needed, before it goes live. To protect anonymity, publishing may be delayed.
 - Verification documents are only used to check the review and are deleted after the decision. Verified reviews count more.
-- Reviews that break these rules are rejected or removed. Anyone can flag a review with the "Report" button.
+- Reviews that break these rules are rejected or removed. Any signed-in user can flag a review with the "Report" button.
 - Review text is machine-translated into other languages; the original is always available.
 
 ## 5. Employers
@@ -30,11 +30,11 @@ RateThatJob shows reviews of workplaces, facts (pay on time, overtime, hours, re
 - Employer access to a workplace is free. We check every access request by hand. Accepted proof, each together with a photo ID of the person: a signed-in business email on the company website's domain (free email providers don't count), a company registry extract or trade license naming the person as a director or owner, or a letter of authorization signed by the company's legal representative (our form). Giving false information or documents ends the access.
 - Employers can reply to reviews and dispute unverified reviews. Reviews cannot be deleted, hidden or bought.
 - Employers must not try to identify reviewers or put pressure on their staff because of a review.
-- Pro is a paid plan per location. It includes the RateThatJob Index for your website (image badge, iframe card, Top Rated seal, the score in the JSON API), early warnings and statistics, and the other features listed on the [Pricing](/pricing) page.
+- Pro is a paid plan per location. It includes the RateThatJob Index for your website (image badge, iframe card, Top Rated seal, the score in the JSON API), early warnings and statistics.
 - Every location gets a 30-day free Pro trial, once, with no card needed. It starts automatically when the access request is approved.
-- After the trial, Pro is billed per location, monthly or yearly, at the prices on the [Pricing](/pricing) page. Hungarian locations are billed in forints, all others in euros.
+- After the trial, Pro is billed per location, monthly or yearly, at the prices on the [Pricing](/pricing) page. Hungarian locations are billed in forints, all others in euros (the Pricing page shows both).
 - If you subscribe by card during the trial, the first payment is taken when the trial ends, never earlier.
-- A Pro subscription renews automatically at the end of each period until you cancel it. You can cancel any time in your dashboard (Billing & invoices); Pro then stays on until the end of the period already paid and is not renewed.
+- A Pro subscription renews automatically at the end of each period until you cancel it. You can cancel any time in your dashboard (Subscription); Pro then stays on until the end of the period already paid and is not renewed.
 - If a renewal payment fails, we try again for a few days and let you know. If it stays unpaid, Pro ends with the last paid period.
 - Fees already paid are not refunded, including for the rest of a cancelled period, unless we charged you by mistake (for example twice) or this is required by law.
 - You can also ask for an invoice and pay by bank transfer; Pro is switched on once the payment arrives.

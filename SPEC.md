@@ -191,7 +191,7 @@ Levels shown as badges: Not verified · Verified (document) · Verified (invited
 - **Subscription page** (`/business/billing`): per location the plan, price and interval, a clear state (Free trial / Active / Payment failed / Cancelled / Expired / Free), days left with a progress bar in the trial, next charge date and amount, card brand, last 4 digits and expiry, the access end after cancelling (with Reactivate), a red band to update the card after a failed payment; buttons open the matching Customer Portal flow (start, switch to yearly with the saving, change card, cancel, invoices). Billing details and the latest invoices (PDF) at the bottom. The dashboard shows a banner during the trial (louder in the last 7 days) and after a failed payment.
 - **Billing emails** (once each, owners and HR): trial ends in 7 and 1 day(s), trial ended, yearly renewal in 7 days, payment failed, cancellation confirmed.
 
-Pro features per location: early warnings, invites, statistics, branded profile (photos, benefits), remove competitor suggestions from own page, **RateThatJob Index** (image badge, iframe card, Top Rated seal, the score in the JSON API, the Index generator). RateThatJob Careers Hub (the jobs widget) is free.
+Pro features per location (what the code gates today): early warnings, statistics, and the **RateThatJob Index** on embeds (image badge, iframe card, Top Rated seal, the score in the JSON API). Free for every employer: replies, disputes, invite link and email invites, workplace profile (photos, benefits), job ads (paid per ad) and RateThatJob Careers Hub. Not built: removing competitor suggestions from your own page.
 
 ---
 

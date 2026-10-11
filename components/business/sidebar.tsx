@@ -50,9 +50,6 @@ export function BusinessSidebar({ orgName, role, awaiting }: Props) {
                   {awaiting}
                 </span>
               )}
-              {!href && (
-                <span className="text-xs uppercase tracking-tagline text-mist">{t("nav.soon")}</span>
-              )}
             </>
           );
           const cls = `flex shrink-0 items-center justify-between gap-3 rounded-xl px-4 py-3 font-black ${

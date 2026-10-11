@@ -7,7 +7,7 @@ import type { PlaceDetails, PlaceSuggestion } from "@/lib/places";
 // OpenStreetMap workplace search, used while there is no GOOGLE_PLACES_API_KEY.
 // Search-as-you-type: Photon (komoot), since Nominatim's usage policy forbids autocomplete.
 // Details of the picked place: one Nominatim lookup, at most one request per second.
-// Both identify us with a User-Agent, are cached and only receive the typed text.
+// Both identify us with a User-Agent, are cached and only receive the typed text and the search area.
 // Suggestion ids are "osm:node/123" so the actions can tell them from Google place ids.
 
 const PHOTON = process.env.PHOTON_API_BASE ?? "https://photon.komoot.io";

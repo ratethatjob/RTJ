@@ -38,6 +38,8 @@ export async function ReviewCard({
   const locale = await getLocale();
   const t = await getTranslations("Review");
   const isApplicant = review.relationship === "applicant";
+  // Deleted accounts that kept their reviews come from the database as "Former member".
+  const author = review.displayName === "Former member" ? t("formerMember") : review.displayName;
   const languageName = (code: string) => intlLanguageName(code, locale);
 
   const meta = [
@@ -71,10 +73,10 @@ export async function ReviewCard({
     <article className="rounded-3xl bg-white p-6">
       <header className="flex items-start gap-3">
         <span className="grid size-12 shrink-0 place-items-center rounded-full bg-[#E8E6E1] font-black">
-          {initials(review.displayName)}
+          {initials(author)}
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="text-lg font-black leading-tight">{review.displayName}</h3>
+          <h3 className="text-lg font-black leading-tight">{author}</h3>
           <p className="text-slate">{meta.join(" · ")}</p>
         </div>
         <div className="hidden shrink-0 items-center gap-3 sm:flex">

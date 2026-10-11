@@ -181,10 +181,14 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                         <p className="text-slate">
                           {l.address} · {tc(l.category)}
                         </p>
-                        {l.scores && (
+                        {l.scores && (l.scores.facts.paid_on_time != null || l.scores.replyRate != null) && (
                           <p className="font-black">
-                            {t("paysOnTimeShort")} {l.scores.facts.paid_on_time}
-                            % · {t("repliesShort")} {l.scores.replyRate}%
+                            {[
+                              l.scores.facts.paid_on_time != null && `${t("paysOnTimeShort")} ${l.scores.facts.paid_on_time}%`,
+                              l.scores.replyRate != null && `${t("repliesShort")} ${l.scores.replyRate}%`,
+                            ]
+                              .filter(Boolean)
+                              .join(" · ")}
                           </p>
                         )}
                       </div>

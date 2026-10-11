@@ -8,15 +8,16 @@ Effective: 10 October 2026
 
 ## 2. The most important rule: anonymity
 
-Employers never learn who wrote a review or who responded to their invite. Public pages only show the display name you choose. Employers only see aggregate numbers, and only from 5 reviews.
+Employers never learn who wrote a review or who responded to their invite. Public pages only show the display name you choose. Apart from the published reviews themselves, employers only see aggregate numbers; invite results and statistics only from 5 reviews.
 
 ## 3. What we process and why
 
 - **Account:** email address, display name, language. Purpose: sign-in and providing the service. Legal basis: providing the service (contract).
 - **Job alerts (optional):** if you tick “Also show me jobs in my area” when sending a review, we store that consent and when you gave it, and may email you about jobs near you. Off by default; turn it off any time on your account page. Legal basis: your consent.
-- **Reviews:** the workplace, your relationship to it (employee, former employee, applicant), period, position, ratings, facts and text. Purpose: publishing, computing scores, moderation. Legal basis: contract and legitimate interest (keeping reviews trustworthy).
-- **Verification document (optional):** payslip, contract and similar. Used only to check the review and deleted after the decision, at the latest within 30 days.
-- **Applications:** name, email or phone, your answers. They go to the employer you apply to. Legal basis: your request (contract).
+- **Reviews:** the workplace, your relationship to it (employee, former employee, trial shift, applicant), period, position, ratings, facts and text. Purpose: publishing, computing scores, moderation. Legal basis: contract and legitimate interest (keeping reviews trustworthy).
+- **Verification document (optional):** payslip, contract and similar. Used only to check the review and deleted as soon as it has been decided.
+- **Applications:** name, email and/or phone, your answers, start date, experience, your message, your CV if you upload one, follow-up answers and messages with the employer. They go to the employer you apply to. Legal basis: your request (contract).
+- **Invited employees:** the email address an employer gives us, stored encrypted and only used to send the invite and one reminder; deleted after the reminder, once used, or after 7 days at the latest. A one-way code of the address is kept so the same person isn't invited to the same workplace again within 90 days; if you unsubscribe, only that code is kept.
 - **Employer accounts:** team members' names, email addresses and roles.
 - **Employer access requests:** name, role, phone number, company website, the signed-in email address, a photo ID (ID card or passport) of the person requesting access and, depending on the method, a company registry extract (trade license) or a letter of authorization. Purpose: checking that you may act for the workplace (legitimate interest: protecting reviewers and employers from impersonation). You may cover the ID document number and everything except your photo and name. The files are kept in a private store that only our team can open (through links that expire after 10 minutes), are never shown to anyone else, and are deleted once the request is decided.
 - **Follows, notifications, helpful votes, reports:** to run the service.
@@ -25,9 +26,9 @@ Employers never learn who wrote a review or who responded to their invite. Publi
 
 ## 4. Automated checks and translation
 
-Review and reply text is checked by an AI model (Anthropic Claude) for personal data, threats and similar content, and translated into other languages. The model only receives the text, not your account details. When a review is held, a person decides.
+Review text is checked by an AI model (Anthropic Claude) for personal data, threats and similar content. Review and employer reply text is translated into other languages by the same service. The model only receives the text, not your account details. When a review is held, a person decides.
 
-If an employer uses the Basic or Pro job ad package, the same AI model summarizes your application for the employer (your answers and, if you uploaded one, your CV) and, with Pro, asks you 2–3 follow-up questions. The summary only supports the employer; the decision is made by a person.
+If an employer uses the Basic or Pro job ad package, an AI model (Anthropic Claude) summarizes your application for the employer (your answers and, if you uploaded one, your CV) and, with Pro, asks you 2–3 follow-up questions. The summary only supports the employer; the decision is made by a person.
 
 ## 5. Processors
 
@@ -35,7 +36,7 @@ If an employer uses the Basic or Pro job ad package, the same AI model summarize
 - Vercel (hosting, serving the website)
 - Anthropic (machine translation, content checks, application summaries)
 - Google (Google Maps based workplace search, when you use it)
-- OpenStreetMap services: Photon by komoot GmbH (workplace search) and Nominatim by the OpenStreetMap Foundation (details of the picked place), when the map search runs on OpenStreetMap. They receive only the search text from our server, not your account details.
+- OpenStreetMap services: Photon by komoot GmbH (workplace search) and Nominatim by the OpenStreetMap Foundation (details of the picked place), when the workplace search runs on OpenStreetMap. They receive only the search text and the approximate area (a city, or your location rounded to about 1 km if you chose it), not your account details.
 - Resend (sending emails, for example messages from employers)
 - Stripe (payment provider for employers: card payments, subscriptions, invoices; receives the company name, billing address, tax ID, email and payment details; we never see full card details)
 
@@ -45,12 +46,12 @@ We update this list before adding a new provider.
 
 - Account data until you delete your account.
 - Reviews until you delete your account, or, if you choose, kept as "Former member" without any link to you.
-- Verification documents until the decision, at most 30 days.
-- Applications until you delete your account. Data you sent to an employer is also the employer's responsibility.
+- Verification documents until the decision.
+- Applications until you delete your account. Uploaded CVs are deleted on request (write to {{privacyEmail}}). Data you sent to an employer is also the employer's responsibility.
 
 ## 7. Your rights
 
-- Access and portability: download your data (JSON) on the My account page.
+- Access and portability: download your profile and reviews (JSON) on the My account page; for any other data write to {{privacyEmail}}.
 - Erasure: delete your account on the My account page.
 - Rectification, restriction, objection: write to [{{privacyEmail}}](mailto:{{privacyEmail}}).
 - Complaints: to the Commissioner of Data Protection of the Dubai International Financial Centre (DIFC), or to the data protection authority where you live (for example in Hungary: NAIH, naih.hu).

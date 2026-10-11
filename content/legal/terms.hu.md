@@ -12,7 +12,7 @@ A RateThatJob munkahelyekről szóló értékeléseket, tényeket (bérfizetés,
 
 ## 3. Fiók
 
-- Az értékeléshez, jelentkezéshez és követéshez fiók kell. Belépés az e-mail-címedre küldött kóddal történik, jelszó nincs.
+- Az értékeléshez, jelentkezéshez, követéshez, bejelentéshez és a „Hasznos” szavazáshoz fiók kell. Belépés az e-mail-címedre küldött kóddal történik, jelszó nincs.
 - A nyilvános oldalakon csak a választott megjelenő neved látszik. A neved és az elérhetőséged nem jelenik meg, és a munkáltatók nem látják, ki írta az értékelést.
 - A fiókod a tiéd, nem a munkáltatódé. Bármikor letöltheted az adataidat és törölheted a fiókod a Fiókom oldalon.
 
@@ -22,7 +22,7 @@ A RateThatJob munkahelyekről szóló értékeléseket, tényeket (bérfizetés,
 - Tilos: mások nevének vagy személyes adatainak közzététele, fenyegetés, gyűlöletkeltés, zaklatás, reklám, hamis vagy megvásárolt értékelés, valamint saját vagy konkurens munkahely manipulálása.
 - Minden értékelés megjelenés előtt automatikus és szükség esetén kézi ellenőrzésen megy át. A névtelenség védelmében a megjelenés késleltetve is történhet.
 - Az igazoló dokumentumot csak ellenőrzésre használjuk, a döntés után töröljük. Az igazolt értékelések nagyobb súllyal számítanak.
-- A szabályokat sértő értékeléseket elutasítjuk vagy eltávolítjuk. Bárki jelezheti a problémás értékelést a „Jelentés” gombbal.
+- A szabályokat sértő értékeléseket elutasítjuk vagy eltávolítjuk. Bármely bejelentkezett felhasználó jelezheti a problémás értékelést a „Jelentés” gombbal.
 - Az értékelés szövegét gépi fordítással más nyelveken is megjelenítjük, az eredeti mindig elérhető.
 
 ## 5. Munkáltatók
@@ -30,11 +30,11 @@ A RateThatJob munkahelyekről szóló értékeléseket, tényeket (bérfizetés,
 - A munkáltatói hozzáférés ingyenes. Minden hozzáférés-igénylést kézzel ellenőrzünk. Elfogadott igazolás – mindegyik az igénylő személyazonosító okmányával együtt: a cég weboldalának domainjén lévő, belépéssel igazolt céges e-mail-cím (ingyenes levelezőszolgáltatás nem fogadható el), olyan cégkivonat vagy trade license, amelyben az igénylő vezető tisztségviselőként vagy tulajdonosként szerepel, vagy a cég törvényes képviselője által aláírt meghatalmazás (a mi nyomtatványunkon). Valótlan adat vagy dokumentum esetén a hozzáférés megszűnik.
 - A munkáltató válaszolhat az értékelésekre, és vitathatja az igazolatlan értékeléseket. Értékelést törölni, elrejteni vagy megvásárolni nem lehet.
 - A munkáltató nem próbálhatja kideríteni az értékelők kilétét, és nem gyakorolhat nyomást a dolgozóira az értékelés miatt.
-- A Pro telephelyenkénti fizetős csomag. Benne van a RateThatJob Index a weboldaladra (képes jelvény, iframe kártya, Top Rated pecsét, a pontszám a JSON API-ban), a korai figyelmeztetés és a statisztika, valamint az [Árak](/pricing) oldalon felsorolt további funkciók.
+- A Pro telephelyenkénti fizetős csomag. Benne van a RateThatJob Index a weboldaladra (képes jelvény, iframe kártya, Top Rated pecsét, a pontszám a JSON API-ban), a korai figyelmeztetés és a statisztika.
 - Minden telephely egyszer 30 napos ingyenes Pro próbát kap, bankkártya nélkül. A próba automatikusan indul, amikor jóváhagyjuk a hozzáférés-igénylést.
-- A próba után a Pro telephelyenként, havi vagy éves díjjal fizetős, az [Árak](/pricing) oldalon szereplő áron. A magyarországi telephelyek forintban, a többiek euróban fizetnek.
+- A próba után a Pro telephelyenként, havi vagy éves díjjal fizetős, az [Árak](/pricing) oldalon szereplő áron. A magyarországi telephelyek forintban, a többiek euróban fizetnek (az Árak oldal mindkettőt mutatja).
 - Ha a próba alatt fizetsz elő bankkártyával, az első terhelés a próba végén történik, korábban nem.
-- A Pro előfizetés minden időszak végén automatikusan megújul, amíg le nem mondod. Bármikor lemondhatod az irányítópulton (Számlázás és számlák); a Pro ilyenkor a már kifizetett időszak végéig működik, utána nem újul meg.
+- A Pro előfizetés minden időszak végén automatikusan megújul, amíg le nem mondod. Bármikor lemondhatod a vezérlőpulton (Előfizetés); a Pro ilyenkor a már kifizetett időszak végéig működik, utána nem újul meg.
 - Ha a megújításkor nem sikerül a fizetés, néhány napig újrapróbáljuk, és értesítünk. Ha kifizetetlen marad, a Pro az utolsó kifizetett időszak végén megszűnik.
 - A már kifizetett díjat nem térítjük vissza, a lemondott időszak hátralévő részére sem, kivéve ha tévesen (például kétszer) terheltünk, vagy ha jogszabály előírja.
 - Kérhetsz számlát is, és fizethetsz átutalással; ilyenkor a befizetés megérkezése után kapcsoljuk be a Prót.

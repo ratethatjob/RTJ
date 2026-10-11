@@ -1,7 +1,7 @@
 {
   "Metadata": {
     "title": "RateThatJob – Know before you go",
-    "description": "Verified reviews from people who actually worked there. Pay, hours, managers and how workplaces treat applicants.",
+    "description": "Reviews from people who worked or applied there, verified where possible. Pay, hours, managers and how workplaces treat applicants.",
     "tagline": "Know before you go"
   },
   "Nav": {
@@ -58,7 +58,7 @@
       "rateBody": "Worked somewhere? Share it anonymously. Your employer never sees who wrote it."
     },
     "jobsTitle": "Latest jobs",
-    "jobsBody": "Apply in 2 minutes without a CV, and see the reviews next to the job.",
+    "jobsBody": "Many jobs take 2 minutes to apply, no CV needed – and the reviews are right next to the job.",
     "allJobs": "All jobs",
     "citiesTitle": "Workplaces by city",
     "faqTitle": "Questions",
@@ -169,7 +169,6 @@
   },
   "Location": {
     "metaTitle": "Working at {company} ({location}) – reviews, pay, hours",
-    "metaDescription": "{company}, {address}: {score} out of 5 from {count, plural, one {# review} other {# reviews}}. Paid on time {paidOnTime}%. Replies to {replyRate}% of applicants.",
     "metaDescriptionEmpty": "Worked at {company}, {address}? Be the first to rate pay, hours and managers on RateThatJob.",
     "outOf5": "out of 5",
     "operatedBy": "Operated by {entity}",
@@ -199,20 +198,20 @@
     "claimTitle": "Do you run or own this workplace?",
     "claimBody": "Get free access to reply to reviews and invite your team.",
     "claimCta": "Request free access",
-    "noReviewsTitle": "No reviews yet",
-    "noReviewsBody": "Worked here? Be the first to share what it's really like.",
     "beTheFirst": "Be the first to rate",
     "repliesToApplicants": "Replies to applicants",
     "ghostingFromApplications": "Based on {count} applications through RateThatJob",
     "openJobs": "Open jobs",
-    "seeJob": "See job",
     "fromEmployer": "From the employer",
     "website": "Visit their website",
     "nearby": "Similar workplaces in {city}",
     "following": "Following",
     "emptyTitle": "No reviews yet. Be the first to rate this workplace!",
     "emptyBody": "It takes about a minute, and nobody sees who wrote it – not even the employer.",
-    "emptyCta": "Rate this job"
+    "emptyCta": "Rate this job",
+    "metaScore": "{company}, {address}: {score} out of 5 from {count, plural, one {# review} other {# reviews}}.",
+    "metaPaid": "Paid on time {paidOnTime}%.",
+    "metaReplies": "Replies to {replyRate}% of applicants."
   },
   "Reviews": {
     "metaTitle": "{company} ({location}) reviews",
@@ -262,7 +261,8 @@
     "verifiedApplication": "Verified · Applied here",
     "helpful": "Helpful",
     "originalLanguage": "Original: {language}",
-    "translated": "Translated"
+    "translated": "Translated",
+    "formerMember": "Former member"
   },
   "NotFound": {
     "title": "Page not found",
@@ -272,7 +272,7 @@
   "Auth": {
     "title": "Create your account in one tap.",
     "titleEmail": "Your account, with just an email.",
-    "subtitle": "Your name and contact details are never shown publicly or to employers.",
+    "subtitle": "Your email is never shown publicly. Employers only see your name and contact details if you apply to their job.",
     "continueWith": "Continue with {provider}",
     "or": "or",
     "email": "Email",
@@ -282,7 +282,7 @@
     "codeSent": "We sent a 6-digit code to {target}.",
     "code": "Code",
     "verify": "Continue",
-    "resend": "Send a new code",
+    "resend": "Change email or get a new code",
     "footer": "No password needed. By continuing you agree to the <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
     "errorGeneric": "Something went wrong. Please try again.",
     "errorCode": "That code didn't work. Check it or send a new one.",
@@ -313,9 +313,6 @@
   },
   "RatePicker": {
     "title": "Which workplace?",
-    "placeholder": "Workplace name",
-    "search": "Search",
-    "noResults": "No workplaces found.",
     "hint": "Type the name. We look on RateThatJob and on the map at once."
   },
   "ReviewForm": {
@@ -382,8 +379,8 @@
     "verifiedNote": "Only our team sees it. It is deleted after checking.",
     "whenLive": "When should it go live?",
     "publish": {
-      "now": "Now",
-      "delayed": "In a few weeks, mixed with others",
+      "now": "As soon as possible",
+      "delayed": "In a few weeks, at a random time",
       "after_leaving": "Only after I leave this job"
     },
     "shownAs": "Shown as <name></name>",
@@ -409,17 +406,16 @@
       "points": {
         "anonymous": "Your review is anonymous: your name or email is never shown with it.",
         "employer": "The employer can't see who wrote it – not even if they invited you.",
-        "why": "We need your email so we can tell you when the workplace replies, and to keep reviews real (one person, one account)."
+        "why": "We need your email so you can sign in again and see the workplace's reply in your account, and to keep reviews real (one person, one account)."
       },
-      "jobAlerts": "Also show me jobs in my area",
-      "jobAlertsNote": "Optional. Occasional emails about jobs near you. Turn it off any time on your account page.",
+      "jobAlerts": "Email me about jobs near me",
+      "jobAlertsNote": "Optional. We don't send these emails yet – this only saves your consent for when we start. Turn it off any time on your account page.",
       "verifyAndSend": "Confirm and send review",
       "sending": "Sending…"
     }
   },
   "NewWorkplace": {
     "title": "Add a workplace",
-    "subtitle": "Can't find it? Add it and be the first to rate it.",
     "company": "Workplace or company name",
     "companyPlaceholder": "e.g. Joe's Pizzeria",
     "address": "Street address",
@@ -430,8 +426,6 @@
     "category": "Type",
     "submit": "Add and rate it",
     "submitClaim": "Add and request access",
-    "cantFind": "Can't find it?",
-    "addIt": "Add a workplace",
     "errors": {
       "invalid": "Please fill in every field.",
       "limit": "You've added a lot of workplaces today. Try again tomorrow.",
@@ -457,7 +451,7 @@
     "minuteTitle": "One minute",
     "minuteBody": "A few taps. Writing is optional.",
     "liveTitle": "You choose when it goes live",
-    "liveBody": "Now, later, or only after you leave.",
+    "liveBody": "As soon as possible, in a few weeks, or only after you leave.",
     "start": "Start my review",
     "footer": "Invited reviews are marked as invited.",
     "invalidTitle": "This invite link doesn't work",
@@ -470,7 +464,7 @@
   },
   "Employers": {
     "metaTitle": "RateThatJob for employers – free access to your workplace profile",
-    "metaDescription": "Reply to reviews, invite your team and see early warnings for every location. Access is free.",
+    "metaDescription": "Reply to reviews, invite your team and post jobs. Access is free; Pro adds early warnings and statistics.",
     "eyebrow": "For employers",
     "title": "A good workplace is the cheapest hiring advantage.",
     "body": "Get free access to your workplaces. Reply to reviews, invite your team to rate you, and see what candidates see.",
@@ -487,15 +481,15 @@
       "indexBody": "Show your score on your careers page and job ads. It updates itself.",
       "indexLink": "How the Index works"
     },
-    "free": "Access is free. Reviews can never be bought or removed.",
+    "free": "Access is free. Employers can never buy or remove reviews.",
     "howTitle": "How it works",
     "how": {
       "claimTitle": "Request access to your workplace",
-      "claimBody": "Free. We verify it by business email, phone or a registry extract.",
+      "claimBody": "Free. We verify it by business email, a registry extract or a letter of authorization, plus your photo ID.",
       "engageTitle": "Reply and invite",
       "engageBody": "Answer reviews in your own language, share one invite link with your team, post jobs.",
       "improveTitle": "Spot problems early",
-      "improveBody": "See trends per location and get a warning when a score starts to drop."
+      "improveBody": "With Pro, see trends per location and a warning on your dashboard when a score starts to drop."
     },
     "pricingTitle": "Free to start. Pro per location.",
     "pricingBody": "Access and replies are free. Job ads start at a low posting fee. Pro adds early warnings, statistics, the RateThatJob Index and more.",
@@ -523,7 +517,6 @@
       "jobs": "Jobs",
       "team": "Team & roles",
       "plan": "Subscription",
-      "soon": "Soon",
       "index": "RateThatJob Index",
       "stats": "Statistics",
       "profile": "Workplace profile"
@@ -536,7 +529,7 @@
     },
     "roleDescriptions": {
       "owner": "All locations, billing, roles",
-      "hr": "All locations, replies, invites",
+      "hr": "All locations, replies, invites, billing",
       "location_manager": "Own location only"
     },
     "noOrgTitle": "You don't manage a workplace yet",
@@ -544,7 +537,6 @@
     "pendingClaims": "Access requests we're checking",
     "claimTitle": "Request access to your workplace",
     "claimSearchHint": "Type the name of your workplace. We look on RateThatJob and on the map at once.",
-    "claimNotListed": "Not listed yet? Add it first, then request access.",
     "claimFormTitle": "Request access: {name}",
     "claimFormBody": "Tell us who you are. We check every request by hand, usually within 2 working days.",
     "orgName": "Company name",
@@ -570,7 +562,7 @@
     "last12": "last 12 months",
     "location": "Location",
     "avgScore": "Average score",
-    "vsLastQuarter": "{delta} vs last quarter",
+    "vsLastQuarter": "{delta} vs 3 months ago",
     "verifiedReviews": "Verified reviews",
     "ofTotal": "of {total} total",
     "repliesToApplicants": "Replies to applicants",
@@ -579,8 +571,6 @@
     "replyNow": "Reply now",
     "earlyWarning": "Early warning",
     "warningTitle": "Score is dropping at {location}",
-    "warningBody": "Down {delta} compared with the previous period.",
-    "seeReviews": "See the reviews",
     "table": {
       "location": "Location",
       "score": "Score",
@@ -595,7 +585,6 @@
       "pro": "Pro",
       "trial": "Pro trial"
     },
-    "upgrade": "Upgrade",
     "inviteTeam": "Invite your team",
     "reviewsTitle": "Reviews & replies",
     "reviewsBody": "You can reply to any review and dispute unverified ones. Reviews can't be removed by employers.",
@@ -629,24 +618,16 @@
     "thisLocation": "This location",
     "invitesSent": "Invites sent",
     "reviewsReceived": "Reviews received",
-    "countsNote": "Counts appear only after 5 reviews. You never see who replied.",
+    "countsNote": "Reviews received show from 5. You never see who reviewed.",
     "whyTitle": "Why invite everyone?",
-    "whyBody": "Your profile shows how many people you invited and how many reviewed. Inviting your whole team makes your score more trusted by candidates.",
-    "locationsTitle": "Locations, team & plan",
+    "whyBody": "Invited reviews are marked as verified. The more of your team rates you, the more candidates trust your score.",
+    "locationsTitle": "Locations & team",
     "locationsBody": "Every location has a free profile. Upgrade the ones you want to manage actively.",
-    "price": "Price",
-    "manager": "Manager",
-    "notAssigned": "Not assigned",
-    "priceSoon": "Pricing soon",
     "teamTitle": "Team & roles",
     "inviteMember": "Invite member",
-    "planTitle": "Plan & billing",
-    "monthly": "Monthly",
-    "yearly": "Yearly · 2 months free",
-    "proIncludes": "<b>Pro per location:</b> early warnings, team invites, the RateThatJob Index for your website, statistics, branded profile, no competitor suggestions.",
+    "planTitle": "Subscription",
+    "proIncludes": "<b>Pro per location:</b> early warnings, statistics and the RateThatJob Index for your website.",
     "chains": "<b>Chains (10+ locations):</b> custom pricing and onboarding.",
-    "billingSoon": "Paid plans are coming soon. Everything is free until then.",
-    "comingSoon": "Coming soon",
     "warningCategory": "{category} is down {delta} in the last 60 days ({recent} vs {baseline}).",
     "seeStats": "See statistics",
     "emailTitle": "Email invites",
@@ -676,7 +657,6 @@
     "websitePlaceholder": "e.g. example.com",
     "noWebsite": "We don't have a website",
     "accountEmailHint": "We check the email you're signed in with: <b>{email}</b> (confirmed with a code). Its domain must match the company website above.",
-    "document": "Company registry extract",
     "documentHint": "PDF, JPG or PNG, up to 10 MB. Only our team sees it, and we delete it once we've decided.",
     "documentError": "Please attach a PDF, JPG or PNG file of up to 10 MB.",
     "claimReply": "Your answer",
@@ -709,7 +689,6 @@
     "noReviews": "You haven't rated a workplace yet.",
     "rateOne": "Rate a job",
     "status": {
-      "draft": "Draft",
       "pending_moderation": "Being checked",
       "scheduled": "Scheduled",
       "published": "Live",
@@ -735,8 +714,8 @@
     "applications": "My applications",
     "following": "Workplaces you follow",
     "noFollowing": "Follow a workplace to hear about new reviews and jobs there.",
-    "jobAlerts": "Emails about jobs in my area",
-    "jobAlertsNote": "Occasional emails about jobs near you. Optional, off by default.",
+    "jobAlerts": "Emails about jobs near me",
+    "jobAlertsNote": "Optional, off by default. We don't send these emails yet; this saves your consent for when we start.",
     "jobAlertsError": "Couldn't save. Try again."
   },
   "NavAccount": {
@@ -816,7 +795,7 @@
       "invites": "Reviews from invites",
       "inviteLinks": "{count} invite links",
       "openJobs": "Open jobs",
-      "embeds": "Websites with a badge",
+      "embeds": "Websites with a badge or Careers Hub",
       "month": "Month",
       "reviews": "Published reviews",
       "verified": "Verified",
@@ -994,7 +973,6 @@
     "revoke": "Revoke",
     "remove": "Remove",
     "save": "Save",
-    "saved": "Saved",
     "allLocations": "All locations",
     "pickLocation": "Pick at least one location.",
     "error": "Something went wrong. Please try again.",
@@ -1008,10 +986,8 @@
   "Jobs": {
     "title": "Find a job",
     "metaTitle": "Jobs – with reviews from people who worked there",
-    "metaDescription": "Open jobs at restaurants, shops, warehouses and more. Apply in 2 minutes without a CV, and see what people who worked there say.",
+    "metaDescription": "Open jobs at restaurants, shops, warehouses and more. Many take 2 minutes to apply without a CV – and you see what people who worked there say.",
     "count": "{count, plural, =0 {No open jobs} one {# open job} other {# open jobs}}",
-    "openJobs": "Open jobs",
-    "jobsHere": "{count, plural, one {# open job here} other {# open jobs here}}",
     "noJobs": "No open jobs match your search right now.",
     "schedule": {
       "full_time": "Full-time",
@@ -1032,16 +1008,13 @@
     "payNotListed": "Pay not listed",
     "posted": "Posted {date}",
     "closes": "Apply by {date}",
-    "apply": "Apply in 2 minutes",
-    "noCv": "No CV needed",
     "aboutJob": "About the job",
     "theWorkplace": "The workplace",
     "seeWorkplace": "See all reviews of this workplace",
     "noReviewsYet": "No reviews of this workplace yet.",
     "metaJobTitle": "{title} – {company}, {location}",
-    "metaJobDescription": "{title} at {company}, {address}. {pay}. Apply without a CV and see reviews from people who worked there.",
+    "metaJobDescription": "{title} at {company}, {address}. {pay}. See reviews from people who worked there before you apply.",
     "allJobs": "All jobs",
-    "browseJobs": "Browse jobs",
     "searchLabel": "Job or company",
     "quickApply": "Quick apply",
     "quickOnly": "Quick apply only",
@@ -1055,7 +1028,7 @@
     },
     "applyQuick": "Quick apply",
     "applyCv": "Apply with CV",
-    "quickHint": "No CV. {count, plural, =0 {A few taps} one {# yes/no question} other {# quick questions}} – about 1 minute.",
+    "quickHint": "No CV. {count, plural, =0 {A few taps} one {# quick question} other {# quick questions}} – about 1 minute.",
     "cvHint": "This employer asks for a CV (PDF or Word).",
     "sections": {
       "responsibilities": "What you'll do",
@@ -1174,7 +1147,6 @@
     "applicants": "{count, plural, =0 {No applicants} one {# applicant} other {# applicants}}",
     "newCount": "{count} new",
     "edit": "Edit",
-    "applications": "Applications",
     "publicPage": "View public page",
     "jobTitle": "Job title",
     "titlePlaceholder": "e.g. Line cook",
@@ -1209,11 +1181,9 @@
     "optional": "optional",
     "closesAt": "Apply by",
     "saveDraft": "Save as draft",
-    "publish": "Publish",
     "save": "Save",
     "close": "Close job",
     "reopen": "Reopen",
-    "saved": "Saved",
     "error": "Something went wrong. Please try again.",
     "invalid": "Add a title and description, and check the pay range.",
     "applicationsTitle": "Applications",
@@ -1236,7 +1206,7 @@
       "hired": "Hired",
       "withdrawn": "Withdrawn"
     },
-    "replyNote": "Contact candidates by email or phone. Every decision you mark here counts as a reply in your ghosting meter, and the candidate sees it.",
+    "replyNote": "Call or message candidates here. Messages and every decision you mark count as a reply in your ghosting meter (calls don't), and the candidate sees them.",
     "appliedOn": "Applied {date}",
     "lists": {
       "responsibilities": "What they'll do",
@@ -1315,7 +1285,7 @@
       },
       "pro": {
         "name": "Pro",
-        "body": "The AI also interviews applicants, and your ad sits at the top."
+        "body": "The AI also asks every applicant a few follow-up questions, and your ad sits at the top."
       },
       "features": {
         "ad": "Job ad next to your reviews",
@@ -1456,21 +1426,15 @@
     }
   },
   "Places": {
-    "title": "Find it on Google Maps",
-    "placeholder": "Workplace name and street, e.g. McDonald’s Blaha",
     "onRtj": "On RateThatJob",
     "category": "What kind of workplace is it?",
-    "addAndRate": "Add and rate",
+    "addAndRate": "Add and rate it",
     "back": "Back",
     "error": "Something went wrong. Please try again.",
     "limit": "You have added many workplaces today. Try again tomorrow.",
     "poweredBy": "Search powered by Google",
-    "notOnMap": "Not on Google Maps?",
     "manualTitle": "Add it yourself",
-    "titleOsm": "Find it on the map",
     "poweredByOsm": "Map data © <osm>OpenStreetMap</osm> contributors · Search by Photon",
-    "notOnMapOsm": "Not on the map?",
-    "near": "Near",
     "areaAuto": "Automatic",
     "areaHere": "My location",
     "areaAny": "Anywhere",
@@ -1517,7 +1481,7 @@
     "privacy": "Privacy policy",
     "cookies": "Cookies",
     "about": "Verified reviews and hard facts about frontline workplaces: pay, hours, managers and how they treat applicants.",
-    "noAds": "Reviews can’t be bought or removed.",
+    "noAds": "Employers can't buy or remove reviews.",
     "careersHub": "Careers Hub"
   },
   "About": {
@@ -1533,7 +1497,7 @@
       "factsTitle": "Facts, not just stars",
       "factsBody": "Were you paid on time? Was overtime paid? Did they reply to applicants? Clear answers help people decide.",
       "fairTitle": "Fair to employers",
-      "fairBody": "Employer access is free, every employer can reply, and reviews can't be bought or removed – by anyone."
+      "fairBody": "Employer access is free, every employer can reply, and no employer can buy, hide or remove reviews."
     },
     "whyTitle": "Why we built it",
     "why1": "Most job sites are built for office jobs and big brands. For hourly work, what matters is the specific location: the manager, the schedule, whether pay arrives on time.",
@@ -1546,7 +1510,7 @@
     "metaTitle": "Pricing for employers",
     "eyebrow": "Pricing",
     "title": "Free access. Pro when you need more.",
-    "intro": "Every employer gets free access to their locations and can reply to reviews. Pro is billed per location, job ads per ad.",
+    "intro": "Every employer gets free access to their locations and can reply to reviews. Pro is billed per location, job ads per ad. Workplaces in Hungary pay in forints, all others in euros.",
     "monthly": "Monthly",
     "yearly": "Yearly",
     "perMonth": "month per location",
@@ -1563,7 +1527,9 @@
         "inviteLink": "Shareable invite link for your team",
         "jobs": "Job ads from a low posting fee",
         "profileBasic": "Team members and roles",
-        "careersHub": "RateThatJob Careers Hub: your jobs on your website"
+        "careersHub": "RateThatJob Careers Hub: your jobs on your website",
+        "invites": "Email invites with one reminder",
+        "profile": "Workplace profile with photos and benefits"
       },
       "cta": "Request free access"
     },
@@ -1574,10 +1540,7 @@
       "features": {
         "warnings": "Early warnings when a score starts dropping",
         "stats": "Statistics and trends per location",
-        "invites": "Email invites with reminders",
-        "index": "RateThatJob Index badge and widget",
-        "profile": "Branded profile with photos and benefits",
-        "noCompetitors": "No competitor suggestions on your page"
+        "index": "RateThatJob Index badge and widget"
       },
       "cta": "Start your free trial",
       "trial": "30 days free, no card"
@@ -1589,7 +1552,7 @@
       "features": {
         "allPro": "Pro on every location",
         "rollout": "Help with setup and invites",
-        "manager": "Location managers with their own access",
+        "manager": "One contact for all locations",
         "invoice": "One invoice for all locations"
       },
       "cta": "Talk to us"
@@ -1636,7 +1599,7 @@
     "payment_failedSubject": "Payment failed for your Pro plan – {location}",
     "payment_failedBody": "Hi,\n\nWe couldn't take the payment for RateThatJob Pro at {location}. Stripe will try again over the next days.\n\nPlease update your card here: {link}\n\nIf it isn't paid, Pro ends with the last paid period and your embedded RateThatJob Index will say \"currently unavailable\".\n\nRateThatJob – Know before you go",
     "renewal_upcomingSubject": "Your yearly Pro plan renews on {date} – {location}",
-    "renewal_upcomingBody": "Hi,\n\nYour yearly RateThatJob Pro plan for {location} renews automatically on {date} for {amount} (plus VAT where it applies), charged to the card on file.\n\nNothing to do if you want to keep it. To change or cancel it before then, go to: {link}\n\nRateThatJob – Know before you go",
+    "renewal_upcomingBody": "Hi,\n\nYour yearly RateThatJob Pro plan for {location} renews automatically on {date} for {amount}, charged to the card on file.\n\nNothing to do if you want to keep it. To change or cancel it before then, go to: {link}\n\nRateThatJob – Know before you go",
     "subscription_canceledSubject": "Your Pro plan is cancelled – {location}",
     "subscription_canceledBody": "Hi,\n\nWe've cancelled RateThatJob Pro for {location}. Nothing more will be charged. You can keep using Pro until {date}; after that your RateThatJob Index on your website says \"currently unavailable\". Your public profile and reviews stay visible.\n\nChanged your mind? Reactivate it before {date}: {link}\n\nRateThatJob – Know before you go"
   },
@@ -1703,7 +1666,7 @@
     "cannotTitle": "What doesn't work",
     "cannotBody": "Employers can't delete reviews, and a better score can't be bought. You can dispute a review that isn't verified; our moderators decide.",
     "warningTitle": "See trouble early",
-    "warningBody": "With Pro, your dashboard warns you when management, pay, schedule or environment drops by 0.5 or more in the last 60 days compared with before (with at least 5 reviews in both periods). So you notice a souring mood before it pulls your Index down.",
+    "warningBody": "With Pro, your dashboard warns you when the overall score, management, pay, schedule or environment drops by 0.5 or more in the last 60 days compared with before (with at least 5 reviews in both periods). So you notice a souring mood before it pulls your Index down.",
     "sealTitle": "Top Rated Employer seal",
     "sealBody": "A location earns the seal with an Index of 4.0 or higher and at least 10 verified reviews in the last 12 months. The seal shows the current year and disappears if the location no longer qualifies.",
     "topTitle": "Above 4.8: a very small club",
@@ -1821,8 +1784,6 @@
       "year": "yearly"
     },
     "error": "Something went wrong. Please try again.",
-    "trialLeft": "{days, plural, one {# day} other {# days}} left of your free Pro trial",
-    "trialBody": "Your RateThatJob Index, early warnings and statistics are on. Activate Pro to keep them.",
     "endedTitle": "{count, plural, one {Your Pro trial has ended} other {Your Pro trial has ended at # locations}}",
     "endedBody": "Your embedded RateThatJob Index now says \"currently unavailable\" instead of your score. Activate Pro to show it again.",
     "gate": {
@@ -1835,7 +1796,6 @@
     "subscribe_year": "Yearly · {price}",
     "payByInvoice": "Pay by invoice instead",
     "manage": "Manage billing",
-    "invoices": "Billing & invoices",
     "subscribed": "Subscribed",
     "renewsOn": "Subscribed ({interval}) – renews on {date}",
     "firstPaymentOn": "Subscribed – first payment on {date}, when the trial ends",
@@ -1848,8 +1808,7 @@
     "billingAddress": "Address",
     "billingTaxId": "Tax ID",
     "billingUnavailable": "We couldn't load your billing details right now.",
-    "billingEdit": "Change your billing details and download your invoices in the billing portal.",
-    "myInvoices": "My invoices"
+    "billingEdit": "Change your billing details and download your invoices in the billing portal."
   },
   "Demo": {
     "label": "Demo data",
@@ -1857,7 +1816,7 @@
   },
   "InviteEmail": {
     "subject": "{company} asks you to rate your workplace",
-    "body": "Hi,\n\n{company} ({location}) invited its team to rate their workplace on RateThatJob. It takes about a minute, writing is optional.\n\nYour employer never sees who wrote a review or who used this invite. Invited reviews go live with a delay, and you choose when: now, later, or only after you leave.\n\nRate your workplace: {link}\n\nYou got this email because {company} added your address. We send one reminder at most, then delete your address.\nUnsubscribe: {unsubscribe}\n\nRateThatJob – Know before you go",
+    "body": "Hi,\n\n{company} ({location}) invited its team to rate their workplace on RateThatJob. It takes about a minute, writing is optional.\n\nYour employer never sees who wrote a review or who used this invite. Invited reviews always go live after a random delay of a few days, or later if you choose: in a few weeks, or only after you leave.\n\nRate your workplace: {link}\n\nYou got this email because {company} added your address. We send one reminder at most, then delete your address.\nUnsubscribe: {unsubscribe}\n\nRateThatJob – Know before you go",
     "reminderSubject": "Reminder: rate your workplace at {company}",
     "reminderBody": "Hi,\n\nA few days ago {company} ({location}) invited you to rate your workplace on RateThatJob. If you'd like to, it takes about a minute.\n\nYour employer never sees who wrote a review or who used this invite.\n\nRate your workplace: {link}\n\nThis is the only reminder. We're now deleting your address.\nUnsubscribe: {unsubscribe}\n\nRateThatJob – Know before you go"
   },
@@ -1872,7 +1831,7 @@
     "infoSubject": "We need a bit more information about your access request – {location}",
     "infoBody": "Hi,\n\nThanks for requesting access to {location} on RateThatJob. Before we can approve it, we need a bit more information:\n\n{message}\n\nReply or add a document here: {link}\n\nRateThatJob – Know before you go",
     "approvedSubject": "Your access is approved – {location}",
-    "approvedBody": "Hi,\n\nGood news: your access to {location} is approved. You can now reply to reviews, invite your team and post jobs. Your free 30-day Pro trial has started.\n\nOpen your dashboard: {link}\n\nRateThatJob – Know before you go",
+    "approvedBody": "Hi,\n\nGood news: your access to {location} is approved. You can now reply to reviews, invite your team and post jobs. If this location hasn't had one yet, your free 30-day Pro trial has started.\n\nOpen your dashboard: {link}\n\nRateThatJob – Know before you go",
     "rejectedSubject": "We couldn't approve your access request – {location}",
     "rejectedBody": "Hi,\n\nWe couldn't confirm that you represent {location}, so we couldn't approve your access request. You're welcome to send a new request with a business email on your company's domain, a company registry extract or a letter of authorization, each with a photo ID.\n\n{link}\n\nRateThatJob – Know before you go"
   },
