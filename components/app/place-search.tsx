@@ -4,13 +4,14 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { choosePlace, confirmPlace, searchPlaces, type Suggestion } from "@/app/[locale]/app/rate/places/actions";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import type { PlacesProvider } from "@/lib/places";
 
 const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
 
 type Place = { placeId: string; name: string; address: string; city: string; category: string | null };
 
-/** Find a workplace on Google Maps; one RateThatJob page per Google place. */
-export function PlaceSearch({ initialQuery = "" }: { initialQuery?: string }) {
+/** Find a workplace on Google Maps or OpenStreetMap; one RateThatJob page per place. */
+export function PlaceSearch({ initialQuery = "", provider }: { initialQuery?: string; provider: PlacesProvider }) {
   const t = useTranslations("Places");
   const tc = useTranslations("Categories");
   const router = useRouter();
@@ -138,7 +139,17 @@ export function PlaceSearch({ initialQuery = "" }: { initialQuery?: string }) {
           ))}
         </ul>
       )}
-      <p className="text-xs text-slate">{t("poweredBy")}</p>
+      <p className="text-xs text-slate">
+        {provider === "osm"
+          ? t.rich("poweredByOsm", {
+              osm: (chunks) => (
+                <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" className="underline">
+                  {chunks}
+                </a>
+              ),
+            })
+          : t("poweredBy")}
+      </p>
     </div>
   );
 }

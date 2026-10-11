@@ -38,7 +38,7 @@ Later phase: job posting + easy, CV-free applying on the same platform (the appl
 | Moderation | LLM classifier + rules | Personal data, hate, threats; queue for manual review |
 | Email | Resend (or Postmark) | Invites, reminders, notifications |
 | Payments | Stripe Billing | Subscription per location (quantity-based), monthly / yearly |
-| Places data | Google Places API | Location autocomplete, seeding, address normalization |
+| Places data | Google Places API; OpenStreetMap (Photon + Nominatim) until a Google key is set | Location autocomplete, seeding, address normalization |
 | Search | Postgres full-text + `pg_trgm` | Move to Typesense/Meilisearch when needed |
 | Analytics | PostHog | Product analytics, funnels |
 | Error tracking | Sentry | |

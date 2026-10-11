@@ -4,16 +4,14 @@ import type { Provider } from "@supabase/supabase-js";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { AUTH_PROVIDERS } from "@/lib/site-config";
 import { createClient } from "@/lib/supabase/client";
 
 /** `business`: employer sign-in, work email code only (no Apple, Google or Facebook). */
 type Props = { next: string; welcome: string; linkError: boolean; business?: boolean };
 
-const PROVIDERS: { id: Provider; name: string }[] = [
-  { id: "apple", name: "Apple" },
-  { id: "google", name: "Google" },
-  { id: "facebook", name: "Facebook" },
-];
+const NAMES = { apple: "Apple", google: "Google", facebook: "Facebook" };
+const PROVIDERS: { id: Provider; name: string }[] = AUTH_PROVIDERS.map((id) => ({ id, name: NAMES[id] }));
 
 export function SignInForm({ next, welcome, linkError, business = false }: Props) {
   const t = useTranslations("Auth");
@@ -109,7 +107,7 @@ export function SignInForm({ next, welcome, linkError, business = false }: Props
 
   return (
     <div className="mt-8 flex flex-1 flex-col">
-      {!business && (
+      {!business && PROVIDERS.length > 0 && (
         <>
       <div className="flex flex-col gap-3">
         {PROVIDERS.map((p, i) => (

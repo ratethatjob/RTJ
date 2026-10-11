@@ -1,4 +1,5 @@
 import { revalidateTag } from "next/cache";
+import { AI_MODELS } from "./ai-models";
 import { adminClient } from "./supabase/admin";
 import { moderate } from "./moderate";
 import { translate } from "./translate";
@@ -6,7 +7,7 @@ import { translate } from "./translate";
 // Stores machine translations of reviews and employer replies. Runs after the
 // response (via after()) and from the daily backfill cron. Never throws.
 
-const MODEL_NAME = "claude-opus-5-5";
+const MODEL_NAME = AI_MODELS.translate;
 
 export async function translateReview(reviewId: string) {
   const db = adminClient();
@@ -65,7 +66,10 @@ export async function processNewReview(reviewId: string) {
     const { data: r } = await db.from("reviews").select("body, status").eq("id", reviewId).single();
     if (r?.body && ["pending_moderation", "scheduled"].includes(r.status)) {
       const result = await moderate(r.body);
-      if (result?.flagged) {
+      // No answer from the API (e.g. out of credit): a human checks it instead.
+      if (result === "unavailable") {
+        await db.rpc("hold_review", { p_review_id: reviewId, p_reason: "ai:unavailable" });
+      } else if (result?.flagged) {
         await db.rpc("hold_review", {
           p_review_id: reviewId,
           p_reason: `ai:${result.reasons.join(",") || "declined"}`,

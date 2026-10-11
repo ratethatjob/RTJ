@@ -3,28 +3,50 @@
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
 import type { Category } from "@/lib/data/types";
+import { isOsmId, osmAutocomplete, osmDetails } from "@/lib/osm";
 import { autocomplete, type PlaceDetails, placeDetails, placesConfigured } from "@/lib/places";
+import { rateLimited } from "@/lib/rate-limit";
 import { adminClient } from "@/lib/supabase/admin";
 
 const CATEGORIES: Category[] = ["restaurant", "retail", "warehouse", "factory", "office"];
 
 export type Suggestion = { placeId: string; main: string; secondary: string; locationId: string | null };
 
-/** Google suggestions, marked when the place is already on RateThatJob. */
+// OSM ids are stored without the "osm:" prefix.
+const osmKey = (id: string) => id.slice(4);
+
+/** Workplaces already on RateThatJob for these Google place ids or OSM ids. */
+async function knownLocations(supabase: Awaited<ReturnType<typeof getUser>>["supabase"], ids: string[]) {
+  const osm = ids.filter(isOsmId);
+  const google = ids.filter((id) => !isOsmId(id));
+  const [g, o] = await Promise.all([
+    google.length ? supabase.rpc("locations_by_place", { p_place_ids: google }) : { data: [] },
+    osm.length ? supabase.rpc("locations_by_osm", { p_osm_ids: osm.map(osmKey) }) : { data: [] },
+  ]);
+  return new Map<string, string>([
+    ...((g.data ?? []) as { place_id: string; location_id: string }[]).map((r) => [r.place_id, r.location_id] as const),
+    ...((o.data ?? []) as { osm_id: string; location_id: string }[]).map((r) => [`osm:${r.osm_id}`, r.location_id] as const),
+  ]);
+}
+
+const details = (id: string, locale: string, sessionToken?: string) =>
+  isOsmId(id) ? osmDetails(id, locale) : placeDetails(id, locale, sessionToken);
+
+/** Map suggestions (Google, or OpenStreetMap without a Google key), marked when already on RateThatJob. */
 export async function searchPlaces(
   input: string,
   sessionToken: string,
 ): Promise<{ suggestions?: Suggestion[]; error?: "signin" | "generic" }> {
   const text = input.trim().slice(0, 100);
-  if (!placesConfigured || text.length < 3) return { suggestions: [] };
+  if (text.length < 3) return { suggestions: [] };
   const { supabase, user } = await getUser();
   if (!user) return { error: "signin" };
+  // OSM's free services ask for fair use.
+  if (!placesConfigured && rateLimited(`osm-search:${user.id}`, 30)) return { suggestions: [] };
   try {
-    const found = await autocomplete(text, await getLocale(), sessionToken);
-    const { data } = found.length
-      ? await supabase.rpc("locations_by_place", { p_place_ids: found.map((f) => f.placeId) })
-      : { data: [] };
-    const known = new Map(((data ?? []) as { place_id: string; location_id: string }[]).map((r) => [r.place_id, r.location_id]));
+    const locale = await getLocale();
+    const found = placesConfigured ? await autocomplete(text, locale, sessionToken) : await osmAutocomplete(text, locale);
+    const known = await knownLocations(supabase, found.map((f) => f.placeId));
     return { suggestions: found.map((f) => ({ ...f, locationId: known.get(f.placeId) ?? null })) };
   } catch (e) {
     console.error("searchPlaces", e);
@@ -39,14 +61,14 @@ export async function choosePlace(
 ): Promise<{ locationId?: string; place?: PlaceDetails; error?: "generic" }> {
   const { supabase, user } = await getUser();
   if (!user) return { error: "generic" };
-  const { data } = await supabase.rpc("locations_by_place", { p_place_ids: [placeId] });
-  const existing = (data as { location_id: string }[] | null)?.[0]?.location_id;
+  const existing = (await knownLocations(supabase, [placeId])).get(placeId);
   if (existing) return { locationId: existing };
-  const place = await placeDetails(placeId, await getLocale(), sessionToken);
+  if (isOsmId(placeId) && rateLimited(`osm-details:${user.id}`, 10)) return { error: "generic" };
+  const place = await details(placeId, await getLocale(), sessionToken).catch(() => null);
   return place ? { place } : { error: "generic" };
 }
 
-/** Creates the workplace from Google's data (fetched again here, never from the client). */
+/** Creates the workplace from Google's or OpenStreetMap's data (fetched again here, never from the client). */
 export async function confirmPlace(
   placeId: string,
   category: string,
@@ -55,11 +77,12 @@ export async function confirmPlace(
   const { user } = await getUser();
   const db = adminClient();
   if (!user || !db) return { error: "generic" };
-  const place = await placeDetails(placeId, await getLocale());
+  const place = await details(placeId, await getLocale()).catch(() => null);
   if (!place || !place.name || !place.address || !place.city || !place.country) return { error: "invalid" };
-  const { data, error } = await db.rpc("workplace_from_place", {
+  const osm = isOsmId(place.placeId);
+  const { data, error } = await db.rpc(osm ? "workplace_from_osm" : "workplace_from_place", {
     p_user_id: user.id,
-    p_place_id: place.placeId,
+    ...(osm ? { p_osm_id: osmKey(place.placeId) } : { p_place_id: place.placeId }),
     p_name: place.name,
     p_address: place.address,
     p_city: place.city,

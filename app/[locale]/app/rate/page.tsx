@@ -4,7 +4,7 @@ import { PlaceSearch } from "@/components/app/place-search";
 import { SearchIcon } from "@/components/icons";
 import { Link, getPathname } from "@/i18n/navigation";
 import { searchLocations } from "@/lib/data";
-import { placesEnabled } from "@/lib/places";
+import { placesProvider } from "@/lib/places";
 
 export const instant = false;
 
@@ -18,7 +18,7 @@ export default async function RatePickerPage({ params, searchParams }: PageProps
   const tw = await getTranslations("NewWorkplace");
   const tc = await getTranslations("Categories");
   const tp = await getTranslations("Places");
-  const google = await placesEnabled();
+  const provider = await placesProvider();
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-4">
@@ -53,15 +53,15 @@ export default async function RatePickerPage({ params, searchParams }: PageProps
         </ul>
       )}
 
-      {google && (
+      {provider && (
         <section className="mt-8">
-          <h2 className="mb-3 text-xl font-black">{tp("title")}</h2>
-          <PlaceSearch initialQuery={query} />
+          <h2 className="mb-3 text-xl font-black">{tp(provider === "osm" ? "titleOsm" : "title")}</h2>
+          <PlaceSearch provider={provider} initialQuery={query} />
         </section>
       )}
 
       <p className="mt-8 text-slate">
-        {google ? tp("notOnMap") : tw("cantFind")}{" "}
+        {provider ? tp(provider === "osm" ? "notOnMapOsm" : "notOnMap") : tw("cantFind")}{" "}
         <Link
           href={{ pathname: "/app/rate/new", query: query ? { q: query } : {} }}
           className="font-black text-ink underline underline-offset-4"

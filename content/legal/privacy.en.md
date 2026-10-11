@@ -32,6 +32,7 @@ If an employer uses the Basic or Pro job ad package, the same AI model summarize
 - Vercel (hosting, serving the website)
 - Anthropic (machine translation, content checks, application summaries)
 - Google (Google Maps based workplace search, when you use it)
+- OpenStreetMap services: Photon by komoot GmbH (workplace search) and Nominatim by the OpenStreetMap Foundation (details of the picked place), when the map search runs on OpenStreetMap. They receive only the search text from our server, not your account details.
 - Resend (sending emails, for example messages from employers)
 - Stripe (payments by employers; we never see full card details)
 

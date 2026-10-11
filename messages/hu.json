@@ -656,7 +656,8 @@
       "hate": "gyűlöletkeltés",
       "harassment": "zaklatás",
       "spam": "spam",
-      "declined": "emberi ellenőrzés kell"
+      "declined": "emberi ellenőrzés kell",
+      "unavailable": "nem volt elérhető, emberi ellenőrzés kell"
     },
     "entityHint": "A jogi személy összekötése után a munkahely oldalán megjelenik: „Üzemeltető: …”.",
     "entityName": "Jogi személy neve",
@@ -1267,7 +1268,10 @@
     "limit": "Ma már sok munkahelyet felvettél. Próbáld újra holnap.",
     "poweredBy": "A keresést a Google biztosítja",
     "notOnMap": "Nincs fent a Google Térképen?",
-    "manualTitle": "Vagy add meg te"
+    "manualTitle": "Vagy add meg te",
+    "titleOsm": "Keresd meg a térképen",
+    "poweredByOsm": "Térképadatok © <osm>OpenStreetMap</osm>-közreműködők · Keresés: Photon",
+    "notOnMapOsm": "Nincs rajta a térképen?"
   },
   "Footer": {
     "workers": "Munkavállalóknak",

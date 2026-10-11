@@ -1,4 +1,5 @@
-import Anthropic from "@anthropic-ai/sdk";
+import type Anthropic from "@anthropic-ai/sdk";
+import { AI_MAX_TOKENS, AI_MODELS, aiClient, logAiError, responseText } from "./ai-models";
 import { docxText } from "./cv-text";
 import type { JobQuestion } from "./data/types";
 import { type JobLanguage, languageName, languageQuestions } from "./languages";
@@ -6,10 +7,9 @@ import { adminClient } from "./supabase/admin";
 
 // AI help for employers (job packages): a summary of each applicant (basic, pro)
 // and a few follow-up questions to the applicant (pro). Runs with the service role;
-// silently does nothing when ANTHROPIC_API_KEY or SUPABASE_SECRET_KEY is missing.
+// silently does nothing when ANTHROPIC_API_KEY or SUPABASE_SECRET_KEY is missing or the API fails.
 
-const MODEL = "claude-opus-5-5";
-let client: Anthropic | null = null;
+const MODEL = AI_MODELS.candidate;
 
 export const FITS = ["strong", "good", "partial", "weak"] as const;
 export type Fit = (typeof FITS)[number];
@@ -101,20 +101,27 @@ async function cvBlock({ db, a }: Loaded): Promise<Content | null> {
   return text ? { type: "text", text: `<cv>\n${text.slice(0, 30000)}\n</cv>` } : null;
 }
 
-async function ask<T>(system: string, content: Content[], schema: Record<string, unknown>): Promise<T | null> {
-  client ??= new Anthropic();
-  const response = await client.beta.messages.create({
-    model: MODEL,
-    max_tokens: 16000,
-    betas: ["server-side-fallback-2026-07-01"],
-    fallbacks: "default",
-    output_config: { effort: "low", format: { type: "json_schema", schema } },
-    system,
-    messages: [{ role: "user", content }],
-  });
-  if (response.stop_reason !== "end_turn") return null;
-  const block = response.content.find((b) => b.type === "text");
-  return block && block.type === "text" ? (JSON.parse(block.text) as T) : null;
+async function ask<T>(
+  system: string,
+  content: Content[],
+  schema: Record<string, unknown>,
+  maxTokens: number,
+): Promise<T | null> {
+  const client = aiClient();
+  if (!client) return null;
+  const response = await client.beta.messages
+    .create({
+      model: MODEL,
+      max_tokens: maxTokens,
+      betas: ["server-side-fallback-2026-07-01"],
+      fallbacks: "default",
+      output_config: { effort: "low", format: { type: "json_schema", schema } },
+      system,
+      messages: [{ role: "user", content }],
+    })
+    .catch((e) => (logAiError("candidate", e), null));
+  const json = response && responseText(response);
+  return json ? (JSON.parse(json) as T) : null;
 }
 
 const textSchema = {
@@ -153,7 +160,7 @@ Give the same content in English (en) and Hungarian (hu).`;
     properties: { fit: { type: "string", enum: [...FITS] }, en: textSchema, hu: textSchema },
     required: ["fit", "en", "hu"],
     additionalProperties: false,
-  });
+  }, AI_MAX_TOKENS.summary);
   if (!result) return false;
   const { error } = await loaded.db
     .from("application_insights")
@@ -187,7 +194,7 @@ Write the questions in ${LANGUAGES[locale] ?? "English"}.`;
     properties: { questions: { type: "array", items: { type: "string" } } },
     required: ["questions"],
     additionalProperties: false,
-  });
+  }, AI_MAX_TOKENS.followups);
   const questions = (result?.questions ?? [])
     .map((q) => q.trim())
     .filter((q) => q.length >= 3 && q.length <= 300)

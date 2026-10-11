@@ -30,3 +30,6 @@ export const JOB_PRICING: Record<string, { currency: string; prices: Record<JobT
   default: { currency: "EUR", prices: { standard: 19, basic: 49, pro: 99 } },
 };
 export const jobPricing = (country: string) => JOB_PRICING[country] ?? JOB_PRICING.default;
+
+// Social sign-in buttons on /app/sign-in, in this order. Add "apple" back once it is set up in Supabase Auth.
+export const AUTH_PROVIDERS: ("apple" | "google" | "facebook")[] = ["google", "facebook"];

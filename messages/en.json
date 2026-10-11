@@ -656,7 +656,8 @@
       "hate": "hate",
       "harassment": "harassment",
       "spam": "spam",
-      "declined": "needs a human look"
+      "declined": "needs a human look",
+      "unavailable": "not available, needs a human look"
     },
     "entityHint": "Linking a legal entity shows \"Operated by …\" on the workplace page.",
     "entityName": "Legal entity name",
@@ -1267,7 +1268,10 @@
     "limit": "You have added many workplaces today. Try again tomorrow.",
     "poweredBy": "Search powered by Google",
     "notOnMap": "Not on Google Maps?",
-    "manualTitle": "Or enter it yourself"
+    "manualTitle": "Or enter it yourself",
+    "titleOsm": "Find it on the map",
+    "poweredByOsm": "Map data © <osm>OpenStreetMap</osm> contributors · Search by Photon",
+    "notOnMapOsm": "Not on the map?"
   },
   "Footer": {
     "workers": "For workers",

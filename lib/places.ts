@@ -110,9 +110,12 @@ export function categoryFromTypes(types: string[]): Category | null {
   return null;
 }
 
-/** The Google search shows only when places can also be saved (service-role key set). */
-export async function placesEnabled() {
-  if (!placesConfigured) return false;
+export type PlacesProvider = "google" | "osm";
+
+/** Map search: Google when GOOGLE_PLACES_API_KEY is set, otherwise OpenStreetMap (lib/osm.ts).
+ *  Shown only when places can also be saved (service-role key set). */
+export async function placesProvider(): Promise<PlacesProvider | null> {
   const { adminClient } = await import("@/lib/supabase/admin");
-  return adminClient() !== null;
+  if (adminClient() === null) return null;
+  return placesConfigured ? "google" : "osm";
 }
