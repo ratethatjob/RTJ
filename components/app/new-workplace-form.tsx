@@ -84,7 +84,7 @@ export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim 
         </p>
       )}
       <button
-        disabled={pending}
+        disabled={pending} aria-busy={pending}
         className="mt-auto rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-60"
       >
         {t(claim ? "submitClaim" : "submit")}

@@ -159,7 +159,7 @@ export function ClaimForm({ locationId, userId, accountEmail }: Props) {
                   : t("error")}
         </p>
       )}
-      <button disabled={pending} className="rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-60">
+      <button disabled={pending} aria-busy={pending} className="rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-60">
         {t("submitClaim")}
       </button>
     </form>

@@ -57,7 +57,7 @@ export function ClaimReply({ claimId, userId }: { claimId: string; userId: strin
       <button
         type="button"
         onClick={send}
-        disabled={pending || (!body.trim() && !file)}
+        disabled={pending || (!body.trim() && !file)} aria-busy={pending}
         className="self-start rounded-2xl bg-ink px-5 py-3 font-black text-paper disabled:opacity-50"
       >
         {t("claimSendReply")}

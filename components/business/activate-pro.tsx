@@ -28,7 +28,7 @@ export function ActivatePro({ locationId, pending }: { locationId: string; pendi
         <button
           key={i}
           type="button"
-          disabled={busy}
+          disabled={busy} aria-busy={busy}
           onClick={() => ask(i)}
           className={`rounded-xl px-3 py-2 text-sm font-black disabled:opacity-50 ${
             i === "year" ? "bg-ink text-paper" : "border-2 border-ink"

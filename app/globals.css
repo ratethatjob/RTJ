@@ -19,3 +19,36 @@ body {
   color: var(--color-ink);
   font-weight: 500;
 }
+
+/* Pending buttons (aria-busy while a server action runs): a small spinner after the label. */
+button[aria-busy="true"]::after {
+  content: "";
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-left: 0.5em;
+  vertical-align: -0.12em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 9999px;
+  animation: rtj-spin 0.7s linear infinite;
+}
+
+@keyframes rtj-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Top progress bar while navigating (components/navigation-progress.tsx). */
+@keyframes rtj-progress {
+  0% {
+    transform: scaleX(0.05);
+  }
+  40% {
+    transform: scaleX(0.6);
+  }
+  100% {
+    transform: scaleX(0.9);
+  }
+}

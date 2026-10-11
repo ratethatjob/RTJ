@@ -95,7 +95,7 @@ export function ReviewSignIn({
           </label>
           {errorBox}
           <button
-            disabled={busy || submitting}
+            disabled={busy || submitting} aria-busy={busy}
             className="rounded-2xl bg-signal py-4 text-lg font-black text-ink disabled:opacity-60"
           >
             {busy || submitting ? t("sending") : t("verifyAndSend")}
@@ -139,7 +139,7 @@ export function ReviewSignIn({
           </label>
           {errorBox}
           <button
-            disabled={busy}
+            disabled={busy} aria-busy={busy}
             className="rounded-2xl bg-signal py-4 text-lg font-black text-ink disabled:opacity-60"
           >
             {ta("sendCode")}

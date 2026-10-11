@@ -28,7 +28,7 @@ export function InsightButton({ jobId, applicationId, refresh }: { jobId: string
     <span className="flex flex-wrap items-center gap-3">
       <button
         type="button"
-        disabled={pending}
+        disabled={pending} aria-busy={pending}
         onClick={() =>
           startTransition(async () => {
             setError(false);

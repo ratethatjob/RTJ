@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Form from "next/form";
 import { hasLocale } from "next-intl";
 import { CategoryChips } from "@/components/category-chips";
 import { DemoChip } from "@/components/demo-badge";
@@ -63,7 +64,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               <span className="hidden lg:inline"> {t("introMore")}</span>
             </p>
 
-            <form
+            <Form
               action={getPathname({ href: "/search", locale })}
               role="search"
               className="mt-8 flex flex-col rounded-3xl border border-mist/40 bg-white p-3 lg:flex-row lg:items-center lg:p-2"
@@ -95,7 +96,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               >
                 {t("search")}
               </button>
-            </form>
+            </Form>
 
             <div className="mt-5">
               <CategoryChips

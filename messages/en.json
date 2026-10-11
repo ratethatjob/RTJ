@@ -20,7 +20,8 @@
     "languages": {
       "en": "English",
       "hu": "Magyar"
-    }
+    },
+    "loading": "Loading"
   },
   "Home": {
     "headline": "Know before you go.",
@@ -876,7 +877,7 @@
     "addMissing": "Can't find it? Add the workplace",
     "pickOne": "Pick the one you mean",
     "pickOneHint": "These aren't on RateThatJob yet. Pick the right one and be the first to rate it.",
-    "mapSearching": "Looking on the map…",
+    "mapSearching": "Searching…",
     "opening": "Opening…",
     "noneAnywhere": "No workplaces found. Check the spelling or try without the place."
   },

@@ -66,7 +66,7 @@ export function DisplayNameForm({ next, initialMode, initialGenerated, initialUs
           <button
             type="button"
             onClick={shuffle}
-            disabled={pending}
+            disabled={pending} aria-busy={pending}
             aria-label={t("shuffle")}
             title={t("shuffle")}
             className="grid size-12 place-items-center rounded-xl border border-mist bg-white disabled:opacity-50"
@@ -117,7 +117,7 @@ export function DisplayNameForm({ next, initialMode, initialGenerated, initialUs
       </p>
 
       <button
-        disabled={pending}
+        disabled={pending} aria-busy={pending}
         className="mt-auto rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-60"
       >
         {t("continue")}

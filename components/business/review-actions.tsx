@@ -72,7 +72,7 @@ export function ReviewActions({ reviewId, locationId, orgId, existingReply, canD
           </button>
           <button
             type="button"
-            disabled={pending}
+            disabled={pending} aria-busy={pending}
             onClick={() => send(mode)}
             className="rounded-2xl bg-ink px-6 py-3 font-black text-paper disabled:opacity-60"
           >

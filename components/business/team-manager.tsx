@@ -75,12 +75,12 @@ export function TeamManager({ orgId, meId, isOwner, members, invites, locations,
                   initialRole={m.role}
                   initialIds={m.locationIds}
                   submitLabel={t("save")}
-                  disabled={pending}
+                  disabled={pending} aria-busy={pending}
                   onSubmit={(role, ids) => run(() => updateMember(orgId, m.id, role, ids))}
                   extra={
                     <button
                       type="button"
-                      disabled={pending}
+                      disabled={pending} aria-busy={pending}
                       onClick={() => run(() => removeMember(orgId, m.id))}
                       className="rounded-xl px-4 py-2 font-black underline underline-offset-4"
                     >
@@ -118,7 +118,7 @@ export function TeamManager({ orgId, meId, isOwner, members, invites, locations,
               initialRole="hr"
               initialIds={[]}
               submitLabel={t("createLink")}
-              disabled={pending}
+              disabled={pending} aria-busy={pending}
               onSubmit={(role, ids) =>
                 run(
                   () => createMemberInvite(orgId, role, ids),
@@ -153,7 +153,7 @@ export function TeamManager({ orgId, meId, isOwner, members, invites, locations,
                       </span>
                       <button
                         type="button"
-                        disabled={pending}
+                        disabled={pending} aria-busy={pending}
                         onClick={() => run(() => revokeMemberInvite(i.id))}
                         className="font-black underline underline-offset-4"
                       >

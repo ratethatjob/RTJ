@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Form from "next/form";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CategoryChips } from "@/components/category-chips";
 import { Suspense } from "react";
@@ -51,7 +52,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
       <SiteHeader />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-8 pt-6 sm:px-6 lg:pt-10">
         <h1 className="text-4xl font-black tracking-brand lg:text-6xl">{t("title")}</h1>
-        <form
+        <Form
           action={getPathname({ href: "/search", locale })}
           role="search"
           className="flex max-w-3xl flex-col rounded-3xl border border-mist/40 bg-white p-3 sm:flex-row sm:items-center sm:p-2"
@@ -79,7 +80,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
           <button type="submit" className="mt-2 rounded-2xl bg-ink px-8 py-4 text-lg font-black text-paper sm:mt-0">
             {th("search")}
           </button>
-        </form>
+        </Form>
 
         <CategoryChips
           active={category}

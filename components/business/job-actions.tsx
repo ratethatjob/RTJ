@@ -16,7 +16,7 @@ export function JobStatusButton({ id, status }: { id: string; status: "draft" | 
     <>
       <button
         type="button"
-        disabled={pending}
+        disabled={pending} aria-busy={pending}
         onClick={() =>
           startTransition(async () => {
             const result = await setJobStatus(id, next);
@@ -47,7 +47,7 @@ export function ApplicationDecision({ id, status }: { id: string; status: string
         <button
           key={d}
           type="button"
-          disabled={pending}
+          disabled={pending} aria-busy={pending}
           onClick={() =>
             startTransition(async () => {
               const result = await decideApplication(id, d);

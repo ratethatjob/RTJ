@@ -47,7 +47,7 @@ export function FollowButton({
   }
 
   return (
-    <button type="button" onClick={toggle} disabled={busy} aria-pressed={following} className={className}>
+    <button type="button" onClick={toggle} disabled={busy} aria-busy={busy} aria-pressed={following} className={className}>
       {following ? `✓ ${followingLabel}` : followLabel}
     </button>
   );

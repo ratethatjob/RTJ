@@ -31,7 +31,7 @@ export function PortalButton({
     <span className="inline-flex flex-col gap-1">
       <button
         type="button"
-        disabled={busy}
+        disabled={busy} aria-busy={busy}
         onClick={() =>
           start(async () => {
             setError(false);
@@ -59,7 +59,7 @@ export function ReactivateButton({ locationId }: { locationId: string }) {
     <span className="inline-flex flex-col gap-1">
       <button
         type="button"
-        disabled={busy || state === "done"}
+        disabled={busy || state === "done"} aria-busy={busy}
         onClick={() =>
           start(async () => {
             const r = await reactivatePro(locationId);

@@ -19,7 +19,7 @@ export function JobAlertsToggle({ initial }: { initial: boolean }) {
         <input
           type="checkbox"
           checked={on}
-          disabled={pending}
+          disabled={pending} aria-busy={pending}
           onChange={(e) => {
             const next = e.target.checked;
             setOn(next);

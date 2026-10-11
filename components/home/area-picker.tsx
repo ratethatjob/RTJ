@@ -40,7 +40,7 @@ export function AreaPicker({ labels, className = "" }: { labels: AreaPickerLabel
       <select
         aria-label={labels.label}
         value={area.startsWith("geo:") ? "here" : area}
-        disabled={pending}
+        disabled={pending} aria-busy={pending}
         onChange={(e) => choose(e.target.value)}
         className="max-w-full rounded-xl border border-mist/60 bg-white px-3 py-2 text-sm font-black text-ink disabled:opacity-60"
       >

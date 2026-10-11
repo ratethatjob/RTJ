@@ -42,7 +42,7 @@ export function JobPayment({
           {state === "error" && <span className="text-sm font-black text-mist">{t("error")}</span>}
           <button
             type="button"
-            disabled={pending}
+            disabled={pending} aria-busy={pending}
             onClick={pay}
             className="shrink-0 rounded-2xl bg-signal px-5 py-2.5 font-black text-ink disabled:opacity-60"
           >

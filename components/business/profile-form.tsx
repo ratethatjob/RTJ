@@ -104,7 +104,7 @@ export function ProfileForm({ locationId, initial }: Props) {
       </fieldset>
 
       {message && <p className="rounded-2xl bg-paper p-4 font-black">{message}</p>}
-      <button type="submit" disabled={pending || uploading} className="self-start rounded-2xl bg-ink px-6 py-3 font-black text-paper disabled:opacity-60">
+      <button type="submit" disabled={pending || uploading} aria-busy={pending} className="self-start rounded-2xl bg-ink px-6 py-3 font-black text-paper disabled:opacity-60">
         {t("save")}
       </button>
     </form>

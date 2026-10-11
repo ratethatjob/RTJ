@@ -104,7 +104,7 @@ export function Decision({ kind, id, documentUrl }: Props) {
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
-              disabled={pending || !question.trim()}
+              disabled={pending || !question.trim()} aria-busy={pending}
               onClick={askForInfo}
               className="rounded-2xl bg-ink px-5 py-3 font-black text-paper disabled:opacity-60"
             >
@@ -141,7 +141,7 @@ export function Decision({ kind, id, documentUrl }: Props) {
       <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
-          disabled={pending}
+          disabled={pending} aria-busy={pending}
           onClick={() => decide(true)}
           className="rounded-2xl bg-ink px-5 py-3 font-black text-paper disabled:opacity-60"
         >
@@ -149,7 +149,7 @@ export function Decision({ kind, id, documentUrl }: Props) {
         </button>
         <button
           type="button"
-          disabled={pending}
+          disabled={pending} aria-busy={pending}
           onClick={() => decide(false)}
           className="rounded-2xl border-2 border-ink px-5 py-3 font-black disabled:opacity-60"
         >
@@ -158,7 +158,7 @@ export function Decision({ kind, id, documentUrl }: Props) {
         {kind === "claims" && !asking && (
           <button
             type="button"
-            disabled={pending}
+            disabled={pending} aria-busy={pending}
             onClick={() => setAsking(true)}
             className="rounded-2xl px-4 py-3 font-black underline underline-offset-4 disabled:opacity-60"
           >

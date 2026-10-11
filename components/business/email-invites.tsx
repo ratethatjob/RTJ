@@ -76,7 +76,7 @@ export function EmailInvites({ locationId, defaultLocale }: { locationId: string
         <button
           type="button"
           onClick={send}
-          disabled={pending || people.length === 0 || tooMany}
+          disabled={pending || people.length === 0 || tooMany} aria-busy={pending}
           className="rounded-xl bg-ink px-5 py-3 font-black text-paper disabled:opacity-50"
         >
           {pending ? t("emailSending") : t("emailSend", { count: people.length })}

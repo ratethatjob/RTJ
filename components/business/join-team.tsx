@@ -15,7 +15,7 @@ export function JoinTeam({ token }: { token: string }) {
     <div className="flex flex-col gap-3">
       <button
         type="button"
-        disabled={pending}
+        disabled={pending} aria-busy={pending}
         onClick={() =>
           startTransition(async () => {
             const result = await acceptMemberInvite(token);

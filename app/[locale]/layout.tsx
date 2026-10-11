@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Archivo } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -5,6 +6,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { FooterGate } from "@/components/footer-gate";
 import { HistoryTracker } from "@/components/history-tracker";
+import { NavigationProgress } from "@/components/navigation-progress";
 import { SiteFooter } from "@/components/site-footer";
 import { routing } from "@/i18n/routing";
 import { pickMessages, SHARED_CLIENT_NAMESPACES } from "@/lib/client-messages";
@@ -47,6 +49,9 @@ export default async function LocaleLayout({
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider messages={await pickMessages(SHARED_CLIENT_NAMESPACES)}>
           <HistoryTracker />
+          <Suspense fallback={null}>
+            <NavigationProgress />
+          </Suspense>
           {children}
           <FooterGate>
             <SiteFooter />

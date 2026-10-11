@@ -20,7 +20,8 @@
     "languages": {
       "en": "English",
       "hu": "Magyar"
-    }
+    },
+    "loading": "Betöltés"
   },
   "Home": {
     "headline": "Know before you go.",
@@ -876,7 +877,7 @@
     "addMissing": "Nem találod? Vedd fel a munkahelyet",
     "pickOne": "Válaszd ki, melyikre gondolsz",
     "pickOneHint": "Ezek még nincsenek fent a RateThatJobon. Válaszd ki a megfelelőt, és elsőként értékelheted.",
-    "mapSearching": "Keresés a térképen…",
+    "mapSearching": "Keresés…",
     "opening": "Megnyitás…",
     "noneAnywhere": "Nincs találat. Ellenőrizd a nevet, vagy próbáld hely nélkül."
   },

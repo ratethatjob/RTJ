@@ -143,7 +143,7 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
         {error && <p className="font-black">{error}</p>}
         <button
           type="button"
-          disabled={pending}
+          disabled={pending} aria-busy={pending}
           onClick={confirm}
           className="rounded-2xl bg-ink px-6 py-4 text-lg font-black text-paper disabled:opacity-50"
         >
@@ -276,7 +276,7 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
                 <li key={s.placeId}>
                   <button
                     type="button"
-                    disabled={pending}
+                    disabled={pending} aria-busy={pending}
                     onClick={() => pickMap(s)}
                     className="flex w-full items-center justify-between gap-3 rounded-2xl border border-mist/60 bg-paper p-4 text-left disabled:opacity-60"
                   >

@@ -16,7 +16,7 @@ export function RefreshPages() {
       <p className="min-w-0 flex-1 text-sm text-slate">{t("refreshPagesHint")}</p>
       <button
         type="button"
-        disabled={pending}
+        disabled={pending} aria-busy={pending}
         onClick={() =>
           startTransition(async () => {
             const result = await refreshPublicPages();
@@ -90,7 +90,7 @@ export function SlugEditor({
       />
       <button
         type="button"
-        disabled={pending || value === slug}
+        disabled={pending || value === slug} aria-busy={pending}
         onClick={() =>
           startTransition(async () => {
             setError(false);
@@ -190,7 +190,7 @@ export function CsvImport() {
       {result && <p className="rounded-2xl bg-paper p-4 font-black">{t("importResult", result)}</p>}
       <button
         type="button"
-        disabled={pending || !rows?.length}
+        disabled={pending || !rows?.length} aria-busy={pending}
         onClick={() =>
           startTransition(async () => {
             if (!rows) return;
@@ -228,7 +228,7 @@ export function EntityForm({ locationId, country }: { locationId: string; countr
       <input value={registry} onChange={(e) => setRegistry(e.target.value)} placeholder={t("entityRegistry")} className={`${input} w-40`} />
       <button
         type="button"
-        disabled={pending || name.trim().length < 2}
+        disabled={pending || name.trim().length < 2} aria-busy={pending}
         onClick={() =>
           startTransition(async () => {
             setError(false);
@@ -255,7 +255,7 @@ export function UnverifyEntity({ linkId }: { linkId: string }) {
   return (
     <button
       type="button"
-      disabled={pending}
+      disabled={pending} aria-busy={pending}
       onClick={() =>
         startTransition(async () => {
           const result = await unverifyEntity(linkId);

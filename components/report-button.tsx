@@ -53,7 +53,7 @@ export function ReportButton({ reviewId }: { reviewId: string }) {
       <div className="flex gap-2">
         <button
           type="button"
-          disabled={pending || !reason}
+          disabled={pending || !reason} aria-busy={pending}
           onClick={() =>
             startTransition(async () => {
               const result = await reportReview(reviewId, reason, details);

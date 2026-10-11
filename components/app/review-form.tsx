@@ -536,7 +536,7 @@ export function ReviewForm({
           <button
             type="button"
             onClick={submit}
-            disabled={pending}
+            disabled={pending} aria-busy={pending}
             className="w-full rounded-2xl bg-signal py-4 text-lg font-black text-ink disabled:opacity-60"
           >
             {pending ? t("submitting") : t(userId ? "submit" : "continueToSend")}

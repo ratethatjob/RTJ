@@ -14,7 +14,7 @@ export function WithdrawButton({ id }: { id: string }) {
     <>
       <button
         type="button"
-        disabled={pending}
+        disabled={pending} aria-busy={pending}
         onClick={() =>
           startTransition(async () => {
             const result = await withdrawApplication(id);

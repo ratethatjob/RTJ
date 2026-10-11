@@ -299,7 +299,7 @@ export function JobForm({
           <>
             <button
               type="button"
-              disabled={pending}
+              disabled={pending} aria-busy={pending}
               onClick={() => submit(true)}
               className="rounded-2xl bg-ink px-6 py-3 font-black text-paper disabled:opacity-60"
             >
@@ -307,7 +307,7 @@ export function JobForm({
             </button>
             <button
               type="button"
-              disabled={pending}
+              disabled={pending} aria-busy={pending}
               onClick={() => submit(false)}
               className="rounded-2xl border-2 border-ink px-6 py-3 font-black disabled:opacity-60"
             >
@@ -317,7 +317,7 @@ export function JobForm({
         ) : (
           <button
             type="submit"
-            disabled={pending}
+            disabled={pending} aria-busy={pending}
             className="rounded-2xl bg-ink px-6 py-3 font-black text-paper disabled:opacity-60"
           >
             {publishedTier && JOB_TIERS.indexOf(v.tier) > JOB_TIERS.indexOf(publishedTier) ? t("saveAndUpgrade") : t("save")}

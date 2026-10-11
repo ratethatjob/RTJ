@@ -18,6 +18,8 @@ export async function refreshSession(request: NextRequest, response: NextRespons
       },
     },
   });
-  await supabase.auth.getUser();
+  // Refreshes an expired session and verifies the JWT locally (ES256 keys, cached JWKS):
+  // no round trip to Supabase Auth on every navigation.
+  await supabase.auth.getClaims();
   return response;
 }

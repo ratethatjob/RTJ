@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import Form from "next/form";
 import { getPathname, Link } from "@/i18n/navigation";
 import { areaPickerLabels } from "@/lib/area-labels";
 import { AccountLink } from "./account-link";
@@ -19,7 +20,7 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
       </Link>
 
       {withSearch && (
-        <form
+        <Form
           action={searchPath}
           role="search"
           className="mx-auto hidden w-full max-w-md items-center gap-2 rounded-xl bg-white px-4 lg:flex"
@@ -31,7 +32,7 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
             placeholder={t("searchWorkplaces")}
             className="w-full bg-transparent py-2.5 outline-none placeholder:text-ink"
           />
-        </form>
+        </Form>
       )}
 
       <nav className="ml-auto flex shrink-0 items-center gap-1 font-black sm:gap-5">

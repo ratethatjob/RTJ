@@ -86,7 +86,7 @@ export function MessageThread({ messages, viewer, otherName, send, collapsed = f
           {error && <p className="font-black">{t("error")}</p>}
           <button
             type="submit"
-            disabled={pending || !body.trim()}
+            disabled={pending || !body.trim()} aria-busy={pending}
             className="self-start rounded-2xl bg-ink px-5 py-2.5 font-black text-paper disabled:opacity-50"
           >
             {pending ? t("sending") : t("send")}

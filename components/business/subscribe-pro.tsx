@@ -37,7 +37,7 @@ export function SubscribePro({
           <button
             key={i}
             type="button"
-            disabled={busy}
+            disabled={busy} aria-busy={busy}
             onClick={() => go(i)}
             className={`rounded-xl px-3 py-2 text-sm font-black disabled:opacity-50 ${
               i === "year" ? "bg-ink text-paper" : "border-2 border-ink"
@@ -64,7 +64,7 @@ export function ManageBilling({ label, dark = false }: { label: string; dark?: b
     <span className="inline-flex flex-col items-end gap-1">
       <button
         type="button"
-        disabled={busy}
+        disabled={busy} aria-busy={busy}
         onClick={() =>
           start(async () => {
             setError(false);
