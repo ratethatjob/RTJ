@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { deleteAccount, markJobEnded, signOut } from "@/app/[locale]/app/account/actions";
+import { MonthYearSelect } from "@/components/month-year-select";
 
 export function JobEndedForm({ reviewId, min }: { reviewId: string; min: string }) {
   const t = useTranslations("Account");
@@ -22,17 +23,10 @@ export function JobEndedForm({ reviewId, min }: { reviewId: string; min: string 
   }
   return (
     <div className="mt-3 flex flex-wrap items-end gap-3">
-      <label className="flex flex-col gap-1">
+      <div className="flex w-full max-w-xs flex-col gap-1">
         <span className="text-sm font-black text-slate">{t("leftWhen")}</span>
-        <input
-          type="month"
-          value={month}
-          min={min}
-          max={new Date().toISOString().slice(0, 7)}
-          onChange={(e) => setMonth(e.target.value)}
-          className="rounded-xl border border-mist/60 px-3 py-2"
-        />
-      </label>
+        <MonthYearSelect label={t("leftWhen")} value={month} min={min} onChange={setMonth} compact />
+      </div>
       <button
         type="button"
         disabled={!month || pending}

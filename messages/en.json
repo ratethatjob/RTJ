@@ -310,9 +310,10 @@
     "uploadFailed": "Your review was saved, but the document upload failed. You can try again later.",
     "errors": {
       "required": "Please fill in the highlighted fields.",
-      "dates": "The end date can't be before the start date.",
+      "dates": "Check the dates: the end can't be before the start, and dates can't be in the future.",
       "generic": "Something went wrong. Please try again."
-    }
+    },
+    "stillHere": "I still work here"
   },
   "NewWorkplace": {
     "title": "Add a workplace",
@@ -1718,5 +1719,9 @@
     "proLine": "RateThatJob Pro – {location}",
     "jobLine": "Job ad, {tier} package: {title}",
     "jobUpgradeLine": "Job ad upgrade {from} → {to}: {title}"
+  },
+  "MonthYear": {
+    "month": "Month",
+    "year": "Year"
   }
 }

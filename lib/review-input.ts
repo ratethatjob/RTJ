@@ -24,6 +24,9 @@ export type ReviewInput = {
 
 const month = /^\d{4}-(0[1-9]|1[0-2])$/;
 
+/** The latest month a period may start or end in (a day ahead, for time zones east of UTC). */
+export const latestMonth = () => new Date(Date.now() + 24 * 3600 * 1000).toISOString().slice(0, 7);
+
 export function parseReview(input: ReviewInput) {
   const r = input.relationship;
   const applicant = r === "applicant";
@@ -43,6 +46,10 @@ export function parseReview(input: ReviewInput) {
     return { error: "required" as const };
   }
   if (needsEnd && input.periodEnd < input.periodStart) return { error: "dates" as const };
+  if (input.periodStart > latestMonth() || (needsEnd && input.periodEnd > latestMonth())) {
+    return { error: "dates" as const };
+  }
+  if (input.periodStart < "1970-01") return { error: "dates" as const };
 
   const rating = (k: (typeof RATING_KEYS)[number]) => {
     const v = input.ratings[k];

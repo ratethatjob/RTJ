@@ -310,9 +310,10 @@
     "uploadFailed": "Az értékelést elmentettük, de a dokumentum feltöltése nem sikerült. Később újra megpróbálhatod.",
     "errors": {
       "required": "Töltsd ki a kiemelt mezőket.",
-      "dates": "A befejezés nem lehet a kezdés előtt.",
+      "dates": "Nézd meg a dátumokat: a vége nem lehet a kezdete előtt, és nem lehet jövőbeli.",
       "generic": "Valami hiba történt. Próbáld újra."
-    }
+    },
+    "stillHere": "Még itt dolgozom"
   },
   "NewWorkplace": {
     "title": "Munkahely felvétele",
@@ -1718,5 +1719,9 @@
     "proLine": "RateThatJob Pro – {location}",
     "jobLine": "Álláshirdetés, {tier} csomag: {title}",
     "jobUpgradeLine": "Álláshirdetés csomagváltás {from} → {to}: {title}"
+  },
+  "MonthYear": {
+    "month": "Hónap",
+    "year": "Év"
   }
 }

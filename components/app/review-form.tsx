@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
 import { submitReview } from "@/app/[locale]/app/actions";
+import { MonthYearSelect, thisMonth } from "@/components/month-year-select";
 import { initials } from "@/lib/format";
 import {
   FACT_KEYS,
@@ -82,9 +83,10 @@ export function ReviewForm({ userId, inviteToken, location, displayName, changeN
       return (
         input.relationship &&
         input.periodStart &&
+        input.periodStart <= thisMonth() &&
         input.position.trim() &&
         (input.relationship !== "former" ||
-          (input.periodEnd && input.periodEnd >= input.periodStart))
+          (input.periodEnd && input.periodEnd >= input.periodStart && input.periodEnd <= thisMonth()))
       );
     }
     if (step === 2) return applicant || input.ratings.overall;
@@ -94,7 +96,10 @@ export function ReviewForm({ userId, inviteToken, location, displayName, changeN
   function goNext() {
     if (!stepValid()) {
       const datesWrong =
-        step === 1 && input.periodEnd && input.periodStart && input.periodEnd < input.periodStart;
+        step === 1 &&
+        ((input.periodEnd && input.periodStart && input.periodEnd < input.periodStart) ||
+          input.periodStart > thisMonth() ||
+          input.periodEnd > thisMonth());
       return setError(t(datesWrong ? "errors.dates" : "errors.required"));
     }
     setError(null);
@@ -208,13 +213,34 @@ export function ReviewForm({ userId, inviteToken, location, displayName, changeN
           </Field>
 
           {input.relationship && (
-            <div className="grid grid-cols-2 gap-3">
-              <Field label={t(applicant ? "appliedWhen" : "from")} className={applicant ? "col-span-2" : ""}>
-                <MonthInput value={input.periodStart} onChange={(v) => set("periodStart", v)} />
+            <div className="flex flex-col gap-4">
+              <Field label={t(applicant ? "appliedWhen" : "from")}>
+                <MonthYearSelect
+                  label={t(applicant ? "appliedWhen" : "from")}
+                  value={input.periodStart}
+                  onChange={(v) => set("periodStart", v)}
+                />
               </Field>
-              {input.relationship === "former" && (
+              {(input.relationship === "current" || input.relationship === "former") && (
                 <Field label={t("to")}>
-                  <MonthInput value={input.periodEnd} onChange={(v) => set("periodEnd", v)} />
+                  {input.relationship === "former" && (
+                    <MonthYearSelect
+                      label={t("to")}
+                      value={input.periodEnd}
+                      min={input.periodStart || undefined}
+                      onChange={(v) => set("periodEnd", v)}
+                    />
+                  )}
+                  {/* "Still working here" is the same as the "I work here now" relationship. */}
+                  <label className="mt-3 flex items-center gap-3 font-black">
+                    <input
+                      type="checkbox"
+                      checked={input.relationship === "current"}
+                      onChange={(e) => set("relationship", e.target.checked ? "current" : "former")}
+                      className="size-5 accent-ink"
+                    />
+                    {t("stillHere")}
+                  </label>
                 </Field>
               )}
             </div>
@@ -505,19 +531,6 @@ function Choice({
       />
       {children}
     </button>
-  );
-}
-
-function MonthInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const max = new Date().toISOString().slice(0, 7);
-  return (
-    <input
-      type="month"
-      value={value}
-      max={max}
-      onChange={(e) => onChange(e.target.value)}
-      className={inputClass}
-    />
   );
 }
 
