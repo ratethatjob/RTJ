@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { getUser } from "@/lib/auth";
 
 export type ProfileInput = { about: string; website: string; benefits: string; photos: string[] };
@@ -40,6 +40,6 @@ export async function saveProfile(
     { onConflict: "location_id" },
   );
   if (error) return { error: "generic" };
-  revalidateTag(`profile:${locationId}`, "max");
+  updateTag(`profile:${locationId}`);
   return { ok: true };
 }

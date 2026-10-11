@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { after } from "next/server";
 import { getLocale, getTranslations } from "next-intl/server";
 import { getUser } from "@/lib/auth";
@@ -105,9 +105,9 @@ function parse(input: JobInput) {
 }
 
 function refresh(id: string, locationId: string) {
-  revalidateTag("jobs", "max");
-  revalidateTag(`job:${id}`, "max");
-  revalidateTag(`jobs:${locationId}`, "max");
+  updateTag("jobs");
+  updateTag(`job:${id}`);
+  updateTag(`jobs:${locationId}`);
 }
 
 // A job goes live only once its package is paid (Stripe Checkout, or an invoice marked paid by
@@ -162,7 +162,7 @@ export async function decideApplication(
   const { supabase } = await getUser();
   const { error } = await supabase.rpc("set_application_status", { p_application_id: id, p_status: status });
   if (error) return { error: "generic" };
-  revalidateTag("locations", "max");
+  updateTag("locations");
   return { ok: true };
 }
 
@@ -189,7 +189,7 @@ export async function messageApplicant(jobId: string, applicationId: string, bod
     p_language: await getLocale(),
   });
   if (error) return { error: "generic" };
-  revalidateTag("locations", "max");
+  updateTag("locations");
   if (app.email) {
     const { data: job } = await supabase
       .from("jobs")

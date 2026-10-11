@@ -4,6 +4,7 @@ import { after } from "next/server";
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
 import { getPathname } from "@/i18n/navigation";
+import { expireWorkplaces } from "@/lib/cache";
 import { getLocationById } from "@/lib/data";
 import { locationPath } from "@/lib/format";
 import { parseReview, type ReviewInput } from "@/lib/review-input";
@@ -65,6 +66,7 @@ export async function submitReview(
         : await createPlaceWorkplace(user.id, pending, await getLocale());
     if (created.error || !created.id) return { error: created.error ?? "generic" };
     input = { ...input, locationId: created.id };
+    expireWorkplaces();
   }
   // Consent given on the sign-in step (only ever switched on here; off on the account page).
   if (jobAlerts === true) await supabase.from("profiles").update({ job_alerts: true }).eq("user_id", user.id);
@@ -110,7 +112,9 @@ export async function createWorkplace(form: {
   if (!user) return { error: "generic" };
   const pending = parsePendingWorkplace({ ...form, kind: "manual" });
   if (!pending || pending.kind !== "manual") return { error: "invalid" };
-  return createManualWorkplace(supabase, pending);
+  const created = await createManualWorkplace(supabase, pending);
+  if (created.id) expireWorkplaces();
+  return created;
 }
 
 /** Account page: switch the job alerts email consent. */

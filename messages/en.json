@@ -860,7 +860,11 @@
         "paused": "Paused"
       }
     },
-    "categoryError": "Couldn't change the category."
+    "categoryError": "Couldn't change the category.",
+    "refreshPages": "Refresh public pages",
+    "refreshPagesHint": "Changed workplace data with SQL or a migration? Public pages show it from the next visit.",
+    "refreshPagesDone": "Done.",
+    "refreshPagesError": "Couldn't refresh."
   },
   "Search": {
     "title": "Find a workplace",

@@ -3,8 +3,38 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { type ImportRow, importLocations, linkEntity, setLocationCategory, setSlug, unverifyEntity } from "@/app/[locale]/admin/actions";
+import { type ImportRow, importLocations, linkEntity, refreshPublicPages, setLocationCategory, setSlug, unverifyEntity } from "@/app/[locale]/admin/actions";
 import { CategorySelect } from "@/components/category-select";
+
+/** After a migration or SQL change: every public workplace and job page is rendered fresh. */
+export function RefreshPages() {
+  const t = useTranslations("Admin");
+  const [state, setState] = useState<"idle" | "done" | "error">("idle");
+  const [pending, startTransition] = useTransition();
+  return (
+    <div className="flex flex-wrap items-center gap-3 rounded-3xl bg-white p-5">
+      <p className="min-w-0 flex-1 text-sm text-slate">{t("refreshPagesHint")}</p>
+      <button
+        type="button"
+        disabled={pending}
+        onClick={() =>
+          startTransition(async () => {
+            const result = await refreshPublicPages();
+            setState(result.error ? "error" : "done");
+          })
+        }
+        className="rounded-xl bg-ink px-4 py-2 text-sm font-black text-paper disabled:opacity-40"
+      >
+        {t("refreshPages")}
+      </button>
+      {state !== "idle" && (
+        <span role="status" className="text-sm font-black">
+          {t(state === "done" ? "refreshPagesDone" : "refreshPagesError")}
+        </span>
+      )}
+    </div>
+  );
+}
 
 /** Admin override of a workplace's category; saved on change. */
 export function CategoryEditor({ id, category }: { id: string; category: string }) {

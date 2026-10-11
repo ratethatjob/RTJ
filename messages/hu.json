@@ -860,7 +860,11 @@
         "paused": "Szüneteltetve"
       }
     },
-    "categoryError": "Nem sikerült módosítani a kategóriát."
+    "categoryError": "Nem sikerült módosítani a kategóriát.",
+    "refreshPages": "Nyilvános oldalak frissítése",
+    "refreshPagesHint": "SQL-lel vagy migrációval módosítottál munkahelyadatot? A nyilvános oldalak a következő látogatástól mutatják.",
+    "refreshPagesDone": "Kész.",
+    "refreshPagesError": "Nem sikerült frissíteni."
   },
   "Search": {
     "title": "Munkahely keresése",

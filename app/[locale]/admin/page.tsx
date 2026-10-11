@@ -1,5 +1,5 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
-import { CategoryEditor, CsvImport, EntityForm, SlugEditor, UnverifyEntity } from "@/components/admin/tools";
+import { CategoryEditor, CsvImport, RefreshPages, EntityForm, SlugEditor, UnverifyEntity } from "@/components/admin/tools";
 import { Decision } from "@/components/admin/decision";
 import { PurgeDemo } from "@/components/admin/purge-demo";
 import { Link } from "@/i18n/navigation";
@@ -615,6 +615,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
                 </div>
               )),
             )}
+          {tab === "workplaces" && <RefreshPages />}
           {tab === "workplaces" && companies.map((c) => (
             <div key={c.id} className="rounded-3xl bg-white p-5">
               <p className="text-lg font-black">{c.name}</p>

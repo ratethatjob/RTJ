@@ -1,6 +1,7 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
+import { expireWorkplaces } from "@/lib/cache";
 import { getUser } from "@/lib/auth";
 import { isCategory } from "@/lib/categories";
 import { sendClaimEmail } from "@/lib/claim-emails";
@@ -29,7 +30,7 @@ export async function decideClaim(id: string, approve: boolean): Promise<Result>
   const { data: files } = await supabase.storage.from("claim-documents").list(folder);
   if (files?.length) await supabase.storage.from("claim-documents").remove(files.map((f) => `${folder}/${f.name}`));
   await sendClaimEmail(claim.mail, approve ? "approved" : "rejected");
-  revalidateTag("locations", "max");
+  expireWorkplaces();
   return { ok: true };
 }
 
@@ -72,8 +73,8 @@ export async function decideVerification(
   if (v?.storage_path) await supabase.storage.from("verifications").remove([v.storage_path]);
   const loc = (v?.reviews as unknown as { location_id: string } | null)?.location_id;
   if (loc) {
-    revalidateTag(`reviews:${loc}`, "max");
-    revalidateTag("locations", "max");
+    updateTag(`reviews:${loc}`);
+    expireWorkplaces();
   }
   return { ok: true };
 }
@@ -88,8 +89,8 @@ export async function decideDispute(id: string, removeReview: boolean): Promise<
   if (error) return { error: true };
   const loc = (d?.reviews as unknown as { location_id: string } | null)?.location_id;
   if (loc && removeReview) {
-    revalidateTag(`reviews:${loc}`, "max");
-    revalidateTag("locations", "max");
+    updateTag(`reviews:${loc}`);
+    expireWorkplaces();
   }
   return { ok: true };
 }
@@ -101,8 +102,8 @@ export async function decideReport(id: string, removeReview: boolean): Promise<R
   if (error) return { error: true };
   const loc = (r?.reviews as unknown as { location_id: string } | null)?.location_id;
   if (loc && removeReview) {
-    revalidateTag(`reviews:${loc}`, "max");
-    revalidateTag("locations", "max");
+    updateTag(`reviews:${loc}`);
+    expireWorkplaces();
   }
   return { ok: true };
 }
@@ -115,7 +116,7 @@ export async function importLocations(
   const { supabase } = await getUser();
   const { data, error } = await supabase.rpc("admin_import_locations", { p_rows: rows });
   if (error) return { error: true };
-  revalidateTag("locations", "max");
+  expireWorkplaces();
   return data as { created: number; skipped: number; failed: number };
 }
 
@@ -126,8 +127,8 @@ export async function setSlug(kind: "company" | "location", id: string, slug: st
       ? await supabase.rpc("admin_set_company_slug", { p_company_id: id, p_slug: slug })
       : await supabase.rpc("admin_set_location_slug", { p_location_id: id, p_slug: slug });
   if (error) return { error: true };
-  revalidateTag("locations", "max");
-  revalidateTag("redirects", "max");
+  expireWorkplaces();
+  updateTag("redirects");
   return { ok: true };
 }
 
@@ -136,7 +137,18 @@ export async function setLocationCategory(id: string, category: string): Promise
   const { supabase } = await getUser();
   const { error } = await supabase.rpc("admin_set_location_category", { p_location_id: id, p_category: category });
   if (error) return { error: true };
-  revalidateTag("locations", "max");
+  expireWorkplaces();
+  return { ok: true };
+}
+
+/** After data changed outside the app (a migration, SQL): every public workplace and job page
+ *  is rendered fresh on its next request. Admins only. */
+export async function refreshPublicPages(): Promise<Result> {
+  const { supabase, user } = await getUser();
+  if (!user) return { error: true };
+  const { data: admin } = await supabase.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
+  if (!admin) return { error: true };
+  expireWorkplaces(["redirects"]);
   return { ok: true };
 }
 
@@ -154,7 +166,7 @@ export async function linkEntity(
     p_registry_id: registryId || null,
   });
   if (error) return { error: true };
-  revalidateTag("locations", "max");
+  expireWorkplaces();
   return { ok: true };
 }
 
@@ -162,7 +174,7 @@ export async function unverifyEntity(linkId: string): Promise<Result> {
   const { supabase } = await getUser();
   const { error } = await supabase.rpc("admin_unverify_entity", { p_link_id: linkId });
   if (error) return { error: true };
-  revalidateTag("locations", "max");
+  expireWorkplaces();
   return { ok: true };
 }
 
@@ -174,8 +186,8 @@ export async function decideOrder(id: string, paid: boolean): Promise<Result> {
   const { error } = await supabase.rpc("admin_decide_order", { p_order_id: id, p_paid: paid });
   if (error) return { error: true };
   if (paid) {
-    revalidateTag("jobs", "max");
-    if (jobId) revalidateTag(`job:${jobId}`, "max");
+    updateTag("jobs");
+    if (jobId) updateTag(`job:${jobId}`);
   }
   return { ok: true };
 }
@@ -184,7 +196,7 @@ export async function decidePlanOrder(id: string, paid: boolean): Promise<Result
   const { supabase } = await getUser();
   const { error } = await supabase.rpc("admin_decide_plan_order", { p_order_id: id, p_paid: paid });
   if (error) return { error: true };
-  revalidateTag("locations", "max");
+  expireWorkplaces();
   return { ok: true };
 }
 
@@ -193,7 +205,7 @@ export async function purgeDemo(): Promise<Result> {
   const { supabase } = await getUser();
   const { error } = await supabase.rpc("admin_purge_demo");
   if (error) return { error: true };
-  revalidateTag("locations", "max");
-  revalidateTag("jobs", "max");
+  expireWorkplaces();
+  updateTag("jobs");
   return { ok: true };
 }

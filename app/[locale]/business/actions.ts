@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { after } from "next/server";
 import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
@@ -25,7 +25,7 @@ export async function postReply(
     .select("id")
     .single();
   if (error) return { error: true };
-  revalidateTag(`reviews:${locationId}`, "max");
+  updateTag(`reviews:${locationId}`);
   after(() => translateReply(data.id));
   return { ok: true };
 }

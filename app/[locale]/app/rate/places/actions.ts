@@ -5,6 +5,7 @@ import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
 import { isOsmId, osmAutocomplete, type SearchArea } from "@/lib/osm";
 import { autocomplete, type PlaceDetails, placesProvider } from "@/lib/places";
+import { expireWorkplaces } from "@/lib/cache";
 import { isCategory } from "@/lib/categories";
 import { searchLocations } from "@/lib/data";
 import { visitorArea } from "@/lib/visitor-area";
@@ -120,7 +121,9 @@ export async function claimPlace(
   const { user } = await getUser();
   if (!user) return { error: "generic" };
   const created = await createPlaceWorkplace(user.id, { kind: "place", placeId, category }, await getLocale());
-  return created.id ? { locationId: created.id } : { error: created.error ?? "generic" };
+  if (!created.id) return { error: created.error ?? "generic" };
+  expireWorkplaces();
+  return { locationId: created.id };
 }
 
 /** Picks a suggestion: an existing workplace, or the place details to confirm. */
