@@ -54,7 +54,7 @@ Ha a munkáltató Basic vagy Pro álláscsomagot használ, egy MI-modell (Anthro
 - Hozzáférés és adathordozhatóság: a Fiókom oldalon letöltheted a profilodat és az értékeléseidet (JSON); minden más adatért írj a {{privacyEmail}} címre.
 - Törlés: a Fiókom oldalon törölheted a fiókod.
 - Helyesbítés, korlátozás, tiltakozás: írj a [{{privacyEmail}}](mailto:{{privacyEmail}}) címre.
-- Panasz: a Dubai International Financial Centre (DIFC) adatvédelmi biztosánál (Commissioner of Data Protection), vagy a lakóhelyed szerinti adatvédelmi hatóságnál (Magyarországon: NAIH, naih.hu).
+- Panasz: az Egyesült Arab Emírségek adatvédelmi hatóságánál (UAE Data Office; az üzemeltető a dubaji Meydan Free Zone-ban van bejegyezve), vagy a lakóhelyed szerinti adatvédelmi hatóságnál (Magyarországon: NAIH, naih.hu).
 
 ## 8. Sütik
 

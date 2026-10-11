@@ -67,4 +67,4 @@ We may change these terms. We announce significant changes on the site; changes 
 
 ## 10. Governing law
 
-These terms are governed by the laws of the Dubai International Financial Centre (DIFC), Dubai, United Arab Emirates. Questions: {{email}}.
+These terms are governed by the laws of the Emirate of Dubai and the federal laws of the United Arab Emirates, as they apply to companies registered in the Meydan Free Zone, Dubai. Questions: {{email}}.

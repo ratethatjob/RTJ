@@ -67,4 +67,4 @@ A feltételeket módosíthatjuk. A lényeges változásokról az oldalon tájék
 
 ## 10. Irányadó jog
 
-Ezekre a feltételekre a Dubai International Financial Centre (DIFC, Dubaj, Egyesült Arab Emírségek) joga az irányadó. Kérdésekkel írj a {{email}} címre.
+Ezekre a feltételekre Dubaj Emírség joga és az Egyesült Arab Emírségek szövetségi joga az irányadó, ahogyan a Meydan Free Zone-ban (Dubaj) bejegyzett cégekre vonatkozik. Kérdésekkel írj a {{email}} címre.
