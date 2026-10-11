@@ -37,7 +37,7 @@ export async function CityHub({ city, category }: { city: string; category: Cate
                 <Link
                   href={c ? `/city/${city}/${CATEGORY_SLUGS[c]}` : `/city/${city}`}
                   aria-current={c === category ? "page" : undefined}
-                  className={`inline-block rounded-full px-5 py-2.5 font-black ${
+                  className={`inline-block rounded-full px-3.5 py-1.5 text-sm font-semibold ${
                     c === category ? "bg-ink text-paper" : "border border-mist/60"
                   }`}
                 >

@@ -2,7 +2,9 @@ import { getFormatter, getTranslations, setRequestLocale } from "next-intl/serve
 import { CategoryEditor, CsvImport, RefreshPages, EntityForm, SlugEditor, UnverifyEntity } from "@/components/admin/tools";
 import { Decision } from "@/components/admin/decision";
 import { PurgeDemo } from "@/components/admin/purge-demo";
-import { Link } from "@/i18n/navigation";
+import { BackLink } from "@/components/app/back-link";
+import { SiteHeader } from "@/components/site-header";
+import { getPathname, Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { domainCheck } from "@/lib/claim-check";
 import { jobPricing, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
@@ -503,25 +505,23 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
   const pct = (a: number, b: number) => (b ? `${Math.round((100 * a) / b)}%` : "–");
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 pb-12 pt-8">
-      <header className="flex items-center justify-between gap-4">
-        <h1 className="text-4xl font-black tracking-brand">{t("title")}</h1>
-        <Link href="/app/account" className="font-black underline underline-offset-4">
-          ←
-        </Link>
-      </header>
+    <>
+    <SiteHeader />
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 pb-12 pt-2 lg:max-w-4xl">
+      <BackLink href={getPathname({ href: "/app/account", locale })} />
+      <h1 className="text-4xl font-black tracking-brand lg:text-5xl">{t("title")}</h1>
       <nav className="-mx-4 flex flex-wrap gap-2 px-4">
         {TABS.map((key, i) => (
           <Link
             key={key}
             href={{ pathname: "/admin", query: { tab: key } }}
             aria-current={key === tab ? "page" : undefined}
-            className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 font-black ${
+            className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-semibold ${
               key === tab ? "bg-ink text-paper" : "bg-white"
             }`}
           >
             {t(`tabs.${key}`)}
-            <span className={`rounded-full px-2 text-sm ${key === tab ? "bg-signal text-ink" : "bg-paper"}`}>
+            <span className={`rounded-full px-1.5 text-xs ${key === tab ? "bg-signal text-ink" : "bg-paper"}`}>
               {counts[i].count ?? 0}
             </span>
           </Link>
@@ -531,7 +531,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
             key={key}
             href={{ pathname: "/admin", query: { tab: key } }}
             aria-current={key === tab ? "page" : undefined}
-            className={`shrink-0 rounded-xl px-4 py-2.5 font-black ${key === tab ? "bg-ink text-paper" : "border border-mist/60"}`}
+            className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-semibold ${key === tab ? "bg-ink text-paper" : "border border-mist/60"}`}
           >
             {t(`tabs.${key}`)}
           </Link>
@@ -708,6 +708,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
       )}
       {extra}
     </main>
+    </>
   );
 }
 

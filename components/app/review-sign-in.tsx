@@ -63,7 +63,7 @@ export function ReviewSignIn({
     </p>
   );
   const input =
-    "rounded-2xl border border-mist/60 bg-white px-5 py-4 text-lg outline-none focus:border-ink";
+    "rounded-2xl border border-mist/60 bg-white px-4 py-3 text-base outline-none focus:border-ink";
 
   return (
     <>
@@ -96,7 +96,7 @@ export function ReviewSignIn({
           {errorBox}
           <button
             disabled={busy || submitting} aria-busy={busy}
-            className="rounded-2xl bg-signal py-4 text-lg font-black text-ink disabled:opacity-60"
+            className="rounded-2xl bg-signal py-3 text-base font-black text-ink disabled:opacity-60"
           >
             {busy || submitting ? t("sending") : t("verifyAndSend")}
           </button>
@@ -140,7 +140,7 @@ export function ReviewSignIn({
           {errorBox}
           <button
             disabled={busy} aria-busy={busy}
-            className="rounded-2xl bg-signal py-4 text-lg font-black text-ink disabled:opacity-60"
+            className="rounded-2xl bg-signal py-3 text-base font-black text-ink disabled:opacity-60"
           >
             {ta("sendCode")}
           </button>

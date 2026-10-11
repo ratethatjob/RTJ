@@ -77,7 +77,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
             />
           </label>
           {category && <input type="hidden" name="category" value={category} />}
-          <button type="submit" className="mt-2 rounded-2xl bg-ink px-8 py-4 text-lg font-black text-paper sm:mt-0">
+          <button type="submit" className="mt-2 rounded-2xl bg-ink px-6 py-3 text-base font-black text-paper sm:mt-0">
             {th("search")}
           </button>
         </Form>
@@ -90,7 +90,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
               <Link
                 href={{ pathname: "/search", query: query(null) }}
                 aria-current={category === null ? "page" : undefined}
-                className={`inline-block rounded-full px-5 py-2.5 font-black ${
+                className={`inline-block rounded-full px-3.5 py-1.5 text-sm font-semibold ${
                   category === null ? "bg-ink text-paper" : "border border-mist/60"
                 }`}
               >

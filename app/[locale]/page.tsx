@@ -54,11 +54,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-8 pt-6 sm:px-6 lg:gap-16 lg:pb-8 lg:pt-12">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-8 pt-6 sm:px-6 lg:gap-12 lg:pb-8 lg:pt-8">
         <ManagedOrgCard />
-        <section className="grid items-center gap-10 lg:grid-cols-[1fr_340px] lg:gap-16 xl:grid-cols-[1fr_400px]">
-          <div>
-            <h1 className="text-[3.25rem] font-black leading-[0.95] tracking-brand sm:text-7xl lg:text-8xl">
+        <section className="grid grid-cols-[minmax(0,1fr)] items-center gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-12 xl:grid-cols-[minmax(0,1fr)_400px]">
+          <div className="min-w-0">
+            <h1 className="text-4xl font-black leading-[1.02] tracking-brand sm:text-6xl lg:text-8xl">
               {t("headline")}
             </h1>
             <p className="mt-5 max-w-xl text-xl text-slate lg:text-2xl">
@@ -94,7 +94,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               </label>
               <button
                 type="submit"
-                className="mt-2 rounded-2xl bg-ink px-8 py-4 text-lg font-black text-paper lg:mt-0"
+                className="mt-2 rounded-2xl bg-ink px-6 py-3 text-base font-black text-paper lg:mt-0"
               >
                 {t("search")}
               </button>
@@ -104,7 +104,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               <CategoryChips
                 active={null}
                 href={(c) => ({ pathname: "/search", query: { category: c } })}
-                wrap
               />
             </div>
           </div>
@@ -283,7 +282,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           </div>
           <Link
             href="/employers"
-            className="self-start rounded-2xl bg-ink px-8 py-4 text-lg font-black text-paper lg:self-auto"
+            className="self-start rounded-2xl bg-ink px-6 py-3 text-base font-black text-paper lg:self-auto"
           >
             {t("claimCta")}
           </Link>

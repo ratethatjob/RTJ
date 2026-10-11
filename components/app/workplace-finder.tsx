@@ -145,7 +145,7 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
           type="button"
           disabled={pending} aria-busy={pending}
           onClick={confirm}
-          className="rounded-2xl bg-ink px-6 py-4 text-lg font-black text-paper disabled:opacity-50"
+          className="rounded-2xl bg-ink px-5 py-3 text-base font-black text-paper disabled:opacity-50"
         >
           {t(mode === "claim" ? "addAndClaim" : "addAndRate")}
         </button>

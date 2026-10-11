@@ -91,7 +91,7 @@ export default async function ReviewsPage({ params, searchParams }: Props) {
             key={f}
             href={href(f)}
             aria-current={f === filter ? "page" : undefined}
-            className={`shrink-0 rounded-full px-5 py-3 font-black ${
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold ${
               f === filter ? "bg-ink text-paper" : "border border-mist/60"
             }`}
           >

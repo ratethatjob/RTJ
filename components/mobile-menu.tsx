@@ -27,7 +27,6 @@ export function MobileMenu() {
   const links = [
     { href: "/search", label: t("findWorkplaces") },
     { href: "/jobs", label: t("jobs") },
-    { href: "/app/rate", label: t("rateAJob") },
     { href: "/employers", label: t("forEmployers") },
     { href: "/pricing", label: t("pricing") },
     { href: "/about", label: t("about") },
@@ -40,7 +39,7 @@ export function MobileMenu() {
         onClick={() => setOpen(true)}
         aria-label={t("menu")}
         aria-expanded={open}
-        className="grid size-11 place-items-center rounded-full border border-mist/60"
+        className="grid size-9 place-items-center rounded-full border border-mist/70"
       >
         <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
           <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
@@ -53,15 +52,25 @@ export function MobileMenu() {
               type="button"
               onClick={() => setOpen(false)}
               aria-label={t("close")}
-              className="grid size-11 place-items-center rounded-full border border-white/25 text-xl font-black"
+              className="grid size-9 place-items-center rounded-full border border-white/25 text-lg font-black"
             >
               ✕
             </button>
           </div>
-          <nav className="mt-6 flex flex-col">
+          <div className="mt-4 flex flex-col gap-2">
+            <Link href="/app/rate" className="rounded-xl bg-signal px-4 py-3 text-center text-lg font-black text-ink">
+              {t("rateAJob")}
+            </Link>
             <MenuBusinessLink />
+          </div>
+          <nav className="mt-4 flex flex-col">
             {links.map((l) => (
-              <Link key={l.href} href={l.href} className="border-b border-white/10 py-4 text-3xl font-black tracking-brand">
+              <Link
+                key={l.href}
+                href={l.href}
+                aria-current={pathname === l.href ? "page" : undefined}
+                className={`border-b border-white/10 py-3.5 text-2xl font-black tracking-brand ${pathname === l.href ? "text-signal" : ""}`}
+              >
                 {l.label}
               </Link>
             ))}

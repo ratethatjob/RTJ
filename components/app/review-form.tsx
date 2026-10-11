@@ -508,7 +508,7 @@ export function ReviewForm({
           <button
             type="button"
             onClick={goNext}
-            className="w-full rounded-2xl bg-ink py-4 text-lg font-black text-paper"
+            className="w-full rounded-2xl bg-ink py-3 text-base font-black text-paper"
           >
             {t("next")}
           </button>
@@ -517,7 +517,7 @@ export function ReviewForm({
             type="button"
             onClick={submit}
             disabled={pending} aria-busy={pending}
-            className="w-full rounded-2xl bg-signal py-4 text-lg font-black text-ink disabled:opacity-60"
+            className="w-full rounded-2xl bg-signal py-3 text-base font-black text-ink disabled:opacity-60"
           >
             {pending ? t("submitting") : t(userId ? "submit" : "continueToSend")}
           </button>
@@ -528,10 +528,10 @@ export function ReviewForm({
 }
 
 const inputClass =
-  "w-full rounded-2xl border border-mist/60 bg-white px-5 py-4 text-lg outline-none focus:border-ink";
+  "w-full rounded-2xl border border-mist/60 bg-white px-4 py-3 text-base outline-none focus:border-ink";
 
 function Shell({ children }: { children: React.ReactNode }) {
-  return <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-4">{children}</main>;
+  return <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-4 lg:max-w-2xl lg:flex-none lg:pt-8">{children}</main>;
 }
 
 function ErrorBox({ children }: { children: React.ReactNode }) {

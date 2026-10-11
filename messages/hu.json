@@ -164,7 +164,6 @@
     "agriculturePlural": "Mezőgazdaság",
     "eventsPlural": "Rendezvény és szórakoztatás",
     "otherPlural": "Egyéb",
-    "more": "Több",
     "letUsDecide": "Döntsétek el ti",
     "pick": "Kategória"
   },
@@ -516,7 +515,9 @@
       "plan": "Előfizetés",
       "index": "RateThatJob Index",
       "stats": "Statisztika",
-      "profile": "Munkahelyi profil"
+      "profile": "Munkahelyi profil",
+      "site": "RateThatJob.com",
+      "account": "Fiókom"
     },
     "signedInAs": "Belépve mint {role}",
     "roles": {
@@ -729,7 +730,16 @@
   },
   "NavAccount": {
     "account": "Fiókom",
-    "notifications": "{count, plural, =0 {Értesítések} other {Értesítések, # olvasatlan}}"
+    "notifications": "{count, plural, =0 {Értesítések} other {Értesítések, # olvasatlan}}",
+    "accountUnread": "{count, plural, other {Fiókom, # olvasatlan értesítés}}",
+    "notificationsItem": "Értesítések",
+    "applications": "Jelentkezéseim",
+    "business": "Céges felület",
+    "pending": "Igénylés folyamatban",
+    "signOut": "Kilépés",
+    "signIn": "Belépés",
+    "businessSignIn": "Belépés munkáltatóként",
+    "shownAs": "Így látszol: {name}"
   },
   "Admin": {
     "title": "Admin",

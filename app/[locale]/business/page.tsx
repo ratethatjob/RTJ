@@ -22,7 +22,7 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
       <main className="w-full py-12">
         <h1 className="text-4xl font-black tracking-brand">{t("noOrgTitle")}</h1>
         <p className="mt-3 text-lg text-slate">{t("noOrgBody")}</p>
-        <Link href="/business/claim" className="mt-6 inline-block rounded-2xl bg-ink px-7 py-4 text-lg font-black text-paper">
+        <Link href="/business/claim" className="mt-6 inline-block rounded-2xl bg-ink px-6 py-3 text-base font-black text-paper">
           {t("claimTitle")}
         </Link>
         <PendingClaims supabase={supabase} userId={user.id} />

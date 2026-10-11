@@ -140,7 +140,7 @@ export function ApplyForm(props: Props) {
   const submitButton = (
     <>
       {error && <p className="rounded-2xl bg-white p-4 font-black">{error}</p>}
-      <button type="submit" disabled={pending} aria-busy={pending} className="rounded-2xl bg-ink px-6 py-4 text-lg font-black text-paper disabled:opacity-60">
+      <button type="submit" disabled={pending} aria-busy={pending} className="rounded-2xl bg-ink px-5 py-3 text-base font-black text-paper disabled:opacity-60">
         {pending ? t("sending") : t("submit")}
       </button>
     </>
@@ -309,7 +309,7 @@ function QuickSteps(p: QuickProps) {
                 type="button"
                 onClick={next}
                 disabled={q.required && !String(p.answers[q.id] ?? "").trim()}
-                className="rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-40"
+                className="rounded-2xl bg-ink py-3 text-base font-black text-paper disabled:opacity-40"
               >
                 {q.required ? t("next") : t("nextOrSkip")}
               </button>
@@ -344,7 +344,7 @@ function QuickSteps(p: QuickProps) {
             type="button"
             onClick={next}
             disabled={!p.startWhen || p.experience == null}
-            className="rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-40"
+            className="rounded-2xl bg-ink py-3 text-base font-black text-paper disabled:opacity-40"
           >
             {t("next")}
           </button>
@@ -444,7 +444,7 @@ export function Followups({
       ))}
       {error && <p className="rounded-2xl bg-paper p-4 font-black">{t("errors.generic")}</p>}
       <div className="flex flex-wrap items-center gap-4">
-        <button type="submit" disabled={pending} aria-busy={pending} className="rounded-2xl bg-ink px-6 py-4 text-lg font-black text-paper disabled:opacity-60">
+        <button type="submit" disabled={pending} aria-busy={pending} className="rounded-2xl bg-ink px-5 py-3 text-base font-black text-paper disabled:opacity-60">
           {t("followups.send")}
         </button>
         <button type="button" disabled={pending} aria-busy={pending} onClick={() => send(true)} className="font-black underline underline-offset-4">

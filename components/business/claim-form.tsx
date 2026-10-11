@@ -33,7 +33,7 @@ export function ClaimForm({ locationId, userId, accountEmail }: Props) {
   const set = (key: keyof typeof form) => (e: { target: { value: string } }) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  const input = "w-full rounded-2xl border border-mist/60 bg-white px-5 py-4 text-lg outline-none focus:border-ink";
+  const input = "w-full rounded-2xl border border-mist/60 bg-white px-4 py-3 text-base outline-none focus:border-ink";
   const field = (key: keyof typeof form, label: string, props: React.InputHTMLAttributes<HTMLInputElement> = {}) => (
     <label className="flex flex-col gap-2">
       <span className="font-black">{label}</span>
@@ -159,7 +159,7 @@ export function ClaimForm({ locationId, userId, accountEmail }: Props) {
                   : t("error")}
         </p>
       )}
-      <button disabled={pending || state === "sent"} aria-busy={pending || state === "sent"} className="rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-60">
+      <button disabled={pending || state === "sent"} aria-busy={pending || state === "sent"} className="rounded-2xl bg-ink py-3 text-base font-black text-paper disabled:opacity-60">
         {t("submitClaim")}
       </button>
     </form>

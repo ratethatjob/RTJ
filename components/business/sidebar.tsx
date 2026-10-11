@@ -24,7 +24,7 @@ export function BusinessSidebar({ orgName, role, awaiting }: Props) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex shrink-0 flex-col bg-ink p-4 text-paper lg:min-h-dvh lg:w-72 lg:p-5">
+    <aside className="flex shrink-0 flex-col bg-ink p-4 text-paper lg:min-h-dvh lg:w-64 lg:p-4">
       <div className="flex items-center justify-between gap-4 lg:block">
         <Link href="/business" className="flex items-center gap-2.5">
           <BrandIcon className="h-6 w-auto" />
@@ -52,7 +52,7 @@ export function BusinessSidebar({ orgName, role, awaiting }: Props) {
               )}
             </>
           );
-          const cls = `flex shrink-0 items-center justify-between gap-3 rounded-xl px-4 py-3 font-black ${
+          const cls = `flex shrink-0 items-center justify-between gap-3 rounded-xl px-4 py-2.5 text-[15px] font-semibold ${
             active ? "bg-signal text-ink" : !href ? "text-mist" : ""
           }`;
           return href ? (
@@ -67,9 +67,15 @@ export function BusinessSidebar({ orgName, role, awaiting }: Props) {
         })}
       </nav>
 
-      <p className="mt-auto hidden pt-8 text-sm text-mist lg:block">
-        {t("signedInAs", { role: t(`roles.${role}`) })}
-      </p>
+      <div className="mt-auto hidden flex-col gap-1 pt-8 text-sm lg:flex">
+        <Link href="/" className="rounded-lg px-4 py-2 font-semibold text-mist hover:text-paper">
+          ← {t("nav.site")}
+        </Link>
+        <Link href="/app/account" className="rounded-lg px-4 py-2 font-semibold text-mist hover:text-paper">
+          {t("nav.account")}
+        </Link>
+        <p className="px-4 pt-2 text-mist">{t("signedInAs", { role: t(`roles.${role}`) })}</p>
+      </div>
     </aside>
   );
 }

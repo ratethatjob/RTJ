@@ -124,11 +124,11 @@ export default async function LocationPage({ params }: Props) {
             locationId={data.id}
             followLabel={t("follow")}
             followingLabel={t("following")}
-            className="rounded-2xl border-2 border-ink px-7 py-4 text-lg font-black"
+            className="rounded-xl border-2 border-ink px-5 py-2.5 text-base font-black"
           />
           <Link
             href={rateHref}
-            className="rounded-2xl bg-ink px-7 py-4 text-lg font-black text-paper"
+            className="rounded-xl bg-ink px-5 py-2.5 text-base font-black text-paper"
           >
             {t("rateThisJob")}
           </Link>
@@ -141,7 +141,7 @@ export default async function LocationPage({ params }: Props) {
           <p className="max-w-2xl text-lg text-mist">{t("emptyBody")}</p>
           <Link
             href={rateHref}
-            className="w-full rounded-2xl bg-signal px-8 py-5 text-center text-xl font-black text-ink sm:w-auto"
+            className="w-full rounded-2xl bg-signal px-6 py-3.5 text-center text-lg font-black text-ink sm:w-auto"
           >
             {t("emptyCta")}
           </Link>
@@ -240,7 +240,7 @@ export default async function LocationPage({ params }: Props) {
                       pathname: `${path}/reviews`,
                       query: f === "all" ? {} : { filter: f },
                     }}
-                    className={`rounded-full px-5 py-3 font-black ${
+                    className={`rounded-full px-3.5 py-1.5 text-sm font-semibold ${
                       f === "all" ? "bg-ink text-paper" : "border border-mist/60"
                     }`}
                   >
@@ -300,13 +300,13 @@ export default async function LocationPage({ params }: Props) {
       <div className="fixed inset-x-0 bottom-0 grid grid-cols-2 gap-3 bg-paper/95 p-4 backdrop-blur lg:hidden">
         <Link
           href={`${path}/reviews`}
-          className="rounded-2xl border-2 border-ink py-4 text-center text-lg font-black"
+          className="rounded-2xl border-2 border-ink py-3 text-center text-base font-black"
         >
           {t("readReviews")}
         </Link>
         <Link
           href={rateHref}
-          className="rounded-2xl bg-ink py-4 text-center text-lg font-black text-paper"
+          className="rounded-2xl bg-ink py-3 text-center text-base font-black text-paper"
         >
           {t("rateThisJob")}
         </Link>

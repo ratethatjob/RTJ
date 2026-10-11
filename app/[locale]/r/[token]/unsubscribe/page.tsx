@@ -29,7 +29,7 @@ export default async function UnsubscribePage({ params, searchParams }: PageProp
         <p className="mt-4 text-lg text-mist">{t(done ? "doneBody" : "body")}</p>
         {!done && (
           <form action={unsubscribe} className="mt-8">
-            <button type="submit" className="w-full rounded-2xl bg-signal py-4 text-lg font-black text-ink">
+            <button type="submit" className="w-full rounded-2xl bg-signal py-3 text-base font-black text-ink">
               {t("confirm")}
             </button>
           </form>

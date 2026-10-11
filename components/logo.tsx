@@ -20,9 +20,9 @@ export function BrandIcon({ className }: { className?: string }) {
 export function Logo({ dark = false, compact = false }: { dark?: boolean; compact?: boolean }) {
   return (
     <span className="inline-flex items-center gap-2 sm:gap-2.5">
-      <BrandIcon className="h-6 w-auto shrink-0 sm:h-7" />
+      <BrandIcon className="h-6 w-auto shrink-0" />
       <span
-        className={`text-[17px] leading-none tracking-brand sm:text-2xl ${compact ? "hidden sm:inline" : ""}`}
+        className={`text-[17px] leading-none tracking-brand sm:text-xl ${compact ? "hidden sm:inline" : ""}`}
       >
         <span className={`font-black ${dark ? "text-paper" : "text-ink"}`}>
           RateThatJob

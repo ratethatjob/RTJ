@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { SiteHeader } from "@/components/site-header";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { ShareButton } from "@/components/app/share-button";
 import { getPathname, Link } from "@/i18n/navigation";
@@ -50,7 +51,9 @@ export default async function ReviewSentPage({ params, searchParams }: PageProps
   if (documents) steps.push(t("document"));
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-10 pt-10 lg:max-w-lg lg:pt-16">
+    <>
+      <SiteHeader />
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-10 pt-6 lg:max-w-lg lg:pt-10">
       <svg viewBox="0 0 96 96" className="rtj-check-pop mx-auto size-24" aria-hidden="true">
         <circle cx="48" cy="48" r="46" className="fill-signal" />
         <path
@@ -99,10 +102,10 @@ export default async function ReviewSentPage({ params, searchParams }: PageProps
       </section>
 
       <div className="mt-8 flex flex-col gap-3">
-        <Link href={href} className="rounded-2xl bg-ink py-4 text-center text-lg font-black text-paper">
+        <Link href={href} className="rounded-2xl bg-ink py-3 text-center text-base font-black text-paper">
           {t("viewWorkplace")}
         </Link>
-        <Link href="/app/rate" className="rounded-2xl border-2 border-ink py-4 text-center text-lg font-black">
+        <Link href="/app/rate" className="rounded-2xl border-2 border-ink py-3 text-center text-base font-black">
           {t("rateAnother")}
         </Link>
         <ShareButton
@@ -112,6 +115,7 @@ export default async function ReviewSentPage({ params, searchParams }: PageProps
           label={t("share")}
         />
       </div>
-    </main>
+      </main>
+    </>
   );
 }

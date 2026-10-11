@@ -28,7 +28,7 @@ export function JoinTeam({ token }: { token: string }) {
             router.refresh();
           })
         }
-        className="rounded-2xl bg-ink px-6 py-4 text-lg font-black text-paper disabled:opacity-60"
+        className="rounded-2xl bg-ink px-5 py-3 text-base font-black text-paper disabled:opacity-60"
       >
         {t("join")}
       </button>

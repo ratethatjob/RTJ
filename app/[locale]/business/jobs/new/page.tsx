@@ -16,7 +16,7 @@ export default async function NewJobPage({ params, searchParams }: PageProps<"/[
   const location = pickLocation(org.locations, query.location) ?? org.locations[0];
 
   return (
-    <main className="flex max-w-3xl flex-col gap-6">
+    <main className="flex max-w-2xl flex-col gap-6">
       <h1 className="text-4xl font-black tracking-brand lg:text-5xl">{t("newJob")}</h1>
       <JobForm
         orgId={org.id}

@@ -164,7 +164,6 @@
     "agriculturePlural": "Agriculture",
     "eventsPlural": "Events & entertainment",
     "otherPlural": "Other",
-    "more": "More",
     "letUsDecide": "Let us decide",
     "pick": "Category"
   },
@@ -516,7 +515,9 @@
       "plan": "Subscription",
       "index": "RateThatJob Index",
       "stats": "Statistics",
-      "profile": "Workplace profile"
+      "profile": "Workplace profile",
+      "site": "RateThatJob.com",
+      "account": "My account"
     },
     "signedInAs": "Signed in as {role}",
     "roles": {
@@ -729,7 +730,16 @@
   },
   "NavAccount": {
     "account": "My account",
-    "notifications": "{count, plural, =0 {Notifications} one {Notifications, # unread} other {Notifications, # unread}}"
+    "notifications": "{count, plural, =0 {Notifications} one {Notifications, # unread} other {Notifications, # unread}}",
+    "accountUnread": "{count, plural, one {My account, # unread notification} other {My account, # unread notifications}}",
+    "notificationsItem": "Notifications",
+    "applications": "My applications",
+    "business": "Business dashboard",
+    "pending": "Request in progress",
+    "signOut": "Sign out",
+    "signIn": "Sign in",
+    "businessSignIn": "Employer sign-in",
+    "shownAs": "Shown as {name}"
   },
   "Admin": {
     "title": "Admin",

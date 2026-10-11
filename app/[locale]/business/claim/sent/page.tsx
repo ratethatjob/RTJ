@@ -66,10 +66,10 @@ export default async function ClaimSentPage({ params, searchParams }: PageProps<
       </section>
 
       <div className="mt-8 flex flex-col gap-3">
-        <Link href="/business" className="rounded-2xl bg-ink py-4 text-center text-lg font-black text-paper">
+        <Link href="/business" className="rounded-2xl bg-ink py-3 text-center text-base font-black text-paper">
           {t("statusButton")}
         </Link>
-        <Link href="/" className="rounded-2xl border-2 border-ink py-4 text-center text-lg font-black">
+        <Link href="/" className="rounded-2xl border-2 border-ink py-3 text-center text-base font-black">
           {t("home")}
         </Link>
       </div>

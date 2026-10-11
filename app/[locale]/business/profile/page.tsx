@@ -22,7 +22,7 @@ export default async function ProfilePage({ params, searchParams }: PageProps<"/
     .maybeSingle();
 
   return (
-    <main className="flex max-w-3xl flex-col gap-6">
+    <main className="flex max-w-2xl flex-col gap-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-4xl font-black tracking-brand lg:text-5xl">{t("title")}</h1>

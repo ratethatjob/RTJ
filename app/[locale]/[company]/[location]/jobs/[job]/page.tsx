@@ -132,7 +132,7 @@ export default async function JobPage({ params }: Props) {
               </dl>
 
               <div className="mt-6 hidden flex-wrap items-center gap-4 lg:flex">
-                <Link href={applyHref} className="rounded-2xl bg-ink px-8 py-4 text-lg font-black text-paper">
+                <Link href={applyHref} className="rounded-2xl bg-ink px-6 py-3 text-base font-black text-paper">
                   {quick ? t("applyQuick") : t("applyCv")}
                 </Link>
                 <span className="text-slate">
@@ -220,7 +220,7 @@ export default async function JobPage({ params }: Props) {
         </div>
 
         <div className="fixed inset-x-0 bottom-0 bg-paper/95 p-4 backdrop-blur lg:hidden">
-          <Link href={applyHref} className="block rounded-2xl bg-ink py-4 text-center text-lg font-black text-paper">
+          <Link href={applyHref} className="block rounded-2xl bg-ink py-3 text-center text-base font-black text-paper">
             {quick ? t("applyQuick") : t("applyCv")}
           </Link>
         </div>

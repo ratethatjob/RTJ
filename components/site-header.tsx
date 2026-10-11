@@ -1,24 +1,27 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import Form from "next/form";
 import { getPathname, Link } from "@/i18n/navigation";
-import { AccountLink } from "./account-link";
-import { EmployersNavLink, HeaderBusinessLink } from "./business-access";
+import { AccountMenu } from "./account-menu";
+import { HeaderBusinessLink } from "./business-access";
+import { HeaderNav } from "./header-nav";
 import { SearchIcon } from "./icons";
-import { LocaleSwitch } from "./locale-switch";
-import { MobileMenu } from "./mobile-menu";
 import { Logo } from "./logo";
+import { MobileMenu } from "./mobile-menu";
 
+/** 64 px header: logo, the main sections (or a search field on workplace pages), then the
+ *  business dashboard button for members, "Rate a job" and the account menu. The language
+ *  switch lives in the footer and the phone menu. */
 export async function SiteHeader({ withSearch = false }: { withSearch?: boolean }) {
   const t = await getTranslations("Nav");
   const searchPath = getPathname({ href: "/search", locale: await getLocale() });
 
   return (
-    <header className="mx-auto flex w-full max-w-6xl items-center gap-2 px-4 py-4 sm:gap-4 sm:px-6 lg:py-6">
+    <header className="mx-auto flex h-16 w-full max-w-6xl items-center gap-3 px-4 sm:px-6 lg:gap-6">
       <Link href="/" className="shrink-0">
         <Logo compact={withSearch} />
       </Link>
 
-      {withSearch && (
+      {withSearch ? (
         <Form
           action={searchPath}
           role="search"
@@ -29,38 +32,34 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
             name="q"
             aria-label={t("searchWorkplaces")}
             placeholder={t("searchWorkplaces")}
-            className="w-full bg-transparent py-2.5 outline-none placeholder:text-ink"
+            className="w-full bg-transparent py-2 text-[15px] outline-none placeholder:text-slate"
           />
         </Form>
+      ) : (
+        <HeaderNav
+          items={[
+            { href: "/search", label: t("findWorkplaces"), match: "^/(search|city)(/|$)" },
+            { href: "/jobs", label: t("jobs"), match: "^/jobs(/|$)" },
+          ]}
+          employers={{
+            href: "/employers",
+            label: t("forEmployers"),
+            match: "^/(employers|pricing|ratethatjob-index|careers-hub)(/|$)",
+          }}
+        />
       )}
 
-      <nav className="ml-auto flex shrink-0 items-center gap-1 font-black sm:gap-5">
-        {!withSearch && (
-          <>
-            <Link href="/search" className="hidden lg:inline">
-              {t("findWorkplaces")}
-            </Link>
-            <Link href="/jobs" className="hidden lg:inline">
-              {t("jobs")}
-            </Link>
-            <EmployersNavLink label={t("forEmployers")} />
-          </>
-        )}
-        <span className="hidden lg:inline">
-          <LocaleSwitch />
-        </span>
+      <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
         <HeaderBusinessLink />
-        <AccountLink signInLabel={t("signIn")} />
+        <Link
+          href="/app/rate"
+          className="hidden rounded-lg bg-ink px-4 py-2 text-[15px] font-semibold text-paper sm:inline-flex"
+        >
+          {t("rateAJob")}
+        </Link>
+        <AccountMenu />
         <MobileMenu />
-        {!withSearch && (
-          <Link
-            href="/app/rate"
-            className="hidden rounded-xl bg-ink px-5 py-3 text-paper lg:inline"
-          >
-            {t("rateAJob")}
-          </Link>
-        )}
-      </nav>
+      </div>
     </header>
   );
 }

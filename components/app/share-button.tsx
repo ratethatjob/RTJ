@@ -17,7 +17,7 @@ export function ShareButton({ url, title, text, label }: { url: string; title: s
       onClick={() => {
         navigator.share({ url: new URL(url, window.location.origin).href, title, text }).catch(() => {});
       }}
-      className="rounded-2xl border-2 border-ink py-4 text-center text-lg font-black"
+      className="rounded-2xl border-2 border-ink py-3 text-center text-base font-black"
     >
       {label}
     </button>

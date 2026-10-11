@@ -42,10 +42,10 @@ export default async function PricingPage({ params, searchParams }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 pb-8 pt-6 sm:px-6 lg:pt-12">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 pb-8 pt-6 sm:px-6 lg:pt-8">
         <section className="max-w-3xl">
           <p className="text-sm font-black uppercase tracking-tagline text-slate">{t("eyebrow")}</p>
-          <h1 className="mt-3 text-5xl font-black leading-[0.95] tracking-brand lg:text-7xl">{t("title")}</h1>
+          <h1 className="mt-3 text-4xl font-black leading-[1.05] tracking-brand sm:text-5xl lg:text-7xl">{t("title")}</h1>
           <p className="mt-6 text-xl text-slate">{t("intro")}</p>
           <div className="mt-8 inline-grid grid-cols-2 rounded-2xl bg-white p-1.5 font-black">
             <Link
@@ -78,7 +78,7 @@ export default async function PricingPage({ params, searchParams }: Props) {
                 </li>
               ))}
             </ul>
-            <Link href="/business/claim" className="mt-8 rounded-2xl border-2 border-ink px-6 py-4 text-center text-lg font-black">
+            <Link href="/business/claim" className="mt-8 rounded-2xl border-2 border-ink px-5 py-3 text-center text-base font-black">
               {t("free.cta")}
             </Link>
           </div>
@@ -107,7 +107,7 @@ export default async function PricingPage({ params, searchParams }: Props) {
                 </li>
               ))}
             </ul>
-            <Link href="/business/claim" className="mt-8 rounded-2xl bg-signal px-6 py-4 text-center text-lg font-black text-ink">
+            <Link href="/business/claim" className="mt-8 rounded-2xl bg-signal px-5 py-3 text-center text-base font-black text-ink">
               {t("pro.cta")}
             </Link>
           </div>
@@ -124,7 +124,7 @@ export default async function PricingPage({ params, searchParams }: Props) {
                 </li>
               ))}
             </ul>
-            <a href={`mailto:${OPERATOR.email}?subject=RateThatJob`} className="mt-8 rounded-2xl border-2 border-ink px-6 py-4 text-center text-lg font-black">
+            <a href={`mailto:${OPERATOR.email}?subject=RateThatJob`} className="mt-8 rounded-2xl border-2 border-ink px-5 py-3 text-center text-base font-black">
               {t("chains.cta")}
             </a>
           </div>
@@ -175,7 +175,7 @@ export default async function PricingPage({ params, searchParams }: Props) {
                 </ul>
                 <Link
                   href="/business/jobs/new"
-                  className={`mt-8 rounded-2xl px-6 py-4 text-center text-lg font-black ${
+                  className={`mt-8 rounded-2xl px-5 py-3 text-center text-base font-black ${
                     tier === "basic" ? "bg-signal text-ink" : "border-2 border-ink"
                   }`}
                 >

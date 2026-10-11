@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { SiteHeader } from "@/components/site-header";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getPathname } from "@/i18n/navigation";
 import { BackLink } from "@/components/app/back-link";
@@ -31,7 +32,9 @@ export default async function WelcomePage({ params, searchParams }: PageProps<"/
 
   const t = await getTranslations("Welcome");
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-4">
+    <>
+      <SiteHeader />
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-2">
       <BackLink href={next} />
       {sent && (
         <p role="status" className="mt-4 rounded-2xl bg-ink px-4 py-3 font-black text-paper">
@@ -46,6 +49,7 @@ export default async function WelcomePage({ params, searchParams }: PageProps<"/
         initialGenerated={profile?.generated_name ?? ""}
         initialUsername={profile?.username ?? ""}
       />
-    </main>
+      </main>
+    </>
   );
 }

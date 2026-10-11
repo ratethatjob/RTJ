@@ -42,7 +42,7 @@ export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim 
   }
 
   const input =
-    "w-full rounded-2xl border border-mist/60 bg-white px-5 py-4 text-lg outline-none focus:border-ink";
+    "w-full rounded-2xl border border-mist/60 bg-white px-4 py-3 text-base outline-none focus:border-ink";
 
   return (
     <form onSubmit={submit} className="mt-6 flex flex-1 flex-col gap-5">
@@ -85,7 +85,7 @@ export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim 
       )}
       <button
         disabled={pending} aria-busy={pending}
-        className="mt-auto rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-60"
+        className="mt-auto rounded-2xl bg-ink py-3 text-base font-black text-paper disabled:opacity-60"
       >
         {t(claim ? "submitClaim" : "submit")}
       </button>

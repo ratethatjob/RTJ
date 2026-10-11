@@ -58,7 +58,7 @@ export default async function InvitePage({ params }: PageProps<"/[locale]/r/[tok
             <div className="mt-auto pt-10">
               <Link
                 href={{ pathname: `/app/rate/${location.id}`, query: { invite: token } }}
-                className="block rounded-2xl bg-signal py-4 text-center text-lg font-black text-ink"
+                className="block rounded-2xl bg-signal py-3 text-center text-base font-black text-ink"
               >
                 {t("start")}
               </Link>
@@ -71,7 +71,7 @@ export default async function InvitePage({ params }: PageProps<"/[locale]/r/[tok
             <p className="mt-4 text-lg text-mist">{t("invalidBody")}</p>
             <Link
               href="/app/rate"
-              className="mt-auto block rounded-2xl bg-signal py-4 text-center text-lg font-black text-ink"
+              className="mt-auto block rounded-2xl bg-signal py-3 text-center text-base font-black text-ink"
             >
               {(await getTranslations("Nav"))("rateAJob")}
             </Link>

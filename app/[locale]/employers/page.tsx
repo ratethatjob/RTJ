@@ -25,19 +25,19 @@ export default async function EmployersPage({ params }: PageProps<"/[locale]/emp
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 pb-8 pt-6 sm:px-6 lg:gap-16 lg:pt-12">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 pb-8 pt-6 sm:px-6 lg:gap-12 lg:pt-8">
         <section className="max-w-3xl">
           <p className="text-sm font-black uppercase tracking-tagline text-slate">{t("eyebrow")}</p>
-          <h1 className="mt-3 text-5xl font-black leading-[0.95] tracking-brand lg:text-7xl">{t("title")}</h1>
+          <h1 className="mt-3 text-4xl font-black leading-[1.05] tracking-brand sm:text-5xl lg:text-7xl">{t("title")}</h1>
           <p className="mt-5 text-xl text-slate">{t("body")}</p>
           <EmployersCta>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/business/claim" className="rounded-2xl bg-ink px-7 py-4 text-lg font-black text-paper">
+              <Link href="/business/claim" className="rounded-2xl bg-ink px-6 py-3 text-base font-black text-paper">
                 {t("cta")}
               </Link>
               <Link
                 href={{ pathname: "/app/sign-in", query: { for: "business", next: getPathname({ href: "/business", locale }) } }}
-                className="rounded-2xl border-2 border-ink px-7 py-4 text-lg font-black"
+                className="rounded-2xl border-2 border-ink px-6 py-3 text-base font-black"
               >
                 {t("dashboard")}
               </Link>
@@ -76,7 +76,7 @@ export default async function EmployersPage({ params }: PageProps<"/[locale]/emp
             <h2 className="text-3xl font-black tracking-brand">{t("pricingTitle")}</h2>
             <p className="mt-2 text-lg text-mist">{t("pricingBody")}</p>
           </div>
-          <Link href="/pricing" className="rounded-2xl bg-signal px-7 py-4 text-lg font-black text-ink">
+          <Link href="/pricing" className="rounded-2xl bg-signal px-6 py-3 text-base font-black text-ink">
             {t("pricingCta")}
           </Link>
         </section>

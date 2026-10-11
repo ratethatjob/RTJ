@@ -95,7 +95,7 @@ export function DisplayNameForm({ next, initialMode, initialGenerated, initialUs
           onFocus={() => setMode("username")}
           placeholder={t("usernamePlaceholder")}
           aria-describedby="username-hint"
-          className="mt-4 w-full rounded-2xl border border-mist/60 bg-paper px-5 py-4 text-lg outline-none focus:border-ink"
+          className="mt-4 w-full rounded-2xl border border-mist/60 bg-paper px-4 py-3 text-base outline-none focus:border-ink"
         />
         <p id="username-hint" className="mt-2 text-sm text-slate">
           {t("usernameHint")}
@@ -118,7 +118,7 @@ export function DisplayNameForm({ next, initialMode, initialGenerated, initialUs
 
       <button
         disabled={pending} aria-busy={pending}
-        className="mt-auto rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-60"
+        className="mt-auto rounded-2xl bg-ink py-3 text-base font-black text-paper disabled:opacity-60"
       >
         {t("continue")}
       </button>

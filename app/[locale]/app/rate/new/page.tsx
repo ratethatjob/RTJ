@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { SiteHeader } from "@/components/site-header";
 import { BackLink } from "@/components/app/back-link";
 import { WorkplaceFinder } from "@/components/app/workplace-finder";
 import { getPathname } from "@/i18n/navigation";
@@ -16,7 +17,9 @@ export default async function NewWorkplacePage({ params, searchParams }: PagePro
   const [provider, autoArea] = await Promise.all([placesProvider(), autoAreaName(locale)]);
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-4">
+    <>
+      <SiteHeader />
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-2 lg:max-w-2xl">
       <BackLink href={getPathname({ href: "/app/rate", locale })} />
       <h1 className="mt-4 text-4xl font-black tracking-brand">{t("title")}</h1>
       <p className="mt-2 text-slate">{tp("hint")}</p>
@@ -30,6 +33,7 @@ export default async function NewWorkplacePage({ params, searchParams }: PagePro
           manualBase={getPathname({ href: "/app/rate", locale })}
         />
       </div>
-    </main>
+      </main>
+    </>
   );
 }

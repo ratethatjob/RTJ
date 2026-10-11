@@ -37,7 +37,7 @@ export default async function ApplyPage({ params, searchParams }: PageProps<"/[l
     : { data: null };
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 pb-12 pt-6">
+    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 pb-12 pt-6 lg:max-w-2xl">
       <BackLink href={getPathname({ href: job ? jobPath(job) : "/jobs", locale })} />
       {!job ? (
         <p className="rounded-3xl bg-white p-6 text-lg">{t("closed")}</p>

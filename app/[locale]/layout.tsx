@@ -16,7 +16,7 @@ import "../globals.css";
 const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin", "latin-ext"],
-  weight: ["500", "900"],
+  weight: ["500", "600", "900"],
 });
 
 export function generateStaticParams() {

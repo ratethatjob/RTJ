@@ -21,10 +21,10 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 pb-8 pt-6 sm:px-6 lg:gap-16 lg:pt-12">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 pb-8 pt-6 sm:px-6 lg:gap-12 lg:pt-8">
         <section className="max-w-3xl">
           <p className="text-sm font-black uppercase tracking-tagline text-slate">{t("eyebrow")}</p>
-          <h1 className="mt-3 text-5xl font-black leading-[0.95] tracking-brand lg:text-7xl">{t("title")}</h1>
+          <h1 className="mt-3 text-4xl font-black leading-[1.05] tracking-brand sm:text-5xl lg:text-7xl">{t("title")}</h1>
           <p className="mt-6 text-xl text-slate lg:text-2xl">{t("intro")}</p>
         </section>
 
@@ -52,7 +52,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
             <h2 className="text-3xl font-black tracking-brand">{t("contactTitle")}</h2>
             <p className="mt-2 text-lg text-slate">{t("contactBody")}</p>
           </div>
-          <a href={`mailto:${OPERATOR.email}`} className="rounded-2xl bg-ink px-7 py-4 text-lg font-black text-paper">
+          <a href={`mailto:${OPERATOR.email}`} className="rounded-2xl bg-ink px-6 py-3 text-base font-black text-paper">
             {OPERATOR.email}
           </a>
         </section>

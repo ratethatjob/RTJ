@@ -86,7 +86,7 @@ export default async function JobsPage({ params, searchParams }: Props) {
           </label>
           {category && <input type="hidden" name="category" value={category} />}
           {quick && <input type="hidden" name="quick" value="1" />}
-          <button type="submit" className="mt-2 rounded-2xl bg-ink px-8 py-4 text-lg font-black text-paper sm:mt-0">
+          <button type="submit" className="mt-2 rounded-2xl bg-ink px-6 py-3 text-base font-black text-paper sm:mt-0">
             {th("search")}
           </button>
         </Form>
@@ -100,7 +100,7 @@ export default async function JobsPage({ params, searchParams }: Props) {
                 <Link
                   href={{ pathname: "/jobs", query: query(category, !quick) }}
                   aria-pressed={quick}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 font-black ${
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-semibold ${
                     quick ? "bg-ink text-signal" : "border border-ink"
                   }`}
                 >
@@ -114,7 +114,7 @@ export default async function JobsPage({ params, searchParams }: Props) {
                 <Link
                   href={{ pathname: "/jobs", query: query(null) }}
                   aria-current={category === null ? "page" : undefined}
-                  className={`inline-block rounded-full px-5 py-2.5 font-black ${
+                  className={`inline-block rounded-full px-3.5 py-1.5 text-sm font-semibold ${
                     category === null ? "bg-ink text-paper" : "border border-mist/60"
                   }`}
                 >

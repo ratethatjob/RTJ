@@ -44,7 +44,7 @@ export default async function BusinessReviewsPage({ params, searchParams }: Page
             <Link
               key={f}
               href={{ pathname: "/business/reviews", query: { filter: f, ...(selected && { location: selected.id }) } }}
-              className={`rounded-full px-5 py-3 font-black ${f === filter ? "bg-ink text-paper" : "border border-mist/60"}`}
+              className={`rounded-full px-3.5 py-1.5 text-sm font-semibold ${f === filter ? "bg-ink text-paper" : "border border-mist/60"}`}
             >
               {t(`filters.${f}`)}
               {f === "needs" && needsCount != null ? ` · ${needsCount}` : ""}

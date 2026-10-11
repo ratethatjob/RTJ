@@ -21,7 +21,7 @@ export default async function EditJobPage({ params }: PageProps<"/[locale]/busin
   const str = (n: number | null) => (n == null ? "" : String(Number(n)));
 
   return (
-    <main className="flex max-w-3xl flex-col gap-6">
+    <main className="flex max-w-2xl flex-col gap-6">
       <h1 className="text-4xl font-black tracking-brand lg:text-5xl">{t("editJob")}</h1>
       <JobForm
         orgId={org.id}

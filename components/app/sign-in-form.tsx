@@ -87,7 +87,7 @@ export function SignInForm({ next, welcome, linkError, business = false }: Props
         {errorBox}
         <button
           disabled={busy} aria-busy={busy}
-          className="rounded-2xl bg-signal py-4 text-lg font-black text-ink disabled:opacity-60"
+          className="rounded-2xl bg-signal py-3 text-base font-black text-ink disabled:opacity-60"
         >
           {t("verify")}
         </button>
@@ -115,7 +115,7 @@ export function SignInForm({ next, welcome, linkError, business = false }: Props
             key={p.id}
             type="button"
             onClick={() => oauth(p.id)}
-            className={`rounded-2xl border-2 border-ink py-4 text-lg font-black ${
+            className={`rounded-2xl border-2 border-ink py-3 text-base font-black ${
               i === 0 ? "bg-ink text-paper" : "bg-white"
             }`}
           >
@@ -143,13 +143,13 @@ export function SignInForm({ next, welcome, linkError, business = false }: Props
             onChange={(e) => setTarget(e.target.value)}
             placeholder={business ? t("businessPlaceholder") : t("emailPlaceholder")}
             required
-            className="rounded-2xl border border-mist/60 bg-white px-5 py-4 text-lg outline-none focus:border-ink"
+            className="rounded-2xl border border-mist/60 bg-white px-4 py-3 text-base outline-none focus:border-ink"
           />
         </label>
         {errorBox}
         <button
           disabled={busy} aria-busy={busy}
-          className="rounded-2xl bg-signal py-4 text-lg font-black text-ink disabled:opacity-60"
+          className="rounded-2xl bg-signal py-3 text-base font-black text-ink disabled:opacity-60"
         >
           {t("sendCode")}
         </button>
