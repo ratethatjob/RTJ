@@ -186,6 +186,7 @@
   },
   "Auth": {
     "title": "Fiók egy koppintással.",
+    "titleEmail": "Fiók egy e-mail-címmel.",
     "subtitle": "A neved és az elérhetőséged soha nem jelenik meg nyilvánosan, és a munkáltatók sem látják.",
     "continueWith": "Folytatás: {provider}",
     "or": "vagy",

@@ -186,6 +186,7 @@
   },
   "Auth": {
     "title": "Create your account in one tap.",
+    "titleEmail": "Your account, with just an email.",
     "subtitle": "Your name and contact details are never shown publicly or to employers.",
     "continueWith": "Continue with {provider}",
     "or": "or",

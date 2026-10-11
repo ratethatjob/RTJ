@@ -12,7 +12,7 @@ A RateThatJob munkahelyekről szóló értékeléseket, tényeket (bérfizetés,
 
 ## 3. Fiók
 
-- Az értékeléshez, jelentkezéshez és követéshez fiók kell. Belépés e-mailes vagy telefonos kóddal, illetve külső fiókkal lehetséges.
+- Az értékeléshez, jelentkezéshez és követéshez fiók kell. Belépés az e-mail-címedre küldött kóddal történik, jelszó nincs.
 - A nyilvános oldalakon csak a választott megjelenő neved látszik. A neved és az elérhetőséged nem jelenik meg, és a munkáltatók nem látják, ki írta az értékelést.
 - A fiókod a tiéd, nem a munkáltatódé. Bármikor letöltheted az adataidat és törölheted a fiókod a Fiókom oldalon.
 

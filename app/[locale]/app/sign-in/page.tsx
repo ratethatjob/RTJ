@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BackButton } from "@/components/app/back-button";
 import { SignInForm } from "@/components/app/sign-in-form";
 import { getUser, safeNext } from "@/lib/auth";
+import { AUTH_PROVIDERS } from "@/lib/site-config";
 
 export const instant = false;
 
@@ -11,7 +12,7 @@ export default async function SignInPage({ params, searchParams }: PageProps<"/[
   setRequestLocale(locale);
   const query = await searchParams;
   const home = getPathname({ href: "/", locale });
-  // Employers sign in with a work email code only; workers also with Apple, Google or Facebook.
+  // Employers sign in with a work email code only; workers also with the AUTH_PROVIDERS accounts, if any.
   const business = query.for === "business";
   const next = safeNext(query.next, business ? getPathname({ href: "/business", locale }) : home);
   // Employers skip the reviewer display-name step.
@@ -34,7 +35,7 @@ export default async function SignInPage({ params, searchParams }: PageProps<"/[
       <BackButton fallback={fallback} label={tn("back")} />
       {business && <p className="mt-4 text-sm font-black uppercase tracking-tagline text-slate">{t("businessEyebrow")}</p>}
       <h1 className={`${business ? "mt-2" : "mt-4"} text-4xl font-black leading-[1.05] tracking-brand`}>
-        {business ? t("businessTitle") : t("title")}
+        {business ? t("businessTitle") : t(AUTH_PROVIDERS.length ? "title" : "titleEmail")}
       </h1>
       <p className="mt-3 text-lg text-slate">{business ? t("businessSubtitle") : t("subtitle")}</p>
       <SignInForm next={next} welcome={welcome} linkError={query.error === "1"} business={business} />

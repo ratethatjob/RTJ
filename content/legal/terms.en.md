@@ -12,7 +12,7 @@ RateThatJob shows reviews of workplaces, facts (pay on time, overtime, hours, re
 
 ## 3. Your account
 
-- You need an account to review, apply and follow workplaces. You sign in with an email or phone code, or with another account.
+- You need an account to review, apply and follow workplaces. You sign in with a code we send to your email address; there is no password.
 - Public pages only show the display name you choose. Your name and contact details are never shown, and employers never learn who wrote a review.
 - Your account belongs to you, not to your employer. You can download your data and delete your account at any time on the My account page.
 

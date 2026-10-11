@@ -31,5 +31,6 @@ export const JOB_PRICING: Record<string, { currency: string; prices: Record<JobT
 };
 export const jobPricing = (country: string) => JOB_PRICING[country] ?? JOB_PRICING.default;
 
-// Social sign-in buttons on /app/sign-in, in this order. Add "apple" back once it is set up in Supabase Auth.
-export const AUTH_PROVIDERS: ("apple" | "google" | "facebook")[] = ["google", "facebook"];
+// Social sign-in buttons on /app/sign-in, in this order. Empty: email code only, everywhere.
+// Add "google", "facebook" or "apple" back once the provider is set up in Supabase Auth.
+export const AUTH_PROVIDERS: ("apple" | "google" | "facebook")[] = [];
