@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+import { hasLocale } from "next-intl";
 import { CategoryChips } from "@/components/category-chips";
 import { DemoChip } from "@/components/demo-badge";
 import type { Metadata } from "next";
@@ -11,6 +13,7 @@ import { JobCard } from "@/components/jobs/job-card";
 import { getFeaturedLocations, getSitemapLocations } from "@/lib/data";
 import { getAllJobs } from "@/lib/data/jobs";
 import { getPathname, Link } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { locationPath } from "@/lib/format";
 import { localeAlternates } from "@/lib/seo";
 
@@ -18,11 +21,15 @@ export async function generateMetadata({
   params,
 }: PageProps<"/[locale]">): Promise<Metadata> {
   const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
   return { alternates: localeAlternates("/", locale) };
 }
 
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
+  // Paths with a dot skip the proxy (/wp-login.php, /.env) and land here as a "locale".
+  // The layout 404s too, but pages render alongside it, so stop before anything renders.
+  if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations("Home");
   const tc = await getTranslations("Categories");

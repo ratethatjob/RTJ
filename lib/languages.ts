@@ -12,13 +12,7 @@ export type JobLanguage = { code: string; level: LanguageLevel };
 
 export const MAX_LANGUAGES = 6;
 
-export function languageName(code: string, locale: string) {
-  try {
-    return new Intl.DisplayNames([locale], { type: "language" }).of(code) ?? code;
-  } catch {
-    return code;
-  }
-}
+export { languageName } from "./intl-names";
 
 export const isLanguageCode = (v: unknown): v is string =>
   typeof v === "string" && (JOB_LANGUAGES as readonly string[]).includes(v);

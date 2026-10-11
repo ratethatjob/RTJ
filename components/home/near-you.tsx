@@ -4,6 +4,7 @@ import { LocationList } from "@/components/location-list";
 import { Link } from "@/i18n/navigation";
 import { areaPickerLabels } from "@/lib/area-labels";
 import { getNearby } from "@/lib/data/nearby";
+import { regionName } from "@/lib/intl-names";
 import { visitorArea } from "@/lib/visitor-area";
 import { AreaPicker } from "./area-picker";
 
@@ -17,7 +18,6 @@ export async function NearYou({ locale }: { locale: string }) {
     area.kind === "any" ? await getNearby([], null) : await getNearby(area.citySlugs, area.country);
   if (!near.locations.length && !near.jobs.length) return null;
   const t = await getTranslations("Home.near");
-  const regions = new Intl.DisplayNames([locale], { type: "region" });
 
   const cityIn =
     area.kind === "area" ? t(`in.${area.id}`) : area.kind === "city" ? t("inCity", { city: area.city }) : null;
@@ -25,7 +25,7 @@ export async function NearYou({ locale }: { locale: string }) {
   const countryIn = country
     ? COUNTRIES_IN.includes(country)
       ? t(`inCountry.${country}`)
-      : t("inCountryOther", { country: regions.of(country) ?? country })
+      : t("inCountryOther", { country: regionName(country, locale) })
     : null;
   const place = near.scope === "city" ? cityIn : near.scope === "country" ? countryIn : null;
   // Said when the city (or country) had nothing yet and we show a wider list.

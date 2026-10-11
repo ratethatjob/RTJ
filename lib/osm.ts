@@ -1,5 +1,6 @@
 import { cacheLife } from "next/cache";
 import { categoryFromOsm } from "@/lib/categories";
+import { regionName } from "@/lib/intl-names";
 import type { PlaceDetails, PlaceSuggestion } from "@/lib/places";
 
 // OpenStreetMap workplace search, used while there is no GOOGLE_PLACES_API_KEY.
@@ -42,14 +43,7 @@ type PhotonFeature = {
 /** Full address under each result: street and number, postcode and city, country. */
 export function suggestionsFromPhoton(data: { features?: PhotonFeature[] }, locale = "en"): PlaceSuggestion[] {
   // Country in the page's language ("Magyarország" on /hu), whatever language Photon answered in.
-  const regions = new Intl.DisplayNames([locale], { type: "region" });
-  const countryName = (code?: string, fallback?: string) => {
-    try {
-      return code ? (regions.of(code.toUpperCase()) ?? fallback) : fallback;
-    } catch {
-      return fallback;
-    }
-  };
+  const countryName = (code?: string, fallback?: string) => (code ? regionName(code, locale, fallback) : fallback);
   const seen = new Set<string>();
   const out: PlaceSuggestion[] = [];
   for (const f of data.features ?? []) {

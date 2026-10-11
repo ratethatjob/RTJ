@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { languageName as intlLanguageName } from "@/lib/intl-names";
 import type { FactKey, LocalizedText, Review } from "@/lib/data/types";
 import { initials, periodLabel, weeksWaited } from "@/lib/format";
 import { HelpfulButton } from "./helpful-button";
@@ -37,8 +38,7 @@ export async function ReviewCard({
   const locale = await getLocale();
   const t = await getTranslations("Review");
   const isApplicant = review.relationship === "applicant";
-  const languageName = (code: string) =>
-    new Intl.DisplayNames([locale], { type: "language" }).of(code) ?? code;
+  const languageName = (code: string) => intlLanguageName(code, locale);
 
   const meta = [
     review.position,
