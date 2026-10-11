@@ -326,6 +326,7 @@
     "country": "Ország",
     "category": "Típus",
     "submit": "Felveszem és értékelem",
+    "submitClaim": "Felveszem és átveszem",
     "cantFind": "Nem találod?",
     "addIt": "Munkahely felvétele",
     "errors": {
@@ -734,7 +735,28 @@
     "infoQuestion": "Mire van szükség? (e-mailben megy az igénylőnek, az igénylés nyitva marad)",
     "sendInfoRequest": "Kérés küldése",
     "requestInfo": "Több infót kérek",
-    "cancel": "Mégse"
+    "cancel": "Mégse",
+    "stripe": {
+      "paidCard": "Kártyával fizetve (Stripe)",
+      "paidManual": "Fizetettnek jelölve (utalás)",
+      "checkoutStarted": "Kártyás fizetés elkezdve, nincs befejezve",
+      "notStarted": "Fizetésre vár",
+      "payment": "Fizetés a Stripe-ban",
+      "customer": "Ügyfél a Stripe-ban",
+      "subscription": "Előfizetés a Stripe-ban",
+      "paidRecently": "Az elmúlt 30 napban fizetve",
+      "subscriptions": "Stripe-előfizetések",
+      "status": {
+        "active": "Aktív",
+        "trialing": "Próbaidő (első terhelés a végén)",
+        "past_due": "Sikertelen fizetés",
+        "canceled": "Lemondva",
+        "unpaid": "Kifizetetlen",
+        "incomplete": "Befejezetlen",
+        "incomplete_expired": "Lejárt",
+        "paused": "Szüneteltetve"
+      }
+    }
   },
   "Search": {
     "title": "Munkahely keresése",
@@ -1145,8 +1167,8 @@
       "title": "Csomag",
       "perAd": "hirdetésenként",
       "everythingIn": "Minden, ami a(z) {name} csomagban, és még:",
-      "billing": "A számla akkor készül, amikor a hirdetés élesedik. Később bővítheted.",
-      "upgradeOnly": "A hirdetés már él: csak magasabb csomagra válthatsz, és csak a különbözetet számlázzuk.",
+      "billing": "Közzétételkor fizetsz, a hirdetés a kifizetés után jelenik meg. Később válthatsz nagyobb csomagra.",
+      "upgradeOnly": "Ez a hirdetés már él: nagyobb csomagra válthatsz, és csak a különbözetet fizeted.",
       "standard": {
         "name": "Alap",
         "body": "Alacsony feladási díj magáért a hirdetésért."
@@ -1212,6 +1234,15 @@
         "fluent": "Folyékony",
         "native": "Anyanyelvi"
       }
+    },
+    "publishAndPay": "Közzététel és fizetés",
+    "saveAndUpgrade": "Mentés és a csomagváltás kifizetése",
+    "payment": {
+      "waiting": "Fizetésre vár – a hirdetés a kifizetés után jelenik meg.",
+      "upgradeWaiting": "A(z) {tier} csomagra váltás fizetésre vár – a kifizetés után vált.",
+      "processing": "Köszönjük! Visszaigazoljuk a fizetést, ez egy pillanat.",
+      "invoice": "Számlát küldünk. A hirdetés a kifizetés után jelenik meg.",
+      "pay": "Fizetés most"
     }
   },
   "Report": {
@@ -1284,7 +1315,8 @@
       "new_application": "Új jelentkezés: {job}",
       "application_message": "{sender, select, employer {Új üzenet: {location} – {job}} other {{name} válaszolt: {job}}}",
       "trial_ending": "{location}: még {days} nap a Pro próbából",
-      "trial_ended": "{location}: lejárt a Pro próbád – a kitett Index most „nem elérhető” feliratot mutat"
+      "trial_ended": "{location}: lejárt a Pro próbád – a kitett Index most „nem elérhető” feliratot mutat",
+      "payment_failed": "{location}: sikertelen Pro-fizetés – frissítsd a kártyádat"
     }
   },
   "Places": {
@@ -1449,7 +1481,9 @@
     "trial_endingSubject": "Még {days} nap a Pro próbából – {location}",
     "trial_endingBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája {days} nap múlva lejár. Utána a weboldaladon lévő RateThatJob Index pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”, a korai figyelmeztetés és a statisztika pedig kikapcsol.\n\nItt kapcsolhatod be a Prót: {link}\n\nRateThatJob – Know before you go",
     "trial_endedSubject": "Lejárt a Pro próbád – {location}",
-    "trial_endedBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája lejárt. A weboldaladon lévő RateThatJob Index most pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”. A nyilvános profilod és az értékelések továbbra is láthatók.\n\nKapcsold be a Prót, hogy újra látszódjon a pontszámod: {link}\n\nRateThatJob – Know before you go"
+    "trial_endedBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája lejárt. A weboldaladon lévő RateThatJob Index most pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”. A nyilvános profilod és az értékelések továbbra is láthatók.\n\nKapcsold be a Prót, hogy újra látszódjon a pontszámod: {link}\n\nRateThatJob – Know before you go",
+    "payment_failedSubject": "Sikertelen fizetés a Pro csomagodnál – {location}",
+    "payment_failedBody": "Szia!\n\nNem sikerült beszedni a RateThatJob Pro díját ennél a telephelynél: {location}. A Stripe a következő napokban újrapróbálja.\n\nItt frissítheted a kártyádat: {link}\n\nHa nem sikerül, a Pro az utolsó kifizetett időszak végén lejár, és a weboldaladra beágyazott RateThatJob Index „jelenleg nem elérhető” feliratot mutat.\n\nRateThatJob – Know before you go"
   },
   "JobsWidget": {
     "title": "Nyitott állások: {name}",
@@ -1641,7 +1675,19 @@
       "indexBody": "Kapcsold be a Prót ennél a telephelynél, hogy kitehesd az Indexet a weboldaladra. A Careers Hub ingyenes – lásd a Careers Hub fület.",
       "statsTitle": "A statisztika a Pro része",
       "statsBody": "Kapcsold be a Prót ennél a telephelynél, hogy lásd a havi számokat, pontszámokat és a kategóriák alakulását."
-    }
+    },
+    "subscribe_month": "Havi · {price}",
+    "subscribe_year": "Éves · {price}",
+    "payByInvoice": "Inkább számlára fizetek",
+    "manage": "Előfizetés kezelése",
+    "invoices": "Számlázás és számlák",
+    "subscribed": "Előfizetve",
+    "renewsOn": "Előfizetve ({interval}) – megújul: {date}",
+    "firstPaymentOn": "Előfizetve – első terhelés {date}, a próbaidő végén",
+    "cancelsOn": "Lemondva – Pro eddig: {date}",
+    "paymentFailed": "Sikertelen fizetés – frissítsd a kártyádat",
+    "checkoutSuccess": "Köszönjük! Az előfizetésed beállítása folyamatban, pillanatokon belül itt látszik.",
+    "billingNoteCards": "Kártyás fizetés (Stripe): havi vagy éves, automatikusan megújul, bármikor lemondható az időszak végére. Kérhetsz számlát is."
   },
   "Demo": {
     "label": "Demó adat",
@@ -1667,5 +1713,10 @@
     "approvedBody": "Szia!\n\nJó hír: jóváhagytuk a(z) {location} igénylését. Mostantól válaszolhatsz az értékelésekre, meghívhatod a csapatodat és hirdethetsz állásokat. Elindult a 30 napos ingyenes Pro próbaidőszakod.\n\nIrányítópult: {link}\n\nRateThatJob – Know before you go",
     "rejectedSubject": "Nem tudtuk jóváhagyni az igénylésedet – {location}",
     "rejectedBody": "Szia!\n\nNem tudtuk megerősíteni, hogy te képviseled a(z) {location} munkahelyet, ezért nem hagytuk jóvá az igénylést. Küldhetsz új igénylést a céged domainjén lévő e-mail-címmel vagy cégkivonattal.\n\n{link}\n\nRateThatJob – Know before you go"
+  },
+  "Billing": {
+    "proLine": "RateThatJob Pro – {location}",
+    "jobLine": "Álláshirdetés, {tier} csomag: {title}",
+    "jobUpgradeLine": "Álláshirdetés csomagváltás {from} → {to}: {title}"
   }
 }

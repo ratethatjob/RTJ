@@ -55,6 +55,8 @@ export function JobForm({
         : await createJob(orgId, v, publish);
       if (result.error)
         return setError(result.error === "invalid" ? t("invalid") : t("error"));
+      // Publishing (or upgrading) continues on Stripe's payment page; the ad goes live once paid.
+      if (result.payment?.url) return window.location.assign(result.payment.url);
       router.push(`/business/jobs/${result.id}`);
       router.refresh();
     });
@@ -301,7 +303,7 @@ export function JobForm({
               onClick={() => submit(true)}
               className="rounded-2xl bg-ink px-6 py-3 font-black text-paper disabled:opacity-60"
             >
-              {t("publish")}
+              {t("publishAndPay")}
             </button>
             <button
               type="button"
@@ -318,7 +320,7 @@ export function JobForm({
             disabled={pending}
             className="rounded-2xl bg-ink px-6 py-3 font-black text-paper disabled:opacity-60"
           >
-            {t("save")}
+            {publishedTier && JOB_TIERS.indexOf(v.tier) > JOB_TIERS.indexOf(publishedTier) ? t("saveAndUpgrade") : t("save")}
           </button>
         )}
       </div>

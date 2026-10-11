@@ -32,9 +32,20 @@ A RateThatJob munkahelyekről szóló értékeléseket, tényeket (bérfizetés,
 - A munkáltató nem próbálhatja kideríteni az értékelők kilétét, és nem gyakorolhat nyomást a dolgozóira az értékelés miatt.
 - A Pro telephelyenkénti fizetős csomag. Benne van a RateThatJob Index a weboldaladra (képes jelvény, iframe kártya, Top Rated pecsét, a pontszám a JSON API-ban), a korai figyelmeztetés és a statisztika, valamint az [Árak](/pricing) oldalon felsorolt további funkciók.
 - Minden telephely egyszer 30 napos ingyenes Pro próbát kap, bankkártya nélkül. A próba automatikusan indul, amikor jóváhagyjuk az átvételt.
-- A próba után a Pro telephelyenként, havi vagy éves díjjal fizetős, az [Árak](/pricing) oldalon szereplő áron. Amíg nincs online fizetés, számlát küldünk, és a befizetés után kapcsoljuk be a Prót.
+- A próba után a Pro telephelyenként, havi vagy éves díjjal fizetős, az [Árak](/pricing) oldalon szereplő áron. A magyarországi telephelyek forintban, a többiek euróban fizetnek.
+- Ha a próba alatt fizetsz elő bankkártyával, az első terhelés a próba végén történik, korábban nem.
+- A Pro előfizetés minden időszak végén automatikusan megújul, amíg le nem mondod. Bármikor lemondhatod az irányítópulton (Számlázás és számlák); a Pro ilyenkor a már kifizetett időszak végéig működik, utána nem újul meg.
+- Ha a megújításkor nem sikerül a fizetés, néhány napig újrapróbáljuk, és értesítünk. Ha kifizetetlen marad, a Pro az utolsó kifizetett időszak végén megszűnik.
+- A már kifizetett díjat nem térítjük vissza, a lemondott időszak hátralévő részére sem, kivéve ha tévesen (például kétszer) terheltünk, vagy ha jogszabály előírja.
+- Kérhetsz számlát is, és fizethetsz átutalással; ilyenkor a befizetés megérkezése után kapcsoljuk be a Prót.
 - Aktív próba vagy kifizetett Pro nélkül a kitett Index-jelvények nem tűnnek el a weboldaladról, de pontszám helyett azt mutatják, hogy az Index jelenleg nem elérhető, és továbbra is a nyilvános profilodra visznek. A nyilvános profilod, az értékelések és a pontszámok a RateThatJobon csomagtól függetlenül mindig láthatók.
 - A RateThatJob Careers Hub (az állásaid a weboldaladon) ingyenes, nem kell hozzá Pro. Az álláshirdetések díja hirdetésenként fizetendő.
+
+## 5a. Fizetés
+
+- A bankkártyás fizetéseket a Stripe, a fizetési szolgáltatónk kezeli. A teljes kártyaadatokat mi nem látjuk és nem tároljuk. A fizetésre a Stripe saját feltételei és adatvédelmi szabályai is vonatkoznak.
+- Álláshirdetés: a csomag díját egyszer, a közzétételkor kell kifizetni, a hirdetés a kifizetés után jelenik meg. Élő hirdetés nagyobb csomagra váltásakor a különbözetet kell fizetni. A megjelent hirdetés díját nem térítjük vissza; ha a hirdetés nem jelenik meg, kérésre visszautaljuk.
+- Minden fizetésről számlát kapsz. Az árakat fizetés előtt mutatjuk.
 
 ## 6. Állások és jelentkezés
 

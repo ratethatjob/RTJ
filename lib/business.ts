@@ -18,6 +18,8 @@ export type BusinessLocation = LocationSummary & {
   trialUsed: boolean;
   /** Activation requested and waiting for payment. */
   pendingOrder: "month" | "year" | null;
+  /** The location's Stripe subscription, if any. */
+  subscription: { status: string; periodEnd: string | null; cancelAtPeriodEnd: boolean; interval: string | null } | null;
 };
 
 const DAY = 24 * 3600 * 1000;
@@ -33,7 +35,7 @@ const loadBusiness = cache(async (locale: string, path: string) => {
 
   const { data: members } = await supabase
     .from("org_members")
-    .select("id, org_id, role, location_ids, orgs(name)")
+    .select("id, org_id, role, location_ids, orgs(name, stripe_customer_id)")
     .eq("user_id", user.id)
     .order("created_at");
   const member = members?.[0];
@@ -58,7 +60,9 @@ const loadBusiness = cache(async (locale: string, path: string) => {
     supabase.from("location_scores").select("location_id, overall_trend").in("location_id", ids),
     supabase
       .from("location_plans")
-      .select("location_id, trial_started_at, trial_ends_at, paid_until")
+      .select(
+        "location_id, trial_started_at, trial_ends_at, paid_until, billing_interval, stripe_status, stripe_period_end, cancel_at_period_end",
+      )
       .in("location_id", ids),
     supabase.from("plan_orders").select("location_id, billing_interval").eq("status", "pending").in("location_id", ids),
   ]);
@@ -68,7 +72,7 @@ const loadBusiness = cache(async (locale: string, path: string) => {
   const now = Date.now();
   const future = (iso: string | null | undefined) => Boolean(iso && Date.parse(iso) > now);
 
-  const org = member.orgs as unknown as { name: string } | null;
+  const org = member.orgs as unknown as { name: string; stripe_customer_id: string | null } | null;
   return {
     supabase,
     user,
@@ -76,13 +80,15 @@ const loadBusiness = cache(async (locale: string, path: string) => {
       id: member.org_id as string,
       name: org?.name ?? "",
       role: member.role as OrgRole,
+      /** Has paid by card before: invoices and card in the Stripe Customer Portal. */
+      billingAccount: Boolean(org?.stripe_customer_id),
       locations: locations.map<BusinessLocation>((l) => ({
         ...l,
         trend: trend.get(l.id) == null ? null : Number(trend.get(l.id)),
         ...(() => {
           const p = plan.get(l.id);
-          const paid = future(p?.paid_until);
-          const trial = future(p?.trial_ends_at);
+          const paid = future(p?.paid_until) || p?.stripe_status === "active";
+          const trial = future(p?.trial_ends_at) || p?.stripe_status === "trialing";
           return {
             plan: (paid ? "pro" : trial ? "trial" : "free") as PlanState,
             pro: paid || trial,
@@ -90,6 +96,14 @@ const loadBusiness = cache(async (locale: string, path: string) => {
             paidUntil: p?.paid_until ?? null,
             trialUsed: Boolean(p?.trial_started_at),
             pendingOrder: pending.get(l.id) ?? null,
+            subscription: p?.stripe_status
+              ? {
+                  status: p.stripe_status,
+                  periodEnd: p.stripe_period_end ?? null,
+                  cancelAtPeriodEnd: Boolean(p.cancel_at_period_end),
+                  interval: p.billing_interval ?? null,
+                }
+              : null,
           };
         })(),
       })),

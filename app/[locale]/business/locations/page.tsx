@@ -1,16 +1,19 @@
 import { Link } from "@/i18n/navigation";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { ActivatePro } from "@/components/business/activate-pro";
+import { ManageBilling, SubscribePro } from "@/components/business/subscribe-pro";
 import { PlanBadge } from "@/components/business/plan-badge";
 import { TrialBanner } from "@/components/business/trial-banner";
 import { daysLeft, getBusiness } from "@/lib/business";
+import { billingCurrency, proPrice } from "@/lib/stripe";
 
 export const instant = false;
 
 const ROLES = ["owner", "hr", "location_manager"] as const;
 
-export default async function LocationsPage({ params }: PageProps<"/[locale]/business/locations">) {
+export default async function LocationsPage({ params, searchParams }: PageProps<"/[locale]/business/locations">) {
   const { locale } = await params;
+  const { checkout } = await searchParams;
   setRequestLocale(locale);
   const { supabase, org } = await getBusiness(locale, "/business/locations");
   if (!org) return null;
@@ -19,6 +22,13 @@ export default async function LocationsPage({ params }: PageProps<"/[locale]/bus
   const format = await getFormatter();
   const date = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "medium" });
   const billing = org.role === "owner" || org.role === "hr";
+  const cards = Boolean(process.env.STRIPE_SECRET_KEY);
+  const money = (country: string, interval: "month" | "year") => {
+    const currency = billingCurrency(country);
+    return format.number(proPrice(currency, interval), { style: "currency", currency: currency.toUpperCase(), maximumFractionDigits: 0 });
+  };
+  const subscribed = (l: (typeof org.locations)[number]) =>
+    Boolean(l.subscription && ["active", "trialing", "past_due"].includes(l.subscription.status));
 
   const { data: members } = await supabase.from("org_members").select("role").eq("org_id", org.id);
   const count = (role: string) => (members ?? []).filter((m) => m.role === role).length;
@@ -56,7 +66,22 @@ export default async function LocationsPage({ params }: PageProps<"/[locale]/bus
                   <PlanBadge plan={l.plan} label={t(`plans.${l.plan}`)} />
                 </td>
                 <td className="px-6 py-4 text-sm text-slate">
-                  {l.plan === "pro" && l.paidUntil
+                  {subscribed(l) && l.subscription ? (
+                    <span className={l.subscription.status === "past_due" ? "font-black text-ink" : ""}>
+                      {l.subscription.status === "past_due"
+                        ? tp("paymentFailed")
+                        : l.subscription.cancelAtPeriodEnd && l.subscription.periodEnd
+                          ? tp("cancelsOn", { date: date(l.subscription.periodEnd) })
+                          : l.subscription.status === "trialing" && l.subscription.periodEnd
+                            ? tp("firstPaymentOn", { date: date(l.subscription.periodEnd) })
+                            : l.subscription.periodEnd
+                              ? tp("renewsOn", {
+                                  interval: tp(`intervals.${l.subscription.interval === "year" ? "year" : "month"}`),
+                                  date: date(l.subscription.periodEnd),
+                                })
+                              : tp("subscribed")}
+                    </span>
+                  ) : l.plan === "pro" && l.paidUntil
                     ? tp("paidUntil", { date: date(l.paidUntil) })
                     : l.plan === "trial" && l.trialEndsAt
                       ? tp("trialDays", { days: daysLeft(l.trialEndsAt), date: date(l.trialEndsAt) })
@@ -65,7 +90,18 @@ export default async function LocationsPage({ params }: PageProps<"/[locale]/bus
                         : tp("noPro")}
                 </td>
                 <td className="px-6 py-4 text-right">
-                  {billing && l.plan !== "pro" && <ActivatePro locationId={l.id} pending={l.pendingOrder} />}
+                  {billing &&
+                    (subscribed(l) ? (
+                      <ManageBilling label={tp("manage")} />
+                    ) : cards ? (
+                      <SubscribePro
+                        locationId={l.id}
+                        prices={{ month: money(l.country, "month"), year: money(l.country, "year") }}
+                        invoicePending={l.pendingOrder}
+                      />
+                    ) : (
+                      l.plan !== "pro" && <ActivatePro locationId={l.id} pending={l.pendingOrder} />
+                    ))}
                 </td>
               </tr>
             ))}
@@ -99,8 +135,14 @@ export default async function LocationsPage({ params }: PageProps<"/[locale]/bus
           <p className="mt-4 font-black text-signal">{tp("trialOffer")}</p>
           <p className="mt-2 text-mist">{t.rich("proIncludes", { b: bold })}</p>
           <p className="mt-2 text-mist">{t.rich("chains", { b: bold })}</p>
-          <div className="mt-4 border-t border-white/15 pt-4">
-            <p className="text-sm text-mist">{tp("billingNote")}</p>
+          <div className="mt-4 flex flex-col gap-3 border-t border-white/15 pt-4">
+            {checkout === "success" && <p className="font-black text-signal">{tp("checkoutSuccess")}</p>}
+            <p className="text-sm text-mist">{tp(cards ? "billingNoteCards" : "billingNote")}</p>
+            {billing && cards && org.billingAccount && (
+              <span>
+                <ManageBilling label={tp("invoices")} dark />
+              </span>
+            )}
           </div>
         </section>
       </div>

@@ -156,10 +156,18 @@ export async function unverifyEntity(linkId: string): Promise<Result> {
   return { ok: true };
 }
 
+/** Paid by transfer: the job goes live (or moves up a package), same as a card payment. */
 export async function decideOrder(id: string, paid: boolean): Promise<Result> {
   const { supabase } = await getUser();
+  const { data: order } = await supabase.rpc("admin_job_order_list");
+  const jobId = ((order ?? []) as { id: string; job_id: string }[]).find((o) => o.id === id)?.job_id;
   const { error } = await supabase.rpc("admin_decide_order", { p_order_id: id, p_paid: paid });
-  return error ? { error: true } : { ok: true };
+  if (error) return { error: true };
+  if (paid) {
+    revalidateTag("jobs", "max");
+    if (jobId) revalidateTag(`job:${jobId}`, "max");
+  }
+  return { ok: true };
 }
 
 export async function decidePlanOrder(id: string, paid: boolean): Promise<Result> {

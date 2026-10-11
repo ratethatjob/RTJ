@@ -39,7 +39,7 @@ export default async function NotificationsPage({ params }: PageProps<"/[locale]
   if (rows.some((r) => !r.read_at)) await supabase.rpc("mark_notifications_read");
 
   const href = (r: Row) =>
-    r.kind === "trial_ending" || r.kind === "trial_ended"
+    r.kind === "trial_ending" || r.kind === "trial_ended" || r.kind === "payment_failed"
       ? "/business/locations#plan"
       : r.kind === "application_message"
       ? r.data.sender === "employer"

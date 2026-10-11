@@ -19,4 +19,8 @@
 
 ## Fejlesztés
 - [x] E-mailes meghívók (Resend): beillesztés / CSV, EN/HU sablon, egy emlékeztető 5 nap után (napi cron), titkosított címek, leiratkozás
-- [ ] Stripe: Pro előfizetés (helyszínenként, havi/éves; most 30 nap próba, utána `plan_orders` + kézi számla, admin „Előfizetések” fül) és álláscsomagok fizetése (most `job_orders` + kézi számla) – kulcsok kellenek
+- [x] Stripe: Pro előfizetés telephelyenként (Checkout, havi/éves, HUF/EUR, a próba végén első terhelés), Customer Portal, álláscsomagok egyszeri fizetése, webhook. Kulcsok a Vercelen (production)
+- [ ] Stripe webhook: a https://ratethatjob.com/api/stripe/webhook végponton ezek az események legyenek bejelölve: checkout.session.completed, checkout.session.async_payment_succeeded, invoice.paid, invoice.payment_failed, customer.subscription.created, customer.subscription.updated, customer.subscription.deleted
+- [ ] `20261012040000_payment_failed_notice.sql` lefuttatása (sikertelen fizetés értesítés az alkalmazásban; addig csak e-mail megy)
+- [ ] ÁSZF 5a. pont (Fizetés) és a Pro megújítás/lemondás/visszatérítés szabályai átnézése (`content/legal/terms.*.md`)
+- [ ] Stripe Dashboardon: cégadatok a számlán (név, cím, adószám), számlák e-mailben küldése (Settings → Customer emails), sikertelen fizetésnél újrapróbálás (Settings → Billing → Retries)

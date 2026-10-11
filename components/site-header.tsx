@@ -11,7 +11,7 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
   const searchPath = getPathname({ href: "/search", locale: await getLocale() });
 
   return (
-    <header className="mx-auto flex w-full max-w-6xl items-center gap-4 px-4 py-4 sm:px-6 lg:py-6">
+    <header className="mx-auto flex w-full max-w-6xl items-center gap-2 px-4 py-4 sm:gap-4 sm:px-6 lg:py-6">
       <Link href="/" className="shrink-0">
         <Logo compact={withSearch} />
       </Link>
@@ -32,7 +32,7 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
         </form>
       )}
 
-      <nav className="ml-auto flex items-center gap-2 font-black sm:gap-5">
+      <nav className="ml-auto flex shrink-0 items-center gap-1 font-black sm:gap-5">
         {!withSearch && (
           <>
             <Link href="/search" className="hidden lg:inline">

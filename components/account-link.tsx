@@ -44,9 +44,20 @@ export function AccountLink({ signInLabel }: { signInLabel: string }) {
           )}
         </Link>
       )}
-      <Link href={signedIn ? "/app/account" : "/app/sign-in"} className="whitespace-nowrap px-1">
-        {signedIn ? t("account") : signInLabel}
-      </Link>
+      {signedIn ? (
+        <Link href="/app/account" aria-label={t("account")} className="grid size-10 place-items-center sm:w-auto sm:px-1">
+          {/* A person icon on phones, so the header fits from 360 px. */}
+          <svg viewBox="0 0 24 24" className="size-6 sm:hidden" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" strokeLinecap="round" />
+          </svg>
+          <span className="hidden whitespace-nowrap sm:inline">{t("account")}</span>
+        </Link>
+      ) : (
+        <Link href="/app/sign-in" className="whitespace-nowrap px-1">
+          {signInLabel}
+        </Link>
+      )}
     </span>
   );
 }

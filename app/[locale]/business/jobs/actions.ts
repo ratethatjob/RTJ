@@ -8,6 +8,7 @@ import { summarizeApplication } from "@/lib/candidate-ai";
 import { sendEmail } from "@/lib/email";
 import { SITE_URL } from "@/lib/seo";
 import { JOB_TIERS, type JobTier } from "@/lib/site-config";
+import { type JobPayment, payForJob } from "@/app/[locale]/business/billing/actions";
 import type { ApplyMode, JobQuestion } from "@/lib/data/types";
 import { parseQuestions } from "@/lib/job-questions";
 import { isLanguageCode, type JobLanguage, parseLanguages } from "@/lib/languages";
@@ -33,7 +34,7 @@ export type JobInput = {
   closesAt: string;
 };
 
-type Result = { ok?: true; id?: string; error?: "invalid" | "generic" };
+type Result = { ok?: true; id?: string; error?: "invalid" | "generic"; payment?: JobPayment };
 
 const WORK = ["permanent", "temporary"];
 const SCHEDULE = ["full_time", "part_time", "shifts", "flexible"];
@@ -109,6 +110,8 @@ function refresh(id: string, locationId: string) {
   revalidateTag(`jobs:${locationId}`, "max");
 }
 
+// A job goes live only once its package is paid (Stripe Checkout, or an invoice marked paid by
+// an admin): saving keeps it a draft, and publishing returns the payment to make.
 export async function createJob(orgId: string, input: JobInput, publish: boolean): Promise<Result> {
   const row = parse(input);
   if (!row) return { error: "invalid" };
@@ -116,32 +119,32 @@ export async function createJob(orgId: string, input: JobInput, publish: boolean
   if (!user) return { error: "generic" };
   const { data, error } = await supabase
     .from("jobs")
-    .insert({
-      ...row,
-      location_id: input.locationId,
-      org_id: orgId,
-      created_by: user.id,
-      status: publish ? "open" : "draft",
-    })
+    .insert({ ...row, location_id: input.locationId, org_id: orgId, created_by: user.id, status: "draft" })
     .select("id")
     .single();
   if (error) return { error: "generic" };
   refresh(data.id, input.locationId);
-  return { ok: true, id: data.id };
+  return { ok: true, id: data.id, ...(publish && { payment: await payForJob(data.id, input.tier) }) };
 }
 
 export async function updateJob(id: string, input: JobInput, publish: boolean): Promise<Result> {
   const row = parse(input);
   if (!row) return { error: "invalid" };
   const { supabase } = await getUser();
+  const { data: current } = await supabase.from("jobs").select("tier, published_at").eq("id", id).maybeSingle();
+  if (!current) return { error: "generic" };
+  // A live job keeps its package until the upgrade is paid.
+  const live = Boolean(current.published_at);
+  const upgrade = live && JOB_TIERS.indexOf(input.tier) > JOB_TIERS.indexOf(current.tier as JobTier);
   const { data, error } = await supabase
     .from("jobs")
-    .update({ ...row, ...(publish && { status: "open" }) })
+    .update({ ...row, ...(live && { tier: current.tier }) })
     .eq("id", id)
     .select("id, location_id");
   if (error || !data.length) return { error: "generic" };
   refresh(id, data[0].location_id);
-  return { ok: true, id };
+  const pay = upgrade || (!live && publish);
+  return { ok: true, id, ...(pay && { payment: await payForJob(id, input.tier) }) };
 }
 
 export async function setJobStatus(id: string, status: "open" | "closed"): Promise<Result> {

@@ -40,7 +40,7 @@ export default async function CareersHubPage({ params }: Props) {
         <section className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
           <div className="min-w-0">
             <p className="text-sm font-black uppercase tracking-tagline text-slate">{t("eyebrow")}</p>
-            <h1 className="mt-3 text-5xl font-black leading-[0.95] tracking-brand lg:text-7xl">{t("title")}</h1>
+            <h1 className="mt-3 text-[2.5rem] font-black leading-[0.95] tracking-brand break-words sm:text-5xl lg:text-7xl">{t("title")}</h1>
             <p className="mt-6 text-xl text-slate lg:text-2xl">{t("intro")}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/business/index?tab=jobs" className="rounded-2xl bg-ink px-7 py-4 text-lg font-black text-paper">

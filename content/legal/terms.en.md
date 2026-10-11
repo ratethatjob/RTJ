@@ -32,9 +32,20 @@ RateThatJob shows reviews of workplaces, facts (pay on time, overtime, hours, re
 - Employers must not try to identify reviewers or put pressure on their staff because of a review.
 - Pro is a paid plan per location. It includes the RateThatJob Index for your website (image badge, iframe card, Top Rated seal, the score in the JSON API), early warnings and statistics, and the other features listed on the [Pricing](/pricing) page.
 - Every location gets a 30-day free Pro trial, once, with no card needed. It starts automatically when the claim is approved.
-- After the trial, Pro is billed per location, monthly or yearly, at the prices on the [Pricing](/pricing) page. Until online payment is available, we invoice you and switch Pro on once the payment arrives.
+- After the trial, Pro is billed per location, monthly or yearly, at the prices on the [Pricing](/pricing) page. Hungarian locations are billed in forints, all others in euros.
+- If you subscribe by card during the trial, the first payment is taken when the trial ends, never earlier.
+- A Pro subscription renews automatically at the end of each period until you cancel it. You can cancel any time in your dashboard (Billing & invoices); Pro then stays on until the end of the period already paid and is not renewed.
+- If a renewal payment fails, we try again for a few days and let you know. If it stays unpaid, Pro ends with the last paid period.
+- Fees already paid are not refunded, including for the rest of a cancelled period, unless we charged you by mistake (for example twice) or this is required by law.
+- You can also ask for an invoice and pay by bank transfer; Pro is switched on once the payment arrives.
 - Without an active trial or paid Pro, embedded Index badges stay on your website but show that the Index is currently unavailable instead of the score, and still link to your public profile. Your public profile, reviews and scores on RateThatJob are always shown, whatever your plan.
 - RateThatJob Careers Hub (your jobs on your website) is free and doesn't need Pro. Job ads are priced per ad.
+
+## 5a. Payments
+
+- Card payments are processed by Stripe, our payment provider. We never see or store full card details. Stripe's own terms and privacy policy apply to the payment.
+- Job ads: the package fee is paid once, when you publish the ad, and the ad goes live once it's paid. Moving a live ad to a bigger package costs the difference. Job ad fees are not refunded once the ad has gone live; if it never goes live, we refund the payment on request.
+- You receive an invoice for every payment. Prices are shown before you pay.
 
 ## 6. Jobs and applications
 

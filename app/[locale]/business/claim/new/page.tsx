@@ -18,6 +18,7 @@ export default async function ClaimNewWorkplacePage({ params, searchParams }: Pa
         initialName={typeof q === "string" ? q.slice(0, 100) : ""}
         defaultCountry={locale === "hu" ? "HU" : "US"}
         rateBase={getPathname({ href: "/business/claim", locale })}
+        claim
       />
     </main>
   );

@@ -40,7 +40,16 @@ type PhotonFeature = {
 };
 
 /** Full address under each result: street and number, postcode and city, country. */
-export function suggestionsFromPhoton(data: { features?: PhotonFeature[] }): PlaceSuggestion[] {
+export function suggestionsFromPhoton(data: { features?: PhotonFeature[] }, locale = "en"): PlaceSuggestion[] {
+  // Country in the page's language ("Magyarország" on /hu), whatever language Photon answered in.
+  const regions = new Intl.DisplayNames([locale], { type: "region" });
+  const countryName = (code?: string, fallback?: string) => {
+    try {
+      return code ? (regions.of(code.toUpperCase()) ?? fallback) : fallback;
+    } catch {
+      return fallback;
+    }
+  };
   const seen = new Set<string>();
   const out: PlaceSuggestion[] = [];
   for (const f of data.features ?? []) {
@@ -52,7 +61,7 @@ export function suggestionsFromPhoton(data: { features?: PhotonFeature[] }): Pla
     seen.add(id);
     const street = streetLine(p.street, p.housenumber, p.countrycode);
     const city = [p.postcode, p.city ?? p.district].filter(Boolean).join(" ");
-    out.push({ placeId: id, main: p.name, secondary: [street, city, p.country].filter(Boolean).join(", "), country: p.countrycode?.toUpperCase() });
+    out.push({ placeId: id, main: p.name, secondary: [street, city, countryName(p.countrycode, p.country)].filter(Boolean).join(", "), country: p.countrycode?.toUpperCase() });
   }
   return out;
 }
@@ -74,7 +83,7 @@ export async function osmAutocomplete(input: string, locale: string, area: Searc
   for (const key of SKIP_KEYS) qs.append("osm_tag", `!${key}`);
   const res = await fetch(`${PHOTON}/api/?${qs}`, { headers: HEADERS });
   if (!res.ok) throw new Error(`photon ${res.status}`);
-  const found = suggestionsFromPhoton(await res.json());
+  const found = suggestionsFromPhoton(await res.json(), locale);
   if (!area?.strict || !area.country) return found;
   const inCountry = found.filter((f) => f.country === area.country);
   return (inCountry.length ? inCountry : found).slice(0, 8);

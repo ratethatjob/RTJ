@@ -35,7 +35,7 @@ Ha a munkáltató Basic vagy Pro álláscsomagot használ, ugyanez az MI-modell 
 - Google (Google Térkép-alapú munkahelykeresés, ha használod)
 - OpenStreetMap-szolgáltatások: a komoot GmbH Photon keresője (munkahelykeresés) és az OpenStreetMap Foundation Nominatim szolgáltatása (a kiválasztott hely adatai), amikor a térképes keresés OpenStreetMapen fut. Csak a keresett szöveget kapják meg a szerverünktől, a fiókod adatait nem.
 - Resend (e-mailek küldése, pl. a munkáltatók üzenetei)
-- Stripe (a munkáltatók fizetései; a teljes kártyaadatokat mi nem látjuk)
+- Stripe (fizetési szolgáltató a munkáltatóknak: kártyás fizetés, előfizetés, számlák; megkapja a cégnevet, a számlázási címet, az adószámot, az e-mail-címet és a fizetési adatokat; a teljes kártyaadatokat mi nem látjuk)
 
 Új szolgáltató bevonása előtt frissítjük ezt a listát.
 

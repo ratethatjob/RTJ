@@ -8,9 +8,10 @@ import { COUNTRIES } from "@/lib/countries";
 
 const CATEGORIES = ["restaurant", "retail", "warehouse", "factory", "office"] as const;
 
-type Props = { initialName: string; defaultCountry: string; rateBase: string };
+/** `claim`: employer flow – the new workplace goes straight to the claim form. */
+type Props = { initialName: string; defaultCountry: string; rateBase: string; claim?: boolean };
 
-export function NewWorkplaceForm({ initialName, defaultCountry, rateBase }: Props) {
+export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim = false }: Props) {
   const t = useTranslations("NewWorkplace");
   const tc = useTranslations("Categories");
   const tn = useTranslations("Countries");
@@ -93,7 +94,7 @@ export function NewWorkplaceForm({ initialName, defaultCountry, rateBase }: Prop
         disabled={pending}
         className="mt-auto rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-60"
       >
-        {t("submit")}
+        {t(claim ? "submitClaim" : "submit")}
       </button>
     </form>
   );

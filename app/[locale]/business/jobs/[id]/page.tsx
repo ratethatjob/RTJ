@@ -3,6 +3,7 @@ import { getFormatter, getTranslations, setRequestLocale } from "next-intl/serve
 import { messageApplicant } from "@/app/[locale]/business/jobs/actions";
 import { CallButton, InsightButton } from "@/components/business/application-tools";
 import { ApplicationDecision, JobStatusButton } from "@/components/business/job-actions";
+import { JobPayment } from "@/components/business/job-payment";
 import { MessageThread, type ThreadMessage } from "@/components/message-thread";
 import { Link } from "@/i18n/navigation";
 import { QuickBadge } from "@/components/jobs/quick-badge";
@@ -13,6 +14,7 @@ import { InsightCard } from "@/components/business/insight-card";
 import { jobQuestions } from "@/components/jobs/languages";
 import { type Answers, unmetMusts } from "@/lib/job-questions";
 import { type JobLanguage, languageName } from "@/lib/languages";
+import type { JobTier } from "@/lib/site-config";
 
 export const instant = false;
 
@@ -35,8 +37,9 @@ type Application = {
   created_at: string;
 };
 
-export default async function JobApplicationsPage({ params }: PageProps<"/[locale]/business/jobs/[id]">) {
+export default async function JobApplicationsPage({ params, searchParams }: PageProps<"/[locale]/business/jobs/[id]">) {
   const { locale, id } = await params;
+  const { checkout } = await searchParams;
   setRequestLocale(locale);
   const { supabase, org } = await getBusiness(locale, `/business/jobs/${id}`);
   if (!org) return null;
@@ -81,6 +84,17 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
   const tr = await getTranslations("Review");
   const format = await getFormatter();
   const status = job.status as "draft" | "open" | "closed";
+  // The order waiting for payment (owners and HR can read orders; a draft always needs one).
+  const { data: order } = await supabase
+    .from("job_orders")
+    .select("tier, previous_tier")
+    .eq("job_id", job.id)
+    .eq("status", "pending")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const returned = checkout === "success" || checkout === "cancelled" ? checkout : null;
+  const awaiting = order ?? (status === "draft" && returned === "success" ? { tier: job.tier, previous_tier: null } : null);
   const ai = job.tier === "basic" || job.tier === "pro";
   const lang = locale === "hu" ? "hu" : "en";
 
@@ -109,6 +123,14 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
         <p className="text-slate">
           {location.name} · {location.address}
         </p>
+        {awaiting && (
+          <JobPayment
+            jobId={job.id}
+            tier={awaiting.tier as JobTier}
+            upgrade={Boolean(awaiting.previous_tier)}
+            returned={returned}
+          />
+        )}
         <div className="flex flex-wrap items-center gap-3">
           <Link href={`/business/jobs/${job.id}/edit`} className="rounded-2xl bg-ink px-5 py-2.5 font-black text-paper">
             {t("edit")}

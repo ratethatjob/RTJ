@@ -326,6 +326,7 @@
     "country": "Country",
     "category": "Type",
     "submit": "Add and rate it",
+    "submitClaim": "Add and claim",
     "cantFind": "Can't find it?",
     "addIt": "Add a workplace",
     "errors": {
@@ -734,7 +735,28 @@
     "infoQuestion": "What do you need? (emailed to the claimant, the claim stays open)",
     "sendInfoRequest": "Send request",
     "requestInfo": "Ask for more info",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "stripe": {
+      "paidCard": "Paid by card (Stripe)",
+      "paidManual": "Marked paid (transfer)",
+      "checkoutStarted": "Card payment started, not completed",
+      "notStarted": "Waiting for payment",
+      "payment": "Payment in Stripe",
+      "customer": "Customer in Stripe",
+      "subscription": "Subscription in Stripe",
+      "paidRecently": "Paid in the last 30 days",
+      "subscriptions": "Stripe subscriptions",
+      "status": {
+        "active": "Active",
+        "trialing": "Trial (first payment at trial end)",
+        "past_due": "Payment failed",
+        "canceled": "Cancelled",
+        "unpaid": "Unpaid",
+        "incomplete": "Incomplete",
+        "incomplete_expired": "Expired",
+        "paused": "Paused"
+      }
+    }
   },
   "Search": {
     "title": "Find a workplace",
@@ -1145,8 +1167,8 @@
       "title": "Package",
       "perAd": "per job ad",
       "everythingIn": "Everything in {name}, plus:",
-      "billing": "You're invoiced when the ad goes live. You can upgrade later.",
-      "upgradeOnly": "This ad is live: you can upgrade, and only the difference is invoiced.",
+      "billing": "You pay when you publish. The ad goes live once it's paid. You can upgrade later.",
+      "upgradeOnly": "This ad is live: you can upgrade and only pay the difference.",
       "standard": {
         "name": "Standard",
         "body": "A low posting fee for the ad itself."
@@ -1212,6 +1234,15 @@
         "fluent": "Fluent",
         "native": "Native"
       }
+    },
+    "publishAndPay": "Publish and pay",
+    "saveAndUpgrade": "Save and pay for the upgrade",
+    "payment": {
+      "waiting": "Waiting for payment – the ad goes live once it's paid.",
+      "upgradeWaiting": "Upgrade to {tier} waiting for payment – the package changes once it's paid.",
+      "processing": "Thanks! We're confirming your payment – this takes a moment.",
+      "invoice": "We'll send you an invoice. The ad goes live once it's paid.",
+      "pay": "Pay now"
     }
   },
   "Report": {
@@ -1284,7 +1315,8 @@
       "new_application": "New application for {job}",
       "application_message": "{sender, select, employer {New message from {location} about {job}} other {{name} replied about {job}}}",
       "trial_ending": "{location}: {days, plural, one {# day} other {# days}} left of your Pro trial",
-      "trial_ended": "{location}: your Pro trial has ended – your embedded Index now says \"currently unavailable\""
+      "trial_ended": "{location}: your Pro trial has ended – your embedded Index now says \"currently unavailable\"",
+      "payment_failed": "{location}: payment for Pro failed – please update your card"
     }
   },
   "Places": {
@@ -1449,7 +1481,9 @@
     "trial_endingSubject": "{days, plural, one {# day} other {# days}} left of your Pro trial – {location}",
     "trial_endingBody": "Hi,\n\nYour free Pro trial for {location} ends in {days, plural, one {# day} other {# days}}. After that, your RateThatJob Index on your website will say \"currently unavailable\" instead of your score, and early warnings and statistics will turn off.\n\nActivate Pro here: {link}\n\nRateThatJob – Know before you go",
     "trial_endedSubject": "Your Pro trial has ended – {location}",
-    "trial_endedBody": "Hi,\n\nYour free Pro trial for {location} has ended. Your RateThatJob Index on your website now says \"currently unavailable\" instead of your score. Your public profile and reviews stay visible as always.\n\nActivate Pro to show your score again: {link}\n\nRateThatJob – Know before you go"
+    "trial_endedBody": "Hi,\n\nYour free Pro trial for {location} has ended. Your RateThatJob Index on your website now says \"currently unavailable\" instead of your score. Your public profile and reviews stay visible as always.\n\nActivate Pro to show your score again: {link}\n\nRateThatJob – Know before you go",
+    "payment_failedSubject": "Payment failed for your Pro plan – {location}",
+    "payment_failedBody": "Hi,\n\nWe couldn't take the payment for RateThatJob Pro at {location}. Stripe will try again over the next days.\n\nPlease update your card here: {link}\n\nIf it isn't paid, Pro ends with the last paid period and your embedded RateThatJob Index will say \"currently unavailable\".\n\nRateThatJob – Know before you go"
   },
   "JobsWidget": {
     "title": "Open jobs at {name}",
@@ -1641,7 +1675,19 @@
       "indexBody": "Activate Pro for this location to put your Index on your website. Careers Hub is free – see the Careers Hub tab.",
       "statsTitle": "Statistics are part of Pro",
       "statsBody": "Activate Pro for this location to see monthly volume, scores and category trends."
-    }
+    },
+    "subscribe_month": "Monthly · {price}",
+    "subscribe_year": "Yearly · {price}",
+    "payByInvoice": "Pay by invoice instead",
+    "manage": "Manage billing",
+    "invoices": "Billing & invoices",
+    "subscribed": "Subscribed",
+    "renewsOn": "Subscribed ({interval}) – renews on {date}",
+    "firstPaymentOn": "Subscribed – first payment on {date}, when the trial ends",
+    "cancelsOn": "Cancelled – Pro until {date}",
+    "paymentFailed": "Payment failed – please update your card",
+    "checkoutSuccess": "Thanks! Your subscription is being set up – it shows here in a moment.",
+    "billingNoteCards": "Pay by card (Stripe): monthly or yearly, renews automatically, cancel any time for the end of the period. You can also ask for an invoice."
   },
   "Demo": {
     "label": "Demo data",
@@ -1667,5 +1713,10 @@
     "approvedBody": "Hi,\n\nGood news: your claim for {location} is approved. You can now reply to reviews, invite your team and post jobs. Your free 30-day Pro trial has started.\n\nOpen your dashboard: {link}\n\nRateThatJob – Know before you go",
     "rejectedSubject": "We couldn't approve your claim – {location}",
     "rejectedBody": "Hi,\n\nWe couldn't confirm that you represent {location}, so we couldn't approve your claim. You're welcome to send a new claim with a business email on your company's domain or a company registry extract.\n\n{link}\n\nRateThatJob – Know before you go"
+  },
+  "Billing": {
+    "proLine": "RateThatJob Pro – {location}",
+    "jobLine": "Job ad, {tier} package: {title}",
+    "jobUpgradeLine": "Job ad upgrade {from} → {to}: {title}"
   }
 }

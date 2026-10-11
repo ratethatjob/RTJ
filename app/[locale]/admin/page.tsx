@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { domainCheck } from "@/lib/claim-check";
 import { jobPricing, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
+import { dashboardUrl } from "@/lib/stripe";
 
 export const instant = false;
 
@@ -18,6 +19,7 @@ type Place = { name: string; address: string } | null;
 type OrderRow = {
   id: string;
   created_at: string;
+  status: "pending" | "paid";
   tier: "standard" | "basic" | "pro";
   previous_tier: "standard" | "basic" | "pro" | null;
   job_title: string;
@@ -25,6 +27,27 @@ type OrderRow = {
   address: string;
   country: string;
   org_name: string;
+  amount: number | null;
+  currency: string | null;
+  paid_via: "stripe" | "manual" | null;
+  decided_at: string | null;
+  stripe_session_id: string | null;
+  stripe_payment_intent: string | null;
+  stripe_customer_id: string | null;
+};
+type SubscriptionRow = {
+  location_id: string;
+  location: string;
+  address: string;
+  org_name: string;
+  stripe_status: string;
+  billing_interval: "month" | "year" | null;
+  billing_currency: string | null;
+  paid_until: string | null;
+  stripe_period_end: string | null;
+  cancel_at_period_end: boolean;
+  stripe_subscription_id: string;
+  stripe_customer_id: string | null;
 };
 type PlanOrderRow = {
   id: string;
@@ -75,7 +98,9 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     supabase.from("verifications").select("id", { count: "exact", head: true }).eq("status", "pending"),
     supabase.from("disputes").select("id", { count: "exact", head: true }).eq("status", "open"),
     supabase.from("reports").select("id", { count: "exact", head: true }).eq("status", "open"),
-    supabase.rpc("admin_job_orders").then((r) => ({ count: ((r.data ?? []) as OrderRow[]).length, data: r.data })),
+    supabase
+      .rpc("admin_job_order_list")
+      .then((r) => ({ count: ((r.data ?? []) as OrderRow[]).filter((o) => o.status === "pending").length, data: r.data })),
     supabase.rpc("admin_plan_orders").then((r) => ({ count: ((r.data ?? []) as PlanOrderRow[]).length, data: r.data })),
   ]);
 
@@ -83,6 +108,8 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
   const date = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "medium" });
 
   let items: { id: string; created_at: string; content: React.ReactNode; documentUrl?: string | null }[] = [];
+  // Below the queue: recent card payments (orders) or Stripe subscriptions (plans).
+  let extra: React.ReactNode = null;
 
   if (tab === "claims") {
     const { data } = await supabase
@@ -253,29 +280,96 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     });
   } else if (tab === "orders") {
     const tj = await getTranslations("BusinessJobs");
-    items = ((counts[5].data ?? []) as OrderRow[]).map((o) => {
+    const rows = (counts[5].data ?? []) as OrderRow[];
+    const orderLine = (o: OrderRow) => {
       const pricing = jobPricing(o.country);
-      const amount = pricing.prices[o.tier] - (o.previous_tier ? pricing.prices[o.previous_tier] : 0);
-      return {
-        id: o.id,
-        created_at: o.created_at,
-        content: (
-          <>
-            <p className="text-lg font-black">
-              {tj(`packages.${o.tier}.name`)}
-              {o.previous_tier && ` (${t("orderUpgrade", { from: tj(`packages.${o.previous_tier}.name`) })})`} ·{" "}
-              {format.number(amount, { style: "currency", currency: pricing.currency, maximumFractionDigits: 0 })}
-            </p>
-            <p>
-              {o.job_title} · {o.location}, {o.address}
-            </p>
-            <p className="text-slate">{o.org_name}</p>
-          </>
-        ),
-      };
-    });
+      // Stored amount (smallest unit) once a payment started, else the list price.
+      const amount =
+        o.amount != null && o.currency
+          ? format.number(o.amount / 100, { style: "currency", currency: o.currency.toUpperCase(), maximumFractionDigits: 0 })
+          : format.number(pricing.prices[o.tier] - (o.previous_tier ? pricing.prices[o.previous_tier] : 0), {
+              style: "currency",
+              currency: pricing.currency,
+              maximumFractionDigits: 0,
+            });
+      return (
+        <>
+          <p className="text-lg font-black">
+            {tj(`packages.${o.tier}.name`)}
+            {o.previous_tier && ` (${t("orderUpgrade", { from: tj(`packages.${o.previous_tier}.name`) })})`} · {amount}
+          </p>
+          <p>
+            {o.job_title} · {o.location}, {o.address}
+          </p>
+          <p className="text-slate">{o.org_name}</p>
+          <StripeLinks
+            status={
+              o.status === "paid"
+                ? t(o.paid_via === "stripe" ? "stripe.paidCard" : "stripe.paidManual")
+                : o.stripe_session_id
+                  ? t("stripe.checkoutStarted")
+                  : t("stripe.notStarted")
+            }
+            links={[
+              o.stripe_payment_intent && { label: t("stripe.payment"), href: dashboardUrl("payments", o.stripe_payment_intent) },
+              o.stripe_customer_id && { label: t("stripe.customer"), href: dashboardUrl("customers", o.stripe_customer_id) },
+            ]}
+          />
+        </>
+      );
+    };
+    items = rows
+      .filter((o) => o.status === "pending")
+      .map((o) => ({ id: o.id, created_at: o.created_at, content: orderLine(o) }));
+    const paid = rows.filter((o) => o.status === "paid");
+    extra = paid.length > 0 && (
+      <section className="mt-8">
+        <h2 className="mb-3 text-sm font-black uppercase tracking-tagline text-slate">{t("stripe.paidRecently")}</h2>
+        <ul className="flex flex-col gap-3">
+          {paid.map((o) => (
+            <li key={o.id} className="rounded-3xl bg-white p-5">
+              <p className="mb-2 text-sm text-slate">{date(o.decided_at ?? o.created_at)}</p>
+              {orderLine(o)}
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
   } else if (tab === "plans") {
     const tp = await getTranslations("Plan");
+    const { data: subs } = await supabase.rpc("admin_stripe_subscriptions");
+    const subscriptions = (subs ?? []) as SubscriptionRow[];
+    extra = subscriptions.length > 0 && (
+      <section className="mt-8">
+        <h2 className="mb-3 text-sm font-black uppercase tracking-tagline text-slate">{t("stripe.subscriptions")}</h2>
+        <ul className="flex flex-col gap-3">
+          {subscriptions.map((x) => (
+            <li key={x.stripe_subscription_id} className="rounded-3xl bg-white p-5">
+              <p className="text-lg font-black">
+                Pro{x.billing_interval && ` · ${tp(`intervals.${x.billing_interval}`)}`}
+                {x.billing_currency && ` · ${x.billing_currency.toUpperCase()}`}
+              </p>
+              <p>
+                {x.location}, {x.address}
+              </p>
+              <p className="text-slate">
+                {x.org_name}
+                {x.paid_until && ` · ${tp("paidUntil", { date: date(x.paid_until) })}`}
+              </p>
+              <StripeLinks
+                status={`${t(`stripe.status.${x.stripe_status}`)}${
+                  x.cancel_at_period_end && x.stripe_period_end ? ` · ${tp("cancelsOn", { date: date(x.stripe_period_end) })}` : ""
+                }`}
+                links={[
+                  { label: t("stripe.subscription"), href: dashboardUrl("subscriptions", x.stripe_subscription_id) },
+                  x.stripe_customer_id && { label: t("stripe.customer"), href: dashboardUrl("customers", x.stripe_customer_id) },
+                ]}
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
     items = ((counts[6].data ?? []) as PlanOrderRow[]).map((o) => {
       const price = PRICING[o.country === "HU" ? "hu" : "en"];
       const amount =
@@ -550,7 +644,23 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
           ))}
         </ul>
       )}
+      {extra}
     </main>
+  );
+}
+
+/** Payment state and links to the Stripe dashboard (admin). */
+function StripeLinks({ status, links }: { status: string; links: (false | null | "" | { label: string; href: string })[] }) {
+  const shown = links.filter((l): l is { label: string; href: string } => Boolean(l));
+  return (
+    <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+      <span className="rounded-lg border border-mist px-2 py-0.5 font-black">{status}</span>
+      {shown.map((l) => (
+        <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className="font-black underline underline-offset-4">
+          {l.label}
+        </a>
+      ))}
+    </p>
   );
 }
 
