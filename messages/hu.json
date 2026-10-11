@@ -388,10 +388,6 @@
     "change": "Módosítás",
     "submit": "Értékelés közzététele",
     "submitting": "Közzététel…",
-    "doneTitle": "Köszönjük!",
-    "doneBody": "Az értékelésedet ellenőrizzük. A választott időpontban jelenik meg; kis munkahelyeken a névtelenséged védelmében rövid, véletlenszerű késleltetéssel.",
-    "doneBack": "Vissza: {name}",
-    "uploadFailed": "Az értékelést elmentettük, de a dokumentum feltöltése nem sikerült. Később újra megpróbálhatod.",
     "errors": {
       "required": "Töltsd ki a kiemelt mezőket.",
       "dates": "Nézd meg a dátumokat: a vége nem lehet a kezdete előtt, és nem lehet jövőbeli.",
@@ -555,7 +551,6 @@
     "phone": "Telefonszám",
     "note": "Mit kell még tudnunk?",
     "submitClaim": "Igénylés elküldése",
-    "claimSent": "Köszönjük! Ellenőrizzük az igénylést, és e-mailben jelezzük, ha jóváhagytuk.",
     "claimExists": "Ehhez a munkahelyhez már van nyitott hozzáférés-igénylésed.",
     "claimError": "Add meg a cég nevét, a neved, egy telefonszámot és a weboldalt (vagy jelöld, hogy nincs), és csatold a dokumentumokat.",
     "overviewTitle": "Áttekintés",
@@ -680,7 +675,20 @@
     "formDocx": "Word (DOCX)",
     "idDocument": "Személyi igazolvány vagy útlevél",
     "idDocumentHint": "Az okmány számát és a fényképeden és a neveden kívül minden mást letakarhatsz.",
-    "domainError": "A belépett e-mail-címed ({email}) nem a céges weboldal domainjén van. Válassz másik módot, vagy lépj be a céges e-mail-címeddel."
+    "domainError": "A belépett e-mail-címed ({email}) nem a céges weboldal domainjén van. Válassz másik módot, vagy lépj be a céges e-mail-címeddel.",
+    "onboarding": {
+      "title": "Üdv a céges felületen!",
+      "body": "Három első lépés:",
+      "close": "Bezárás",
+      "steps": {
+        "profileTitle": "Töltsd ki a profilt",
+        "profileBody": "Bemutatkozás, juttatások és fotók a munkahely oldalán.",
+        "inviteTitle": "Hívd meg a csapatodat",
+        "inviteBody": "Kérd meg a munkatársaidat, hogy értékeljenek, linkkel vagy e-mailben.",
+        "billingTitle": "Nézd meg az előfizetést",
+        "billingBody": "A Pro próbaidőd és a csomagok."
+      }
+    }
   },
   "Account": {
     "title": "Fiókod",
@@ -1844,9 +1852,19 @@
     "infoSubject": "Még egy kis információ kell a hozzáférés-igénylésedhez – {location}",
     "infoBody": "Szia!\n\nKöszönjük, hogy hozzáférést igényeltél a(z) {location} munkahelyhez a RateThatJobon. A jóváhagyáshoz még egy kis információ kell:\n\n{message}\n\nItt válaszolhatsz vagy csatolhatsz dokumentumot: {link}\n\nRateThatJob – Know before you go",
     "approvedSubject": "Jóváhagytuk a hozzáférésedet – {location}",
-    "approvedBody": "Szia!\n\nJó hír: jóváhagytuk a hozzáférésedet a(z) {location} munkahelyhez. Mostantól válaszolhatsz az értékelésekre, meghívhatod a csapatodat és hirdethetsz állásokat. Ha ennél a telephelynél még nem volt, elindult a 30 napos ingyenes Pro próbaidőszakod.\n\nVezérlőpult: {link}\n\nRateThatJob – Know before you go",
+    "approvedBody": "Szia!\n\nJó hír: jóváhagytuk a hozzáférésedet a(z) {location} munkahelyhez. Mostantól válaszolhatsz az értékelésekre, meghívhatod a csapatodat és hirdethetsz állásokat. Ha ennél a telephelynél még nem volt, elindult a 30 napos ingyenes Pro próbaidőszakod.\n\nCéges felület: {link}",
     "rejectedSubject": "Nem tudtuk jóváhagyni a hozzáférés-igénylésedet – {location}",
-    "rejectedBody": "Szia!\n\nNem tudtuk megerősíteni, hogy te képviseled a(z) {location} munkahelyet, ezért nem hagytuk jóvá a hozzáférés-igénylést. Küldhetsz új igénylést céges e-mail-címmel (a céged domainjén), cégkivonattal vagy meghatalmazással – mindegyikhez személyazonosító okmánnyal.\n\n{link}\n\nRateThatJob – Know before you go"
+    "rejectedBody": "Szia!\n\nNem tudtuk megerősíteni, hogy te képviseled a(z) {location} munkahelyet, ezért nem hagytuk jóvá a hozzáférés-igénylést. Küldhetsz új igénylést céges e-mail-címmel (a céged domainjén), cégkivonattal vagy meghatalmazással – mindegyikhez személyazonosító okmánnyal.\n\n{link}\n\nRateThatJob – Know before you go",
+    "approvedTitle": "Jóváhagytuk a hozzáférésedet: {location}",
+    "approvedIntro": "Mostantól válaszolhatsz az értékelésekre, meghívhatod a csapatodat és hirdethetsz állásokat. Ha ennél a telephelynél még nem volt, elindult a 30 napos ingyenes Pro próbaidőszakod.",
+    "approvedButton": "Céges felület megnyitása",
+    "approvedLink": "Vagy nyisd meg ezt a linket:",
+    "stepsTitle": "Első lépések",
+    "steps": {
+      "profile": "Töltsd ki a munkahely profilját: bemutatkozás, juttatások, fotók",
+      "invite": "Hívd meg a csapatodat értékelni, linkkel vagy e-mailben",
+      "billing": "Nézd meg az előfizetés oldalt: Pro próbaidő és csomagok"
+    }
   },
   "Billing": {
     "proLine": "RateThatJob Pro – {location}",
@@ -1917,5 +1935,50 @@
       "pastDue": "{count, plural, one {Egy fizetés nem sikerült} other {# fizetés nem sikerült}} – frissítsd a kártyádat, hogy megmaradjon a Pro.",
       "cta": "Előfizetés"
     }
+  },
+  "ReviewSent": {
+    "title": "Köszönjük! Az értékelésed beérkezett",
+    "workplace": "Munkahely",
+    "nextTitle": "Mi történik most?",
+    "published": "Már megjelent a munkahely oldalán.",
+    "held": "Megjelenés előtt egy munkatársunk átnézi.",
+    "afterLeaving": "Akkor jelenik meg, amikor a Fiókodban jelzed, hogy már nem dolgozol ott.",
+    "soon": "15 percen belül megjelenik a munkahely oldalán.",
+    "later": "Várhatóan {date} körül jelenik meg a munkahely oldalán.",
+    "laterChosen": "Ahogy kérted, késleltetve jelenik meg.",
+    "laterAnonymity": "A késleltetés a névtelenségedet védi.",
+    "textCheck": "A szöveget automatikusan is átnézzük. Ha valami nem stimmel, megjelenés előtt egy munkatársunk is megnézi.",
+    "document": "A feltöltött dokumentumot egy munkatársunk nézi át. Ha rendben van, az értékelésed „Igazolt” jelölést kap.",
+    "uploadFailed": "Az értékelést elmentettük, de a dokumentum feltöltése nem sikerült.",
+    "statusInAccount": "Az állapotát bármikor megnézheted a <link>Fiókodban</link>.",
+    "viewWorkplace": "Megnézem a munkahely oldalát",
+    "rateAnother": "Értékelek egy másik munkahelyet",
+    "share": "Megosztom",
+    "shareText": "{name} – nézd meg, milyen ott dolgozni, a RateThatJobon."
+  },
+  "AccountNav": {
+    "label": "Fiókom",
+    "account": "Fiókom",
+    "applications": "Jelentkezéseim",
+    "notifications": "Értesítések",
+    "business": "Céges felület"
+  },
+  "BusinessAccess": {
+    "open": "Céges felület",
+    "pending": "Igénylés folyamatban",
+    "managing": "Te kezeled: {org}",
+    "openDashboard": "Céges felület megnyitása"
+  },
+  "ClaimSent": {
+    "title": "Megkaptuk a hozzáférés-igénylésedet",
+    "workplace": "Munkahely",
+    "nextTitle": "Mi történik most?",
+    "check": "Egy munkatársunk kézzel átnézi az igénylésedet és a feltöltött dokumentumokat.",
+    "info": "Ha további információ kell, e-mailben írunk, és a céges felületen válaszolhatsz.",
+    "decision": "A döntésről e-mailt küldünk ide: {email}.",
+    "status": "Addig az igénylés állapotát a céges felületen látod. A fejlécben (mobilon a menüben) az „Igénylés folyamatban” gomb is odavisz.",
+    "approved": "Jóváhagyás után ezzel a fiókkal azonnal használhatod a céges felületet.",
+    "statusButton": "Igénylés állapota",
+    "home": "Vissza a főoldalra"
   }
 }

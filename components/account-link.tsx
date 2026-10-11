@@ -1,30 +1,16 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { useBusinessStatus } from "@/lib/business-status";
 
 /** "Sign in" for visitors; "My account" and the notification bell once signed in.
  * Checked in the browser so public pages stay static and cacheable. */
 export function AccountLink({ signInLabel }: { signInLabel: string }) {
   const t = useTranslations("NavAccount");
-  const [signedIn, setSignedIn] = useState(false);
-  const [unread, setUnread] = useState(0);
-  useEffect(() => {
-    try {
-      const supabase = createClient();
-      supabase.auth.getSession().then(({ data }) => {
-        setSignedIn(Boolean(data.session));
-        if (!data.session) return;
-        supabase
-          .from("notifications")
-          .select("id", { count: "exact", head: true })
-          .is("read_at", null)
-          .then(({ count }) => setUnread(count ?? 0));
-      });
-    } catch {}
-  }, []);
+  const status = useBusinessStatus();
+  const signedIn = Boolean(status?.signedIn);
+  const unread = status?.unread ?? 0;
   return (
     <span className="flex items-center gap-1">
       {signedIn && (

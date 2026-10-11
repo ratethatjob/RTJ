@@ -1,8 +1,11 @@
+import { AccountShell } from "@/components/app/account-shell";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { OrgCard } from "@/components/business-access";
 import { AccountActions, JobAlertsToggle, JobEndedForm } from "@/components/app/account-actions";
 import { getPathname, Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { initials } from "@/lib/format";
+import { getMembership } from "@/lib/membership";
 
 export const instant = false;
 
@@ -41,14 +44,14 @@ export default async function AccountPage({ params }: PageProps<"/[locale]/app/a
     location_id: string;
     locations: { name: string; address: string; slug: string; companies: { slug: string } | null } | null;
   }[];
-  const t = await getTranslations("Account");
+  const [t, tb, membership] = await Promise.all([getTranslations("Account"), getTranslations("BusinessAccess"), getMembership()]);
   const format = await getFormatter();
   const name = profile?.display_mode === "username" ? profile.username : profile?.generated_name;
   const self = getPathname({ href: "/app/account", locale });
   const reviews = (rows ?? []) as unknown as Row[];
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-8 px-4 pb-12 pt-8">
+    <AccountShell active="account" back={getPathname({ href: "/", locale })}>
       <header className="flex items-center justify-between gap-4">
         <h1 className="text-4xl font-black tracking-brand">{t("title")}</h1>
         {admin && (
@@ -57,6 +60,14 @@ export default async function AccountPage({ params }: PageProps<"/[locale]/app/a
           </Link>
         )}
       </header>
+
+      {membership && (
+        <OrgCard
+          name={membership.orgName}
+          label={tb("managing", { org: membership.orgName })}
+          cta={tb("openDashboard")}
+        />
+      )}
 
       <section className="flex items-center gap-3 rounded-3xl bg-white p-5">
         <span className="grid size-12 shrink-0 place-items-center rounded-full bg-[#E8E6E1] font-black">
@@ -73,7 +84,7 @@ export default async function AccountPage({ params }: PageProps<"/[locale]/app/a
         </Link>
       </section>
 
-      <Link href="/app/applications" className="flex items-center justify-between rounded-3xl bg-white p-5 font-black">
+      <Link href="/app/applications" className="flex items-center justify-between rounded-3xl bg-white p-5 font-black lg:hidden">
         {t("applications")}
         <span aria-hidden>→</span>
       </Link>
@@ -148,6 +159,6 @@ export default async function AccountPage({ params }: PageProps<"/[locale]/app/a
       <JobAlertsToggle initial={Boolean(profile?.job_alerts)} />
 
       <AccountActions exportHref={`${self}/export`} home={getPathname({ href: "/", locale })} />
-    </main>
+    </AccountShell>
   );
 }

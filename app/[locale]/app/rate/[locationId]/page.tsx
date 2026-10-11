@@ -44,6 +44,7 @@ export default async function RatePage({ params, searchParams }: PageProps<"/[lo
       locationHref={getPathname({ href: locationPath(location), locale })}
       returnPath={selfPath}
       welcomePath={getPathname({ href: "/app/welcome", locale })}
+      sentPath={getPathname({ href: "/app/rate/sent", locale })}
     />
   );
 }

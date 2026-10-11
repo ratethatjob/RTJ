@@ -1,6 +1,7 @@
+import { AccountShell } from "@/components/app/account-shell";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { WithdrawButton } from "@/components/app/withdraw-button";
-import { Link } from "@/i18n/navigation";
+import { getPathname, Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 
 export const instant = false;
@@ -41,7 +42,7 @@ export default async function ApplicationsPage({ params }: PageProps<"/[locale]/
   const now = Date.now();
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 pb-12 pt-8">
+    <AccountShell active="applications" back={getPathname({ href: "/app/account", locale })}>
       <h1 className="text-4xl font-black tracking-brand">{t("title")}</h1>
       {rows.length === 0 ? (
         <p className="rounded-3xl bg-white p-5 text-slate">
@@ -118,6 +119,6 @@ export default async function ApplicationsPage({ params }: PageProps<"/[locale]/
           })}
         </ul>
       )}
-    </main>
+    </AccountShell>
   );
 }

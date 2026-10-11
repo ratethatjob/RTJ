@@ -1,5 +1,6 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { LocationSelect } from "@/components/business/location-select";
+import { BusinessOnboarding } from "@/components/business/onboarding";
 import { PendingClaims } from "@/components/business/pending-claims";
 import { PlanBadge } from "@/components/business/plan-badge";
 import { TrialBanner } from "@/components/business/trial-banner";
@@ -18,7 +19,7 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
 
   if (!org) {
     return (
-      <main className="mx-auto w-full max-w-xl px-4 py-12">
+      <main className="w-full py-12">
         <h1 className="text-4xl font-black tracking-brand">{t("noOrgTitle")}</h1>
         <p className="mt-3 text-lg text-slate">{t("noOrgBody")}</p>
         <Link href="/business/claim" className="mt-6 inline-block rounded-2xl bg-ink px-7 py-4 text-lg font-black text-paper">
@@ -76,13 +77,15 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
             {selected ? selected.address : t("allLocations")} · {t("last12")}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto">
           <LocationSelect locations={org.locations} selected={selected?.id ?? null} />
           <Link href="/business/invite" className="rounded-2xl bg-ink px-5 py-3 font-black text-paper">
             {t("inviteTeam")}
           </Link>
         </div>
       </header>
+
+      <BusinessOnboarding orgId={org.id} />
 
       <PendingClaims supabase={supabase} userId={user.id} />
 

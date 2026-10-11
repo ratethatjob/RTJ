@@ -15,7 +15,7 @@ export default async function ClaimPage({ params }: PageProps<"/[locale]/busines
   const t = await getTranslations("Business");
 
   return (
-    <main className="mx-auto w-full max-w-xl px-4 py-10">
+    <main className="w-full max-w-xl pb-10 pt-4">
       <h1 className="text-4xl font-black tracking-brand">{t("claimFormTitle", { name: location.name })}</h1>
       <p className="mt-1 font-black text-slate">
         {location.address}, {location.city}

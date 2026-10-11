@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useRef, useState, useTransition } from "react";
 import { submitClaim } from "@/app/[locale]/business/actions";
+import { getPathname } from "@/i18n/navigation";
 import { CLAIM_DOC_TYPES, claimDocOk, uploadClaimDocument } from "@/lib/claim-upload";
 
 const METHODS = ["email_domain", "document", "authorization"] as const;
@@ -32,10 +33,6 @@ export function ClaimForm({ locationId, userId, accountEmail }: Props) {
   const set = (key: keyof typeof form) => (e: { target: { value: string } }) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  if (state === "sent") {
-    return <p className="mt-8 rounded-3xl bg-signal p-6 text-lg font-black">{t("claimSent")}</p>;
-  }
-
   const input = "w-full rounded-2xl border border-mist/60 bg-white px-5 py-4 text-lg outline-none focus:border-ink";
   const field = (key: keyof typeof form, label: string, props: React.InputHTMLAttributes<HTMLInputElement> = {}) => (
     <label className="flex flex-col gap-2">
@@ -64,7 +61,10 @@ export function ClaimForm({ locationId, userId, accountEmail }: Props) {
         documentPath,
         idDocumentPath,
       });
-      setState(result.ok ? "sent" : (result.error ?? "generic"));
+      if (!result.ok) return setState(result.error ?? "generic");
+      setState("sent");
+      // A full page load, so the header shows the request in progress.
+      window.location.assign(getPathname({ href: { pathname: "/business/claim/sent", query: { claim: claimId.current } }, locale }));
     });
   }
 
@@ -159,7 +159,7 @@ export function ClaimForm({ locationId, userId, accountEmail }: Props) {
                   : t("error")}
         </p>
       )}
-      <button disabled={pending} aria-busy={pending} className="rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-60">
+      <button disabled={pending || state === "sent"} aria-busy={pending || state === "sent"} className="rounded-2xl bg-ink py-4 text-lg font-black text-paper disabled:opacity-60">
         {t("submitClaim")}
       </button>
     </form>

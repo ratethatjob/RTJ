@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { EmployersCta } from "@/components/business-access";
 import { SiteHeader } from "@/components/site-header";
 import { Faq } from "@/components/faq";
 import { getPathname, Link } from "@/i18n/navigation";
@@ -29,17 +30,19 @@ export default async function EmployersPage({ params }: PageProps<"/[locale]/emp
           <p className="text-sm font-black uppercase tracking-tagline text-slate">{t("eyebrow")}</p>
           <h1 className="mt-3 text-5xl font-black leading-[0.95] tracking-brand lg:text-7xl">{t("title")}</h1>
           <p className="mt-5 text-xl text-slate">{t("body")}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/business/claim" className="rounded-2xl bg-ink px-7 py-4 text-lg font-black text-paper">
-              {t("cta")}
-            </Link>
-            <Link
-              href={{ pathname: "/app/sign-in", query: { for: "business", next: getPathname({ href: "/business", locale }) } }}
-              className="rounded-2xl border-2 border-ink px-7 py-4 text-lg font-black"
-            >
-              {t("dashboard")}
-            </Link>
-          </div>
+          <EmployersCta>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/business/claim" className="rounded-2xl bg-ink px-7 py-4 text-lg font-black text-paper">
+                {t("cta")}
+              </Link>
+              <Link
+                href={{ pathname: "/app/sign-in", query: { for: "business", next: getPathname({ href: "/business", locale }) } }}
+                className="rounded-2xl border-2 border-ink px-7 py-4 text-lg font-black"
+              >
+                {t("dashboard")}
+              </Link>
+            </div>
+          </EmployersCta>
         </section>
         <section className="grid gap-4 sm:grid-cols-2">
           {features.map((f) => (

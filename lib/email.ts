@@ -1,6 +1,7 @@
 // Transactional email through Resend's HTTP API. Skipped silently without RESEND_API_KEY.
 
-export async function sendEmail(to: string, subject: string, text: string): Promise<boolean> {
+/** `html` is optional; the plain `text` is always sent too. */
+export async function sendEmail(to: string, subject: string, text: string, html?: string): Promise<boolean> {
   const key = process.env.RESEND_API_KEY;
   if (!key || !to) return false;
   const res = await fetch("https://api.resend.com/emails", {
@@ -11,6 +12,7 @@ export async function sendEmail(to: string, subject: string, text: string): Prom
       to: [to],
       subject,
       text,
+      ...(html && { html }),
     }),
   }).catch(() => null);
   return Boolean(res?.ok);

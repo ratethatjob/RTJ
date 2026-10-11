@@ -1,9 +1,8 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import Form from "next/form";
 import { getPathname, Link } from "@/i18n/navigation";
-import { areaPickerLabels } from "@/lib/area-labels";
 import { AccountLink } from "./account-link";
-import { AreaPicker } from "./home/area-picker";
+import { EmployersNavLink, HeaderBusinessLink } from "./business-access";
 import { SearchIcon } from "./icons";
 import { LocaleSwitch } from "./locale-switch";
 import { MobileMenu } from "./mobile-menu";
@@ -44,17 +43,13 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
             <Link href="/jobs" className="hidden lg:inline">
               {t("jobs")}
             </Link>
-            <Link href="/employers" className="hidden lg:inline">
-              {t("forEmployers")}
-            </Link>
+            <EmployersNavLink label={t("forEmployers")} />
           </>
         )}
         <span className="hidden lg:inline">
-          <AreaPicker labels={await areaPickerLabels()} />
-        </span>
-        <span className="hidden lg:inline">
           <LocaleSwitch />
         </span>
+        <HeaderBusinessLink />
         <AccountLink signInLabel={t("signIn")} />
         <MobileMenu />
         {!withSearch && (

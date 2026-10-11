@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
+import { BusinessBack } from "@/components/business/business-back";
 import { BusinessSidebar } from "@/components/business/sidebar";
 import { getBusiness } from "@/lib/business";
 import { pickMessages, SHARED_CLIENT_NAMESPACES } from "@/lib/client-messages";
@@ -18,7 +19,10 @@ export default async function BusinessLayout({ children, params }: LayoutProps<"
   if (!org) {
     return (
       <NextIntlClientProvider messages={messages}>
-        <div className="flex flex-1 flex-col">{children}</div>
+        <div className="mx-auto flex w-full max-w-xl flex-1 flex-col px-4 pt-4">
+          <BusinessBack hasOrg={false} />
+          {children}
+        </div>
       </NextIntlClientProvider>
     );
   }
@@ -36,7 +40,10 @@ export default async function BusinessLayout({ children, params }: LayoutProps<"
     <NextIntlClientProvider messages={messages}>
       <div className="flex flex-1 flex-col lg:flex-row">
         <BusinessSidebar orgName={org.name} role={org.role} awaiting={count ?? 0} />
-        <div className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-10">{children}</div>
+        <div className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+          <BusinessBack hasOrg />
+          <div className="mt-2">{children}</div>
+        </div>
       </div>
     </NextIntlClientProvider>
   );

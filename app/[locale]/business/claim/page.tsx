@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { WorkplaceFinder } from "@/components/app/workplace-finder";
-import { getPathname } from "@/i18n/navigation";
+import { getPathname, redirect } from "@/i18n/navigation";
+import { getMembership } from "@/lib/membership";
 import { autoAreaName } from "@/lib/area-labels";
 import { placesProvider } from "@/lib/places";
 
@@ -9,12 +10,15 @@ export const instant = false;
 export default async function ClaimSearchPage({ params, searchParams }: PageProps<"/[locale]/business/claim">) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { q } = await searchParams;
+  const { q, add } = await searchParams;
+  // Members coming from "Request free access" (or signing in for it) go to their dashboard;
+  // ?add=1 still opens the search to request another workplace.
+  if (add !== "1" && (await getMembership())) redirect({ href: "/business", locale });
   const t = await getTranslations("Business");
   const [provider, autoArea] = await Promise.all([placesProvider(), autoAreaName(locale)]);
 
   return (
-    <main className="mx-auto w-full max-w-md px-4 py-10">
+    <main className="w-full max-w-md pb-10 pt-4">
       <h1 className="text-4xl font-black tracking-brand">{t("claimTitle")}</h1>
       <p className="mt-2 text-slate">{t("claimSearchHint")}</p>
       <div className="mt-6">

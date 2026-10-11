@@ -61,6 +61,7 @@ export default async function PendingRatePage({ params, searchParams }: PageProp
       locationHref={getPathname({ href: "/app/rate", locale })}
       returnPath={selfPath}
       welcomePath={getPathname({ href: "/app/welcome", locale })}
+      sentPath={getPathname({ href: "/app/rate/sent", locale })}
     />
   );
 }

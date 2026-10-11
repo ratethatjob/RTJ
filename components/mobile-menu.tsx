@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
+import { MenuBusinessLink } from "./business-access";
 import { LocaleSwitch } from "./locale-switch";
 
 /** Menu for phones: the header only has room for the logo and sign-in. */
@@ -58,6 +59,7 @@ export function MobileMenu() {
             </button>
           </div>
           <nav className="mt-6 flex flex-col">
+            <MenuBusinessLink />
             {links.map((l) => (
               <Link key={l.href} href={l.href} className="border-b border-white/10 py-4 text-3xl font-black tracking-brand">
                 {l.label}

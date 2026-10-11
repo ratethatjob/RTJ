@@ -16,7 +16,7 @@ export default async function ClaimNewWorkplacePage({ params, searchParams }: Pa
   const tb = await getTranslations("Business");
   const [provider, autoArea] = await Promise.all([placesProvider(), autoAreaName(locale)]);
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 py-10">
+    <main className="flex w-full max-w-md flex-1 flex-col pb-10 pt-4">
       <h1 className="text-4xl font-black tracking-brand">{t("title")}</h1>
       <p className="mt-2 text-slate">{tb("claimSearchHint")}</p>
       <div className="mt-6">

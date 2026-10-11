@@ -6,6 +6,7 @@ import { DemoChip } from "@/components/demo-badge";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
+import { ManagedOrgCard } from "@/components/business-access";
 import { NearYou, NearYouFallback } from "@/components/home/near-you";
 import { SiteHeader } from "@/components/site-header";
 import { Bar, formatScore, ScoreTile } from "@/components/scores";
@@ -54,6 +55,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     <>
       <SiteHeader />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-8 pt-6 sm:px-6 lg:gap-16 lg:pb-8 lg:pt-12">
+        <ManagedOrgCard />
         <section className="grid items-center gap-10 lg:grid-cols-[1fr_340px] lg:gap-16 xl:grid-cols-[1fr_400px]">
           <div>
             <h1 className="text-[3.25rem] font-black leading-[0.95] tracking-brand sm:text-7xl lg:text-8xl">

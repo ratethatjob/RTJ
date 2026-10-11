@@ -14,7 +14,7 @@ export async function LocationSelect({
 }) {
   const t = await getTranslations("Business");
   return (
-    <form className="flex items-center gap-2">
+    <form className="flex w-full min-w-0 items-center gap-2 sm:w-auto">
       {Object.entries(extra).map(([k, v]) => (
         <input key={k} type="hidden" name={k} value={v} />
       ))}
@@ -25,7 +25,7 @@ export async function LocationSelect({
         id="location"
         name="location"
         defaultValue={selected ?? ""}
-        className="rounded-lg border border-mist/60 bg-white px-3 py-2 font-black"
+        className="w-0 min-w-0 flex-1 rounded-lg border border-mist/60 bg-white px-3 py-2 font-black sm:w-auto sm:flex-none"
       >
         {allowAll && <option value="">{t("allLocations")}</option>}
         {locations.map((l) => (

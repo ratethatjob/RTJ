@@ -15,6 +15,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import type { PendingWorkplace } from "@/lib/workplaces";
 import { ChevronLeftIcon, GlobeIcon } from "../icons";
+import { BACK_LINK_CLASS } from "./back-link-class";
 import { ReviewSignIn } from "./review-sign-in";
 
 /** Without `userId` the whole review is filled in first and the last step signs in by email code.
@@ -30,6 +31,8 @@ type Props = {
   /** This page (localized, with its query): where an email sign-in link comes back to. */
   returnPath: string;
   welcomePath: string;
+  /** The "review sent" page (`?review=<id>`). */
+  sentPath: string;
 };
 
 const DOC_TYPES = ["payslip", "contract", "employment_letter", "other"] as const;
@@ -62,6 +65,7 @@ export function ReviewForm({
   locationHref,
   returnPath,
   welcomePath,
+  sentPath,
 }: Props) {
   const t = useTranslations("ReviewForm");
   const router = useRouter();
@@ -75,7 +79,6 @@ export function ReviewForm({
   const [step, setStep] = useState(1);
   const [input, setInput] = useState<ReviewInput>(() => empty(locationId));
   const [jobAlerts, setJobAlerts] = useState(false);
-  const [doneHref, setDoneHref] = useState(locationHref);
   const [file, setFile] = useState<File | null>(null);
   const [docType, setDocType] = useState<(typeof DOC_TYPES)[number]>("payslip");
   const [error, setError] = useState<string | null>(null);
@@ -172,15 +175,11 @@ export function ReviewForm({
       try {
         localStorage.removeItem(storageKey);
       } catch {}
-      // A new reviewer still picks how they are shown (generated name by default).
-      if (!result.nameConfirmed) {
-        const next = result.href ?? locationHref;
-        return router.push(`${welcomePath}?next=${encodeURIComponent(next)}&sent=1`);
-      }
-      if (!uploadOk) setError(t("uploadFailed"));
-      if (result.href) setDoneHref(result.href);
       setDone(true);
-      window.scrollTo(0, 0);
+      const sent = `${sentPath}?review=${result.id}${uploadOk ? "" : "&upload=failed"}`;
+      // A new reviewer still picks how they are shown (generated name by default), then sees it.
+      if (!result.nameConfirmed) return router.push(`${welcomePath}?next=${encodeURIComponent(sent)}&sent=1`);
+      router.push(sent);
     });
   }
 
@@ -196,36 +195,17 @@ export function ReviewForm({
     return !error;
   }
 
-  if (done) {
-    return (
-      <Shell>
-        <h1 className="mt-10 text-5xl font-black tracking-brand">{t("doneTitle")}</h1>
-        <p className="mt-4 text-lg text-slate">{t("doneBody")}</p>
-        {error && <ErrorBox>{error}</ErrorBox>}
-        <a
-          href={doneHref}
-          className="mt-auto rounded-2xl bg-ink py-4 text-center text-lg font-black text-paper"
-        >
-          {t("doneBack", { name: location.name })}
-        </a>
-      </Shell>
-    );
-  }
-
   const header = (
     <div className="flex items-center gap-3">
       {step > 1 ? (
-        <button
-          type="button"
-          onClick={() => setStep(step - 1)}
-          aria-label={t("back")}
-          className="-ml-2 p-2"
-        >
-          <ChevronLeftIcon className="size-7" />
+        <button type="button" onClick={() => setStep(step - 1)} className={BACK_LINK_CLASS}>
+          <ChevronLeftIcon className="size-6" />
+          {t("back")}
         </button>
       ) : (
-        <a href={locationHref} aria-label={t("back")} className="-ml-2 p-2">
-          <ChevronLeftIcon className="size-7" />
+        <a href={locationHref} className={BACK_LINK_CLASS}>
+          <ChevronLeftIcon className="size-6" />
+          {t("back")}
         </a>
       )}
       {step <= 3 && (

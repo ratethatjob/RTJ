@@ -101,9 +101,6 @@ export default async function JobApplicationsPage({ params, searchParams }: Page
   return (
     <main className="flex max-w-4xl flex-col gap-6">
       <header className="flex flex-col gap-3">
-        <Link href="/business/jobs" className="font-black text-slate">
-          ← {t("title")}
-        </Link>
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="text-4xl font-black tracking-brand lg:text-5xl">{job.title}</h1>
           <span

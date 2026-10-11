@@ -14,7 +14,7 @@ export default async function JoinPage({ params }: PageProps<"/[locale]/business
   const invite = (data as { org_name: string; role: string; valid: boolean }[] | null)?.[0];
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-4 px-4 py-12">
+    <main className="flex w-full max-w-md flex-1 flex-col justify-center gap-4 py-12">
       {invite?.valid ? (
         <>
           <h1 className="text-4xl font-black tracking-brand">{t("joinTitle", { org: invite.org_name })}</h1>

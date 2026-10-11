@@ -1,7 +1,7 @@
+import { AccountShell } from "@/components/app/account-shell";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { replyToEmployer } from "@/app/[locale]/app/apply/actions";
-import { BackLink } from "@/components/app/back-link";
 import { FollowupsCard } from "@/components/app/followups-card";
 import { MessageThread, type ThreadMessage } from "@/components/message-thread";
 import { getPathname } from "@/i18n/navigation";
@@ -40,8 +40,7 @@ export default async function ApplicationPage({ params }: PageProps<"/[locale]/a
   const open = a.application_followups.filter((f) => !f.answer).sort((x, y) => x.position - y.position);
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 pb-12 pt-6">
-      <BackLink href={getPathname({ href: "/app/applications", locale })} />
+    <AccountShell active="applications" back={getPathname({ href: "/app/applications", locale })}>
       <header>
         <p className="font-black text-slate">
           {place?.name} · {place?.address}
@@ -65,6 +64,6 @@ export default async function ApplicationPage({ params }: PageProps<"/[locale]/a
           readOnly={a.status === "withdrawn"}
         />
       </section>
-    </main>
+    </AccountShell>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { hasEarlierPage } from "@/components/history-tracker";
+import { BACK_LINK_CLASS } from "@/components/app/back-link-class";
 import { ChevronLeftIcon } from "@/components/icons";
 
 /**
@@ -13,15 +14,15 @@ export function BackButton({ fallback, label }: { fallback: string; label: strin
   return (
     <a
       href={fallback}
-      aria-label={label}
       onClick={(e) => {
         if (!hasEarlierPage()) return;
         e.preventDefault();
         router.back();
       }}
-      className="-ml-2 inline-block p-2"
+      className={BACK_LINK_CLASS}
     >
-      <ChevronLeftIcon className="size-7" />
+      <ChevronLeftIcon className="size-6" />
+      {label}
     </a>
   );
 }

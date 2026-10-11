@@ -388,10 +388,6 @@
     "change": "Change",
     "submit": "Publish review",
     "submitting": "Publishing…",
-    "doneTitle": "Thank you!",
-    "doneBody": "Your review is being checked. It goes live at the time you chose; small workplaces get a short random delay to protect your anonymity.",
-    "doneBack": "Back to {name}",
-    "uploadFailed": "Your review was saved, but the document upload failed. You can try again later.",
     "errors": {
       "required": "Please fill in the highlighted fields.",
       "dates": "Check the dates: the end can't be before the start, and dates can't be in the future.",
@@ -555,7 +551,6 @@
     "phone": "Phone number",
     "note": "Anything else we should know?",
     "submitClaim": "Send request",
-    "claimSent": "Thanks! We'll check your request and email you when it's approved.",
     "claimExists": "You already have an open access request for this workplace.",
     "claimError": "Please fill in your company, your name, a phone number and your website (or tick that you don't have one), and attach the documents.",
     "overviewTitle": "Overview",
@@ -680,7 +675,20 @@
     "formDocx": "Word (DOCX)",
     "idDocument": "Photo ID (ID card or passport)",
     "idDocumentHint": "You can cover the document number and everything except your photo and name.",
-    "domainError": "Your signed-in email ({email}) isn't on the company website's domain. Pick another method, or sign in with your work email."
+    "domainError": "Your signed-in email ({email}) isn't on the company website's domain. Pick another method, or sign in with your work email.",
+    "onboarding": {
+      "title": "Welcome to your business dashboard",
+      "body": "Three first steps:",
+      "close": "Close",
+      "steps": {
+        "profileTitle": "Fill in your profile",
+        "profileBody": "About, benefits and photos, shown on your workplace page.",
+        "inviteTitle": "Invite your team",
+        "inviteBody": "Ask your staff to rate you, by link or email.",
+        "billingTitle": "Check your subscription",
+        "billingBody": "Your Pro trial and plans."
+      }
+    }
   },
   "Account": {
     "title": "Your account",
@@ -1844,9 +1852,19 @@
     "infoSubject": "We need a bit more information about your access request – {location}",
     "infoBody": "Hi,\n\nThanks for requesting access to {location} on RateThatJob. Before we can approve it, we need a bit more information:\n\n{message}\n\nReply or add a document here: {link}\n\nRateThatJob – Know before you go",
     "approvedSubject": "Your access is approved – {location}",
-    "approvedBody": "Hi,\n\nGood news: your access to {location} is approved. You can now reply to reviews, invite your team and post jobs. If this location hasn't had one yet, your free 30-day Pro trial has started.\n\nOpen your dashboard: {link}\n\nRateThatJob – Know before you go",
+    "approvedBody": "Hi,\n\nGood news: your access to {location} is approved. You can now reply to reviews, invite your team and post jobs. If this location hasn't had one yet, your free 30-day Pro trial has started.\n\nOpen your business dashboard: {link}",
     "rejectedSubject": "We couldn't approve your access request – {location}",
-    "rejectedBody": "Hi,\n\nWe couldn't confirm that you represent {location}, so we couldn't approve your access request. You're welcome to send a new request with a business email on your company's domain, a company registry extract or a letter of authorization, each with a photo ID.\n\n{link}\n\nRateThatJob – Know before you go"
+    "rejectedBody": "Hi,\n\nWe couldn't confirm that you represent {location}, so we couldn't approve your access request. You're welcome to send a new request with a business email on your company's domain, a company registry extract or a letter of authorization, each with a photo ID.\n\n{link}\n\nRateThatJob – Know before you go",
+    "approvedTitle": "Your access to {location} is approved",
+    "approvedIntro": "You can now reply to reviews, invite your team and post jobs. If this location hasn't had one yet, your free 30-day Pro trial has started.",
+    "approvedButton": "Open business dashboard",
+    "approvedLink": "Or open this link:",
+    "stepsTitle": "First steps",
+    "steps": {
+      "profile": "Fill in your workplace profile: about, benefits, photos",
+      "invite": "Invite your team to rate you, by link or email",
+      "billing": "See your subscription page: Pro trial and plans"
+    }
   },
   "Billing": {
     "proLine": "RateThatJob Pro – {location}",
@@ -1917,5 +1935,50 @@
       "pastDue": "{count, plural, one {A payment failed} other {# payments failed}} – update your card to keep Pro.",
       "cta": "Subscription"
     }
+  },
+  "ReviewSent": {
+    "title": "Thank you! Your review is in",
+    "workplace": "Workplace",
+    "nextTitle": "What happens now",
+    "published": "It's already live on the workplace page.",
+    "held": "One of our team checks it before it goes live.",
+    "afterLeaving": "It goes live once you mark in your account that you've left this job.",
+    "soon": "It goes live on the workplace page within 15 minutes.",
+    "later": "It's due to go live on the workplace page around {date}.",
+    "laterChosen": "It's delayed, as you asked.",
+    "laterAnonymity": "The delay protects your anonymity.",
+    "textCheck": "Your text is also checked automatically. If something looks off, one of our team looks at it before it goes live.",
+    "document": "One of our team checks the document you uploaded. If it's fine, your review gets the Verified badge.",
+    "uploadFailed": "Your review was saved, but the document upload failed.",
+    "statusInAccount": "You can see its status any time in <link>your account</link>.",
+    "viewWorkplace": "View the workplace page",
+    "rateAnother": "Rate another workplace",
+    "share": "Share",
+    "shareText": "{name} – see what it's like to work there, on RateThatJob."
+  },
+  "AccountNav": {
+    "label": "My account",
+    "account": "My account",
+    "applications": "My applications",
+    "notifications": "Notifications",
+    "business": "Business dashboard"
+  },
+  "BusinessAccess": {
+    "open": "Business dashboard",
+    "pending": "Request in progress",
+    "managing": "You manage: {org}",
+    "openDashboard": "Open business dashboard"
+  },
+  "ClaimSent": {
+    "title": "We've received your access request",
+    "workplace": "Workplace",
+    "nextTitle": "What happens now",
+    "check": "One of our team checks your request and the documents you uploaded by hand.",
+    "info": "If we need more information, we'll email you, and you can reply in the business dashboard.",
+    "decision": "We'll email our decision to {email}.",
+    "status": "Until then you can see the status of your request in the business dashboard. The \"Request in progress\" button in the header (in the menu on phones) takes you there too.",
+    "approved": "Once it's approved, you can use the business dashboard right away with this account.",
+    "statusButton": "Request status",
+    "home": "Back to the home page"
   }
 }
