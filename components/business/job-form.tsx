@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import {
   createJob,
@@ -11,6 +11,7 @@ import { useRouter } from "@/i18n/navigation";
 import { currencyFor } from "@/lib/currency";
 import type { JobQuestion } from "@/lib/data/types";
 import { MAX_QUESTIONS, PRESET_QUESTIONS } from "@/lib/job-questions";
+import { JOB_LANGUAGES, type JobLanguage, LANGUAGE_LEVELS, languageName, MAX_LANGUAGES } from "@/lib/languages";
 import { JOB_TIERS, type JobTier, jobPricing } from "@/lib/site-config";
 
 type Location = { id: string; name: string; address: string; country: string };
@@ -220,6 +221,13 @@ export function JobForm({
           <span className="text-sm text-slate">{t("lists.hint")}</span>
         </label>
       ))}
+
+      <LanguagesField
+        adLanguage={v.adLanguage}
+        languages={v.languages}
+        onChange={(patch) => setV((prev) => ({ ...prev, ...patch }))}
+        input={input}
+      />
 
       <fieldset className="flex flex-col gap-3">
         <legend className="mb-2 font-black">{t("applyMode.title")}</legend>
@@ -537,6 +545,95 @@ function PackagePicker({
         })}
       </div>
       <p className="text-sm text-slate">{minimum ? t("packages.upgradeOnly") : t("packages.billing")}</p>
+    </fieldset>
+  );
+}
+
+/** The ad's own language and the languages expected from applicants, with level. */
+function LanguagesField({
+  adLanguage,
+  languages,
+  onChange,
+  input,
+}: {
+  adLanguage: string;
+  languages: JobLanguage[];
+  onChange: (patch: { adLanguage?: string; languages?: JobLanguage[] }) => void;
+  input: string;
+}) {
+  const t = useTranslations("BusinessJobs");
+  const locale = useLocale();
+  const name = (code: string) => languageName(code, locale);
+  const unused = JOB_LANGUAGES.filter((c) => !languages.some((l) => l.code === c));
+  const update = (i: number, patch: Partial<JobLanguage>) =>
+    onChange({ languages: languages.map((l, j) => (j === i ? { ...l, ...patch } : l)) });
+
+  return (
+    <fieldset className="flex flex-col gap-3 rounded-2xl bg-paper p-4">
+      <legend className="sr-only">{t("languages.title")}</legend>
+      <p className="font-black">{t("languages.title")}</p>
+      <label className="flex flex-col gap-2">
+        <span className="text-sm font-black text-slate">{t("languages.adLanguage")}</span>
+        <select value={adLanguage} onChange={(e) => onChange({ adLanguage: e.target.value })} className={`${input} sm:max-w-xs`}>
+          <option value="">{t("languages.notSet")}</option>
+          {JOB_LANGUAGES.map((c) => (
+            <option key={c} value={c}>
+              {name(c)}
+            </option>
+          ))}
+        </select>
+      </label>
+      <div className="flex flex-col gap-2">
+        <span className="text-sm font-black text-slate">
+          {t("languages.expected")} <span className="font-medium">({t("optional")})</span>
+        </span>
+        {languages.map((l, i) => (
+          <div key={l.code} className="flex flex-wrap items-center gap-2 rounded-2xl bg-white p-2">
+            <select
+              value={l.code}
+              onChange={(e) => update(i, { code: e.target.value })}
+              aria-label={t("languages.language")}
+              className="rounded-xl border border-mist/60 bg-white px-3 py-2 font-black"
+            >
+              {[l.code, ...unused].map((c) => (
+                <option key={c} value={c}>
+                  {name(c)}
+                </option>
+              ))}
+            </select>
+            <select
+              value={l.level}
+              onChange={(e) => update(i, { level: e.target.value as JobLanguage["level"] })}
+              aria-label={t("languages.level")}
+              className="rounded-xl border border-mist/60 bg-white px-3 py-2"
+            >
+              {LANGUAGE_LEVELS.map((lv) => (
+                <option key={lv} value={lv}>
+                  {t(`languages.levels.${lv}`)}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={() => onChange({ languages: languages.filter((_, j) => j !== i) })}
+              aria-label={t("languages.remove")}
+              className="ml-auto px-2 text-xl font-black text-slate"
+            >
+              ×
+            </button>
+          </div>
+        ))}
+        {languages.length < MAX_LANGUAGES && unused.length > 0 && (
+          <button
+            type="button"
+            onClick={() => onChange({ languages: [...languages, { code: unused[0], level: "conversational" }] })}
+            className="self-start rounded-2xl border-2 border-ink px-4 py-2 font-black"
+          >
+            {t("languages.add")}
+          </button>
+        )}
+        <p className="text-sm text-slate">{t("languages.hint")}</p>
+      </div>
     </fieldset>
   );
 }

@@ -25,6 +25,8 @@ type JobRow = {
   offers?: string[] | null;
   featured?: boolean | null;
   is_demo?: boolean | null;
+  ad_language?: string | null;
+  languages?: Job["languages"] | null;
   published_at: string;
   closes_at: string | null;
   updated_at: string;
@@ -59,6 +61,8 @@ function toJob(r: JobRow): Job {
     offers: r.offers ?? [],
     featured: r.featured ?? false,
     isDemo: r.is_demo ?? false,
+    adLanguage: r.ad_language ?? null,
+    languages: r.languages ?? [],
     publishedAt: r.published_at,
     closesAt: r.closes_at,
     updatedAt: r.updated_at,
@@ -120,12 +124,16 @@ export async function getJob(id: string): Promise<Job | null> {
   return data && toJob(data);
 }
 
-/** /jobs listing: title/company and where (city or street), optionally quick apply only. */
+/**
+ * /jobs listing: title/company and where (city or street), optionally quick apply only, and a
+ * language (jobs whose ad is written in it or that ask for it).
+ */
 export async function findJobs(
   q: string,
   where: string,
   category: Category | null,
   quickOnly = false,
+  language: string | null = null,
 ): Promise<Job[]> {
   "use cache";
   cacheLife("minutes");
@@ -138,7 +146,8 @@ export async function findJobs(
         (!term || `${j.title} ${j.location.companyName}`.toLowerCase().includes(term)) &&
         (!place || `${j.location.address} ${j.location.city}`.toLowerCase().includes(place)) &&
         (!category || j.location.category === category) &&
-        (!quickOnly || j.applyMode === "quick"),
+        (!quickOnly || j.applyMode === "quick") &&
+        (!language || j.adLanguage === language || j.languages.some((l) => l.code === language)),
     );
   }
   const safe = (s: string) => s.replace(/[%_\\,()]/g, " ");
@@ -147,6 +156,9 @@ export async function findJobs(
   if (place) query = query.or(`city.ilike.%${safe(place)}%,address.ilike.%${safe(place)}%`);
   if (category) query = query.eq("category", category);
   if (quickOnly) query = query.eq("apply_mode", "quick");
+  if (language && /^[a-z]{2}$/.test(language)) {
+    query = query.or(`ad_language.eq.${language},languages.cs.[{"code":"${language}"}]`);
+  }
   const { data, error } = await query.order("published_at", { ascending: false }).limit(50);
   if (error) throw error;
   // Featured (pro) jobs first; the sort is stable, so newest first within each group.

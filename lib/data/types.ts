@@ -114,6 +114,10 @@ export type Job = {
   question: string | null;
   applyMode: ApplyMode;
   questions: JobQuestion[];
+  /** Language the ad is written in (ISO 639-1). */
+  adLanguage: string | null;
+  /** Languages expected from applicants, with level. */
+  languages: { code: string; level: "basic" | "conversational" | "fluent" | "native" }[];
   responsibilities: string[];
   requirements: string[];
   offers: string[];

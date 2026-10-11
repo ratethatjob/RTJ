@@ -255,7 +255,7 @@ Goal: employers show their score on their careers page / job ads; every embed is
 - Launch locales: `en`, `hu`. Add `de` next.
 - All UI strings in message files from the first commit; no hard-coded copy.
 - Locale detection: URL prefix > profile setting > `Accept-Language`.
-- User content: store original + translations; reader sees their locale with "Translated from X · Show original".
+- User content: store original + translations; reader sees their locale with "Translated · Show original"; untranslated content shows a small "Original: {language}" tag. Applies to reviews, employer replies and application messages.
 - Employer invite messages sent in each recipient's language when known, otherwise the location's country language.
 - Dates, numbers, currency via `Intl`.
 
@@ -285,6 +285,7 @@ Goal: employers show their score on their careers page / job ads; every embed is
 
 **Phase 3 – Jobs**
 - Job posts on location pages, easy CV-free apply (short question set), application tracking → automatic ghosting metric and `verification_level = application` reviewers.
+- Languages per job: the ad's original language and optional expected languages with level (basic / conversational / fluent / native). Shown on the job page, cards, Careers Hub widget and JobPosting JSON-LD; `/jobs` language filter; applicants answer "Do you speak X?" as must-have questions; the AI candidate summary takes them into account.
 
 ### PMF signals to track from day one
 - Verified reviews per month in the launch segment without paid ads.

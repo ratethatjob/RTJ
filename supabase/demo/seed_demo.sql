@@ -198,4 +198,18 @@ begin
   where o.job_id = j.id and c.is_demo;
 end $$;
 
+-- Demo jobs: ad language and expected languages.
+update public.jobs j set ad_language = v.ad, languages = v.langs::jsonb
+from (values
+  ('Line cook', 'hu', '[{"code":"hu","level":"conversational"}]'),
+  ('Waiter', 'en', '[{"code":"en","level":"conversational"},{"code":"hu","level":"basic"}]'),
+  ('Barista', 'en', '[{"code":"en","level":"fluent"}]'),
+  ('Cashier', 'hu', '[{"code":"hu","level":"conversational"}]'),
+  ('Warehouse picker', 'hu', '[]'),
+  ('Forklift driver', 'en', '[{"code":"en","level":"basic"},{"code":"hi","level":"conversational"}]'),
+  ('Office coordinator', 'en', '[{"code":"en","level":"fluent"},{"code":"ar","level":"basic"}]'),
+  ('Receptionist', 'hu', '[{"code":"hu","level":"native"},{"code":"en","level":"conversational"}]')
+) as v(title, ad, langs), public.locations l, public.companies c
+where j.title = v.title and l.id = j.location_id and c.id = l.company_id and c.is_demo;
+
 select private.demo_summary();

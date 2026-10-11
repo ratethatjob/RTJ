@@ -171,12 +171,13 @@
     "noReplyAfter": "No reply after {weeks, plural, one {# week} other {# weeks}}",
     "noReply": "No reply",
     "repliedIn": "Replied in {days, plural, one {# day} other {# days}}",
-    "translatedFrom": "Translated from {language}",
     "showOriginal": "Show original",
     "showTranslation": "Show translation",
     "replyFrom": "Reply from {company}",
     "verifiedApplication": "Verified · Applied here",
-    "helpful": "Helpful"
+    "helpful": "Helpful",
+    "originalLanguage": "Original: {language}",
+    "translated": "Translated"
   },
   "NotFound": {
     "title": "Page not found",
@@ -837,7 +838,9 @@
       "pay": "Pay",
       "hours": "Hours",
       "contract": "Contract",
-      "where": "Where"
+      "where": "Where",
+      "adLanguage": "Ad language",
+      "languages": "Languages"
     },
     "applyQuick": "Quick apply",
     "applyCv": "Apply with CV",
@@ -856,7 +859,18 @@
     "no": "No",
     "yesNo": "Yes / No",
     "shortAnswer": "Short answer",
-    "featured": "Featured"
+    "featured": "Featured",
+    "languageFilter": "Language",
+    "anyLanguage": "Any language",
+    "languageLevel": "{language} – {level}",
+    "levels": {
+      "basic": "basic",
+      "conversational": "conversational",
+      "fluent": "fluent",
+      "native": "native"
+    },
+    "speakQuestion": "Do you speak {language} at least at {level} level?",
+    "languagesLine": "Languages: {list}"
   },
   "Apply": {
     "title": "Apply: {title}",
@@ -1128,6 +1142,23 @@
       "ask": "Ask in the interview",
       "followups": "Follow-up answers",
       "note": "AI-generated from the application only. Check it yourself before you decide."
+    },
+    "languages": {
+      "title": "Languages",
+      "adLanguage": "Language of this ad",
+      "notSet": "Not set",
+      "expected": "Languages expected from applicants",
+      "language": "Language",
+      "level": "Level",
+      "remove": "Remove language",
+      "add": "+ Add a language",
+      "hint": "Each language becomes a must-have yes/no question when people apply.",
+      "levels": {
+        "basic": "Basic",
+        "conversational": "Conversational",
+        "fluent": "Fluent",
+        "native": "Native"
+      }
     }
   },
   "Report": {
@@ -1334,7 +1365,8 @@
     "send": "Send",
     "sending": "Sending…",
     "write": "Message the candidate",
-    "error": "Couldn't send. Please try again."
+    "error": "Couldn't send. Please try again.",
+    "original": "Original: {language}"
   },
   "Email": {
     "messageSubject": "{company} wrote to you about {job}",

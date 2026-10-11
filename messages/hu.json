@@ -171,12 +171,13 @@
     "noReplyAfter": "{weeks} hét után sincs válasz",
     "noReply": "Nem válaszoltak",
     "repliedIn": "{days} nap alatt válaszoltak",
-    "translatedFrom": "Fordítás, eredeti nyelv: {language}",
     "showOriginal": "Eredeti",
     "showTranslation": "Fordítás",
     "replyFrom": "{company} válasza",
     "verifiedApplication": "Igazolt · Itt jelentkezett",
-    "helpful": "Hasznos"
+    "helpful": "Hasznos",
+    "originalLanguage": "Eredeti: {language}",
+    "translated": "Fordítva"
   },
   "NotFound": {
     "title": "Az oldal nem található",
@@ -837,7 +838,9 @@
       "pay": "Bér",
       "hours": "Munkaidő",
       "contract": "Szerződés",
-      "where": "Hol"
+      "where": "Hol",
+      "adLanguage": "Hirdetés nyelve",
+      "languages": "Nyelvek"
     },
     "applyQuick": "Gyors jelentkezés",
     "applyCv": "Jelentkezés önéletrajzzal",
@@ -856,7 +859,18 @@
     "no": "Nem",
     "yesNo": "Igen / Nem",
     "shortAnswer": "Rövid válasz",
-    "featured": "Kiemelt"
+    "featured": "Kiemelt",
+    "languageFilter": "Nyelv",
+    "anyLanguage": "Bármilyen nyelv",
+    "languageLevel": "{language} – {level}",
+    "levels": {
+      "basic": "alap",
+      "conversational": "tárgyalóképes",
+      "fluent": "folyékony",
+      "native": "anyanyelvi"
+    },
+    "speakQuestion": "Beszélsz {language} nyelven legalább {level} szinten?",
+    "languagesLine": "Nyelvek: {list}"
   },
   "Apply": {
     "title": "Jelentkezés: {title}",
@@ -1128,6 +1142,23 @@
       "ask": "Kérdezd meg az interjún",
       "followups": "Válaszok a további kérdésekre",
       "note": "AI által, csak a jelentkezés alapján készült. Döntés előtt nézd át magad is."
+    },
+    "languages": {
+      "title": "Nyelvek",
+      "adLanguage": "A hirdetés nyelve",
+      "notSet": "Nincs megadva",
+      "expected": "Elvárt nyelvek a jelentkezőtől",
+      "language": "Nyelv",
+      "level": "Szint",
+      "remove": "Nyelv törlése",
+      "add": "+ Nyelv hozzáadása",
+      "hint": "Minden nyelvből jelentkezéskor kötelező igen/nem kérdés lesz.",
+      "levels": {
+        "basic": "Alap",
+        "conversational": "Tárgyalóképes",
+        "fluent": "Folyékony",
+        "native": "Anyanyelvi"
+      }
     }
   },
   "Report": {
@@ -1334,7 +1365,8 @@
     "send": "Küldés",
     "sending": "Küldés…",
     "write": "Üzenet a jelöltnek",
-    "error": "Nem sikerült elküldeni. Próbáld újra."
+    "error": "Nem sikerült elküldeni. Próbáld újra.",
+    "original": "Eredeti: {language}"
   },
   "Email": {
     "messageSubject": "A(z) {company} írt neked: {job}",

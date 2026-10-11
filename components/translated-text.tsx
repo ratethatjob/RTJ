@@ -4,39 +4,54 @@ import { useState } from "react";
 import { GlobeIcon } from "./icons";
 
 type Props = {
-  translated: string;
   original: string;
-  note: string;
+  /** Machine translation into the reader's language, or null when we show the original. */
+  translated: string | null;
+  /** "Original: Hungarian" (null when the language is unknown). */
+  originalLabel: string | null;
+  translatedLabel: string;
   showOriginalLabel: string;
   showTranslationLabel: string;
+  className?: string;
 };
 
-/** Shows a machine translation with a toggle back to the original text. */
+/**
+ * User-written text everywhere (reviews, employer replies, messages): a small tag with the original
+ * language, and "Translated · Show original" when a translation is shown.
+ */
 export function TranslatedText({
-  translated,
   original,
-  note,
+  translated,
+  originalLabel,
+  translatedLabel,
   showOriginalLabel,
   showTranslationLabel,
+  className = "text-lg leading-relaxed",
 }: Props) {
   const [showOriginal, setShowOriginal] = useState(false);
+  const showingTranslation = translated != null && !showOriginal;
 
   return (
     <>
-      <p className="text-lg leading-relaxed">{showOriginal ? original : translated}</p>
-      <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#E8E6E1] pt-4 text-slate">
-        <span className="flex items-center gap-2">
+      <p className={`whitespace-pre-line ${className}`}>{showingTranslation ? translated : original}</p>
+      {(translated != null || originalLabel) && (
+        <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate">
           <GlobeIcon className="size-4 shrink-0" />
-          {note}
-        </span>
-        <button
-          type="button"
-          onClick={() => setShowOriginal((v) => !v)}
-          className="shrink-0 font-black text-ink underline underline-offset-4"
-        >
-          {showOriginal ? showTranslationLabel : showOriginalLabel}
-        </button>
-      </div>
+          <span>{showingTranslation ? translatedLabel : originalLabel}</span>
+          {translated != null && (
+            <>
+              <span aria-hidden="true">·</span>
+              <button
+                type="button"
+                onClick={() => setShowOriginal((v) => !v)}
+                className="font-black text-ink underline underline-offset-4"
+              >
+                {showingTranslation ? showOriginalLabel : showTranslationLabel}
+              </button>
+            </>
+          )}
+        </p>
+      )}
     </>
   );
 }

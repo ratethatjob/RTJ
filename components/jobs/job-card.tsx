@@ -1,6 +1,7 @@
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Job } from "@/lib/data/types";
+import { languageList } from "./languages";
 import { formatPay } from "./pay";
 import { DemoChip } from "@/components/demo-badge";
 import { QuickBadge } from "./quick-badge";
@@ -38,6 +39,9 @@ export async function JobCard({ job, showPlace = true }: { job: Job; showPlace?:
         {pay && <span className="rounded-lg bg-signal px-2.5 py-1">{pay}</span>}
         <span className="rounded-lg border border-mist px-2.5 py-1">{t(`schedule.${job.schedule}`)}</span>
       </span>
+      {job.languages.length > 0 && (
+        <span className="mt-1 text-sm font-black">{t("languagesLine", { list: languageList(job.languages, locale, t) })}</span>
+      )}
       <span className="mt-1 text-sm text-slate">
         {t("posted", { date: format.dateTime(new Date(job.publishedAt), { dateStyle: "medium" }) })}
       </span>

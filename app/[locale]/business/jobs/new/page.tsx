@@ -36,6 +36,8 @@ export default async function NewJobPage({ params, searchParams }: PageProps<"/[
           applyMode: "quick",
           questions: [],
           tier: "standard",
+          adLanguage: location.country === "HU" ? "hu" : "en",
+          languages: [],
           closesAt: "",
         }}
       />

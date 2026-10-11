@@ -1,6 +1,6 @@
 import { getPathname, redirect } from "@/i18n/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { BackLink } from "@/components/app/back-link";
+import { BackButton } from "@/components/app/back-button";
 import { SignInForm } from "@/components/app/sign-in-form";
 import { getUser, safeNext } from "@/lib/auth";
 
@@ -24,9 +24,14 @@ export default async function SignInPage({ params, searchParams }: PageProps<"/[
   }
 
   const t = await getTranslations("Auth");
+  const tn = await getTranslations("Nav");
+  // Without an earlier page in this tab, go to `next` only when it's a public page:
+  // a page that needs sign-in would send the visitor straight back here.
+  const needsSignIn = /^\/(?:hu\/)?(?:app|business)(?:[/?]|$)/.test(next);
+  const fallback = needsSignIn ? (business ? getPathname({ href: "/employers", locale }) : home) : next;
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-4">
-      <BackLink href={next} />
+      <BackButton fallback={fallback} label={tn("back")} />
       {business && <p className="mt-4 text-sm font-black uppercase tracking-tagline text-slate">{t("businessEyebrow")}</p>}
       <h1 className={`${business ? "mt-2" : "mt-4"} text-4xl font-black leading-[1.05] tracking-brand`}>
         {business ? t("businessTitle") : t("title")}

@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { languageList } from "@/components/jobs/languages";
 import { formatPay } from "@/components/jobs/pay";
 import { getCompany, getLocationById } from "@/lib/data";
 import { getCompanyJobs, getJob, getLocationJobs } from "@/lib/data/jobs";
@@ -91,6 +92,7 @@ export async function jobsWidgetData(scope: WidgetScope, id: string, locale: str
             schedule: t(`schedule.${j.schedule}`),
             work_type: tr(`workType.${j.workType}`),
             quick_apply: j.applyMode === "quick",
+            languages: j.languages.length ? t("languagesLine", { list: languageList(j.languages, locale, t) }) : null,
             featured: j.featured,
             url: `${SITE_URL}${path}?ref=embed`,
             apply_url: `${SITE_URL}${prefix}/app/apply/${j.id}?ref=embed`,

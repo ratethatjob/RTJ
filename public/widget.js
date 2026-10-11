@@ -144,6 +144,7 @@
           if (j.pay) badges.appendChild(el("span", { class: "p" }, j.pay));
           badges.appendChild(el("span", { class: "s" }, j.schedule));
           info.appendChild(badges);
+          if (j.languages) info.appendChild(el("div", { class: "m" }, j.languages));
           li.appendChild(info);
           var apply = link(j.apply_url + (from ? "&from=" + encodeURIComponent(from) : ""), { class: "a", "aria-label": L.apply + ": " + j.title + " (" + L.newTab + ")" }, L.apply);
           li.appendChild(apply);

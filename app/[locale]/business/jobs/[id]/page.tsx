@@ -10,7 +10,9 @@ import { getBusiness } from "@/lib/business";
 import type { JobQuestion } from "@/lib/data/types";
 import type { Insight } from "@/lib/candidate-ai";
 import { InsightCard } from "@/components/business/insight-card";
+import { jobQuestions } from "@/components/jobs/languages";
 import { type Answers, unmetMusts } from "@/lib/job-questions";
+import { type JobLanguage, languageName } from "@/lib/languages";
 
 export const instant = false;
 
@@ -41,13 +43,23 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const { data: job } = await supabase
     .from("jobs")
-    .select("id, title, status, location_id, apply_mode, questions, tier")
+    .select("id, title, status, location_id, apply_mode, questions, languages, tier")
     .eq("id", id)
     .maybeSingle();
   const location = job && org.locations.find((l) => l.id === job.location_id);
   if (!job || !location) notFound();
 
-  const questions = (job.questions ?? []) as JobQuestion[];
+  const tj = await getTranslations("Jobs");
+  // The employer's questions plus one must-have per expected language.
+  const questions = jobQuestions(
+    { questions: (job.questions ?? []) as JobQuestion[], languages: (job.languages ?? []) as JobLanguage[] },
+    locale,
+    tj,
+  );
+  const { data: messageLanguages } = await supabase.rpc("job_application_message_languages", { p_job_id: job.id });
+  const messageLanguage = new Map(
+    ((messageLanguages ?? []) as { id: string; message_language: string | null }[]).map((m) => [m.id, m.message_language]),
+  );
   const { data } = await supabase.rpc("job_application_list", { p_job_id: job.id });
   // Applicants who meet every must-have first (the list is newest first already).
   const applications = ((data ?? []) as Application[])
@@ -66,6 +78,7 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
     await supabase.rpc("mark_applications_viewed", { p_job_id: job.id });
   }
   const t = await getTranslations("BusinessJobs");
+  const tr = await getTranslations("Review");
   const format = await getFormatter();
   const status = job.status as "draft" | "open" | "closed";
   const ai = job.tier === "basic" || job.tier === "pro";
@@ -196,7 +209,16 @@ export default async function JobApplicationsPage({ params }: PageProps<"/[local
                     )}
                   </dl>
                 )}
-                {a.message && <p className="mt-3 whitespace-pre-line">{a.message}</p>}
+                {a.message && (
+                  <div className="mt-3">
+                    <p className="whitespace-pre-line">{a.message}</p>
+                    {messageLanguage.get(a.id) && (
+                      <p className="mt-1 text-sm text-slate">
+                        {tr("originalLanguage", { language: languageName(messageLanguage.get(a.id)!, locale) })}
+                      </p>
+                    )}
+                  </div>
+                )}
                 {ai ? (
                   a.insight ? (
                     <InsightCard insight={a.insight} lang={lang} />

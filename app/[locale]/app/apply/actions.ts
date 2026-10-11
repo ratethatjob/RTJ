@@ -1,10 +1,12 @@
 "use server";
 
 import { after } from "next/server";
+import { getLocale } from "next-intl/server";
 import { getUser } from "@/lib/auth";
 import { followupQuestions, summarizeApplication } from "@/lib/candidate-ai";
 import type { JobQuestion } from "@/lib/data/types";
 import { parseAnswers } from "@/lib/job-questions";
+import { type JobLanguage, languageQuestions } from "@/lib/languages";
 
 export type ApplyInput = {
   jobId: string;
@@ -30,7 +32,7 @@ export async function applyToJob(
   // Mode and questions come from the job itself, not from the browser.
   const { data: job } = await supabase
     .from("jobs")
-    .select("id, apply_mode, questions, status, tier")
+    .select("id, apply_mode, questions, languages, status, tier")
     .eq("id", input.jobId)
     .maybeSingle();
   if (!job || job.status !== "open") return { error: "closed" };
@@ -40,7 +42,12 @@ export async function applyToJob(
   const email = input.email.trim();
   const phone = input.phone.trim();
   const message = input.message.trim();
-  const answers = parseAnswers(job.questions as JobQuestion[], input.answers);
+  // Expected languages are must-have yes/no questions too (the text doesn't matter here).
+  const questions = [
+    ...(job.questions as JobQuestion[]),
+    ...languageQuestions((job.languages ?? []) as JobLanguage[], () => ""),
+  ];
+  const answers = parseAnswers(questions, input.answers);
   if (
     fullName.length < 2 ||
     fullName.length > 120 ||
@@ -67,6 +74,7 @@ export async function applyToJob(
     answers,
     cv_path: quick ? null : cvPath,
     message: message || null,
+    message_language: message ? await getLocale() : null,
     source: input.source === "embed" ? "embed" : "site",
   }).select("id").single();
   if (!error) {
@@ -118,6 +126,12 @@ export async function replyToEmployer(applicationId: string, body: string): Prom
   if (!user || !text || text.length > 4000) return { error: true };
   const { error } = await supabase
     .from("application_messages")
-    .insert({ application_id: applicationId, sender: "applicant", author_id: user.id, body: text });
+    .insert({
+      application_id: applicationId,
+      sender: "applicant",
+      author_id: user.id,
+      body: text,
+      original_language: await getLocale(),
+    });
   return error ? { error: true } : { ok: true };
 }

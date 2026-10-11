@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { jobQuestions, languageList } from "@/components/jobs/languages";
 import { formatPay } from "@/components/jobs/pay";
 import { QuickBadge } from "@/components/jobs/quick-badge";
 import { FactBars, GhostingMeter, ScoreTile } from "@/components/scores";
@@ -12,6 +13,7 @@ import { getAllJobs, getJob } from "@/lib/data/jobs";
 import type { Job } from "@/lib/data/types";
 import { locationPath } from "@/lib/format";
 import { findRedirect } from "@/lib/data/redirects";
+import { languageName } from "@/lib/languages";
 import { localeAlternates, SITE_URL } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/[company]/[location]/jobs/[job]">;
@@ -75,6 +77,7 @@ export default async function JobPage({ params }: Props) {
   const applyHref = `/app/apply/${job.id}`;
   const quick = job.applyMode === "quick";
   const date = (d: string) => format.dateTime(new Date(d), { dateStyle: "medium" });
+  const questions = jobQuestions(job, locale, t);
 
   return (
     <>
@@ -117,6 +120,8 @@ export default async function JobPage({ params }: Props) {
                     [t("facts.hours"), t(`schedule.${job.schedule}`)],
                     [t("facts.contract"), tr(`workType.${job.workType}`)],
                     [t("facts.where"), job.location.city],
+                    ...(job.adLanguage ? [[t("facts.adLanguage"), languageName(job.adLanguage, locale)] as const] : []),
+                    ...(job.languages.length ? [[t("facts.languages"), languageList(job.languages, locale, t)] as const] : []),
                   ] as const
                 ).map(([label, value]) => (
                   <div key={label} className="rounded-2xl bg-paper p-4">
@@ -131,7 +136,7 @@ export default async function JobPage({ params }: Props) {
                   {quick ? t("applyQuick") : t("applyCv")}
                 </Link>
                 <span className="text-slate">
-                  {quick ? t("quickHint", { count: job.questions.length }) : t("cvHint")}
+                  {quick ? t("quickHint", { count: questions.length }) : t("cvHint")}
                 </span>
               </div>
             </header>
@@ -165,12 +170,12 @@ export default async function JobPage({ params }: Props) {
               ) : null,
             )}
 
-            {job.questions.length > 0 && (
+            {questions.length > 0 && (
               <section className="rounded-[2rem] bg-ink p-6 text-paper sm:p-8">
                 <h2 className="text-2xl font-black tracking-brand">{t("questionsTitle")}</h2>
                 <p className="mt-1 text-mist">{quick ? t("questionsQuick") : t("questionsCv")}</p>
                 <ol className="mt-5 flex flex-col gap-2">
-                  {job.questions.map((q, i) => (
+                  {questions.map((q, i) => (
                     <li key={q.id} className="flex items-start justify-between gap-3 rounded-2xl bg-white/5 p-4">
                       <span className="flex gap-3">
                         <span className="font-black text-mist">{i + 1}.</span>
@@ -283,6 +288,10 @@ function JsonLd({ job, locale }: { job: Job; locale: string }) {
     ...(job.responsibilities.length && { responsibilities: job.responsibilities.join("\n") }),
     ...(job.requirements.length && { qualifications: job.requirements.join("\n") }),
     ...(job.offers.length && { jobBenefits: job.offers.join("\n") }),
+    // Expected languages as skills (JobPosting has no language property of its own).
+    ...(job.languages.length && {
+      skills: job.languages.map((l) => `${languageName(l.code, "en")} (${l.level})`).join(", "),
+    }),
     directApply: true,
     url: `${SITE_URL}${prefix}${path(job)}`,
   };

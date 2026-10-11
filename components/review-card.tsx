@@ -110,24 +110,33 @@ export async function ReviewCard({
 
       {body && review.body && (
         <div className="mt-4">
-          {body.translated ? (
-            <TranslatedText
-              translated={body.text}
-              original={review.body.original}
-              note={t("translatedFrom", { language: languageName(review.body.language) })}
-              showOriginalLabel={t("showOriginal")}
-              showTranslationLabel={t("showTranslation")}
-            />
-          ) : (
-            <p className="text-lg leading-relaxed">{body.text}</p>
-          )}
+          <TranslatedText
+            original={review.body.original}
+            translated={body.translated ? body.text : null}
+            originalLabel={review.body.language ? t("originalLanguage", { language: languageName(review.body.language) }) : null}
+            translatedLabel={t("translated")}
+            showOriginalLabel={t("showOriginal")}
+            showTranslationLabel={t("showTranslation")}
+          />
         </div>
       )}
 
-      {reply && (
+      {reply && review.reply && (
         <div className="mt-4 rounded-2xl bg-paper p-5">
           <p className="font-black">{t("replyFrom", { company: companyName })}</p>
-          <p className="mt-1 text-slate">{reply.text}</p>
+          <div className="mt-1 text-slate">
+            <TranslatedText
+              original={review.reply.body.original}
+              translated={reply.translated ? reply.text : null}
+              originalLabel={
+                review.reply.body.language ? t("originalLanguage", { language: languageName(review.reply.body.language) }) : null
+              }
+              translatedLabel={t("translated")}
+              showOriginalLabel={t("showOriginal")}
+              showTranslationLabel={t("showTranslation")}
+              className=""
+            />
+          </div>
         </div>
       )}
       {children}

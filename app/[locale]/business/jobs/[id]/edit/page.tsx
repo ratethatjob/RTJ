@@ -4,6 +4,7 @@ import { JobForm } from "@/components/business/job-form";
 import { getBusiness } from "@/lib/business";
 import { currencyFor } from "@/lib/currency";
 import type { JobQuestion } from "@/lib/data/types";
+import type { JobLanguage } from "@/lib/languages";
 
 export const instant = false;
 
@@ -44,6 +45,8 @@ export default async function EditJobPage({ params }: PageProps<"/[locale]/busin
           applyMode: job.apply_mode ?? "quick",
           questions: (job.questions ?? []) as JobQuestion[],
           tier: job.tier ?? "standard",
+          adLanguage: job.ad_language ?? "",
+          languages: (job.languages ?? []) as JobLanguage[],
           closesAt: job.closes_at ?? "",
         }}
       />

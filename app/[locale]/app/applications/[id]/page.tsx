@@ -26,7 +26,7 @@ export default async function ApplicationPage({ params }: PageProps<"/[locale]/a
   const { data } = await supabase
     .from("job_applications")
     .select(
-      "id, status, created_at, jobs(title, locations(name, address, companies(name))), application_messages(id, sender, body, created_at), application_followups(id, question, answer, position)",
+      "id, status, created_at, jobs(title, locations(name, address, companies(name))), application_messages(id, sender, body, created_at, original_language), application_followups(id, question, answer, position)",
     )
     .eq("id", id)
     .maybeSingle();

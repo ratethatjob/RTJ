@@ -1,10 +1,17 @@
 "use client";
 
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { languageName } from "@/lib/languages";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
-export type ThreadMessage = { id: string; sender: "employer" | "applicant"; body: string; created_at: string };
+export type ThreadMessage = {
+  id: string;
+  sender: "employer" | "applicant";
+  body: string;
+  created_at: string;
+  original_language?: string | null;
+};
 
 type Props = {
   messages: ThreadMessage[];
@@ -20,6 +27,7 @@ type Props = {
 export function MessageThread({ messages, viewer, otherName, send, collapsed = false, readOnly = false }: Props) {
   const t = useTranslations("Thread");
   const format = useFormatter();
+  const locale = useLocale();
   const router = useRouter();
   const [open, setOpen] = useState(!collapsed);
   const [body, setBody] = useState("");
@@ -43,6 +51,7 @@ export function MessageThread({ messages, viewer, otherName, send, collapsed = f
                 </span>
                 <span className="mt-1 text-xs text-slate">
                   {mine ? t("you") : otherName} · {format.dateTime(new Date(m.created_at), { dateStyle: "medium", timeStyle: "short" })}
+                  {m.original_language && ` · ${t("original", { language: languageName(m.original_language, locale) })}`}
                 </span>
               </li>
             );

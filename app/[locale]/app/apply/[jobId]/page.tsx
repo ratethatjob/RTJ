@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { jobQuestions } from "@/components/jobs/languages";
 import { BackLink } from "@/components/app/back-link";
 import { ApplyForm } from "@/components/app/apply-form";
 import { jobPath } from "@/components/jobs/job-card";
@@ -29,6 +30,7 @@ export default async function ApplyPage({ params, searchParams }: PageProps<"/[l
   const query = new URLSearchParams({ ...(source === "embed" && { ref: "embed" }), ...(from && { from }) }).toString();
   const { supabase, user } = await requireUser(locale, `/app/apply/${jobId}${query ? `?${query}` : ""}`);
   const t = await getTranslations("Apply");
+  const tj = await getTranslations("Jobs");
   const job = await getJob(jobId);
   const { data: existing } = job
     ? await supabase.from("job_applications").select("id").eq("job_id", job.id).eq("user_id", user.id).maybeSingle()
@@ -63,7 +65,7 @@ export default async function ApplyPage({ params, searchParams }: PageProps<"/[l
             userId={user.id}
             company={job.location.companyName}
             mode={job.applyMode}
-            questions={job.questions}
+            questions={jobQuestions(job, locale, tj)}
             source={source}
             returnUrl={from}
             defaultEmail={user.email ?? ""}

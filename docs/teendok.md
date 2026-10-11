@@ -8,18 +8,18 @@
   - `CRON_SECRET` (tetszőleges hosszú véletlen szöveg)
 - [ ] Google Places: Google Cloud Console → új projekt → „Places API (New)” bekapcsolása → API kulcs (API restrictions: csak Places API (New)) → Vercelen `GOOGLE_PLACES_API_KEY`, utána Redeploy. A `SUPABASE_SECRET_KEY` is kell hozzá. A kód kész, a kulccsal azonnal működik.
 - [ ] Vercel: `POSTGRES_URL_NON_POOLING` (RTJ adatbázis kapcsolat), hogy a migrációk minden buildnél automatikusan lefussanak
-- [ ] Supabase Auth: Site URL és Redirect URL-ek beállítva (rtj-k9pn.vercel.app, ratethatjob.com, www, preview, localhost). Hátra: saját SMTP (Resend: smtp.resend.com, jelszó a kulcs), utána {{ .Token }} az e-mail sablonba
+- [x] Supabase Auth: Site URL = https://ratethatjob.com, Redirect URL-ek beállítva (rtj-k9pn.vercel.app, ratethatjob.com, www, preview, localhost); saját SMTP a Resenden (no-reply@ratethatjob.com), a Magic link és a Confirm sign up sablonban benne a {{ .Token }} kód (EN+HU)
 - [ ] Belépési szolgáltatók: Apple, Google, Facebook
 - [x] Domain: ratethatjob.com él a Vercelen, a www 308-cal a fő címre visz (GoDaddy @ A rekord → 216.198.79.1)
 - [ ] Régi Vercel projekt („rtj”) és a supabase-cyan-kettle Supabase projekt törlése
 
-- [ ] Üzemeltető: ABOVO JOBS MENA L.L.C-FZ beírva (`lib/site-config.ts`). (TRN: 105494925800001, irányadó jog: DIFC). Hiányzik: a `PRICING` Pro havi ár telephelyenként
+- [x] Üzemeltető: ABOVO JOBS MENA L.L.C-FZ beírva (`lib/site-config.ts`). (TRN: 105494925800001, irányadó jog: DIFC).
 - [ ] Álláscsomag árak: `JOB_PRICING` (`lib/site-config.ts`) – javaslat: 4 990 / 14 990 / 29 990 Ft, 19 / 49 / 99 EUR
-- [ ] `RESEND_API_KEY` + `EMAIL_FROM` a Vercelen (üzenet e-mailben is a jelöltnek)
+- [x] `RESEND_API_KEY` a Vercelen, újraépítve (`EMAIL_FROM` nem kötelező, alapból no-reply@ratethatjob.com)
 - [ ] Jogi szövegek átnézése: `content/legal/` (ÁSZF, adatvédelem, sütik, impresszum – HU és EN). Az adatfeldolgozók (Stripe, Resend, Anthropic jelentkezés-összefoglaló) felvéve
 
 - [ ] Élesítés előtt: demó adatok törlése (admin → Demó adatok → „Minden demó adat törlése”, vagy `select private.purge_demo();`)
 
 ## Fejlesztés
-- [ ] E-mailes meghívók (Resend) – kulcs kell
+- [ ] E-mailes meghívók (Resend) – a kulcs megvan, a küldés még hátravan
 - [ ] Stripe: Pro előfizetés (helyszínenként, havi/éves; most 30 nap próba, utána `plan_orders` + kézi számla, admin „Előfizetések” fül) és álláscsomagok fizetése (most `job_orders` + kézi számla) – kulcsok kellenek

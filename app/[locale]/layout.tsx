@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { FooterGate } from "@/components/footer-gate";
+import { HistoryTracker } from "@/components/history-tracker";
 import { SiteFooter } from "@/components/site-footer";
 import { routing } from "@/i18n/routing";
 import { pickMessages, SHARED_CLIENT_NAMESPACES } from "@/lib/client-messages";
@@ -44,6 +45,7 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${archivo.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider messages={await pickMessages(SHARED_CLIENT_NAMESPACES)}>
+          <HistoryTracker />
           {children}
           <FooterGate>
             <SiteFooter />

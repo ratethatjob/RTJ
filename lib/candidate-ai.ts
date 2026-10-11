@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { docxText } from "./cv-text";
 import type { JobQuestion } from "./data/types";
+import { type JobLanguage, languageName, languageQuestions } from "./languages";
 import { adminClient } from "./supabase/admin";
 
 // AI help for employers (job packages): a summary of each applicant (basic, pro)
@@ -32,7 +33,7 @@ async function load(applicationId: string) {
   if (!a || a.status === "withdrawn") return null;
   const { data: job } = await db
     .from("jobs")
-    .select("id, title, description, responsibilities, requirements, offers, questions, tier, apply_mode")
+    .select("id, title, description, responsibilities, requirements, offers, questions, languages, ad_language, tier, apply_mode")
     .eq("id", a.job_id)
     .single();
   if (!job) return null;
@@ -47,7 +48,12 @@ async function load(applicationId: string) {
 type Loaded = NonNullable<Awaited<ReturnType<typeof load>>>;
 
 function describe({ a, job, followups }: Loaded) {
-  const questions = (job.questions ?? []) as JobQuestion[];
+  // Expected languages are must-have questions too ("Do you speak English (conversational)?").
+  const languages = (job.languages ?? []) as JobLanguage[];
+  const questions = [
+    ...((job.questions ?? []) as JobQuestion[]),
+    ...languageQuestions(languages, (l) => `Do you speak ${languageName(l.code, "en")} at least at ${l.level} level?`),
+  ];
   const answers = { ...(a.answer ? { q1: a.answer } : {}), ...(a.answers ?? {}) } as Record<string, unknown>;
   const lines = (label: string, items: string[] | null) =>
     items?.length ? `${label}:\n${items.map((i) => `- ${i}`).join("\n")}\n` : "";
@@ -55,7 +61,9 @@ function describe({ a, job, followups }: Loaded) {
     `Title: ${job.title}\n${job.description}\n` +
     lines("Responsibilities", job.responsibilities) +
     lines("Requirements", job.requirements) +
-    lines("Offers", job.offers);
+    lines("Offers", job.offers) +
+    (job.ad_language ? `The ad is written in ${languageName(job.ad_language, "en")}.\n` : "") +
+    lines("Languages expected from applicants", languages.map((l) => `${languageName(l.code, "en")} (${l.level})`));
   const answerText = questions
     .filter((q) => answers[q.id] != null)
     .map((q) => {

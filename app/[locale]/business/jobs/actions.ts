@@ -2,7 +2,7 @@
 
 import { revalidateTag } from "next/cache";
 import { after } from "next/server";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { getUser } from "@/lib/auth";
 import { summarizeApplication } from "@/lib/candidate-ai";
 import { sendEmail } from "@/lib/email";
@@ -10,6 +10,7 @@ import { SITE_URL } from "@/lib/seo";
 import { JOB_TIERS, type JobTier } from "@/lib/site-config";
 import type { ApplyMode, JobQuestion } from "@/lib/data/types";
 import { parseQuestions } from "@/lib/job-questions";
+import { isLanguageCode, type JobLanguage, parseLanguages } from "@/lib/languages";
 
 export type JobInput = {
   locationId: string;
@@ -25,6 +26,8 @@ export type JobInput = {
   requirements: string;
   offers: string;
   applyMode: ApplyMode;
+  adLanguage: string;
+  languages: JobLanguage[];
   questions: JobQuestion[];
   tier: JobTier;
   closesAt: string;
@@ -48,6 +51,7 @@ function parse(input: JobInput) {
   const title = input.title.trim();
   const description = input.description.trim();
   const questions = parseQuestions(input.questions);
+  const languages = parseLanguages(input.languages);
   // One item per line.
   const lines = (v: string) =>
     v
@@ -62,6 +66,8 @@ function parse(input: JobInput) {
     !description ||
     description.length > 8000 ||
     !questions ||
+    !languages ||
+    (input.adLanguage !== "" && !isLanguageCode(input.adLanguage)) ||
     !["quick", "cv"].includes(input.applyMode) ||
     !JOB_TIERS.includes(input.tier) ||
     lists.some((l) => l.length > 15 || l.some((item) => item.length > 300)) ||
@@ -88,6 +94,8 @@ function parse(input: JobInput) {
     requirements: lists[1],
     offers: lists[2],
     apply_mode: input.applyMode,
+    ad_language: input.adLanguage || null,
+    languages,
     questions,
     question: null,
     tier: input.tier,
@@ -172,7 +180,11 @@ export async function messageApplicant(jobId: string, applicationId: string, bod
   const found = await managed(jobId, applicationId);
   if (!found) return { error: "generic" };
   const { supabase, app } = found;
-  const { error } = await supabase.rpc("send_application_message", { p_application_id: applicationId, p_body: text });
+  const { error } = await supabase.rpc("send_application_message", {
+    p_application_id: applicationId,
+    p_body: text,
+    p_language: await getLocale(),
+  });
   if (error) return { error: "generic" };
   revalidateTag("locations", "max");
   if (app.email) {

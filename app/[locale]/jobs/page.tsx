@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
 import { isCategory } from "@/lib/data";
 import { findJobs } from "@/lib/data/jobs";
+import { isLanguageCode, JOB_LANGUAGES, languageName } from "@/lib/languages";
 import { localeAlternates } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/jobs">;
@@ -17,7 +18,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const { locale } = await params;
   const sp = await searchParams;
   const t = await getTranslations({ locale, namespace: "Jobs" });
-  const filtered = Boolean(sp.q || sp.where || sp.category || sp.quick);
+  const filtered = Boolean(sp.q || sp.where || sp.category || sp.quick || sp.lang);
   return {
     title: `${t("metaTitle")} | RateThatJob`,
     description: t("metaDescription"),
@@ -35,15 +36,17 @@ export default async function JobsPage({ params, searchParams }: Props) {
   const where = typeof sp.where === "string" ? sp.where.slice(0, 100) : "";
   const category = isCategory(sp.category) ? sp.category : null;
   const quick = sp.quick === "1";
+  const lang = isLanguageCode(sp.lang) ? sp.lang : null;
   const t = await getTranslations("Jobs");
   const th = await getTranslations("Home");
   const tc = await getTranslations("Categories");
-  const jobs = await findJobs(q, where, category, quick);
+  const jobs = await findJobs(q, where, category, quick, lang);
   const query = (c: string | null, quickOnly = quick) => ({
     ...(q && { q }),
     ...(where && { where }),
     ...(c && { category: c }),
     ...(quickOnly && { quick: "1" }),
+    ...(lang && { lang }),
   });
 
   return (
@@ -54,7 +57,7 @@ export default async function JobsPage({ params, searchParams }: Props) {
         <form
           action={getPathname({ href: "/jobs", locale })}
           role="search"
-          className="flex max-w-3xl flex-col rounded-3xl border border-mist/40 bg-white p-3 sm:flex-row sm:items-center sm:p-2"
+          className="flex max-w-4xl flex-col rounded-3xl border border-mist/40 bg-white p-3 sm:flex-row sm:items-center sm:p-2"
         >
           <label className="flex flex-1 flex-col px-4 py-2">
             <span className="text-sm font-black text-slate">{t("searchLabel")}</span>
@@ -69,6 +72,18 @@ export default async function JobsPage({ params, searchParams }: Props) {
               placeholder={th("wherePlaceholder")}
               className="bg-transparent text-lg outline-none"
             />
+          </label>
+          <span className="mx-1 h-px bg-[#E8E6E1] sm:h-10 sm:w-px" />
+          <label className="flex flex-col px-4 py-2">
+            <span className="text-sm font-black text-slate">{t("languageFilter")}</span>
+            <select name="lang" defaultValue={lang ?? ""} className="bg-transparent text-lg outline-none">
+              <option value="">{t("anyLanguage")}</option>
+              {JOB_LANGUAGES.map((code) => (
+                <option key={code} value={code}>
+                  {languageName(code, locale)}
+                </option>
+              ))}
+            </select>
           </label>
           {category && <input type="hidden" name="category" value={category} />}
           {quick && <input type="hidden" name="quick" value="1" />}
