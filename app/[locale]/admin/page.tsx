@@ -7,6 +7,7 @@ import { requireUser } from "@/lib/auth";
 import { domainCheck } from "@/lib/claim-check";
 import { jobPricing, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
 import { dashboardUrl } from "@/lib/stripe";
+import { StripeInvoiceCheck } from "@/components/admin/stripe-invoice-check";
 
 export const instant = false;
 
@@ -358,7 +359,10 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     const tp = await getTranslations("Plan");
     const { data: subs } = await supabase.rpc("admin_stripe_subscriptions");
     const subscriptions = (subs ?? []) as SubscriptionRow[];
-    extra = subscriptions.length > 0 && (
+    extra = (
+      <>
+      <StripeInvoiceCheck />
+      {subscriptions.length > 0 && (
       <section className="mt-8">
         <h2 className="mb-3 text-sm font-black uppercase tracking-tagline text-slate">{t("stripe.subscriptions")}</h2>
         <ul className="flex flex-col gap-3">
@@ -388,6 +392,8 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
           ))}
         </ul>
       </section>
+      )}
+      </>
     );
     items = ((counts[6].data ?? []) as PlanOrderRow[]).map((o) => {
       const price = PRICING[o.country === "HU" ? "hu" : "en"];

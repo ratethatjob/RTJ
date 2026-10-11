@@ -1,7 +1,15 @@
 import Stripe from "stripe";
 import { adminClient } from "./supabase/admin";
 import { SITE_URL } from "./seo";
-import { jobPricing, type JobTier, PRICING, YEARLY_MONTHS } from "./site-config";
+import { invoiceFooter as footerFor, invoiceSeller, taxExemptFor } from "./invoice-tax";
+import { jobPricing, type JobTier, OPERATOR, PRICING, YEARLY_MONTHS } from "./site-config";
+
+
+export { taxExemptFor } from "./invoice-tax";
+/** Seller line at the top of every invoice footer (official name, Meydan address, TRN). */
+export const INVOICE_SELLER = invoiceSeller(OPERATOR.taxNumber);
+/** Invoice footer for a customer's tax status: the seller line plus the legal basis. */
+export const invoiceFooter = (taxExempt: string | null | undefined) => footerFor(taxExempt, OPERATOR.taxNumber);
 
 // Stripe (live keys on Vercel): Pro subscriptions per location and one-time job ad payments.
 // Products, prices and the Customer Portal configuration are created here on first use
@@ -154,29 +162,55 @@ export function dashboardUrl(kind: "customers" | "subscriptions" | "payments", i
 // UAE (and EU without a VAT number) → none.
 // ---------------------------------------------------------------------------
 
-const EU = new Set([
-  "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU",
-  "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK",
-]);
+let accountTaxId: string | null = null;
 
-export function taxExemptFor(country: string | null | undefined, taxIdTypes: string[]): Stripe.Customer.TaxExempt | null {
-  const c = (country ?? "").toUpperCase();
-  if (!c) return null;
-  if (c === "AE") return "none";
-  if (EU.has(c)) return taxIdTypes.includes("eu_vat") ? "reverse" : "none";
-  return "exempt";
+/** Our UAE TRN as an account tax ID (created once through the API, found again by its value),
+ *  so invoices list it under the seller. null if Stripe refuses it. */
+export async function accountTaxIds(s: Stripe): Promise<string[]> {
+  if (!accountTaxId) {
+    try {
+      const list = await s.taxIds.list({ owner: { type: "account" }, limit: 100 });
+      accountTaxId =
+        list.data.find((t) => t.type === "ae_trn" && t.value.replace(/\D/g, "") === OPERATOR.taxNumber)?.id ??
+        (await s.taxIds.create({ type: "ae_trn", value: OPERATOR.taxNumber, owner: { type: "account" } })).id;
+    } catch (e) {
+      console.error("accountTaxIds", e);
+      return [];
+    }
+  }
+  return [accountTaxId];
 }
 
-/** Sets the customer's tax_exempt from its billing country and tax IDs (no-op when unchanged).
- *  Run before each Checkout and from the webhook, so invoices carry the right status. */
-export async function syncTaxExempt(s: Stripe, customerId: string) {
+/** What a customer's invoices will carry, after a sync (for the admin check). */
+export type InvoiceSetup = { customerId: string; taxExempt: string | null; footer: string | null; subscriptions: number };
+
+/** Sets the customer's tax_exempt from its billing country and tax IDs, the matching invoice
+ *  footer, and our TRN on its live subscriptions (each only when it differs). Run before each
+ *  Checkout, from the webhook and daily, so every invoice carries the right status and text. */
+export async function syncTaxExempt(s: Stripe, customerId: string): Promise<InvoiceSetup | null> {
   const customer = await s.customers.retrieve(customerId, { expand: ["tax_ids"] });
-  if (customer.deleted) return;
+  if (customer.deleted) return null;
   const wanted = taxExemptFor(
     customer.address?.country,
     (customer.tax_ids?.data ?? []).map((t) => t.type),
   );
-  if (wanted && wanted !== customer.tax_exempt) await s.customers.update(customerId, { tax_exempt: wanted });
+  const exempt = wanted ?? customer.tax_exempt;
+  const footer = invoiceFooter(exempt);
+  const update: Stripe.CustomerUpdateParams = {};
+  if (wanted && wanted !== customer.tax_exempt) update.tax_exempt = wanted;
+  if (customer.invoice_settings?.footer !== footer) update.invoice_settings = { footer };
+  if (Object.keys(update).length) await s.customers.update(customerId, update);
+
+  const ids = await accountTaxIds(s);
+  const subs = await s.subscriptions.list({ customer: customerId, status: "all", limit: 100 });
+  const live = subs.data.filter((sub) => ["active", "trialing", "past_due", "unpaid", "incomplete"].includes(sub.status));
+  for (const sub of live) {
+    const has = (sub.invoice_settings?.account_tax_ids ?? []).map((t) => (typeof t === "string" ? t : t.id));
+    if (ids.length && ids.some((id) => !has.includes(id))) {
+      await s.subscriptions.update(sub.id, { invoice_settings: { account_tax_ids: ids } });
+    }
+  }
+  return { customerId, taxExempt: exempt ?? null, footer, subscriptions: live.length };
 }
 
 export type BillingDetails = {
@@ -199,4 +233,44 @@ export async function billingDetails(s: Stripe, customerId: string): Promise<Bil
       : [],
     taxIds: (customer.tax_ids?.data ?? []).map((t) => ({ type: t.type, value: t.value })),
   };
+}
+
+/** One customer's invoice setup after a sync, with its next subscription invoice (admin check). */
+export type InvoiceCheck = InvoiceSetup & {
+  orgName: string;
+  next: { amountDue: number; currency: string; date: string | null; footer: string | null; accountTaxIds: number }[];
+};
+
+/** Syncs every org's Stripe customer (tax status, footer, our TRN) and previews the next
+ *  invoice of each live subscription. Daily from the cron and on demand from the admin. */
+export async function syncAllInvoiceSetups(
+  s: Stripe,
+  db: NonNullable<ReturnType<typeof adminClient>>,
+): Promise<InvoiceCheck[]> {
+  const { data: orgs } = await db.from("orgs").select("name, stripe_customer_id").not("stripe_customer_id", "is", null);
+  const out: InvoiceCheck[] = [];
+  for (const org of orgs ?? []) {
+    try {
+      const setup = await syncTaxExempt(s, org.stripe_customer_id as string);
+      if (!setup) continue;
+      const subs = await s.subscriptions.list({ customer: setup.customerId, status: "all", limit: 100 });
+      const next = [];
+      for (const sub of subs.data.filter((x) => ["active", "trialing", "past_due"].includes(x.status) && !x.cancel_at_period_end)) {
+        const inv = await s.invoices.createPreview({ subscription: sub.id }).catch(() => null);
+        if (!inv) continue;
+        const when = inv.next_payment_attempt ?? inv.period_end;
+        next.push({
+          amountDue: inv.amount_due,
+          currency: inv.currency,
+          date: when ? new Date(when * 1000).toISOString() : null,
+          footer: inv.footer ?? null,
+          accountTaxIds: inv.account_tax_ids?.length ?? 0,
+        });
+      }
+      out.push({ ...setup, orgName: org.name as string, next });
+    } catch (e) {
+      console.error("syncAllInvoiceSetups", org.stripe_customer_id, e);
+    }
+  }
+  return out;
 }

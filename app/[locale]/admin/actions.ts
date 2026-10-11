@@ -5,6 +5,8 @@ import { expireWorkplaces } from "@/lib/cache";
 import { getUser } from "@/lib/auth";
 import { isCategory } from "@/lib/categories";
 import { sendClaimEmail } from "@/lib/claim-emails";
+import { type InvoiceCheck, stripe, syncAllInvoiceSetups } from "@/lib/stripe";
+import { adminClient } from "@/lib/supabase/admin";
 
 type Result = { ok?: true; error?: true };
 
@@ -208,4 +210,21 @@ export async function purgeDemo(): Promise<Result> {
   expireWorkplaces();
   updateTag("jobs");
   return { ok: true };
+}
+
+/** Syncs every Stripe customer's tax status, invoice footer and our TRN now, and returns what
+ *  their next invoices will carry. Admins only. */
+export async function syncStripeInvoices(): Promise<{ rows?: InvoiceCheck[]; error?: true }> {
+  const { supabase, user } = await getUser();
+  if (!user) return { error: true };
+  const { data: admin } = await supabase.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
+  const s = stripe();
+  const db = adminClient();
+  if (!admin || !s || !db) return { error: true };
+  try {
+    return { rows: await syncAllInvoiceSetups(s, db) };
+  } catch (e) {
+    console.error("syncStripeInvoices", e);
+    return { error: true };
+  }
 }

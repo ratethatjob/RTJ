@@ -867,7 +867,19 @@
     "refreshPagesHint": "SQL-lel vagy migrációval módosítottál munkahelyadatot? A nyilvános oldalak a következő látogatástól mutatják.",
     "refreshPagesDone": "Kész.",
     "refreshPagesError": "Nem sikerült frissíteni.",
-    "idMissing": "Nincs csatolva (korábbi igénylés)"
+    "idMissing": "Nincs csatolva (korábbi igénylés)",
+    "invoiceCheck": {
+      "title": "Számlabeállítások a Stripe-ban",
+      "body": "Most beállítja minden ügyfél adóstátuszát, a számla láblécét (eladó, TRN, jogalap) és a TRN-ünket az előfizetéseiken, majd megmutatja, mi lesz a következő számlájukon. Naponta magától is lefut.",
+      "run": "Szinkronizálás most",
+      "error": "Nem sikerült lefuttatni. Ellenőrizd a Stripe és a Supabase kulcsot.",
+      "none": "Még nincs Stripe-ügyfél.",
+      "noNext": "Nincs következő előfizetési számla.",
+      "next": "Következő számla: {date}, {amount}",
+      "trnYes": "rajta a TRN-ünk",
+      "trnNo": "hiányzik a TRN-ünk",
+      "noFooter": "(nincs lábléc)"
+    }
   },
   "Search": {
     "title": "Munkahely keresése",

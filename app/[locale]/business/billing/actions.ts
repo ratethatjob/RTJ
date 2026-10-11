@@ -8,7 +8,9 @@ import { SITE_URL } from "@/lib/seo";
 import type { JobTier } from "@/lib/site-config";
 import { JOB_TIERS } from "@/lib/site-config";
 import {
+  accountTaxIds,
   billingCurrency,
+  INVOICE_SELLER,
   type Interval,
   jobOrderPrice,
   orgCustomer,
@@ -197,7 +199,7 @@ export async function payForJob(jobId: string, tier: JobTier): Promise<JobPaymen
     const unitAmount = toMinor(amount, currency);
     const customer = await orgCustomer(s, job.org_id, user.email ?? null, locale);
     // Returning buyers: reverse charge / exempt is set before Checkout finalizes the invoice.
-    await syncTaxExempt(s, customer);
+    const setup = await syncTaxExempt(s, customer);
     const base = `${SITE_URL}${localePath(locale)}/business/jobs/${jobId}`;
     const t = await getTranslations("Billing");
     const tj = await getTranslations("BusinessJobs");
@@ -212,7 +214,12 @@ export async function payForJob(jobId: string, tier: JobTier): Promise<JobPaymen
       line_items: [{ quantity: 1, price_data: { currency, unit_amount: unitAmount, product_data: { name: name.slice(0, 250) } } }],
       metadata: meta,
       payment_intent_data: { metadata: meta, description: `${name} – ${place.name}`.slice(0, 1000) },
-      invoice_creation: { enabled: true, invoice_data: { metadata: meta } },
+      // The footer follows the status known now; a buyer adding a VAT number in this Checkout
+      // gets "reverse" from the webhook for later invoices.
+      invoice_creation: {
+        enabled: true,
+        invoice_data: { metadata: meta, footer: setup?.footer ?? INVOICE_SELLER, account_tax_ids: await accountTaxIds(s) },
+      },
       client_reference_id: order.order_id,
       billing_address_collection: "required",
       tax_id_collection: { enabled: true, required: "if_supported" },

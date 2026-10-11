@@ -867,7 +867,19 @@
     "refreshPagesHint": "Changed workplace data with SQL or a migration? Public pages show it from the next visit.",
     "refreshPagesDone": "Done.",
     "refreshPagesError": "Couldn't refresh.",
-    "idMissing": "Not attached (older request)"
+    "idMissing": "Not attached (older request)",
+    "invoiceCheck": {
+      "title": "Invoice settings in Stripe",
+      "body": "Sets every customer's tax status, the invoice footer (seller, TRN, legal basis) and our TRN on their subscriptions now, then shows what their next invoice will carry. It also runs daily.",
+      "run": "Sync now",
+      "error": "Couldn't run the sync. Check the Stripe and Supabase keys.",
+      "none": "No Stripe customers yet.",
+      "noNext": "No upcoming subscription invoice.",
+      "next": "Next invoice: {date}, {amount}",
+      "trnYes": "our TRN on it",
+      "trnNo": "our TRN missing",
+      "noFooter": "(no footer)"
+    }
   },
   "Search": {
     "title": "Find a workplace",

@@ -4,12 +4,13 @@ import { decryptEmail } from "@/lib/invite-crypto";
 import { type InviteToSend, sendInviteEmails } from "@/lib/invite-emails";
 import { sendPendingBillingNotices } from "@/lib/billing-notices";
 import { SITE_URL } from "@/lib/seo";
-import { stripe } from "@/lib/stripe";
+import { stripe, syncAllInvoiceSetups } from "@/lib/stripe";
 import { adminClient } from "@/lib/supabase/admin";
 
 // Daily: emails the Pro trial notices (written in-app by process_trials()) and billing notices
 // (yearly renewal reminders from process_renewals()) to owners and HR, cancels the Stripe
 // subscriptions of locations that left their org (stripe_cancel_queue),
+// keeps every Stripe customer's tax status, invoice footer and our TRN in line,
 // and the one reminder for email invites sent 5+ days ago and not used yet (then the address is cleared).
 // Needs SUPABASE_SECRET_KEY and RESEND_API_KEY; without them the notices stay in-app only.
 const KINDS = ["trial_ending", "trial_ended"];
@@ -57,6 +58,7 @@ export async function GET(request: Request) {
     billing: await sendPendingBillingNotices(db),
     cancelled: await cancelOrphanSubscriptions(db),
     reminders: await sendInviteReminders(db),
+    invoiceSetups: await syncInvoiceSetups(db),
   });
 }
 
@@ -102,4 +104,9 @@ async function sendInviteReminders(db: NonNullable<ReturnType<typeof adminClient
     if (email) invites.push({ id: r.id, token: r.token, locale: r.locale ?? "en", email, locationId: batch.location_id });
   }
   return invites.length ? sendInviteEmails(db, invites, true) : 0;
+}
+
+async function syncInvoiceSetups(db: NonNullable<ReturnType<typeof adminClient>>) {
+  const s = stripe();
+  return s ? (await syncAllInvoiceSetups(s, db)).length : 0;
 }
