@@ -13,6 +13,7 @@ import { CATEGORIES, isCategory } from "@/lib/categories";
 import { kindLabel } from "@/lib/place-types";
 import { adminClient } from "@/lib/supabase/admin";
 import { Decision } from "@/components/admin/decision";
+import { AdminOverview, type Overview } from "@/components/admin/overview";
 import { PurgeDemo } from "@/components/admin/purge-demo";
 import { BackLink } from "@/components/app/back-link";
 import { SiteHeader } from "@/components/site-header";
@@ -28,7 +29,7 @@ import { OSM_CITIES, OSM_GROUPS } from "@/lib/osm-import-core";
 export const instant = false;
 
 const TABS = ["claims", "moderation", "verifications", "disputes", "reports", "orders", "plans"] as const;
-const TOOLS = ["metrics", "workplaces", "duplicates", "osm", "entities", "import", "demo"] as const;
+const TOOLS = ["overview", "metrics", "workplaces", "duplicates", "osm", "entities", "import", "demo"] as const;
 type Queue = (typeof TABS)[number];
 type Tab = Queue | (typeof TOOLS)[number];
 
@@ -92,7 +93,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
   setRequestLocale(locale);
   const { tab: rawTab, q: rawQ, cat: rawCat } = await searchParams;
   const cat = isCategory(rawCat) ? rawCat : null;
-  const tab: Tab = [...TABS, ...TOOLS].includes(rawTab as Tab) ? (rawTab as Tab) : "claims";
+  const tab: Tab = [...TABS, ...TOOLS].includes(rawTab as Tab) ? (rawTab as Tab) : "overview";
   const q = typeof rawQ === "string" ? rawQ.trim().slice(0, 80) : "";
   const { supabase, user } = await requireUser(locale, "/admin");
   const t = await getTranslations("Admin");
@@ -574,6 +575,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     open_jobs: number;
     embeds: number;
   };
+  const overview = tab === "overview" ? ((await supabase.rpc("admin_overview")).data as Overview | null) : null;
   const metrics = tab === "metrics" ? ((await supabase.rpc("admin_metrics")).data as Metrics | null) : null;
   // Map search calls per month (Google Places budget).
   const placesUsage =
@@ -656,6 +658,13 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
       <BackLink href={getPathname({ href: "/app/account", locale })} />
       <h1 className="text-4xl font-black tracking-brand lg:text-5xl">{t("title")}</h1>
       <nav className="-mx-4 flex flex-wrap gap-2 px-4">
+        <Link
+          href={{ pathname: "/admin", query: { tab: "overview" } }}
+          aria-current={tab === "overview" ? "page" : undefined}
+          className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-semibold ${tab === "overview" ? "bg-ink text-paper" : "bg-white"}`}
+        >
+          {t("tabs.overview")}
+        </Link>
         {TABS.map((key, i) => (
           <Link
             key={key}
@@ -671,7 +680,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
             </span>
           </Link>
         ))}
-        {TOOLS.map((key) => (
+        {TOOLS.filter((key) => key !== "overview").map((key) => (
           <Link
             key={key}
             href={{ pathname: "/admin", query: { tab: key } }}
@@ -682,7 +691,9 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
           </Link>
         ))}
       </nav>
-      {tab === "metrics" ? (
+      {tab === "overview" ? (
+        overview ? <AdminOverview data={overview} /> : <p className="rounded-3xl bg-white p-5 text-slate">{t("empty")}</p>
+      ) : tab === "metrics" ? (
         metrics && (
           <section className="flex flex-col gap-4">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">

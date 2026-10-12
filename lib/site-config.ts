@@ -27,6 +27,9 @@ export const countryCurrency = (country: string): Currency => (country === "HU" 
 /** Pro price per location and month, per currency. null = "price on request" until set. */
 export const PRO_MONTHLY: Record<Currency, number | null> = { EUR: 39, HUF: 12900 };
 
+/** Rough rate for the admin overview's single total (MRR/ARR in euros); never shown to customers. */
+export const HUF_PER_EUR = 400;
+
 /** Yearly billing: 2 months free (SPEC 7). */
 export const YEARLY_MONTHS = 10;
 

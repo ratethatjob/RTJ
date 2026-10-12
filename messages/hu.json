@@ -802,7 +802,8 @@
       "plans": "Előfizetések",
       "demo": "Demó adatok",
       "osm": "OSM-import",
-      "duplicates": "Lehetséges duplikátumok"
+      "duplicates": "Lehetséges duplikátumok",
+      "overview": "Áttekintés"
     },
     "empty": "Nincs teendő.",
     "approve": "Jóváhagyom",
@@ -1011,6 +1012,79 @@
       "photoId": "Személyazonosító okmány",
       "opened": "Megnyitva {count}×, utoljára {date}",
       "neverOpened": "Még nem nyitották meg"
+    },
+    "overview": {
+      "band": "{from} – {to}",
+      "todo": {
+        "title": "Teendők",
+        "none": "Nincs várakozó teendő",
+        "moderation": "Moderálás",
+        "claims": "Hozzáférés-igénylések",
+        "verifications": "Igazolások",
+        "reports": "Jelentések",
+        "disputes": "Vitatások",
+        "categories": "Ellenőrizendő kategóriák",
+        "duplicates": "Lehetséges duplikátumok"
+      },
+      "reviews": {
+        "title": "Értékelések",
+        "total": "Összes beküldött",
+        "published": "Megjelent",
+        "scheduled": "Időzítve (megjelenik)",
+        "pending": "Ellenőrzés alatt",
+        "held": "Visszatartva, csapat nézi",
+        "rejected": "Elutasítva",
+        "removed": "Eltávolítva",
+        "new": "Új",
+        "newSub": "ma · 7 nap · 30 nap"
+      },
+      "workplaces": {
+        "title": "Munkahelyek",
+        "total": "Összes",
+        "rated": "Értékelt",
+        "unrated": "Még nem értékelt",
+        "newVia": "Új, 30 nap: {via}"
+      },
+      "companies": {
+        "title": "Cégek és Pro",
+        "claimsOpen": "Várakozó igénylés",
+        "claimsApproved": "Jóváhagyott igénylés",
+        "trial": "Próbaidős telephely",
+        "pro": "Fizetős Pro telephely",
+        "canceling": "{count} lemondva az időszak végére",
+        "canceled": "Lemondva",
+        "pastDue": "Sikertelen fizetés",
+        "mrr": "MRR",
+        "arr": "ARR",
+        "total": "Összesen ≈ {value} (1 € = {rate} Ft)"
+      },
+      "users": {
+        "title": "Felhasználók",
+        "total": "Összes",
+        "active7": "Belépett az elmúlt 7 napban",
+        "new": "Új",
+        "newSub": "7 nap · 30 nap"
+      },
+      "jobs": {
+        "title": "Állások",
+        "active": "Élő hirdetés",
+        "expired": "Lezárt vagy lejárt",
+        "revenue30": "Álláscsomag-bevétel, 30 nap"
+      },
+      "trend": {
+        "reviews": "Új értékelések, elmúlt 30 nap",
+        "workplaces": "Új munkahelyek, elmúlt 30 nap"
+      },
+      "via": {
+        "search": "Kereső",
+        "rate": "Értékelés",
+        "claim": "Hozzáférés-igénylés",
+        "jobs": "Állások",
+        "osm_import": "OSM-import",
+        "manual": "Kézzel beírt",
+        "admin_import": "CSV-import",
+        "unknown": "Ismeretlen"
+      }
     }
   },
   "Search": {
@@ -1701,7 +1775,7 @@
         "index": "RateThatJob Index jelvény és widget"
       },
       "cta": "Ingyenes próba indítása",
-      "trial": "30 nap ingyen, bankkártya nélkül"
+      "trial": "30 nap ingyen"
     },
     "chains": {
       "name": "Láncok",
@@ -1726,7 +1800,7 @@
       "q4": "Befolyásolja a Pro a pontszámunkat?",
       "q4a": "Nem. A pontszám csak értékelésekből és jelentkezésekből jön, mindenkinél ugyanúgy.",
       "trial": "Van ingyenes próba?",
-      "triala": "Igen. Minden telephely 30 nap Prót kap ingyen, bankkártya nélkül. Automatikusan indul, amikor jóváhagyjuk a hozzáférés-igénylést, telephelyenként egyszer. Utána a kitett Index „jelenleg nem elérhető” feliratot mutat, amíg be nem kapcsolod a Prót."
+      "triala": "Igen. Minden telephely 30 nap Prót kap ingyen. Automatikusan indul, amikor jóváhagyjuk a hozzáférés-igénylést, telephelyenként egyszer. Utána a kitett Index „jelenleg nem elérhető” feliratot mutat, amíg be nem kapcsolod a Prót."
     },
     "jobAds": {
       "title": "Álláshirdetések",
@@ -1837,11 +1911,11 @@
       "fewQ": "Mi van, ha 5-nél kevesebb értékelésünk van?",
       "fewA": "A jelvényen az áll, hogy „Értékelj minket a RateThatJobon”, és a telephelyed értékelő űrlapjára visz. Oszd meg a meghívó linkedet a csapatoddal, hogy összegyűljön az 5.",
       "costQ": "Kerül valamibe?",
-      "costA": "A weboldaladra kitehető Index a Pro része. Minden telephely 30 napot kap ingyen, bankkártya nélkül, a hozzáférés jóváhagyásától. Utána a Pro telephelyenként fizetős; nélküle a kitett jelvények megmaradnak, de azt mutatják, hogy az Index jelenleg nem elérhető. A nyilvános profilod és az értékelések mindig láthatók."
+      "costA": "A weboldaladra kitehető Index a Pro része. Minden telephely 30 napot kap ingyen a hozzáférés jóváhagyásától. Utána a Pro telephelyenként fizetős; nélküle a kitett jelvények megmaradnak, de azt mutatják, hogy az Index jelenleg nem elérhető. A nyilvános profilod és az értékelések mindig láthatók."
     },
     "bottomTitle": "Hadd beszéljenek helyetted a dolgozóid.",
-    "bottomBody": "Igényelj ingyenes hozzáférést a munkahelyedhez, és próbáld ki az Indexet a karrieroldaladon 30 napig, bankkártya nélkül.",
-    "trialNote": "A Pro része · 30 nap ingyen, bankkártya nélkül"
+    "bottomBody": "Igényelj ingyenes hozzáférést a munkahelyedhez, és próbáld ki az Indexet a karrieroldaladon 30 napig ingyen.",
+    "trialNote": "A Pro része · 30 nap ingyen"
   },
   "CareersHub": {
     "metaTitle": "RateThatJob Careers Hub – az állásaid a saját weboldaladon",
@@ -1928,7 +2002,7 @@
     "trialDays": "Még {days} nap az ingyenes próbából ({date}-ig)",
     "trialEnded": "A próba lejárt – a kitett Index „jelenleg nem elérhető” feliratot mutat",
     "noPro": "Nincs Pro",
-    "trialOffer": "Minden telephely: 30 nap Pro ingyen, bankkártya nélkül.",
+    "trialOffer": "Minden telephely: 30 nap Pro ingyen.",
     "billingNote": "Amíg nincs online fizetés, számlát küldünk, és a befizetés után kapcsoljuk be a Prót.",
     "activate": "Pro bekapcsolása",
     "activate_month": "Havi",
@@ -2031,7 +2105,7 @@
     },
     "daysLeft": "{days, plural, =0 {Ma jár le} other {Még # nap van hátra}}",
     "trialUntil": "Eddig: {date}",
-    "trialNoCard": "Még nincs kártya megadva. A próba végén a Pro kikapcsol: a weboldaladon az Index „jelenleg nem elérhető” lesz, amíg elő nem fizetsz. A profilod és az értékelések láthatók maradnak.",
+    "trialNoCard": "A próba végén a Pro kikapcsol: a weboldaladon az Index „jelenleg nem elérhető” lesz, amíg elő nem fizetsz. A profilod és az értékelések láthatók maradnak.",
     "trialSubscribed": "Előfizettél. Az első terhelés: {date}{amount, select, none {} other { · {amount}}}",
     "nextCharge": "Következő terhelés",
     "nextChargeValue": "{date}{amount, select, none {} other { · {amount}}}",

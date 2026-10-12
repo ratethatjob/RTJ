@@ -31,7 +31,7 @@ RateThatJob shows reviews of workplaces, facts (pay on time, overtime, hours, re
 - Employers can reply to reviews and dispute unverified reviews. Reviews cannot be deleted, hidden or bought.
 - Employers must not try to identify reviewers or put pressure on their staff because of a review.
 - Pro is a paid plan per location. It includes the RateThatJob Index for your website (image badge, iframe card, Top Rated seal, the score in the JSON API), early warnings and statistics.
-- Every location gets a 30-day free Pro trial, once, with no card needed. It starts automatically when the access request is approved.
+- Every location gets a 30-day free Pro trial, once. It starts automatically when the access request is approved.
 - After the trial, Pro is billed per location, monthly or yearly, at the prices on the [Pricing](/pricing) page. Hungarian locations are billed in forints, all others in euros (the Pricing page shows both).
 - If you subscribe by card during the trial, the first payment is taken when the trial ends, never earlier.
 - A Pro subscription renews automatically at the end of each period until you cancel it. You can cancel any time in your dashboard (Subscription); Pro then stays on until the end of the period already paid and is not renewed.

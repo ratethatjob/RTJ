@@ -802,7 +802,8 @@
       "plans": "Subscriptions",
       "demo": "Demo data",
       "osm": "OSM import",
-      "duplicates": "Possible duplicates"
+      "duplicates": "Possible duplicates",
+      "overview": "Overview"
     },
     "empty": "Nothing waiting.",
     "approve": "Approve",
@@ -1011,6 +1012,79 @@
       "photoId": "Photo ID",
       "opened": "Opened {count, plural, one {# time} other {# times}}, last on {date}",
       "neverOpened": "Not opened yet"
+    },
+    "overview": {
+      "band": "{from} – {to}",
+      "todo": {
+        "title": "To do",
+        "none": "Nothing waiting",
+        "moderation": "Moderation",
+        "claims": "Access requests",
+        "verifications": "Documents",
+        "reports": "Reports",
+        "disputes": "Disputes",
+        "categories": "Categories to check",
+        "duplicates": "Possible duplicates"
+      },
+      "reviews": {
+        "title": "Reviews",
+        "total": "All sent",
+        "published": "Live",
+        "scheduled": "Scheduled (goes live)",
+        "pending": "Being checked",
+        "held": "Held for the team",
+        "rejected": "Rejected",
+        "removed": "Removed",
+        "new": "New",
+        "newSub": "today · 7 days · 30 days"
+      },
+      "workplaces": {
+        "title": "Workplaces",
+        "total": "All",
+        "rated": "Rated",
+        "unrated": "Not rated yet",
+        "newVia": "New in 30 days: {via}"
+      },
+      "companies": {
+        "title": "Companies and Pro",
+        "claimsOpen": "Access requests waiting",
+        "claimsApproved": "Access requests approved",
+        "trial": "Locations in trial",
+        "pro": "Locations on paid Pro",
+        "canceling": "{count} cancelling at period end",
+        "canceled": "Cancelled",
+        "pastDue": "Payment failed",
+        "mrr": "MRR",
+        "arr": "ARR",
+        "total": "Total ≈ {value} (1 € = {rate} Ft)"
+      },
+      "users": {
+        "title": "Users",
+        "total": "All",
+        "active7": "Signed in, last 7 days",
+        "new": "New",
+        "newSub": "7 days · 30 days"
+      },
+      "jobs": {
+        "title": "Jobs",
+        "active": "Live ads",
+        "expired": "Closed or expired",
+        "revenue30": "Job package revenue, 30 days"
+      },
+      "trend": {
+        "reviews": "New reviews, last 30 days",
+        "workplaces": "New workplaces, last 30 days"
+      },
+      "via": {
+        "search": "Search",
+        "rate": "Review",
+        "claim": "Access request",
+        "jobs": "Jobs",
+        "osm_import": "OSM import",
+        "manual": "Typed in",
+        "admin_import": "CSV import",
+        "unknown": "Unknown"
+      }
     }
   },
   "Search": {
@@ -1701,7 +1775,7 @@
         "index": "RateThatJob Index badge and widget"
       },
       "cta": "Start your free trial",
-      "trial": "30 days free, no card"
+      "trial": "30 days free"
     },
     "chains": {
       "name": "Chains",
@@ -1726,7 +1800,7 @@
       "q4": "Does Pro affect our score?",
       "q4a": "No. Scores come only from reviews and applications, the same for everyone.",
       "trial": "Is there a free trial?",
-      "triala": "Yes. Every location gets 30 days of Pro free, with no card needed. It starts automatically when your access request is approved, once per location. After that, your embedded Index says \"currently unavailable\" until you activate Pro."
+      "triala": "Yes. Every location gets 30 days of Pro free. It starts automatically when your access request is approved, once per location. After that, your embedded Index says \"currently unavailable\" until you activate Pro."
     },
     "jobAds": {
       "title": "Job ads",
@@ -1837,11 +1911,11 @@
       "fewQ": "What if we have fewer than 5 reviews?",
       "fewA": "The badge says \"Rate us on RateThatJob\" and links to the review form for your location. Share your invite link with your team to get there.",
       "costQ": "Does it cost anything?",
-      "costA": "The Index for your website is part of Pro. Every location gets 30 days free with no card, starting when your access request is approved. After that Pro is billed per location; without it, your embedded badges stay but say the Index is currently unavailable. Your public profile and reviews are always visible."
+      "costA": "The Index for your website is part of Pro. Every location gets 30 days free, starting when your access request is approved. After that Pro is billed per location; without it, your embedded badges stay but say the Index is currently unavailable. Your public profile and reviews are always visible."
     },
     "bottomTitle": "Let your people speak for you.",
-    "bottomBody": "Request free access to your workplace and try the Index on your careers page for 30 days, no card.",
-    "trialNote": "Part of Pro · 30 days free, no card"
+    "bottomBody": "Request free access to your workplace and try the Index on your careers page for 30 days free.",
+    "trialNote": "Part of Pro · 30 days free"
   },
   "CareersHub": {
     "metaTitle": "RateThatJob Careers Hub – your jobs on your website",
@@ -1928,7 +2002,7 @@
     "trialDays": "{days, plural, one {# day} other {# days}} left of the free trial (until {date})",
     "trialEnded": "Trial ended – the embedded Index shows \"currently unavailable\"",
     "noPro": "No Pro",
-    "trialOffer": "Every location: 30 days of Pro free, no card.",
+    "trialOffer": "Every location: 30 days of Pro free.",
     "billingNote": "Until online payment is ready, we send an invoice and switch Pro on when it's paid.",
     "activate": "Activate Pro",
     "activate_month": "Monthly",
@@ -2031,7 +2105,7 @@
     },
     "daysLeft": "{days, plural, =0 {Ends today} one {# day left} other {# days left}}",
     "trialUntil": "Until {date}",
-    "trialNoCard": "No card yet. When the trial ends, Pro switches off: your Index on your website says \"currently unavailable\" until you subscribe. Your profile and reviews stay visible.",
+    "trialNoCard": "When the trial ends, Pro switches off: your Index on your website says \"currently unavailable\" until you subscribe. Your profile and reviews stay visible.",
     "trialSubscribed": "Subscribed. First charge: {date}{amount, select, none {} other { · {amount}}}",
     "nextCharge": "Next charge",
     "nextChargeValue": "{date}{amount, select, none {} other { · {amount}}}",

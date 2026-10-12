@@ -31,7 +31,7 @@ A RateThatJob munkahelyekről szóló értékeléseket, tényeket (bérfizetés,
 - A munkáltató válaszolhat az értékelésekre, és vitathatja az igazolatlan értékeléseket. Értékelést törölni, elrejteni vagy megvásárolni nem lehet.
 - A munkáltató nem próbálhatja kideríteni az értékelők kilétét, és nem gyakorolhat nyomást a dolgozóira az értékelés miatt.
 - A Pro telephelyenkénti fizetős csomag. Benne van a RateThatJob Index a weboldaladra (képes jelvény, iframe kártya, Top Rated pecsét, a pontszám a JSON API-ban), a korai figyelmeztetés és a statisztika.
-- Minden telephely egyszer 30 napos ingyenes Pro próbát kap, bankkártya nélkül. A próba automatikusan indul, amikor jóváhagyjuk a hozzáférés-igénylést.
+- Minden telephely egyszer 30 napos ingyenes Pro próbát kap. A próba automatikusan indul, amikor jóváhagyjuk a hozzáférés-igénylést.
 - A próba után a Pro telephelyenként, havi vagy éves díjjal fizetős, az [Árak](/pricing) oldalon szereplő áron. A magyarországi telephelyek forintban, a többiek euróban fizetnek (az Árak oldal mindkettőt mutatja).
 - Ha a próba alatt fizetsz elő bankkártyával, az első terhelés a próba végén történik, korábban nem.
 - A Pro előfizetés minden időszak végén automatikusan megújul, amíg le nem mondod. Bármikor lemondhatod a vezérlőpulton (Előfizetés); a Pro ilyenkor a már kifizetett időszak végéig működik, utána nem újul meg.
