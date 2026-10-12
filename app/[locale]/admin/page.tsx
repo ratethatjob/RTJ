@@ -143,13 +143,6 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
       )
       .eq("status", "open")
       .order("created_at");
-    const paths = (data ?? [])
-      .flatMap((c) => [c.document_path, c.id_document_path])
-      .filter((p): p is string => Boolean(p));
-    const { data: signed } = paths.length
-      ? await supabase.storage.from("claim-documents").createSignedUrls(paths, 600)
-      : { data: [] };
-    const urls = new Map((signed ?? []).map((x) => [x.path, x.signedUrl]));
     items = (data ?? []).map((c) => {
       const place = c.locations as unknown as Place;
       const check = domainCheck(c.account_email, c.website);
@@ -205,8 +198,8 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
               )}
               <dt className="font-black">{c.method === "authorization" ? tb("documentAuthorization") : tb("documentRegistry")}</dt>
               <dd>
-                {c.document_path && urls.get(c.document_path) ? (
-                  <a href={urls.get(c.document_path) ?? undefined} target="_blank" rel="noreferrer" className="font-black underline underline-offset-4">
+                {c.document_path ? (
+                  <a href={docHref("claim", c.id, "company")} target="_blank" rel="noreferrer" className="font-black underline underline-offset-4">
                     {t("openDocument")}
                   </a>
                 ) : (
@@ -215,8 +208,8 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
               </dd>
               <dt className="font-black">{tb("idDocument")}</dt>
               <dd>
-                {c.id_document_path && urls.get(c.id_document_path) ? (
-                  <a href={urls.get(c.id_document_path) ?? undefined} target="_blank" rel="noreferrer" className="font-black underline underline-offset-4">
+                {c.id_document_path ? (
+                  <a href={docHref("claim", c.id, "id")} target="_blank" rel="noreferrer" className="font-black underline underline-offset-4">
                     {t("openDocument")}
                   </a>
                 ) : (
@@ -224,6 +217,12 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
                 )}
               </dd>
               {c.note && (<><dt className="font-black">{tb("note")}</dt><dd className="whitespace-pre-line">{c.note}</dd></>)}
+              {(c.document_path || c.id_document_path) && (
+                <>
+                  <dt className="font-black">{t("docs.deletes")}</dt>
+                  <dd>{t("docs.afterDecision")}</dd>
+                </>
+              )}
             </dl>
             {messages.length > 0 && (
               <ul className="mt-3 flex flex-col gap-2">
@@ -241,6 +240,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
         ),
       };
     });
+    extra = await DecidedDocuments({ kind: "claim", supabase });
   } else if (tab === "moderation") {
     const { data } = await supabase
       .from("reviews")
@@ -279,27 +279,26 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
       .select(`id, created_at, doc_type, storage_path, reviews(${reviewCols})`)
       .eq("status", "pending")
       .order("created_at");
-    const paths = (data ?? []).map((v) => v.storage_path).filter((p): p is string => Boolean(p));
-    const { data: signed } = paths.length
-      ? await supabase.storage.from("verifications").createSignedUrls(paths, 600)
-      : { data: [] };
-    const urls = new Map((signed ?? []).map((s) => [s.path, s.signedUrl]));
     items = (data ?? []).map((v) => {
       const r = v.reviews as unknown as ReviewRow;
       return {
         id: v.id,
         created_at: v.created_at,
-        documentUrl: v.storage_path ? urls.get(v.storage_path) : null,
+        documentUrl: v.storage_path ? docHref("review", v.id, "proof") : null,
         content: (
           <>
             <p className="mb-2 inline-block rounded-lg border border-mist px-2.5 py-1 text-sm font-black">
               {tf(`docTypes.${v.doc_type}`)}
             </p>
             {r && <ReviewSummary r={r} relationship={tr(`relationship.${r.relationship}`)} />}
+            <p className="mt-2 text-sm text-slate">
+              {t("docs.deletes")}: {t("docs.afterDecision")}
+            </p>
           </>
         ),
       };
     });
+    extra = await DecidedDocuments({ kind: "review", supabase });
   } else if (tab === "disputes") {
     const { data } = await supabase
       .from("disputes")
@@ -1033,6 +1032,120 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
       {extra}
     </main>
     </>
+  );
+}
+
+/** Link that opens a proof document through the logging route (60-second signed link). */
+const docHref = (kind: "claim" | "review", id: string, file: "company" | "id" | "proof") =>
+  `/api/admin/document?kind=${kind}&id=${id}&file=${file}`;
+
+type DocLog = { source_id: string; created_at: string };
+
+/** Decided documents still kept (30 days after the decision): result, deletion date, links, opens. */
+async function DecidedDocuments({
+  kind,
+  supabase,
+}: {
+  kind: "claim" | "review";
+  supabase: Awaited<ReturnType<typeof requireUser>>["supabase"];
+}) {
+  const t = await getTranslations("Admin.docs");
+  const tf = await getTranslations("ReviewForm");
+  const format = await getFormatter();
+  const date = (iso: string | null) => (iso ? format.dateTime(new Date(iso), { dateStyle: "medium" }) : "–");
+  type Row = { id: string; title: string; sub: string; result: string; decided_at: string | null; delete_at: string | null; files: { label: string; file: "company" | "id" | "proof" }[] };
+  let rows: Row[] = [];
+  if (kind === "claim") {
+    const { data } = await supabase
+      .from("claim_requests")
+      .select("id, org_name, method, status, decided_at, documents_delete_at, document_path, id_document_path, locations(name, address)")
+      .not("decided_at", "is", null)
+      .is("documents_deleted_at", null)
+      .not("documents_delete_at", "is", null)
+      .order("documents_delete_at")
+      .limit(100);
+    rows = (data ?? []).map((c) => {
+      const place = c.locations as unknown as Place;
+      return {
+        id: c.id,
+        title: c.org_name,
+        sub: [place?.name, place?.address].filter(Boolean).join(" · "),
+        result: c.status === "resolved" ? t("approved") : t("rejected"),
+        decided_at: c.decided_at,
+        delete_at: c.documents_delete_at,
+        files: [
+          ...(c.document_path ? [{ label: c.method === "authorization" ? t("authorization") : t("registry"), file: "company" as const }] : []),
+          ...(c.id_document_path ? [{ label: t("photoId"), file: "id" as const }] : []),
+        ],
+      };
+    });
+  } else {
+    const { data } = await supabase
+      .from("verifications")
+      .select("id, doc_type, status, decided_at, delete_at, reviews(position, locations(name, address))")
+      .not("decided_at", "is", null)
+      .is("deleted_at", null)
+      .not("delete_at", "is", null)
+      .order("delete_at")
+      .limit(100);
+    rows = (data ?? []).map((v) => {
+      const r = v.reviews as unknown as { position: string; locations: Place } | null;
+      return {
+        id: v.id,
+        title: tf(`docTypes.${v.doc_type}`),
+        sub: [r?.locations?.name, r?.locations?.address, r?.position].filter(Boolean).join(" · "),
+        result: v.status === "approved" ? t("approved") : t("rejected"),
+        decided_at: v.decided_at,
+        delete_at: v.delete_at,
+        files: [{ label: tf(`docTypes.${v.doc_type}`), file: "proof" as const }],
+      };
+    });
+  }
+  const { data: logs } = rows.length
+    ? await supabase
+        .from("document_access_log")
+        .select("source_id, created_at")
+        .eq("kind", kind)
+        .in("source_id", rows.map((r) => r.id))
+        .order("created_at", { ascending: false })
+    : { data: [] };
+  const opens = new Map<string, DocLog[]>();
+  for (const l of (logs ?? []) as DocLog[]) opens.set(l.source_id, [...(opens.get(l.source_id) ?? []), l]);
+
+  return (
+    <section className="mt-8">
+      <h2 className="text-2xl font-black">{t("title")}</h2>
+      <p className="mt-1 text-slate">{t("intro")}</p>
+      {rows.length === 0 ? (
+        <p className="mt-3 rounded-3xl bg-white p-5 text-slate">{t("none")}</p>
+      ) : (
+        <ul className="mt-3 flex flex-col gap-3">
+          {rows.map((r) => {
+            const seen = opens.get(r.id) ?? [];
+            return (
+              <li key={r.id} className="rounded-3xl bg-white p-5">
+                <p className="font-black">{r.title}</p>
+                {r.sub && <p className="text-slate">{r.sub}</p>}
+                <p className="mt-2 text-sm">
+                  {t("decided", { result: r.result, date: date(r.decided_at) })} ·{" "}
+                  <span className="font-black">{t("deletesOn", { date: date(r.delete_at) })}</span>
+                </p>
+                <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                  {r.files.map((f) => (
+                    <a key={f.file} href={docHref(kind, r.id, f.file)} target="_blank" rel="noreferrer" className="font-black underline underline-offset-4">
+                      {f.label}
+                    </a>
+                  ))}
+                </p>
+                <p className="mt-1 text-sm text-slate">
+                  {seen.length ? t("opened", { count: seen.length, date: date(seen[0].created_at) }) : t("neverOpened")}
+                </p>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
   );
 }
 

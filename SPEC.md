@@ -31,7 +31,7 @@ Later phase: job posting + easy, CV-free applying on the same platform (the appl
 | Hosting | **Vercel** | Edge caching, ISR revalidation, OG image generation; functions in `fra1`, next to the database (Supabase eu-central-1) |
 | Database | **Postgres (Supabase)** | Row Level Security on every table |
 | Auth | **Supabase Auth** | Apple, Google, Facebook, email OTP (passwordless) |
-| File storage | Supabase Storage, **private bucket** | Verification documents only; auto-delete after review |
+| File storage | Supabase Storage, **private bucket** | Verification documents only; deleted 30 days after the decision |
 | Styling | Tailwind CSS | Design tokens from section 12 |
 | i18n | next-intl | Locale routing, ICU messages |
 | Machine translation | LLM API (e.g. Claude) | Translate on publish, cache in DB |
@@ -126,7 +126,7 @@ Main tables (all with `id uuid`, `created_at`, `updated_at`):
   - `status` (`draft` | `pending_moderation` | `scheduled` | `published` | `rejected` | `removed`)
 - `review_translations` – `review_id`, `locale`, `body`, `model`, `created_at`.
 - `employer_replies` – `review_id`, `org_member_id`, `body`, `original_language`; + `reply_translations`.
-- `verifications` – `review_id`, `storage_path`, `doc_type`, `detected_legal_entity`, `status`, `reviewed_by`, `deleted_at`. Delete file after decision (max 30 days).
+- `verifications` – `review_id`, `storage_path`, `doc_type`, `detected_legal_entity`, `status`, `reviewed_by`, `deleted_at`. File kept 30 days after the decision, then deleted by a daily job; a short record stays (doc type, who checked, when, result).
 - `disputes` – employer disputes on **unverified** reviews only; `reason`, `status`. Employers can never delete reviews.
 - `reports` – user reports, moderation queue.
 - `helpful_votes` (later).
@@ -183,7 +183,7 @@ Levels shown as badges: Not verified · Verified (document) · Verified (invited
 
 ## 7. Employer side (`/business`)
 
-- **Access request ("claim"):** free; public copy says "Request free access" / "Hozzáférés igénylése". Three ways to verify, each with a photo ID of the person (number and everything but photo and name may be covered): (a) business email – the signed-in, code-verified email's domain matches the company website (freemail never); (b) company registry extract / UAE trade license naming the person as director or owner; (c) letter of authorization signed by the legal representative (fillable PDF + DOCX form in EN/HU at `/forms/rtj-authorization-<locale>.pdf|docx`). No phone method. Documents go to the private `claim-documents` bucket, admins open them through signed links, deleted after the decision. The admin card shows the method, the domain match and both documents. Approval also confirms the legal entity link.
+- **Access request ("claim"):** free; public copy says "Request free access" / "Hozzáférés igénylése". Three ways to verify, each with a photo ID of the person (number and everything but photo and name may be covered): (a) business email – the signed-in, code-verified email's domain matches the company website (freemail never); (b) company registry extract / UAE trade license naming the person as director or owner; (c) letter of authorization signed by the legal representative (fillable PDF + DOCX form in EN/HU at `/forms/rtj-authorization-<locale>.pdf|docx`). No phone method. Documents go to the private `claim-documents` bucket, only admins open them through short-lived signed links (every opening logged: who, when, which file), kept 30 days after the decision and then deleted by a daily job; a short record without file or personal data stays. The admin card shows the method, the domain match and both documents. Approval also confirms the legal entity link.
 - **Overview:** score, verified count, applicant reply rate, reviews awaiting reply, early warnings, per-location table.
 - **Early warnings (Pro):** detect drops in a category score (e.g. −0.5 within 60 days) or recurring topics (LLM topic clustering on recent reviews) per location; email + dashboard alert.
 - **Early signals (Pro, part of early warnings):** before reviews go live, the employer sees anonymous, aggregated themes per location, so it can act – without weakening anonymity (the publishing delays stay as they are). Rules:
@@ -285,7 +285,7 @@ Goal: employers show their score on their careers page / job ads; every embed is
 - Public API and employer views never return `user_id`, contact data, `invite_id` or device data for reviews.
 - Employer-facing aggregates require **n ≥ 5**.
 - Invite contact data encrypted at rest and deleted after the reminder window.
-- Verification files deleted after decision.
+- Proof documents (review proofs and access-request documents) kept 30 days after the decision, then deleted; admin access logged.
 - Users can export and delete their account; deleting an account anonymizes their reviews (keeps them as "Former member") or removes them – user's choice.
 
 ---

@@ -32,10 +32,7 @@ export async function decideClaim(id: string, approve: boolean): Promise<Result>
   const claim = await claimInfo(supabase, id);
   const { error } = await supabase.rpc("admin_decide_claim", { p_claim_id: id, p_approve: approve });
   if (error || !claim) return { error: true };
-  // Documents are deleted as soon as the claim is decided.
-  const folder = `${claim.user_id}/${id}`;
-  const { data: files } = await supabase.storage.from("claim-documents").list(folder);
-  if (files?.length) await supabase.storage.from("claim-documents").remove(files.map((f) => `${folder}/${f.name}`));
+  // The documents stay 30 days after the decision, then the daily job deletes them.
   await sendClaimEmail(claim.mail, approve ? "approved" : "rejected");
   expireWorkplaces();
   return { ok: true };
@@ -67,7 +64,7 @@ export async function decideVerification(
   const { supabase } = await getUser();
   const { data: v } = await supabase
     .from("verifications")
-    .select("storage_path, reviews(location_id)")
+    .select("reviews(location_id)")
     .eq("id", id)
     .single();
   const { error } = await supabase.rpc("admin_decide_verification", {
@@ -76,8 +73,7 @@ export async function decideVerification(
     p_legal_entity: legalEntity.trim() || null,
   });
   if (error) return { error: true };
-  // The document is deleted as soon as it has been decided.
-  if (v?.storage_path) await supabase.storage.from("verifications").remove([v.storage_path]);
+  // The document stays 30 days after the decision, then the daily job deletes it.
   const loc = (v?.reviews as unknown as { location_id: string } | null)?.location_id;
   if (loc) {
     updateTag(`reviews:${loc}`);

@@ -420,7 +420,7 @@
       "other": "Egyéb"
     },
     "removeFile": "Törlés",
-    "verifiedNote": "Csak a csapatunk látja, ellenőrzés után töröljük.",
+    "verifiedNote": "Csak a csapatunk látja. Az igazolást a döntés után 30 napig őrizzük, utána töröljük.",
     "whenLive": "Mikor jelenik meg?",
     "goesLive": "Az elküldés után 3–12 nappal, véletlenszerű napon és időpontban. Mindenki értékelése ugyanígy vár, így az időzítésből nem derül ki, ki írta.",
     "shownAs": "Így látszol: <name></name>",
@@ -697,7 +697,7 @@
     "websitePlaceholder": "pl. pelda.hu",
     "noWebsite": "Nincs weboldalunk",
     "accountEmailHint": "A belépéshez használt e-mail-címedet ellenőrizzük: <b>{email}</b> (kóddal igazolva). A domainjének egyeznie kell a fent megadott céges weboldaléval.",
-    "documentHint": "PDF, JPG vagy PNG, legfeljebb 10 MB. Csak a csapatunk látja, és a döntés után töröljük.",
+    "documentHint": "PDF, JPG vagy PNG, legfeljebb 10 MB. Csak a csapatunk látja. Az igazolást a döntés után 30 napig őrizzük, utána töröljük.",
     "documentError": "Csatolj egy legfeljebb 10 MB-os PDF, JPG vagy PNG fájlt.",
     "claimReply": "A válaszod",
     "claimAddDocument": "Dokumentum csatolása vagy cseréje (nem kötelező)",
@@ -995,6 +995,22 @@
       "notSame": "Nem ugyanaz",
       "managed": "A kezelt (csomaggal rendelkező) munkahelynek kell megmaradnia.",
       "error": "Valami hiba történt."
+    },
+    "docs": {
+      "title": "Eldöntött igazolások (30 napig őrizzük)",
+      "intro": "A döntés után 30 napig maradnak meg, utána a napi feladat törli őket; csak az okmány típusa, az ellenőrző, az időpont és az eredmény marad meg. Minden megnyitást naplózunk.",
+      "none": "Nincs törlésre váró eldöntött igazolás.",
+      "deletes": "Törlődik",
+      "afterDecision": "a döntés után 30 nappal",
+      "deletesOn": "Törlődik: {date}",
+      "decided": "{result}: {date}",
+      "approved": "Jóváhagyva",
+      "rejected": "Elutasítva",
+      "registry": "Cégkivonat / trade license",
+      "authorization": "Meghatalmazás",
+      "photoId": "Személyazonosító okmány",
+      "opened": "Megnyitva {count}×, utoljára {date}",
+      "neverOpened": "Még nem nyitották meg"
     }
   },
   "Search": {

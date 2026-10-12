@@ -420,7 +420,7 @@
       "other": "Other"
     },
     "removeFile": "Remove",
-    "verifiedNote": "Only our team sees it. It is deleted after checking.",
+    "verifiedNote": "Only our team sees it. We keep the document for 30 days after the decision, then delete it.",
     "whenLive": "When does it go live?",
     "goesLive": "3 to 12 days after you send it, on a random day and time. Everyone's review waits the same way, so the timing doesn't give away who wrote it.",
     "shownAs": "Shown as <name></name>",
@@ -697,7 +697,7 @@
     "websitePlaceholder": "e.g. example.com",
     "noWebsite": "We don't have a website",
     "accountEmailHint": "We check the email you're signed in with: <b>{email}</b> (confirmed with a code). Its domain must match the company website above.",
-    "documentHint": "PDF, JPG or PNG, up to 10 MB. Only our team sees it, and we delete it once we've decided.",
+    "documentHint": "PDF, JPG or PNG, up to 10 MB. Only our team sees it. We keep it for 30 days after the decision, then delete it.",
     "documentError": "Please attach a PDF, JPG or PNG file of up to 10 MB.",
     "claimReply": "Your answer",
     "claimAddDocument": "Add or replace the document (optional)",
@@ -995,6 +995,22 @@
       "notSame": "Not the same",
       "managed": "The managed workplace (with a plan) must be the one kept.",
       "error": "Something went wrong."
+    },
+    "docs": {
+      "title": "Decided documents (kept 30 days)",
+      "intro": "Documents stay 30 days after the decision, then the daily job deletes them and keeps only the type, who checked it, when and the result. Every open is logged.",
+      "none": "No decided documents waiting for deletion.",
+      "deletes": "Deleted",
+      "afterDecision": "30 days after the decision",
+      "deletesOn": "Deleted on {date}",
+      "decided": "{result} on {date}",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "registry": "Registry extract / trade license",
+      "authorization": "Letter of authorization",
+      "photoId": "Photo ID",
+      "opened": "Opened {count, plural, one {# time} other {# times}}, last on {date}",
+      "neverOpened": "Not opened yet"
     }
   },
   "Search": {
