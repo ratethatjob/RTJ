@@ -10,7 +10,7 @@
 - [x] Domain: ratethatjob.com él a Vercelen, a www 308-cal a fő címre visz (GoDaddy @ A rekord → 216.198.79.1)
 - [ ] Régi Vercel projekt („rtj”) és a supabase-cyan-kettle Supabase projekt törlése
 
-- [x] Üzemeltető: ABOVO JOBS MENA L.L.C-FZ beírva (`lib/site-config.ts`). (TRN: 105494925800001, irányadó jog: DIFC).
+- [x] Üzemeltető: ABOVO JOBS MENA L.L.C-FZ beírva (`lib/site-config.ts`). (TRN: 105494925800001, irányadó jog: Dubai Emirátus és az Egyesült Arab Emírségek joga (Meydan Free Zone)).
 - [x] Álláscsomag árak: `JOB_PRICING` (`lib/site-config.ts`) – jóváhagyva: 4 990 / 14 990 / 29 990 Ft, 19 / 49 / 99 EUR
 - [x] `RESEND_API_KEY` a Vercelen, újraépítve (`EMAIL_FROM` nem kötelező, alapból no-reply@ratethatjob.com)
 - [ ] Ügyvédi átnézés: „Korai jelzések” (Pro) – adatvédelmi tájékoztató 2. és 4. pont (`content/legal/privacy.hu.md`, `privacy.en.md`), és az értékelő űrlap mondata („A munkáltató a megjelenés előtt névtelen, összesített témákat láthat, a szövegedet soha.”): jogalap (jogos érdek), érdekmérlegelés, tájékoztatás elég-e

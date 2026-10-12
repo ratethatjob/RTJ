@@ -118,6 +118,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                   <p className="text-3xl font-black tracking-brand">
                     {example.name}
                   </p>
+                  {example.isDemo && (
+                    <span className="mt-2 inline-block rounded-md bg-paper text-ink">
+                      <DemoChip />
+                    </span>
+                  )}
                   <p className="text-mist">
                     {example.address} · {tc(example.category)} ·{" "}
                     {tl("verifiedCount", {

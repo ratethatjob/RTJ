@@ -53,8 +53,17 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
   };
   const avg = weighted((l) => l.scores!.overall);
   const trend = weighted((l) => l.trend);
-  const replyRate = weighted((l) => l.scores!.replyRate);
-  const replyDays = weighted((l) => l.scores!.avgReplyDays);
+  // The reply rate can come from applications alone, before any review (location ghosting).
+  const ghosted = locs.filter((l) => l.ghosting);
+  const byApps = (pick: (g: NonNullable<(typeof locs)[number]["ghosting"]>) => number | null) => {
+    const pairs = ghosted
+      .map((l) => [pick(l.ghosting!), Math.max(1, l.ghosting!.applications)] as const)
+      .filter(([v]) => v != null) as [number, number][];
+    const w = pairs.reduce((n, [, c]) => n + c, 0);
+    return w ? pairs.reduce((n, [v, c]) => n + v * c, 0) / w : null;
+  };
+  const replyRate = byApps((g) => g.replyRate);
+  const replyDays = byApps((g) => g.avgReplyDays);
 
   const ids = locs.map((l) => l.id);
   const { count: awaiting } = ids.length
@@ -168,7 +177,7 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
                 <td className="px-6 py-4 font-black">{l.trend == null ? "–" : signed(l.trend)}</td>
                 <td className="px-6 py-4">{l.scores?.reviewCount ?? 0}</td>
                 <td className="px-6 py-4">{l.scores?.facts.paid_on_time == null ? "–" : `${l.scores.facts.paid_on_time}%`}</td>
-                <td className="px-6 py-4">{l.scores?.replyRate == null ? "–" : `${l.scores.replyRate}%`}</td>
+                <td className="px-6 py-4">{l.ghosting == null ? "–" : `${l.ghosting.replyRate}%`}</td>
                 <td className="px-6 py-4">
                   <PlanBadge plan={l.plan} label={t(`plans.${l.plan}`)} />
                 </td>

@@ -1,9 +1,13 @@
-import { getIndexLocation, isTopRated, PUBLIC_HEADERS } from "@/lib/rtj-index";
+import { hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
+import { getIndexLocation, isTopRated, localeUrl, PUBLIC_HEADERS } from "@/lib/rtj-index";
 
 // Public JSON for the RateThatJob Index. Scores only from 5 published reviews, and only while
 // the location has Pro (trial or paid); otherwise status is "inactive".
-export async function GET(_request: Request, { params }: RouteContext<"/api/public/locations/[id]/index">) {
+export async function GET(request: Request, { params }: RouteContext<"/api/public/locations/[id]/index">) {
   const { id } = await params;
+  const requested = new URL(request.url).searchParams.get("locale");
+  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
   const data = await getIndexLocation(id);
   if (!data) return Response.json({ error: "not_found" }, { status: 404, headers: PUBLIC_HEADERS });
   const { location, active, showScore, profileUrl, rateUrl } = data;
@@ -27,8 +31,8 @@ export async function GET(_request: Request, { params }: RouteContext<"/api/publ
         avg_reply_days: showScore ? (s?.avgReplyDays ?? null) : null,
       },
       top_rated: active && isTopRated(location),
-      profile_url: profileUrl,
-      rate_url: rateUrl,
+      profile_url: localeUrl(profileUrl, locale),
+      rate_url: localeUrl(rateUrl, locale),
       updated_at: location.updatedAt ?? null,
     },
     { headers: PUBLIC_HEADERS },

@@ -119,6 +119,14 @@ export default async function LocationPage({ params }: Props) {
             </strong>
           </p>
         )}
+        <div className="lg:hidden">
+          <FollowButton
+            locationId={data.id}
+            followLabel={t("follow")}
+            followingLabel={t("following")}
+            className="rounded-xl border-2 border-ink px-4 py-2 text-sm font-black"
+          />
+        </div>
         <div className="hidden gap-3 lg:flex">
           <FollowButton
             locationId={data.id}
@@ -297,13 +305,15 @@ export default async function LocationPage({ params }: Props) {
         </section>
       )}
 
-      <div className="fixed inset-x-0 bottom-0 grid grid-cols-2 gap-3 bg-paper/95 p-4 backdrop-blur lg:hidden">
-        <Link
-          href={`${path}/reviews`}
-          className="rounded-2xl border-2 border-ink py-3 text-center text-base font-black"
-        >
-          {t("readReviews")}
-        </Link>
+      <div className={`fixed inset-x-0 bottom-0 grid gap-3 bg-paper/95 p-4 backdrop-blur lg:hidden ${s ? "grid-cols-2" : ""}`}>
+        {s && (
+          <Link
+            href={`${path}/reviews`}
+            className="rounded-2xl border-2 border-ink py-3 text-center text-base font-black"
+          >
+            {t("readReviews")}
+          </Link>
+        )}
         <Link
           href={rateHref}
           className="rounded-2xl bg-ink py-3 text-center text-base font-black text-paper"

@@ -10,21 +10,22 @@ type Props = {
   origin: string;
   locationId: string;
   locationName: string;
-  profileUrl: string;
+  linkUrl: string;
   locale: string;
   sealEarned: boolean;
 };
 
-export function EmbedGenerator({ origin, locationId, locationName, profileUrl, locale, sealEarned }: Props) {
+export function EmbedGenerator({ origin, locationId, locationName, linkUrl, locale, sealEarned }: Props) {
   const t = useTranslations("Index");
   const [variant, setVariant] = useState<Variant>("compact-light");
   const seal = variant.startsWith("seal");
   const svgPath = seal ? `/embed/${locationId}/seal.svg` : `/embed/${locationId}.svg`;
   const src = `${origin}${svgPath}?style=${variant}&locale=${locale}`;
-  const alt = `${locationName} – RateThatJob`;
+  // Quotes and angle brackets in a name would break the pasted HTML.
+  const alt = `${locationName.replace(/[<>"&]/g, "")} – RateThatJob`;
 
-  const imageCode = `<a href="${profileUrl}">\n  <img src="${src}" alt="${alt}">\n</a>`;
-  const scriptCode = `<div class="rtj-index" data-location="${locationId}" data-style="${variant}" data-locale="${locale}">\n  <a href="${profileUrl}">${alt}</a>\n</div>\n<script src="${origin}/widget.js" async></script>`;
+  const imageCode = `<a href="${linkUrl}">\n  <img src="${src}" alt="${alt}">\n</a>`;
+  const scriptCode = `<div class="rtj-index" data-location="${locationId}" data-style="${variant}" data-locale="${locale}">\n  <a href="${linkUrl}">${alt}</a>\n</div>\n<script src="${origin}/widget.js" async></script>`;
   const jsonCode = `GET ${origin}/api/public/locations/${locationId}/index`;
 
   return (

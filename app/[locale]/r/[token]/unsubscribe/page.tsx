@@ -10,13 +10,18 @@ export const metadata: Metadata = { robots: { index: false, follow: false } };
 export default async function UnsubscribePage({ params, searchParams }: PageProps<"/[locale]/r/[token]/unsubscribe">) {
   const { locale, token } = await params;
   setRequestLocale(locale);
-  const done = (await searchParams).done === "1";
+  const state = (await searchParams).done;
+  const done = state === "1";
+  const failed = state === "0";
   const t = await getTranslations("Unsubscribe");
 
   async function unsubscribe() {
     "use server";
-    if (/^[\w-]{8,64}$/.test(token)) await publicClient().rpc("invite_unsubscribe", { p_token: token });
-    redirect({ href: { pathname: `/r/${token}/unsubscribe`, query: { done: "1" } }, locale });
+    const { data, error } = /^[\w-]{8,64}$/.test(token)
+      ? await publicClient().rpc("invite_unsubscribe", { p_token: token })
+      : { data: false, error: null };
+    // Only an email invite can be unsubscribed (not a shareable link or an unknown token).
+    redirect({ href: { pathname: `/r/${token}/unsubscribe`, query: { done: !error && data ? "1" : "0" } }, locale });
   }
 
   return (
@@ -25,9 +30,9 @@ export default async function UnsubscribePage({ params, searchParams }: PageProp
         <Link href="/" className="self-start">
           <Logo dark />
         </Link>
-        <h1 className="mt-12 text-4xl font-black leading-[1.05] tracking-brand">{t(done ? "doneTitle" : "title")}</h1>
-        <p className="mt-4 text-lg text-mist">{t(done ? "doneBody" : "body")}</p>
-        {!done && (
+        <h1 className="mt-12 text-4xl font-black leading-[1.05] tracking-brand">{t(done ? "doneTitle" : failed ? "failedTitle" : "title")}</h1>
+        <p className="mt-4 text-lg text-mist">{t(done ? "doneBody" : failed ? "failedBody" : "body")}</p>
+        {!done && !failed && (
           <form action={unsubscribe} className="mt-8">
             <button type="submit" className="w-full rounded-2xl bg-signal py-3 text-base font-black text-ink">
               {t("confirm")}

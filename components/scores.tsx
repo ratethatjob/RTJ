@@ -16,7 +16,8 @@ export async function ScoreTile({
   const t = await getTranslations("Location");
   return (
     <div
-      className={`flex shrink-0 flex-col items-center justify-center rounded-3xl bg-signal text-ink ${
+      // Green only for good scores, like in the lists.
+      className={`flex shrink-0 flex-col items-center justify-center rounded-3xl ${score >= 4 ? "bg-signal" : "bg-[#E8E6E1]"} text-ink ${
         size === "lg" ? "size-28 lg:size-32" : "size-20 rounded-2xl"
       }`}
     >
@@ -112,13 +113,14 @@ export async function CategoryScores({ scores }: { scores: LocationScores }) {
   return (
     <dl className="grid grid-cols-2 gap-3">
       {await Promise.all(
-        keys.map(async (key) => (
+        // A category nobody rated isn't shown (ratings per category are optional).
+        keys.filter((key) => scores[key] != null).map(async (key) => (
           <div
             key={key}
             className="flex items-center justify-between gap-2 rounded-2xl bg-white px-5 py-4 font-black"
           >
             <dt>{t(key)}</dt>
-            <dd>{await formatScore(scores[key])}</dd>
+            <dd>{await formatScore(scores[key]!)}</dd>
           </div>
         )),
       )}

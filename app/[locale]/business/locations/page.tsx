@@ -5,6 +5,7 @@ import { ManageBilling, SubscribePro } from "@/components/business/subscribe-pro
 import { PlanBadge } from "@/components/business/plan-badge";
 import { TrialBanner } from "@/components/business/trial-banner";
 import { daysLeft, getBusiness } from "@/lib/business";
+import { SUBSCRIBED_STATUSES } from "@/lib/billing-status";
 import { billingCurrency, proPrice } from "@/lib/stripe";
 
 export const instant = false;
@@ -29,7 +30,7 @@ export default async function LocationsPage({ params, searchParams }: PageProps<
     return format.number(proPrice(currency, interval), { style: "currency", currency: currency.toUpperCase(), maximumFractionDigits: 0 });
   };
   const subscribed = (l: (typeof org.locations)[number]) =>
-    Boolean(l.subscription && ["active", "trialing", "past_due"].includes(l.subscription.status));
+    Boolean(l.subscription && SUBSCRIBED_STATUSES.includes(l.subscription.status));
 
   const { data: members } = await supabase.from("org_members").select("role").eq("org_id", org.id);
   const count = (role: string) => (members ?? []).filter((m) => m.role === role).length;
@@ -37,8 +38,18 @@ export default async function LocationsPage({ params, searchParams }: PageProps<
 
   return (
     <main>
-      <h1 className="text-4xl font-black tracking-brand lg:text-5xl">{t("locationsTitle")}</h1>
-      <p className="mt-1 text-slate">{t("locationsBody")}</p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-black tracking-brand lg:text-5xl">{t("locationsTitle")}</h1>
+          <p className="mt-1 text-slate">{t("locationsBody")}</p>
+        </div>
+        <Link
+          href={{ pathname: "/business/claim", query: { add: "1" } }}
+          className="rounded-xl border border-ink/20 bg-white px-4 py-3 text-sm font-black"
+        >
+          {t("addWorkplace")}
+        </Link>
+      </div>
       <div className="mt-6">
         <TrialBanner locations={org.locations} />
       </div>

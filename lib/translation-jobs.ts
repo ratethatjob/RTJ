@@ -60,11 +60,18 @@ export async function translateReply(replyId: string) {
 
 /** New review: AI moderation (may send it back to the manual queue), then translation. */
 export async function processNewReview(reviewId: string) {
+  await moderateReview(reviewId);
+  await translateReview(reviewId);
+}
+
+/** The AI check. A review is published only once this ran (ai_checked_at), held or not. */
+async function moderateReview(reviewId: string) {
   const db = adminClient();
   if (!db) return;
   try {
-    const { data: r } = await db.from("reviews").select("body, status").eq("id", reviewId).single();
-    if (r?.body && ["pending_moderation", "scheduled"].includes(r.status)) {
+    const { data: r } = await db.from("reviews").select("body, status, ai_checked_at").eq("id", reviewId).single();
+    if (!r || r.ai_checked_at) return;
+    if (r.body && ["pending_moderation", "scheduled"].includes(r.status)) {
       const result = await moderate(r.body);
       // No answer from the API (e.g. out of credit): a human checks it instead.
       if (result === "unavailable") {
@@ -76,10 +83,27 @@ export async function processNewReview(reviewId: string) {
         });
       }
     }
+    await db.from("reviews").update({ ai_checked_at: new Date().toISOString() }).eq("id", reviewId);
   } catch (e) {
     console.error("moderate", reviewId, e);
   }
-  await translateReview(reviewId);
+}
+
+/** Daily catch-up: reviews that never got the AI check (the request ended early, or the review
+ *  was not sent through the app). */
+export async function moderateUnchecked(limit = 25) {
+  const db = adminClient();
+  if (!db) return 0;
+  const { data } = await db
+    .from("reviews")
+    .select("id")
+    .is("ai_checked_at", null)
+    .in("status", ["pending_moderation", "scheduled"])
+    .lt("created_at", new Date(Date.now() - 10 * 60 * 1000).toISOString())
+    .order("created_at")
+    .limit(limit);
+  for (const r of data ?? []) await moderateReview(r.id);
+  return (data ?? []).length;
 }
 
 /** Backfill: recent reviews and replies with text but no translations yet. */

@@ -26,10 +26,10 @@ export type LocalizedText = {
 
 export type LocationScores = {
   overall: number;
-  manager: number;
-  pay: number;
-  schedule: number;
-  environment: number;
+  manager: number | null;
+  pay: number | null;
+  schedule: number | null;
+  environment: number | null;
   reviewCount: number;
   verifiedCount: number;
   /** Share of "yes" answers, 0–100. */

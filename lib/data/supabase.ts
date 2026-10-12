@@ -80,10 +80,10 @@ export function toLocation(row: LocationRow): LocationSummary {
       row.review_count > 0 && row.overall != null
         ? {
             overall: Number(row.overall),
-            manager: Number(row.manager ?? row.overall),
-            pay: Number(row.pay ?? row.overall),
-            schedule: Number(row.schedule ?? row.overall),
-            environment: Number(row.environment ?? row.overall),
+            manager: row.manager == null ? null : Number(row.manager),
+            pay: row.pay == null ? null : Number(row.pay),
+            schedule: row.schedule == null ? null : Number(row.schedule),
+            environment: row.environment == null ? null : Number(row.environment),
             reviewCount: row.review_count,
             verifiedCount: row.verified_count,
             facts: {

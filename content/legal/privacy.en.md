@@ -15,7 +15,7 @@ Employers never learn who wrote a review or who responded to their invite. Publi
 ## 3. What we process and why
 
 - **Account:** email address, display name, language. Purpose: sign-in and providing the service. Legal basis: providing the service (contract).
-- **Job alerts (optional):** if you tick “Also show me jobs in my area” when sending a review, we store that consent and when you gave it, and may email you about jobs near you. Off by default; turn it off any time on your account page. Legal basis: your consent.
+- **Job alerts (optional):** if you tick “Email me about jobs near me” when sending a review, we store that consent and when you gave it, so we may email you about jobs near you. We don't send these emails yet. Off by default; turn it off any time on your account page. Legal basis: your consent.
 - **Reviews:** the workplace, your relationship to it (employee, former employee, trial shift, applicant), period, position, ratings, facts and text. Purpose: publishing, computing scores, moderation. Legal basis: contract and legitimate interest (keeping reviews trustworthy).
 - **Verification document (optional):** payslip, contract and similar. Used only to check the review and deleted as soon as it has been decided.
 - **Applications:** name, email and/or phone, your answers, start date, experience, your message, your CV if you upload one, follow-up answers and messages with the employer. They go to the employer you apply to. Legal basis: your request (contract).

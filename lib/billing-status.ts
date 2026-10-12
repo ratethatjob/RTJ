@@ -30,7 +30,12 @@ export type BillingView = {
   nextChargeAt: string | null;
   /** Worth a banner on the dashboard: trial ends within 7 days, or a payment failed. */
   attention: boolean;
+  /** Active from a period paid by bank transfer (no Stripe subscription behind it). */
+  transfer?: boolean;
 };
+
+/** Stripe statuses that mean a subscription exists (no second Checkout). */
+export const SUBSCRIBED_STATUSES = ["active", "trialing", "past_due", "unpaid", "incomplete"];
 
 const DAY = 24 * 3600 * 1000;
 const time = (iso: string | null) => (iso ? Date.parse(iso) : NaN);
@@ -73,8 +78,8 @@ export function billingView(p: PlanFacts, now: number = Date.now()): BillingView
   if (stripe === "active") {
     return { ...base, state: "active", accessUntil: p.periodEnd ?? p.paidUntil, nextChargeAt: p.periodEnd };
   }
-  // Paid by bank transfer (no automatic renewal).
-  if (paidOn) return { ...base, state: "active", accessUntil: p.paidUntil };
+  // Paid by bank transfer (no automatic renewal), or a period still running after Stripe ended.
+  if (paidOn) return { ...base, state: "active", accessUntil: p.paidUntil, transfer: !stripe };
   if (p.trialStartedAt || p.paidUntil || stripe) return { ...base, state: "expired" };
   return { ...base, state: "free" };
 }

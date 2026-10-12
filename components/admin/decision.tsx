@@ -150,7 +150,8 @@ export function Decision({ kind, id, documentUrl }: Props) {
         <button
           type="button"
           disabled={pending} aria-busy={pending}
-          onClick={() => decide(false)}
+          // Reject / remove / cancel can't be undone.
+          onClick={() => window.confirm(t("confirmNo", { action: noLabel })) && decide(false)}
           className="rounded-2xl border-2 border-ink px-5 py-3 font-black disabled:opacity-60"
         >
           {noLabel}

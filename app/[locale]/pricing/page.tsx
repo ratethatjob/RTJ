@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const FREE = ["claim", "reply", "dispute", "inviteLink", "invites", "profile", "careersHub", "jobs", "profileBasic"] as const;
-// Only what is actually behind Pro in the code: the Index on embeds, statistics, early warnings.
-const PRO = ["warnings", "stats", "index"] as const;
+// Only what is actually behind Pro in the code: the Index on embeds, statistics, early warnings, early signals.
+const PRO = ["warnings", "signals", "stats", "index"] as const;
 const FAQ = ["q1", "trial", "q2", "q3", "q4"] as const;
 const JOB_FEATURES = { standard: ["ad", "apply", "contact"], basic: ["summary", "cv"], pro: ["followups", "featured"] } as const;
 
@@ -30,8 +30,11 @@ export default async function PricingPage({ params, searchParams }: Props) {
   const jobPrice = jobPricing(locale === "hu" ? "HU" : "default");
   const format = await getFormatter();
   const price = PRICING[locale] ?? PRICING.en;
-  const money = (v: number) =>
-    format.number(v, { style: "currency", currency: price.currency, maximumFractionDigits: 0 });
+  // Hungarian workplaces pay in HUF, all others in EUR, whatever the page language: show both.
+  const other = locale === "hu" ? PRICING.en : PRICING.hu;
+  const otherJobs = jobPricing(locale === "hu" ? "default" : "HU");
+  const money = (v: number, currency = price.currency) =>
+    format.number(v, { style: "currency", currency, maximumFractionDigits: 0 });
   const proPrice =
     price.monthly == null
       ? null
@@ -96,6 +99,13 @@ export default async function PricingPage({ params, searchParams }: Props) {
             ) : (
               <p className="mt-4 text-3xl font-black tracking-brand">{t("onRequest")}</p>
             )}
+            {other.monthly != null && (
+              <p className="text-mist">
+                {t("otherCurrency", {
+                  price: `${money(yearly ? other.monthly * YEARLY_MONTHS : other.monthly, other.currency)} / ${yearly ? t("perYear") : t("perMonth")}`,
+                })}
+              </p>
+            )}
             <p className="text-mist">{t("pro.note")}</p>
             <p className="mt-4 self-start rounded-lg bg-signal px-3 py-1.5 font-black text-ink">{t("pro.trial")}</p>
             <p className="mt-6 font-black">{t("pro.everythingFree")}</p>
@@ -117,7 +127,7 @@ export default async function PricingPage({ params, searchParams }: Props) {
             <p className="mt-4 text-3xl font-black tracking-brand">{t("chains.price")}</p>
             <p className="text-slate">{t("chains.note")}</p>
             <ul className="mt-6 flex flex-col gap-3">
-              {(["allPro", "rollout", "manager", "invoice"] as const).map((f) => (
+              {(["allPro", "rollout", "manager"] as const).map((f) => (
                 <li key={f} className="flex gap-3">
                   <span className="font-black" aria-hidden="true">✓</span>
                   {t(`chains.features.${f}`)}
@@ -156,7 +166,10 @@ export default async function PricingPage({ params, searchParams }: Props) {
                     maximumFractionDigits: 0,
                   })}
                 </p>
-                <p className={tier === "basic" ? "text-mist" : "text-slate"}>{tj("packages.perAd")}</p>
+                <p className={tier === "basic" ? "text-mist" : "text-slate"}>
+                  {tj("packages.perAd")} ·{" "}
+                  {t("otherCurrency", { price: money(otherJobs.prices[tier], otherJobs.currency) })}
+                </p>
                 <p className={`mt-3 ${tier === "basic" ? "text-mist" : "text-slate"}`}>{tj(`packages.${tier}.body`)}</p>
                 <ul className="mt-6 flex flex-col gap-3">
                   {i > 0 && (

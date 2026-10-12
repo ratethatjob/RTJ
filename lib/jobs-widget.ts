@@ -25,6 +25,8 @@ export function validWidgetTarget(scope: WidgetScope, id: string) {
 /** Jobs to show plus the RateThatJob Index for the footer; null when nothing matches. */
 export async function jobsWidgetData(scope: WidgetScope, id: string, locale: string) {
   let jobs: Job[];
+  // The places this widget belongs to, with or without open jobs (counted as embeds).
+  let placeIds: string[];
   let index: { name: string; active: boolean; reviews: number; score: number | null; url: string; rateUrl: string };
   const prefix = locale === "en" ? "" : `/${locale}`;
   const locIndex = (l: LocationSummary) => {
@@ -44,6 +46,7 @@ export async function jobsWidgetData(scope: WidgetScope, id: string, locale: str
     const company = await getCompany(id);
     if (!company) return null;
     jobs = await getCompanyJobs(id);
+    placeIds = company.locations.map((l) => l.id);
     // Company score: review-weighted average over its locations with Pro (trial or paid).
     const active = company.locations.filter(indexActive);
     const rated = active.filter((l) => l.scores && l.scores.reviewCount > 0);
@@ -65,6 +68,7 @@ export async function jobsWidgetData(scope: WidgetScope, id: string, locale: str
     if (!location) return null;
     jobs = scope === "job" ? [(await getJob(id))!] : await getLocationJobs(location.id);
     index = locIndex(location);
+    placeIds = [location.id];
   }
 
   const t = await getTranslations({ locale, namespace: "Jobs" });
@@ -74,7 +78,7 @@ export async function jobsWidgetData(scope: WidgetScope, id: string, locale: str
   const num = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
   return {
-    locationIds: [...new Set(jobs.map((j) => j.location.id))],
+    locationIds: placeIds,
     payload: {
       scope,
       locale,

@@ -52,6 +52,7 @@ export async function sendPendingBillingNotices(db: Db) {
 
 async function emailNotice(db: Db, n: Notice) {
   let sent = 0;
+  let tried = 0;
   try {
     const { data: members } = await db
       .from("org_members")
@@ -76,12 +77,16 @@ async function emailNotice(db: Db, n: Notice) {
         maximumFractionDigits: 0,
       }).format(proPrice(currency, "year"));
       const values = { location, date, amount, link: billingLink(locale) };
+      tried += 1;
       if (await sendEmail(email, t(`${n.kind}Subject`, values), t(`${n.kind}Body`, values))) sent += 1;
     }
   } catch (e) {
     console.error("billing notice", n.kind, e);
   }
-  // Marked either way so a missing address doesn't retry forever.
-  await db.from("billing_notices").update({ emailed_at: new Date().toISOString() }).eq("id", n.id);
+  // Retried next day (within 3 days) only when every send failed, e.g. an email outage;
+  // no address at all doesn't retry.
+  if (sent > 0 || tried === 0) {
+    await db.from("billing_notices").update({ emailed_at: new Date().toISOString() }).eq("id", n.id);
+  }
   return sent;
 }

@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const HOW = ["window", "categories", "facts", "verified", "threshold"] as const;
-const PLACES = ["image", "widget", "json", "email"] as const;
+const PLACES = ["image", "widget", "json"] as const;
 const IMPROVE = ["reply", "applicants", "invite", "pay", "hours", "listen"] as const;
 const FAQ = ["what", "update", "remove", "few", "cost"] as const;
 
@@ -93,7 +93,7 @@ export default async function IndexMarketingPage({ params }: Props) {
         <section>
           <h2 className="text-3xl font-black tracking-brand lg:text-4xl">{t("placesTitle")}</h2>
           <p className="mt-3 max-w-3xl text-lg text-slate">{t("placesIntro")}</p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {PLACES.map((k) => (
               <div key={k} className="rounded-3xl bg-white p-7">
                 <h3 className="text-xl font-black tracking-brand">{t(`places.${k}Title`)}</h3>

@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { WorkplaceFinder } from "@/components/app/workplace-finder";
 import { getPathname, redirect } from "@/i18n/navigation";
+import { requireUser } from "@/lib/auth";
 import { getMembership } from "@/lib/membership";
 import { autoAreaName } from "@/lib/area-labels";
 import { placesProvider } from "@/lib/places";
@@ -11,6 +12,7 @@ export default async function ClaimSearchPage({ params, searchParams }: PageProp
   const { locale } = await params;
   setRequestLocale(locale);
   const { q, add } = await searchParams;
+  await requireUser(locale, add === "1" ? "/business/claim?add=1" : "/business/claim");
   // Members coming from "Request free access" (or signing in for it) go to their dashboard;
   // ?add=1 still opens the search to request another workplace.
   if (add !== "1" && (await getMembership())) redirect({ href: "/business", locale });

@@ -294,6 +294,10 @@ export async function badgeLabels(
   };
 }
 
+/** Our page URL in the embed's language (English at the root, others under /<locale>). */
+export const localeUrl = (url: string, locale: string) =>
+  locale === "en" || !url.startsWith(SITE_URL) ? url : `${SITE_URL}/${locale}${url.slice(SITE_URL.length)}`;
+
 /** Public, cacheable, open to every origin. */
 export const PUBLIC_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -318,8 +322,7 @@ export async function recordEmbed(request: Request, locationId: string) {
   }
   const own = new URL(request.url).hostname;
   if (!domain || domain === own || domain === "localhost" || domain.endsWith("ratethatjob.com")) return;
-  const { supabaseKey, supabaseUrl } = await import("@/lib/supabase/env");
-  if (!supabaseUrl || !supabaseKey) return;
-  const { publicClient } = await import("@/lib/data/supabase");
-  await publicClient().rpc("record_embed_view", { p_location_id: locationId, p_domain: domain });
+  // Service role only: nobody can add domains to an employer's list through the public API.
+  const { adminClient } = await import("@/lib/supabase/admin");
+  await adminClient()?.rpc("record_embed_view", { p_location_id: locationId, p_domain: domain });
 }

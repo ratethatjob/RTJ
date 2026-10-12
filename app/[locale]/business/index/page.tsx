@@ -1,4 +1,4 @@
-import { headers } from "next/headers";
+import { SITE_URL } from "@/lib/seo";
 import {
   getFormatter,
   getTranslations,
@@ -29,8 +29,8 @@ export default async function IndexPage({
   const location =
     pickLocation(org.locations, query.location) ?? org.locations[0];
   const tab = query.tab === "jobs" ? "jobs" : "index";
-  const host = (await headers()).get("host");
-  const origin = `${host?.startsWith("localhost") ? "http" : "https"}://${host}`;
+  // Snippets always point to the live site, whichever host the dashboard was opened on.
+  const origin = SITE_URL;
   const few = (location.scores?.reviewCount ?? 0) < MIN_REVIEWS;
   const format = await getFormatter();
   const { data: openJobs } =
@@ -40,6 +40,7 @@ export default async function IndexPage({
           .select("id, title")
           .eq("location_id", location.id)
           .eq("status", "open")
+          .or(`closes_at.is.null,closes_at.gte.${new Date().toISOString().slice(0, 10)}`)
           .order("published_at", { ascending: false })
       : { data: [] };
   const url = (path: string) =>
@@ -122,7 +123,8 @@ export default async function IndexPage({
             origin={origin}
             locationId={location.id}
             locationName={location.name}
-            profileUrl={`${origin}${getPathname({ href: locationPath(location), locale })}`}
+            // Under 5 reviews the badge asks for reviews, so its link opens the review form.
+            linkUrl={url(few ? `/app/rate/${location.id}` : locationPath(location))}
             locale={locale}
             sealEarned={isTopRated(location)}
           />

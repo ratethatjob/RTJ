@@ -12,7 +12,7 @@ import { adminClient } from "@/lib/supabase/admin";
 // subscriptions of locations that left their org (stripe_cancel_queue),
 // keeps every Stripe customer's tax status, invoice footer and our TRN in line,
 // and the one reminder for email invites sent 5+ days ago and not used yet (then the address is cleared).
-// Needs SUPABASE_SECRET_KEY and RESEND_API_KEY; without them the notices stay in-app only.
+// Needs SUPABASE_SECRET_KEY; without RESEND_API_KEY only the Stripe upkeep runs and notices stay in-app.
 const KINDS = ["trial_ending", "trial_ended"];
 
 export async function GET(request: Request) {
@@ -21,7 +21,11 @@ export async function GET(request: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
   const db = adminClient();
-  if (!db || !process.env.RESEND_API_KEY) return Response.json({ sent: 0, skipped: "not configured" });
+  if (!db) return Response.json({ sent: 0, skipped: "not configured" });
+  // Stripe upkeep doesn't need email.
+  const cancelled = await cancelOrphanSubscriptions(db);
+  const invoiceSetups = await syncInvoiceSetups(db);
+  if (!process.env.RESEND_API_KEY) return Response.json({ sent: 0, skipped: "no email", cancelled, invoiceSetups });
 
   const since = new Date(Date.now() - 3 * 24 * 3600 * 1000).toISOString();
   const { data: rows } = await db
@@ -49,16 +53,18 @@ export async function GET(request: Request) {
         t(`${n.kind}Body`, { ...values, link }),
       );
       if (ok) sent += 1;
+      // A failed send (e.g. email outage) is tried again tomorrow, within 3 days.
+      if (!ok) continue;
     }
-    // Marked either way so a missing address doesn't retry forever.
+    // No address: marked anyway so it doesn't retry forever.
     await db.from("notifications").update({ emailed_at: new Date().toISOString() }).eq("id", n.id);
   }
   return Response.json({
     sent,
     billing: await sendPendingBillingNotices(db),
-    cancelled: await cancelOrphanSubscriptions(db),
+    cancelled,
     reminders: await sendInviteReminders(db),
-    invoiceSetups: await syncInvoiceSetups(db),
+    invoiceSetups,
   });
 }
 

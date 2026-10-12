@@ -33,7 +33,7 @@
     "wherePlaceholder": "Város, utca vagy környék",
     "search": "Keresés",
     "recentlyRated": "Friss értékelések",
-    "exampleProfile": "Példa munkahelyprofil",
+    "exampleProfile": "Nemrég értékelt munkahely",
     "features": {
       "verifiedTitle": "Igazolt, nem találgatás",
       "verifiedBody": "Az értékeléseket bérjegyzékkel, szerződéssel vagy munkáltatói meghívóval ellenőrizzük. Az igazolt értékelés többet számít.",
@@ -458,7 +458,8 @@
   "Company": {
     "metaTitle": "{company} – értékelések minden telephelyről",
     "locations": "{count} telephely",
-    "noScore": "Még nincs értékelés"
+    "noScore": "Még nincs értékelés",
+    "metaDescription": "{company} a RateThatJobon: {count} telephely és {reviews} értékelés azoktól, akik ott dolgoznak vagy dolgoztak."
   },
   "Employers": {
     "metaTitle": "RateThatJob munkáltatóknak – ingyenes hozzáférés a munkahelyed profiljához",
@@ -490,14 +491,14 @@
       "improveBody": "Pro csomaggal telephelyenként látod a trendeket, és a vezérlőpult jelez, ha egy pontszám romlani kezd."
     },
     "pricingTitle": "Ingyen indulhatsz. Pro telephelyenként.",
-    "pricingBody": "A hozzáférés és a válaszok ingyenesek. Az álláshirdetés alacsony feladási díjjal indul. A Pro korai figyelmeztetést, statisztikát, RateThatJob Indexet és még többet ad.",
+    "pricingBody": "A hozzáférés és a válaszok ingyenesek. Az álláshirdetés alacsony feladási díjjal indul. A Pro korai figyelmeztetést, korai jelzéseket, statisztikát és RateThatJob Indexet ad.",
     "pricingCta": "Árak",
     "faqTitle": "Munkáltatói kérdések",
     "faq": {
       "removeQ": "Eltávolíthatunk egy negatív értékelést?",
       "removeA": "Nem, és megvásárolni sem lehet. Nyilvánosan válaszolhatsz, és vitathatod a szabályokat sértő igazolatlan értékeléseket.",
       "anonymousQ": "Láthatjuk, ki írta az értékelést?",
-      "anonymousA": "Nem. Az értékelések a névtelenség miatt őszinték. A válaszokat, a trendeket és az összesített számokat látod, 5 értékeléstől.",
+      "anonymousA": "Nem. Az értékelések a névtelenség miatt őszinték. Az értékeléseket, a válaszokat és ugyanazokat a pontszámokat látod, mint a nyilvános oldalon. A havi statisztika és a kategóriatrendek csak 5 értékeléstől jelennek meg.",
       "disputeQ": "Mi történik, ha vitatunk egy értékelést?",
       "disputeA": "A csapatunk a szabályok alapján megnézi. Ami sérti őket, lekerül; az őszinte kritika marad.",
       "costQ": "Mennyibe kerül?",
@@ -625,7 +626,7 @@
     "teamTitle": "Csapat és szerepkörök",
     "inviteMember": "Tag meghívása",
     "planTitle": "Előfizetés",
-    "proIncludes": "<b>Pro telephelyenként:</b> korai figyelmeztetés, statisztika és RateThatJob Index a weboldaladra.",
+    "proIncludes": "<b>Pro telephelyenként:</b> korai figyelmeztetés, korai jelzések, statisztika és RateThatJob Index a weboldaladra.",
     "chains": "<b>Láncok (10+ telephely):</b> egyedi ár és bevezetés.",
     "warningCategory": "{category}: {delta}-del csökkent az utolsó 60 napban ({recent}, korábban {baseline}).",
     "seeStats": "Statisztika",
@@ -691,7 +692,8 @@
         "billingTitle": "Nézd meg az előfizetést",
         "billingBody": "A Pro próbaidőd és a csomagok."
       }
-    }
+    },
+    "addWorkplace": "Másik munkahely hozzáadása"
   },
   "Account": {
     "title": "Fiókod",
@@ -713,7 +715,7 @@
     "leftWhen": "Utolsó hónap ott",
     "save": "Mentés",
     "export": "Adataim letöltése",
-    "exportHint": "A profilod és az értékeléseid JSON-fájlban.",
+    "exportHint": "A profilod, az értékeléseid, az álláspályázataid (üzenetekkel), a követéseid és az értesítéseid JSON-fájlban.",
     "signOut": "Kilépés",
     "deleteTitle": "Fiók törlése",
     "deleteBody": "A fiókodat és a belépési adataidat véglegesen töröljük.",
@@ -901,7 +903,8 @@
       "trnYes": "rajta a TRN-ünk",
       "trnNo": "hiányzik a TRN-ünk",
       "noFooter": "(nincs lábléc)"
-    }
+    },
+    "confirmNo": "{action}: biztos? Ez nem vonható vissza."
   },
   "Search": {
     "title": "Munkahely keresése",
@@ -961,7 +964,7 @@
     "jsonCode": "JSON API (saját dizájnhoz)",
     "sitesTitle": "{count, plural, =0 {Hol látszik a jelvényed} other {# weboldalon látszik a jelvényed}}",
     "sitesEmpty": "Amint a jelvényed kikerül egy weboldalra, itt megjelenik. Csak a weboldal domainjét számoljuk, a látogatóiról semmit.",
-    "views": "{count} megtekintés",
+    "views": "{count} betöltés",
     "lastSeen": "utoljára: {date}",
     "tabs": {
       "index": "Index jelvény",
@@ -1466,7 +1469,7 @@
     "addAndRate": "Felveszem és értékelem",
     "back": "Vissza",
     "error": "Valami hiba történt. Próbáld újra.",
-    "limit": "Ma már sok munkahelyet felvettél. Próbáld újra holnap.",
+    "limit": "Innen most túl sok új munkahelyet vettek fel. Próbáld újra később.",
     "poweredBy": "A keresést a Google biztosítja",
     "manualTitle": "Add meg kézzel",
     "poweredByOsm": "Térképadatok © <osm>OpenStreetMap</osm>-közreműködők · Keresés: Photon",
@@ -1574,6 +1577,7 @@
       "everythingFree": "Minden, ami az ingyenesben, plusz:",
       "features": {
         "warnings": "Korai figyelmeztetés, ha romlik egy pontszám",
+        "signals": "Korai jelzések a még meg nem jelent értékelésekből",
         "stats": "Statisztika és trendek telephelyenként",
         "index": "RateThatJob Index jelvény és widget"
       },
@@ -1587,8 +1591,7 @@
       "features": {
         "allPro": "Pro minden telephelyen",
         "rollout": "Segítség a beállításban és a meghívókban",
-        "manager": "Egy kapcsolattartó minden telephelyre",
-        "invoice": "Egy számla minden telephelyre"
+        "manager": "Egy kapcsolattartó minden telephelyre"
       },
       "cta": "Beszéljünk"
     },
@@ -1610,7 +1613,8 @@
       "title": "Álláshirdetések",
       "intro": "Hirdetésenként fizetsz. Minden csomagban benne van a gyors vagy önéletrajzos jelentkezés, a saját kérdések, a jelöltek hívása és az üzenetküldés.",
       "cta": "Állás feladása"
-    }
+    },
+    "otherCurrency": "Magyarországon kívül: {price}"
   },
   "Thread": {
     "you": "Te",
@@ -1628,11 +1632,11 @@
     "messageSubject": "A(z) {company} írt neked: {job}",
     "messageBody": "Szia {name}!\n\nA(z) {company} üzenetet küldött a(z) {job} jelentkezésedről:\n\n{message}\n\nVálaszolj itt: {link}\n\nRateThatJob – Know before you go",
     "trial_endingSubject": "Még {days} nap a Pro próbából – {location}",
-    "trial_endingBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája {days} nap múlva lejár. Utána a weboldaladon lévő RateThatJob Index pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”, a korai figyelmeztetés és a statisztika pedig kikapcsol.\n\nItt kapcsolhatod be a Prót: {link}\n\nRateThatJob – Know before you go",
+    "trial_endingBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája {days} nap múlva lejár. Utána a weboldaladon lévő RateThatJob Index pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”, a korai figyelmeztetés, a korai jelzések és a statisztika pedig kikapcsol.\n\nItt kapcsolhatod be a Prót: {link}\n\nRateThatJob – Know before you go",
     "trial_endedSubject": "Lejárt a Pro próbád – {location}",
     "trial_endedBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája lejárt. A weboldaladon lévő RateThatJob Index most pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”. A nyilvános profilod és az értékelések továbbra is láthatók.\n\nKapcsold be a Prót, hogy újra látszódjon a pontszámod: {link}\n\nRateThatJob – Know before you go",
     "payment_failedSubject": "Sikertelen fizetés a Pro csomagodnál – {location}",
-    "payment_failedBody": "Szia!\n\nNem sikerült beszedni a RateThatJob Pro díját ennél a telephelynél: {location}. A Stripe a következő napokban újrapróbálja.\n\nItt frissítheted a kártyádat: {link}\n\nHa nem sikerül, a Pro az utolsó kifizetett időszak végén lejár, és a weboldaladra beágyazott RateThatJob Index „jelenleg nem elérhető” feliratot mutat.\n\nRateThatJob – Know before you go",
+    "payment_failedBody": "Szia!\n\nNem sikerült beszedni a RateThatJob Pro díját ennél a telephelynél: {location}. A Stripe a következő napokban újrapróbálja.\n\nItt frissítheted a kártyádat: {link}\n\nAmíg nincs kifizetve, a Pro szünetel: a weboldaladra beágyazott RateThatJob Index „jelenleg nem elérhető” feliratot mutat, a korai figyelmeztetés, a korai jelzések és a statisztika pedig kikapcsol.\n\nRateThatJob – Know before you go",
     "renewal_upcomingSubject": "Hamarosan megújul az éves Pro előfizetésed – {location}",
     "renewal_upcomingBody": "Szia!\n\nA(z) {location} éves RateThatJob Pro előfizetése automatikusan megújul, a mentett kártyádról.\nMegújulás: {date}\nÖsszeg: {amount}\n\nHa meg szeretnéd tartani, nincs teendőd. Ha addig módosítanád vagy lemondanád: {link}\n\nRateThatJob – Know before you go",
     "subscription_canceledSubject": "Lemondva: a Pro előfizetésed – {location}",
@@ -1650,7 +1654,7 @@
   },
   "IndexPage": {
     "metaTitle": "RateThatJob Index – a munkahelyed pontszáma, bárhol",
-    "metaDescription": "A RateThatJob Index megmutatja, mit mondanak a dolgozóid arról, milyen nálad dolgozni: pontszám az elmúlt 12 hónap értékeléseiből, bérről és munkaidőről szóló tényekkel. Tedd ki a karrieroldaladra, a hirdetéseidbe és az e-mail-aláírásodba.",
+    "metaDescription": "A RateThatJob Index megmutatja, mit mondanak a dolgozóid arról, milyen nálad dolgozni: pontszám az elmúlt 12 hónap értékeléseiből, bérről és munkaidőről szóló tényekkel. Tedd ki a karrieroldaladra és a hirdetéseidbe.",
     "eyebrow": "RateThatJob Index",
     "title": "Az elégedett dolgozónál nincs jobb álláshirdetés.",
     "intro": "A RateThatJob Index a munkahelyed pontszáma, abból, amit a nálad dolgozók mondanak. Ha a jelentkező magas Indexet lát, tudja, hogy ott jól bánnak vele – és nyugodtan mehet dolgozni.",
@@ -1684,9 +1688,7 @@
       "widgetTitle": "Élő widget",
       "widgetBody": "Egy script, és élő kártya jelenik meg az oldaladon, világos vagy sötét, angol vagy magyar nyelven.",
       "jsonTitle": "JSON API",
-      "jsonBody": "A pontszám, a darabszámok és a tények nyílt JSON-ként, fejlesztőknek, akik saját dizájnt szeretnének.",
-      "emailTitle": "E-mail-aláírás",
-      "emailBody": "Tedd a képes jelvényt az e-mail-aláírásodba, és minden leveled megmutatja, hogyan értékelnek a dolgozóid."
+      "jsonBody": "A pontszám, a darabszámok és a tények nyílt JSON-ként, fejlesztőknek, akik saját dizájnt szeretnének."
     },
     "improveTitle": "Mi mozgatja – és hogyan javíthatod",
     "improveIntro": "Felfelé csak úgy lehet menni, ha jobb munkahely leszel, és ezt meg is mutatod:",
@@ -1860,7 +1862,9 @@
     "body": "Nem küldünk több meghívót munkahely értékelésére a RateThatJobról.",
     "confirm": "Leiratkozás",
     "doneTitle": "Leiratkoztál",
-    "doneBody": "Nem kapsz tőlünk több meghívó e-mailt. Ha meggondolod magad, a meghívó linked továbbra is működik."
+    "doneBody": "Nem kapsz tőlünk több meghívó e-mailt. Ha meggondolod magad, a meghívó linked továbbra is működik.",
+    "failedTitle": "Ezzel a linkkel nem lehet leiratkozni",
+    "failedBody": "Nem e-mailes meghívóból származik, vagy már nem érvényes. Ha kaptál tőlünk e-mailt, az abban lévő linket használd."
   },
   "ClaimEmail": {
     "infoSubject": "Még egy kis információ kell a hozzáférés-igénylésedhez – {location}",
@@ -1891,7 +1895,7 @@
   },
   "BillingPage": {
     "title": "Előfizetés",
-    "intro": "A Pro telephelyenként jár: a RateThatJob Index a weboldaladon, korai figyelmeztetések és statisztika.",
+    "intro": "A Pro telephelyenként jár: a RateThatJob Index a weboldaladon, korai figyelmeztetések, korai jelzések és statisztika.",
     "states": {
       "trial": "Próbaidőszak",
       "active": "Aktív",
@@ -1946,9 +1950,10 @@
     "banner": {
       "trial": "{days, plural, =0 {Ma lejár a Pro próbaidőszakod} other {Még # nap van hátra a Pro próbaidőszakodból}}{count, plural, =1 {} other { (# telephely)}}",
       "ending": "{days, plural, =0 {Ma lejár a Pro próbaidőszakod} one {Holnap lejár a Pro próbaidőszakod} other {# nap múlva lejár a Pro próbaidőszakod}}{count, plural, =1 {} other { (# telephely)}} – fizess elő, hogy az Indexed a weboldaladon maradjon.",
-      "pastDue": "{count, plural, one {Egy fizetés nem sikerült} other {# fizetés nem sikerült}} – frissítsd a kártyádat, hogy megmaradjon a Pro.",
+      "pastDue": "{count, plural, one {Egy fizetés nem sikerült} other {# fizetés nem sikerült}} – a Pro szünetel, amíg a fizetés nem sikerül. Frissítsd a kártyádat.",
       "cta": "Előfizetés"
-    }
+    },
+    "proUntil": "Pro eddig: {date}. Magától nem újul meg."
   },
   "ReviewSent": {
     "title": "Köszönjük! Az értékelésed beérkezett",
@@ -1957,7 +1962,7 @@
     "published": "Már megjelent a munkahely oldalán.",
     "held": "Megjelenés előtt egy munkatársunk átnézi.",
     "afterLeaving": "Akkor jelenik meg, amikor a Fiókodban jelzed, hogy már nem dolgozol ott.",
-    "soon": "15 percen belül megjelenik a munkahely oldalán.",
+    "soon": "Nagyjából egy órán belül megjelenik a munkahely oldalán.",
     "later": "Várhatóan {date} körül jelenik meg a munkahely oldalán.",
     "laterChosen": "Ahogy kérted, késleltetve jelenik meg.",
     "laterAnonymity": "A késleltetés a névtelenségedet védi.",
@@ -2017,6 +2022,6 @@
   },
   "EarlySignalsEmail": {
     "subject": "Új korai jelzés – {location}",
-    "body": "Szia!\n\nÚj téma jelent meg a korai jelzések között itt: {location}. Ezek névtelen, összesített témák a még meg nem jelent értékelésekből.\n\nNézd meg a céges felületen: {link}\n\nRateThatJob – Know before you go"
+    "body": "Szia!\n\nÚj téma jelent meg a korai jelzések között itt: {location}. Ezek névtelen, összesített témák a még meg nem jelent és az elmúlt 60 nap értékeléseiből.\n\nNézd meg a céges felületen: {link}\n\nRateThatJob – Know before you go"
   }
 }

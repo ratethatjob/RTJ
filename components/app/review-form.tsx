@@ -56,7 +56,7 @@ const empty = (locationId: string): ReviewInput => ({
 });
 
 export function ReviewForm({
-  userId,
+  userId: serverUserId,
   inviteToken,
   location,
   workplace,
@@ -68,6 +68,9 @@ export function ReviewForm({
   sentPath,
 }: Props) {
   const t = useTranslations("ReviewForm");
+  // Signed in on the last step: kept, so a failed send can be retried without a new code.
+  const [signedInId, setSignedInId] = useState<string | null>(null);
+  const userId = serverUserId ?? signedInId;
   const router = useRouter();
   const target =
     location.id ??
@@ -497,7 +500,10 @@ export function ReviewForm({
           returnPath={returnPath}
           jobAlerts={jobAlerts}
           onJobAlerts={setJobAlerts}
-          onSignedIn={(uid) => send(input, jobAlerts, uid)}
+          onSignedIn={(uid) => {
+            setSignedInId(uid);
+            send(input, jobAlerts, uid);
+          }}
           busy={pending}
         />
       )}

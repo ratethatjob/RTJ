@@ -11,7 +11,8 @@ import {
   renderSeal,
 } from "@/lib/rtj-index";
 
-// Top Rated Employer seal: 404 unless the location earned it (4.0+, 10+ verified in 12 months).
+// Top Rated Employer seal: an empty image unless the location earned it (4.0+, 10+ verified in
+// 12 months), so a lost seal simply disappears instead of showing a broken image.
 // Without Pro (trial or paid) the seal stays but says the Index is unavailable.
 export async function GET(request: Request, { params }: RouteContext<"/embed/[id]/seal.svg">) {
   const { id } = await params;
@@ -20,8 +21,11 @@ export async function GET(request: Request, { params }: RouteContext<"/embed/[id
   const theme = url.searchParams.get("style")?.includes("light") ? "light" : "dark";
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
   const data = await getIndexLocation(id);
-  if (!data || (data.active && !isTopRated(data.location))) {
-    return new Response("Not found", { status: 404, headers: PUBLIC_HEADERS });
+  if (!data) return new Response("Not found", { status: 404, headers: PUBLIC_HEADERS });
+  if (data.active && !isTopRated(data.location)) {
+    return new Response('<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>', {
+      headers: { ...EMBED_HEADERS, "Content-Type": "image/svg+xml; charset=utf-8" },
+    });
   }
   after(() => recordEmbed(request, data.location.id));
   return new Response(renderSeal(data, await badgeLabels(locale, data), theme), {

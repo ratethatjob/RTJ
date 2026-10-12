@@ -28,6 +28,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const rated = data.locations.some((l) => l.scores && !l.isDemo);
   return {
     title: `${t("metaTitle", { company: data.name })} | RateThatJob`,
+    description: t("metaDescription", {
+      company: data.name,
+      count: data.locations.length,
+      reviews: data.locations.reduce((n, l) => n + (l.scores?.reviewCount ?? 0), 0),
+    }),
     alternates: localeAlternates(`/${data.slug}`, locale),
     ...(!rated && { robots: { index: false } }),
   };

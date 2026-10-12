@@ -3,6 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { BusinessBack } from "@/components/business/business-back";
 import { BusinessSidebar } from "@/components/business/sidebar";
+import { getUser } from "@/lib/auth";
 import { getBusiness } from "@/lib/business";
 import { pickMessages, SHARED_CLIENT_NAMESPACES } from "@/lib/client-messages";
 
@@ -13,8 +14,12 @@ export const instant = false;
 export default async function BusinessLayout({ children, params }: LayoutProps<"/[locale]/business">) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { supabase, org } = await getBusiness(locale, "/business");
   const messages = await pickMessages([...SHARED_CLIENT_NAMESPACES, "Business", "Index", "Team", "BusinessJobs", "Profile", "Thread", "Plan", "NewWorkplace", "Categories", "Countries", "Places", "BillingPage"]);
+  // Signed out: every page sends to sign-in with its own path (invite links, email links).
+  if (!(await getUser()).user) {
+    return <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>;
+  }
+  const { supabase, org } = await getBusiness(locale, "/business");
 
   if (!org) {
     return (

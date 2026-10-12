@@ -84,6 +84,12 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
   const tb = await getTranslations("Business");
   const tr = await getTranslations("Review");
   const tf = await getTranslations("ReviewForm");
+  const trep = await getTranslations("Report.reasons");
+  // Reports are stored as "<reason key>: details".
+  const reportReason = (text: string) => {
+    const [key, ...rest] = text.split(":");
+    return trep.has(key) ? [trep(key), rest.join(":").trim()].filter(Boolean).join(": ") : text;
+  };
   const format = await getFormatter();
 
   const { data: admin } = await supabase.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
@@ -226,7 +232,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
       .select(`${reviewCols}, created_at, hold_reason`)
       .eq("status", "pending_moderation")
       .order("created_at");
-    const holdLabel = (reason: string) =>
+    const oneHold = (reason: string) =>
       reason.startsWith("ai:")
         ? `${t("holdReasons.ai")}: ${reason
             .slice(3)
@@ -236,6 +242,8 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
         : t.has(`holdReasons.${reason}`)
           ? t(`holdReasons.${reason}`)
           : reason;
+    // A rule hold and an AI hold together: "burst + ai:spam".
+    const holdLabel = (reason: string) => reason.split(" + ").map(oneHold).join(" · ");
     items = (data ?? []).map((r) => ({
       id: r.id,
       created_at: r.created_at,
@@ -290,7 +298,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
         created_at: d.created_at,
         content: (
           <>
-            <p className="whitespace-pre-line rounded-2xl bg-paper p-4">{d.reason}</p>
+            <p className="whitespace-pre-line rounded-2xl bg-paper p-4">{reportReason(d.reason)}</p>
             {r && (
               <div className="mt-3">
                 <ReviewSummary r={r} relationship={tr(`relationship.${r.relationship}`)} />
@@ -437,7 +445,7 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
         created_at: d.created_at,
         content: (
           <>
-            <p className="whitespace-pre-line rounded-2xl bg-paper p-4">{d.reason}</p>
+            <p className="whitespace-pre-line rounded-2xl bg-paper p-4">{reportReason(d.reason)}</p>
             {r && (
               <div className="mt-3">
                 <ReviewSummary r={r} relationship={tr(`relationship.${r.relationship}`)} />

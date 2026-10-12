@@ -5,6 +5,7 @@ We only use cookies the site needs to work. There are no advertising or tracking
 ## Necessary cookies
 
 - **sb-…-auth-token** – keeps you signed in (Supabase). Lasts until you sign out or it expires.
+- **sb-…-auth-token-code-verifier** – a one-time check while you sign in with an email link; removed once you are signed in.
 - **NEXT_LOCALE** – the site language of the pages you visit; deleted when you close the browser.
 
 ## Functional cookies
@@ -16,6 +17,8 @@ We only use cookies the site needs to work. There are no advertising or tracking
 
 - **Page counter** (sessionStorage) – counts the pages viewed in this tab so the back arrow knows where to go; deleted when you close the tab.
 - **Review draft** (localStorage) – so a half-finished review isn't lost, also while you confirm your email. Stays only on your device and is deleted when the review is sent.
+- **rtj:area** (localStorage) – the area you picked under the workplace search field, so the next search starts there.
+- **Dashboard welcome band** (localStorage) – remembers that you closed the “Welcome to your business dashboard” steps.
 
 ## Embedded badges
 

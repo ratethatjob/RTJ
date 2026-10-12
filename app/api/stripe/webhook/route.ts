@@ -99,8 +99,8 @@ async function fulfillJobOrder(db: Db, session: Stripe.Checkout.Session) {
   if (error) throw error;
   if (newlyPaid) {
     const jobId = session.metadata?.job_id;
-    revalidateTag("jobs", "max");
-    if (jobId) revalidateTag(`job:${jobId}`, "max");
+    revalidateTag("jobs", { expire: 0 });
+    if (jobId) revalidateTag(`job:${jobId}`, { expire: 0 });
   }
 }
 
@@ -132,7 +132,7 @@ async function syncSubscription(s: Stripe, db: Db, subscriptionId: string, event
   });
   if (error) throw error;
   // Pro decides what the embedded Index shows.
-  revalidateTag("locations", "max");
+  revalidateTag("locations", { expire: 0 });
   // Just cancelled (for the period end): one confirmation to owners and HR.
   const newlyCancelled =
     cancelling && before && !(before.cancel_at_period_end && before.stripe_subscription_id === sub.id);

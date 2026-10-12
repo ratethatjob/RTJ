@@ -7,6 +7,7 @@ import { getBusiness } from "@/lib/business";
 import { SITE_URL } from "@/lib/seo";
 import type { JobTier } from "@/lib/site-config";
 import { JOB_TIERS } from "@/lib/site-config";
+import { SUBSCRIBED_STATUSES } from "@/lib/billing-status";
 import {
   accountTaxIds,
   billingCurrency,
@@ -42,7 +43,7 @@ export async function startProCheckout(locationId: string, interval: Interval): 
     .select("trial_ends_at, paid_until, stripe_status")
     .eq("location_id", locationId)
     .single();
-  if (["active", "trialing", "past_due"].includes(plan?.stripe_status ?? "")) return { error: "subscribed" };
+  if (SUBSCRIBED_STATUSES.includes(plan?.stripe_status ?? "")) return { error: "subscribed" };
 
   try {
     const currency = billingCurrency(location.country);

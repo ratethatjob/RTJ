@@ -98,7 +98,9 @@ export async function BillingCard({ location, view, info, canManage, invoicePend
               </dd>
             </dl>
           ) : (
-            <p className="text-slate">{t("paidByTransfer", { date: date(view.accessUntil) })}</p>
+            <p className="text-slate">
+              {t(view.transfer ? "paidByTransfer" : "proUntil", { date: date(view.accessUntil) })}
+            </p>
           ))}
 
         {state === "canceling" && <p className="text-lg font-black">{t("cancelUntil", { date: date(view.accessUntil) })}</p>}

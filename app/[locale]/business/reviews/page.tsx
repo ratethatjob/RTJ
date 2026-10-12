@@ -17,6 +17,7 @@ export default async function BusinessReviewsPage({ params, searchParams }: Page
   const { supabase, org } = await getBusiness(locale, "/business/reviews");
   if (!org) return null;
   const t = await getTranslations("Business");
+  const tr = await getTranslations("Reviews");
 
   const filter = FILTERS.includes(query.filter as (typeof FILTERS)[number])
     ? (query.filter as (typeof FILTERS)[number])
@@ -25,13 +26,22 @@ export default async function BusinessReviewsPage({ params, searchParams }: Page
   const ids = (selected ? [selected] : org.locations).map((l) => l.id);
   const address = new Map(org.locations.map((l) => [l.id, l.address]));
 
-  let q = supabase.from("public_reviews").select("*").in("location_id", ids);
+  let q = supabase.from("public_reviews").select("*", { count: "exact" }).in("location_id", ids);
   if (filter === "needs") q = q.is("reply_body", null);
   if (filter === "verified") q = q.neq("verification_level", "none");
   if (filter === "invited") q = q.eq("verification_level", "invited");
-  const { data } = ids.length ? await q.order("published_at", { ascending: false }).limit(50) : { data: [] };
+  const PER_PAGE = 50;
+  const page = Math.max(1, Number(query.page) || 1);
+  const { data, count } = ids.length
+    ? await q.order("published_at", { ascending: false }).range((page - 1) * PER_PAGE, page * PER_PAGE - 1)
+    : { data: [], count: 0 };
   const rows = data ?? [];
-  const needsCount = filter === "needs" ? rows.length : null;
+  const pages = Math.max(1, Math.ceil((count ?? 0) / PER_PAGE));
+  const needsCount = filter === "needs" ? (count ?? 0) : null;
+  const pageHref = (p: number) => ({
+    pathname: "/business/reviews" as const,
+    query: { filter, page: String(p), ...(selected && { location: selected.id }) },
+  });
 
   return (
     <main>
@@ -69,14 +79,22 @@ export default async function BusinessReviewsPage({ params, searchParams }: Page
                   locationId={row.location_id}
                   orgId={org.id}
                   existingReply={row.reply_body}
-                  canDispute={review.verification === "none"}
-                  startOpen={filter === "needs" && rows[0].id === review.id}
+                  // Disputes are for owners and HR (can_dispute_review).
+                  canDispute={review.verification === "none" && org.role !== "location_manager"}
+                  startOpen={filter === "needs" && page === 1 && rows[0].id === review.id}
                 />
               </ReviewCard>
             </div>
           );
         })}
       </section>
+      {pages > 1 && (
+        <nav className="mt-6 flex items-center justify-between font-black">
+          {page > 1 ? <Link href={pageHref(page - 1)}>{tr("previous")}</Link> : <span />}
+          <span className="text-slate">{tr("pageOf", { page, pages })}</span>
+          {page < pages ? <Link href={pageHref(page + 1)}>{tr("next")}</Link> : <span />}
+        </nav>
+      )}
     </main>
   );
 }

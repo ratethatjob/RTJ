@@ -12,6 +12,9 @@ export function LocaleSwitch({ dark = false }: { dark?: boolean }) {
   const pathname = usePathname();
   const t = useTranslations("Nav");
   const [open, setOpen] = useState(false);
+  // The query (?q=, ?page=, filters) stays when switching language; read on open so the
+  // component needs no useSearchParams (static pages).
+  const [query, setQuery] = useState("");
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,7 +34,10 @@ export function LocaleSwitch({ dark = false }: { dark?: boolean }) {
     <div ref={ref} className="relative">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          setQuery(window.location.search);
+          setOpen((v) => !v);
+        }}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={t("switchLanguage")}
@@ -56,7 +62,7 @@ export function LocaleSwitch({ dark = false }: { dark?: boolean }) {
             <li key={l} role="none">
               <Link
                 role="menuitem"
-                href={pathname}
+                href={`${pathname}${query}`}
                 locale={l}
                 onClick={() => setOpen(false)}
                 aria-current={l === locale ? "true" : undefined}

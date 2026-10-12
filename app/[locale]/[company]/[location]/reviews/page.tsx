@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${t("metaTitle", { company: data.companyName, location: data.address })} | RateThatJob`,
     alternates: localeAlternates(`${locationPath(data)}/reviews`, locale),
-    ...(data.isDemo && { robots: { index: false } }),
+    // Like the location page: no index without reviews (or for demo data).
+    ...((data.isDemo || !data.scores) && { robots: { index: false } }),
   };
 }
 

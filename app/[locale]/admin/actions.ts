@@ -187,6 +187,20 @@ export async function decideOrder(id: string, paid: boolean): Promise<Result> {
   const jobId = ((order ?? []) as { id: string; job_id: string }[]).find((o) => o.id === id)?.job_id;
   const { error } = await supabase.rpc("admin_decide_order", { p_order_id: id, p_paid: paid });
   if (error) return { error: true };
+  // An open card Checkout for this order can't be paid any more (cancelled, or paid by transfer).
+  const s = stripe();
+  const db = adminClient();
+  if (s && db) {
+    const { data: row } = await db.from("job_orders").select("stripe_session_id").eq("id", id).maybeSingle();
+    if (row?.stripe_session_id) {
+      try {
+        const session = await s.checkout.sessions.retrieve(row.stripe_session_id);
+        if (session.status === "open") await s.checkout.sessions.expire(session.id);
+      } catch (e) {
+        console.error("decideOrder expire", e);
+      }
+    }
+  }
   if (paid) {
     updateTag("jobs");
     if (jobId) updateTag(`job:${jobId}`);

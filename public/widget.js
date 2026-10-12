@@ -31,7 +31,7 @@
     fetch(src)
       .then(function (r) {
         if (!r.ok) throw new Error(r.status);
-        return Promise.all([r.text(), fetch(origin + "/api/public/locations/" + id + "/index").then(function (j) { return j.json(); })]);
+        return Promise.all([r.text(), fetch(origin + "/api/public/locations/" + id + "/index?locale=" + encodeURIComponent(locale)).then(function (j) { return j.json(); })]);
       })
       .then(function (res) {
         var data = res[1] || {};
