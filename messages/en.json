@@ -32,7 +32,6 @@
     "wherePlaceholder": "City, street or area",
     "search": "Search",
     "recentlyRated": "Recently rated",
-    "exampleProfile": "Recently rated workplace",
     "features": {
       "verifiedTitle": "Verified, not guessed",
       "verifiedBody": "Reviews are checked against payslips, contracts or employer invites. Verified reviews count more.",
@@ -2069,5 +2068,23 @@
   "EarlySignalsEmail": {
     "subject": "New early signal – {location}",
     "body": "Hi,\n\nA new theme has appeared in the early signals for {location}: anonymous, aggregated themes from reviews that aren't live yet and from the last 60 days.\n\nSee it in your business dashboard: {link}\n\nRateThatJob – Know before you go"
+  },
+  "Showcase": {
+    "metaTitle": "Sample workplace page",
+    "sample": "Sample",
+    "banner": "This is a sample page with a made-up business – this is what a workplace page looks like on RateThatJob.",
+    "ctaEmployer": "Claim your own page for free",
+    "ctaWorker": "Rate your workplace",
+    "ctaEmployerShort": "For employers",
+    "ctaWorkerShort": "Rate a job",
+    "pro": "Pro",
+    "proTitle": "On the employer's own website",
+    "proBody": "With Pro the employer can show the RateThatJob Index on its careers page and job ads. This is how the badges look for this sample:",
+    "badgeWide": "Wide card for a careers page",
+    "badgeCompact": "Compact badge",
+    "badgeSeal": "Top Rated Employer seal (4.0+ with 10 verified reviews)",
+    "proMore": "How the RateThatJob Index works",
+    "heroLink": "See what a workplace page looks like",
+    "employersLink": "See the sample workplace page"
   }
 }

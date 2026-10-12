@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import Form from "next/form";
 import { hasLocale } from "next-intl";
 import { CategoryChips } from "@/components/category-chips";
-import { DemoChip } from "@/components/demo-badge";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
@@ -18,7 +17,10 @@ import { getPathname, Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { locationPath } from "@/lib/format";
 import { localeAlternates } from "@/lib/seo";
-import { kindLabel } from "@/lib/place-types";
+import { kindLabel, placeTypeLabel } from "@/lib/place-types";
+import { SHOWCASE, SHOWCASE_PATH } from "@/lib/showcase";
+import { DemoChip } from "@/components/demo-badge";
+import { ShowcaseLogo } from "@/components/showcase/illustrations";
 
 export async function generateMetadata({
   params,
@@ -50,7 +52,8 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     cityNames.set(l.citySlug, l.city);
   }
   const cities = [...cityCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
-  const example = featured[0];
+  const example = SHOWCASE;
+  const ts = await getTranslations("Showcase");
 
   return (
     <>
@@ -109,58 +112,44 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             </div>
           </div>
 
-          {example?.scores && (
-            <Link
-              href={locationPath(example)}
-              className="hidden rounded-[2rem] bg-ink p-8 text-paper lg:block"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-3xl font-black tracking-brand">
-                    {example.name}
-                  </p>
-                  {example.isDemo && (
-                    <span className="mt-2 inline-block rounded-md bg-paper text-ink">
-                      <DemoChip />
-                    </span>
-                  )}
-                  <p className="text-mist">
-                    {example.address} · {kindLabel(example.placeType, locale, tc(example.category))} ·{" "}
-                    {tl("verifiedCount", {
-                      count: example.scores.verifiedCount,
-                    })}
+          {/* The sample workplace page (a made-up bakery, lib/showcase.ts), summed up. */}
+          <Link
+            href={SHOWCASE_PATH}
+            className="hidden rounded-[2rem] bg-ink p-8 text-paper lg:block"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex min-w-0 items-start gap-4">
+                <ShowcaseLogo className="size-14 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-2xl font-black leading-tight tracking-brand">{example.name}</p>
+                  <p className="mt-1 text-mist">
+                    {placeTypeLabel(example.placeType?.type, locale) ?? tc(example.category)} · {example.city} ·{" "}
+                    {tl("verifiedCount", { count: example.scores!.verifiedCount })}
                   </p>
                 </div>
-                <ScoreTile score={example.scores.overall} size="sm" />
               </div>
-              <dl className="mt-6 flex flex-col gap-4">
-                {(
-                  [
-                    [
-                      tl("facts.paid_on_time"),
-                      example.scores.facts.paid_on_time,
-                    ],
-                    [
-                      tl("facts.overtime_paid"),
-                      example.scores.facts.overtime_paid,
-                    ],
-                    [tl("repliesToApplicants"), example.scores.replyRate],
-                  ] as const
-                ).map(([label, value]) =>
-                  value == null ? null : (
-                    <div key={label}>
-                      <div className="mb-2 flex justify-between font-black">
-                        <dt>{label}</dt>
-                        <dd>{value}%</dd>
-                      </div>
-                      <Bar value={value} dark />
+              <ScoreTile score={example.scores!.overall} size="sm" />
+            </div>
+            <dl className="mt-6 flex flex-col gap-4">
+              {(
+                [
+                  [tl("facts.paid_on_time"), example.scores!.facts.paid_on_time],
+                  [tl("repliesToApplicants"), example.ghosting!.replyRate],
+                ] as const
+              ).map(([label, value]) =>
+                value == null ? null : (
+                  <div key={label}>
+                    <div className="mb-2 flex justify-between font-black">
+                      <dt>{label}</dt>
+                      <dd>{value}%</dd>
                     </div>
-                  ),
-                )}
-              </dl>
-              <p className="mt-6 text-sm text-mist">{t("exampleProfile")}</p>
-            </Link>
-          )}
+                    <Bar value={value} dark />
+                  </div>
+                ),
+              )}
+            </dl>
+            <p className="mt-6 font-black text-signal">{ts("heroLink")} →</p>
+          </Link>
         </section>
 
         {/* Personal part, streamed: the static page above and below stays the same for everyone. */}

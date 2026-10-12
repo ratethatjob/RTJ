@@ -4,6 +4,7 @@ import { EmployersCta } from "@/components/business-access";
 import { SiteHeader } from "@/components/site-header";
 import { Faq } from "@/components/faq";
 import { getPathname, Link } from "@/i18n/navigation";
+import { SHOWCASE_PATH } from "@/lib/showcase";
 import { localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/employers">): Promise<Metadata> {
@@ -20,6 +21,7 @@ export default async function EmployersPage({ params }: PageProps<"/[locale]/emp
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("Employers");
+  const ts = await getTranslations("Showcase");
   const features = ["reply", "invite", "warning", "index"] as const;
 
   return (
@@ -43,6 +45,9 @@ export default async function EmployersPage({ params }: PageProps<"/[locale]/emp
               </Link>
             </div>
           </EmployersCta>
+          <Link href={SHOWCASE_PATH} className="mt-5 inline-block font-black underline underline-offset-4">
+            {ts("employersLink")} →
+          </Link>
         </section>
         <section className="grid gap-4 sm:grid-cols-2">
           {features.map((f) => (

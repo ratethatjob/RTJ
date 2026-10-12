@@ -10,18 +10,17 @@ export function jobPath(job: Job) {
   return `/${job.location.companySlug}/${job.location.slug}/jobs/${job.id}`;
 }
 
-/** One open job in a list. `showPlace` adds the workplace and address. */
-export async function JobCard({ job, showPlace = true }: { job: Job; showPlace?: boolean }) {
+/** One open job in a list. `showPlace` adds the workplace and address. `linked={false}`: a card
+ *  without a job page behind it (the sample workplace). */
+export async function JobCard({ job, showPlace = true, linked = true }: { job: Job; showPlace?: boolean; linked?: boolean }) {
   const t = await getTranslations("Jobs");
   const locale = await getLocale();
   const format = await getFormatter();
   const pay = formatPay(job, locale, t);
 
-  return (
-    <Link
-      href={jobPath(job)}
-      className={`flex h-full flex-col gap-1 rounded-3xl bg-white p-5 sm:p-6 ${job.featured ? "ring-2 ring-ink" : ""}`}
-    >
+  const className = `flex h-full flex-col gap-1 rounded-3xl bg-white p-5 sm:p-6 ${job.featured ? "ring-2 ring-ink" : ""}`;
+  const content = (
+    <>
       {job.isDemo && (
         <span>
           <DemoChip />
@@ -45,6 +44,13 @@ export async function JobCard({ job, showPlace = true }: { job: Job; showPlace?:
       <span className="mt-1 text-sm text-slate">
         {t("posted", { date: format.dateTime(new Date(job.publishedAt), { dateStyle: "medium" }) })}
       </span>
+    </>
+  );
+  return linked ? (
+    <Link href={jobPath(job)} className={className}>
+      {content}
     </Link>
+  ) : (
+    <div className={className}>{content}</div>
   );
 }

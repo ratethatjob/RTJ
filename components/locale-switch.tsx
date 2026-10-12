@@ -6,8 +6,8 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { Flag } from "./flags";
 
-/** Language menu: every locale with its flag and own name. */
-export function LocaleSwitch({ dark = false }: { dark?: boolean }) {
+/** Language menu: every locale with its flag and own name. `compact`: the small header version. */
+export function LocaleSwitch({ dark = false, compact = false }: { dark?: boolean; compact?: boolean }) {
   const locale = useLocale();
   const pathname = usePathname();
   const t = useTranslations("Nav");
@@ -41,9 +41,9 @@ export function LocaleSwitch({ dark = false }: { dark?: boolean }) {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={t("switchLanguage")}
-        className={`inline-flex h-11 items-center gap-2 rounded-full border px-3.5 font-black uppercase ${
-          dark ? "border-white/25" : "border-mist/60"
-        }`}
+        className={`inline-flex items-center rounded-full border font-black uppercase ${
+          compact ? "h-9 gap-1.5 px-2.5 text-sm" : "h-11 gap-2 px-3.5"
+        } ${dark ? "border-white/25" : "border-mist/60"}`}
       >
         <Flag locale={locale} className="h-3.5 w-5 rounded-[2px]" />
         {locale}

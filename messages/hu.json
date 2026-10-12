@@ -1,8 +1,8 @@
 {
   "Metadata": {
-    "title": "RateThatJob – Know before you go",
+    "title": "RateThatJob – Tudd, mielőtt belépsz",
     "description": "Értékelések olyanoktól, akik ott dolgoztak vagy oda jelentkeztek, ahol lehet, igazolva. Bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel.",
-    "tagline": "Know before you go"
+    "tagline": "Tudd, mielőtt belépsz"
   },
   "Nav": {
     "findWorkplaces": "Munkahelyek",
@@ -23,7 +23,7 @@
     "loading": "Betöltés"
   },
   "Home": {
-    "headline": "Know before you go.",
+    "headline": "Tudd, mielőtt belépsz.",
     "intro": "Igazolt értékelések olyanoktól, akik tényleg ott dolgoztak.",
     "introMore": "Bér, beosztás, vezetők, és hogyan bánnak a jelentkezőkkel – minden munkahelyről.",
     "workplace": "Munkahely",
@@ -32,7 +32,6 @@
     "wherePlaceholder": "Város, utca vagy környék",
     "search": "Keresés",
     "recentlyRated": "Friss értékelések",
-    "exampleProfile": "Nemrég értékelt munkahely",
     "features": {
       "verifiedTitle": "Igazolt, nem találgatás",
       "verifiedBody": "Az értékeléseket bérjegyzékkel, szerződéssel vagy munkáltatói meghívóval ellenőrizzük. Az igazolt értékelés többet számít.",
@@ -1000,8 +999,8 @@
       "stripReplies": "A jelentkezők {pct}%-ának válaszol",
       "paidOnTime": "Időben fizet",
       "replies": "Válaszol a jelentkezőknek",
-      "topRated": "Top Rated Employer",
-      "footer": "RateThatJob.com · Know before you go",
+      "topRated": "Legjobbra értékelt munkáltató",
+      "footer": "RateThatJob.com · Tudd, mielőtt belépsz",
       "unavailable": "A RateThatJob Index jelenleg nem elérhető.",
       "unavailableHint": "Munkáltató: lépjen be a fiókjába az aktiváláshoz."
     },
@@ -1571,7 +1570,7 @@
   "About": {
     "metaTitle": "Rólunk",
     "eyebrow": "Rólunk",
-    "title": "Know before you go.",
+    "title": "Tudd, mielőtt belépsz.",
     "intro": "A RateThatJob megmutatja, milyen valójában dolgozni egy étteremben, boltban, raktárban vagy gyárban – telephelyenként, azoktól, akik ott dolgoztak.",
     "principles": {
       "anonymousTitle": "Mindig névtelen",
@@ -1676,17 +1675,17 @@
   },
   "Email": {
     "messageSubject": "A(z) {company} írt neked: {job}",
-    "messageBody": "Szia {name}!\n\nA(z) {company} üzenetet küldött a(z) {job} jelentkezésedről:\n\n{message}\n\nVálaszolj itt: {link}\n\nRateThatJob – Know before you go",
+    "messageBody": "Szia {name}!\n\nA(z) {company} üzenetet küldött a(z) {job} jelentkezésedről:\n\n{message}\n\nVálaszolj itt: {link}\n\nRateThatJob – Tudd, mielőtt belépsz",
     "trial_endingSubject": "Még {days} nap a Pro próbából – {location}",
-    "trial_endingBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája {days} nap múlva lejár. Utána a weboldaladon lévő RateThatJob Index pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”, a korai figyelmeztetés, a korai jelzések és a statisztika pedig kikapcsol.\n\nItt kapcsolhatod be a Prót: {link}\n\nRateThatJob – Know before you go",
+    "trial_endingBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája {days} nap múlva lejár. Utána a weboldaladon lévő RateThatJob Index pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”, a korai figyelmeztetés, a korai jelzések és a statisztika pedig kikapcsol.\n\nItt kapcsolhatod be a Prót: {link}\n\nRateThatJob – Tudd, mielőtt belépsz",
     "trial_endedSubject": "Lejárt a Pro próbád – {location}",
-    "trial_endedBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája lejárt. A weboldaladon lévő RateThatJob Index most pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”. A nyilvános profilod és az értékelések továbbra is láthatók.\n\nKapcsold be a Prót, hogy újra látszódjon a pontszámod: {link}\n\nRateThatJob – Know before you go",
+    "trial_endedBody": "Szia!\n\nA(z) {location} ingyenes Pro próbája lejárt. A weboldaladon lévő RateThatJob Index most pontszám helyett azt mutatja, hogy „jelenleg nem elérhető”. A nyilvános profilod és az értékelések továbbra is láthatók.\n\nKapcsold be a Prót, hogy újra látszódjon a pontszámod: {link}\n\nRateThatJob – Tudd, mielőtt belépsz",
     "payment_failedSubject": "Sikertelen fizetés a Pro csomagodnál – {location}",
-    "payment_failedBody": "Szia!\n\nNem sikerült beszedni a RateThatJob Pro díját ennél a telephelynél: {location}. A Stripe a következő napokban újrapróbálja.\n\nItt frissítheted a kártyádat: {link}\n\nAmíg nincs kifizetve, a Pro szünetel: a weboldaladra beágyazott RateThatJob Index „jelenleg nem elérhető” feliratot mutat, a korai figyelmeztetés, a korai jelzések és a statisztika pedig kikapcsol.\n\nRateThatJob – Know before you go",
+    "payment_failedBody": "Szia!\n\nNem sikerült beszedni a RateThatJob Pro díját ennél a telephelynél: {location}. A Stripe a következő napokban újrapróbálja.\n\nItt frissítheted a kártyádat: {link}\n\nAmíg nincs kifizetve, a Pro szünetel: a weboldaladra beágyazott RateThatJob Index „jelenleg nem elérhető” feliratot mutat, a korai figyelmeztetés, a korai jelzések és a statisztika pedig kikapcsol.\n\nRateThatJob – Tudd, mielőtt belépsz",
     "renewal_upcomingSubject": "Hamarosan megújul az éves Pro előfizetésed – {location}",
-    "renewal_upcomingBody": "Szia!\n\nA(z) {location} éves RateThatJob Pro előfizetése automatikusan megújul, a mentett kártyádról.\nMegújulás: {date}\nÖsszeg: {amount}\n\nHa meg szeretnéd tartani, nincs teendőd. Ha addig módosítanád vagy lemondanád: {link}\n\nRateThatJob – Know before you go",
+    "renewal_upcomingBody": "Szia!\n\nA(z) {location} éves RateThatJob Pro előfizetése automatikusan megújul, a mentett kártyádról.\nMegújulás: {date}\nÖsszeg: {amount}\n\nHa meg szeretnéd tartani, nincs teendőd. Ha addig módosítanád vagy lemondanád: {link}\n\nRateThatJob – Tudd, mielőtt belépsz",
     "subscription_canceledSubject": "Lemondva: a Pro előfizetésed – {location}",
-    "subscription_canceledBody": "Szia!\n\nLemondtuk a(z) {location} RateThatJob Pro előfizetését, több terhelés nem lesz. A Prót eddig még használhatod: {date}\n\nUtána a weboldaladon lévő RateThatJob Index „jelenleg nem elérhető” feliratot mutat. A nyilvános profilod és az értékelések láthatók maradnak.\n\nMeggondoltad magad? A fenti dátumig újraaktiválhatod: {link}\n\nRateThatJob – Know before you go"
+    "subscription_canceledBody": "Szia!\n\nLemondtuk a(z) {location} RateThatJob Pro előfizetését, több terhelés nem lesz. A Prót eddig még használhatod: {date}\n\nUtána a weboldaladon lévő RateThatJob Index „jelenleg nem elérhető” feliratot mutat. A nyilvános profilod és az értékelések láthatók maradnak.\n\nMeggondoltad magad? A fenti dátumig újraaktiválhatod: {link}\n\nRateThatJob – Tudd, mielőtt belépsz"
   },
   "JobsWidget": {
     "title": "Nyitott állások: {name}",
@@ -1899,9 +1898,9 @@
   },
   "InviteEmail": {
     "subject": "A(z) {company} arra kér, értékeld a munkahelyedet",
-    "body": "Szia!\n\nA(z) {company} ({location}) arra kérte a csapatát, hogy értékeljék a munkahelyüket a RateThatJobon. Nagyjából egy perc, írni nem kötelező.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót. A meghívásra írt értékelések mindig néhány nap véletlenszerű késleltetéssel jelennek meg, vagy később, ha így döntesz: pár hét múlva, vagy csak miután eljöttél.\n\nÉrtékeld a munkahelyedet: {link}\n\nAzért kaptad ezt az e-mailt, mert a(z) {company} megadta a címedet. Legfeljebb egy emlékeztetőt küldünk, utána töröljük a címedet.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Know before you go",
+    "body": "Szia!\n\nA(z) {company} ({location}) arra kérte a csapatát, hogy értékeljék a munkahelyüket a RateThatJobon. Nagyjából egy perc, írni nem kötelező.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót. A meghívásra írt értékelések mindig néhány nap véletlenszerű késleltetéssel jelennek meg, vagy később, ha így döntesz: pár hét múlva, vagy csak miután eljöttél.\n\nÉrtékeld a munkahelyedet: {link}\n\nAzért kaptad ezt az e-mailt, mert a(z) {company} megadta a címedet. Legfeljebb egy emlékeztetőt küldünk, utána töröljük a címedet.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Tudd, mielőtt belépsz",
     "reminderSubject": "Emlékeztető: értékeld a munkahelyedet ({company})",
-    "reminderBody": "Szia!\n\nPár napja a(z) {company} ({location}) meghívott, hogy értékeld a munkahelyedet a RateThatJobon. Ha szeretnéd, nagyjából egy perc.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót.\n\nÉrtékeld a munkahelyedet: {link}\n\nEz az egyetlen emlékeztető. A címedet most töröljük.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Know before you go"
+    "reminderBody": "Szia!\n\nPár napja a(z) {company} ({location}) meghívott, hogy értékeld a munkahelyedet a RateThatJobon. Ha szeretnéd, nagyjából egy perc.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót.\n\nÉrtékeld a munkahelyedet: {link}\n\nEz az egyetlen emlékeztető. A címedet most töröljük.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Tudd, mielőtt belépsz"
   },
   "Unsubscribe": {
     "title": "Leiratkozol a meghívókról?",
@@ -1914,11 +1913,11 @@
   },
   "ClaimEmail": {
     "infoSubject": "Még egy kis információ kell a hozzáférés-igénylésedhez – {location}",
-    "infoBody": "Szia!\n\nKöszönjük, hogy hozzáférést igényeltél a(z) {location} munkahelyhez a RateThatJobon. A jóváhagyáshoz még egy kis információ kell:\n\n{message}\n\nItt válaszolhatsz vagy csatolhatsz dokumentumot: {link}\n\nRateThatJob – Know before you go",
+    "infoBody": "Szia!\n\nKöszönjük, hogy hozzáférést igényeltél a(z) {location} munkahelyhez a RateThatJobon. A jóváhagyáshoz még egy kis információ kell:\n\n{message}\n\nItt válaszolhatsz vagy csatolhatsz dokumentumot: {link}\n\nRateThatJob – Tudd, mielőtt belépsz",
     "approvedSubject": "Jóváhagytuk a hozzáférésedet – {location}",
     "approvedBody": "Szia!\n\nJó hír: jóváhagytuk a hozzáférésedet a(z) {location} munkahelyhez. Mostantól válaszolhatsz az értékelésekre, meghívhatod a csapatodat és hirdethetsz állásokat. Ha ennél a telephelynél még nem volt, elindult a 30 napos ingyenes Pro próbaidőszakod.\n\nCéges felület: {link}",
     "rejectedSubject": "Nem tudtuk jóváhagyni a hozzáférés-igénylésedet – {location}",
-    "rejectedBody": "Szia!\n\nNem tudtuk megerősíteni, hogy te képviseled a(z) {location} munkahelyet, ezért nem hagytuk jóvá a hozzáférés-igénylést. Küldhetsz új igénylést céges e-mail-címmel (a céged domainjén), cégkivonattal vagy meghatalmazással – mindegyikhez személyazonosító okmánnyal.\n\n{link}\n\nRateThatJob – Know before you go",
+    "rejectedBody": "Szia!\n\nNem tudtuk megerősíteni, hogy te képviseled a(z) {location} munkahelyet, ezért nem hagytuk jóvá a hozzáférés-igénylést. Küldhetsz új igénylést céges e-mail-címmel (a céged domainjén), cégkivonattal vagy meghatalmazással – mindegyikhez személyazonosító okmánnyal.\n\n{link}\n\nRateThatJob – Tudd, mielőtt belépsz",
     "approvedTitle": "Jóváhagytuk a hozzáférésedet: {location}",
     "approvedIntro": "Mostantól válaszolhatsz az értékelésekre, meghívhatod a csapatodat és hirdethetsz állásokat. Ha ennél a telephelynél még nem volt, elindult a 30 napos ingyenes Pro próbaidőszakod.",
     "approvedButton": "Céges felület megnyitása",
@@ -2068,6 +2067,24 @@
   },
   "EarlySignalsEmail": {
     "subject": "Új korai jelzés – {location}",
-    "body": "Szia!\n\nÚj téma jelent meg a korai jelzések között itt: {location}. Ezek névtelen, összesített témák a még meg nem jelent és az elmúlt 60 nap értékeléseiből.\n\nNézd meg a céges felületen: {link}\n\nRateThatJob – Know before you go"
+    "body": "Szia!\n\nÚj téma jelent meg a korai jelzések között itt: {location}. Ezek névtelen, összesített témák a még meg nem jelent és az elmúlt 60 nap értékeléseiből.\n\nNézd meg a céges felületen: {link}\n\nRateThatJob – Tudd, mielőtt belépsz"
+  },
+  "Showcase": {
+    "metaTitle": "Minta céges adatlap",
+    "sample": "Minta",
+    "banner": "Ez egy minta adatlap kitalált céggel – így néz ki egy munkahely oldala a RateThatJobon.",
+    "ctaEmployer": "Igényeld a saját oldaladat ingyen",
+    "ctaWorker": "Értékeld a munkahelyedet",
+    "ctaEmployerShort": "Munkáltatóknak",
+    "ctaWorkerShort": "Értékelj",
+    "pro": "Pro",
+    "proTitle": "A munkáltató saját weboldalán",
+    "proBody": "Pro-val a cég kiteheti a RateThatJob Indexet a karrieroldalára és a hirdetéseibe. Így néznek ki a jelvények ennél a mintánál:",
+    "badgeWide": "Széles kártya karrieroldalra",
+    "badgeCompact": "Kompakt jelvény",
+    "badgeSeal": "Legjobbra értékelt munkáltató pecsét (4,0 felett, 10 ellenőrzött értékeléssel)",
+    "proMore": "Hogyan működik a RateThatJob Index",
+    "heroLink": "Nézd meg, milyen egy céges adatlap",
+    "employersLink": "Nézd meg a minta adatlapot"
   }
 }

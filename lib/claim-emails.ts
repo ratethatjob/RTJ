@@ -29,8 +29,9 @@ export async function sendClaimEmail(
   const values = { location: claim.location, link, message };
   if (kind !== "approved") return sendEmail(claim.email, t(`${kind}Subject`, values), t(`${kind}Body`, values));
 
+  const signature = `RateThatJob – ${(await getTranslations({ locale, namespace: "Metadata" }))("tagline")}`;
   const steps = STEPS.map((s) => ({ text: t(`steps.${s.key}`), href: `${base}${s.path}` }));
-  const text = `${t("approvedBody", values)}\n\n${t("stepsTitle")}\n${steps.map((s, i) => `${i + 1}. ${s.text}: ${s.href}`).join("\n")}\n\nRateThatJob – Know before you go`;
+  const text = `${t("approvedBody", values)}\n\n${t("stepsTitle")}\n${steps.map((s, i) => `${i + 1}. ${s.text}: ${s.href}`).join("\n")}\n\n${signature}`;
   const html = `<!doctype html><html><body style="margin:0;background:#F4F2EE;font-family:Arial,Helvetica,sans-serif;color:#14161A">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F4F2EE"><tr><td align="center" style="padding:32px 16px">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:24px">
@@ -47,7 +48,7 @@ ${steps.map((s) => `<li style="margin-bottom:8px"><a href="${esc(s.href)}" style
 </ol>
 <p style="margin:28px 0 0;font-size:13px;color:#4A4F57">${esc(t("approvedLink"))} <a href="${esc(link)}" style="color:#14161A">${esc(link)}</a></p>
 </td></tr></table>
-<p style="margin:16px 0 0;font-size:12px;color:#4A4F57">RateThatJob – Know before you go</p>
+<p style="margin:16px 0 0;font-size:12px;color:#4A4F57">${signature}</p>
 </td></tr></table></body></html>`;
   return sendEmail(claim.email, t("approvedSubject", values), text, html);
 }

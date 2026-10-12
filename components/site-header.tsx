@@ -4,13 +4,14 @@ import { getPathname, Link } from "@/i18n/navigation";
 import { AccountMenu } from "./account-menu";
 import { HeaderBusinessLink } from "./business-access";
 import { HeaderNav } from "./header-nav";
+import { LocaleSwitch } from "./locale-switch";
 import { SearchIcon } from "./icons";
 import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
 
 /** 64 px header: logo, the main sections (or a search field on workplace pages), then the
- *  business dashboard button for members, "Rate a job" and the account menu. The language
- *  switch lives in the footer and the phone menu. */
+ *  business dashboard button for members, "Rate a job", the compact language switch and the
+ *  account menu. Phones get the language switch in the menu. */
 export async function SiteHeader({ withSearch = false }: { withSearch?: boolean }) {
   const t = await getTranslations("Nav");
   const searchPath = getPathname({ href: "/search", locale: await getLocale() });
@@ -57,6 +58,9 @@ export async function SiteHeader({ withSearch = false }: { withSearch?: boolean 
         >
           {t("rateAJob")}
         </Link>
+        <div className="hidden sm:block">
+          <LocaleSwitch compact />
+        </div>
         <AccountMenu />
         <MobileMenu />
       </div>
