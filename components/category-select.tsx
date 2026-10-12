@@ -12,12 +12,17 @@ export function CategorySelect({
   className,
   auto = true,
   suggested = false,
+  placeholder,
+  required = false,
 }: {
   value: string;
   onChange: (value: string) => void;
   className?: string;
   auto?: boolean;
   suggested?: boolean;
+  /** No preselected value: a "Choose…" option that can't be picked, and `required`. */
+  placeholder?: string;
+  required?: boolean;
 }) {
   const t = useTranslations("Categories");
   const locale = useLocale();
@@ -26,7 +31,18 @@ export function CategorySelect({
     t.has(`examples.${c}`) ? `${t(c)} – ${t(`examples.${c}`)}` : t(c);
   return (
     <>
-      <select value={value} onChange={(e) => onChange(e.target.value)} aria-label={t("pick")} className={className}>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        aria-label={t("pick")}
+        required={required}
+        className={className}
+      >
+        {placeholder && !auto && (
+          <option value="" disabled>
+            {placeholder}
+          </option>
+        )}
         {auto && <option value="">{t("letUsDecide")}</option>}
         {[...sorted, "other" as const].map((c) => (
           <option key={c} value={c}>

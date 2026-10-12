@@ -68,6 +68,19 @@ export const PLACE_EXAMPLES: PlaceExample[] = [
   { name: "OIL! Benzinkút", city: "Szeged", primaryType: null, types: ["gas_station", "point_of_interest", "establishment"], category: "automotive", placeType: "gas_station" },
   // Map data says only "shop": the name decides before the generic type.
   { name: "Borbély Szalon", city: "Szeged", primaryType: "store", types: ["store"], category: "hair", placeType: "barber_shop" },
+  // Counterexamples: food or barber words in the names of offices. A specific Google type always
+  // beats the name; office words decide office types; unclear names go to the AI ("" = no category).
+  { name: "Creative Coffee Agency", city: "Budapest", primaryType: null, types: ["point_of_interest", "establishment"], category: "office", placeType: "marketing_agency" },
+  { name: "Creative Coffee Agency", city: "Budapest", primaryType: "marketing_agency", types: ["marketing_agency", "point_of_interest"], category: "office", placeType: "marketing_agency" },
+  { name: "Pizza Hut Iroda", city: "Budapest", primaryType: null, types: ["point_of_interest", "establishment"], category: "office", placeType: "corporate_office" },
+  { name: "Burger Design Studio", city: "Budapest", primaryType: null, types: ["point_of_interest", "establishment"], category: "", placeType: null },
+  { name: "Bakery Software Kft", city: "Szeged", primaryType: null, types: ["point_of_interest", "establishment"], category: "tech", placeType: "software_company" },
+  { name: "Barber Consulting", city: "Budapest", primaryType: null, types: ["point_of_interest", "establishment"], category: "office", placeType: "consultant" },
+  { name: "Coffee Media Group", city: "Budapest", primaryType: null, types: ["point_of_interest", "establishment"], category: "office", placeType: "marketing_agency" },
+  { name: "Kávé Ügynökség", city: "Szeged", primaryType: null, types: [], category: "office", placeType: "marketing_agency" },
+  { name: "Coffee Records", city: "Budapest", primaryType: "record_store", types: ["record_store", "store"], category: "", placeType: "record_store" },
+  { name: "Pékség utcai iroda", city: "Szeged", primaryType: "bakery", types: ["bakery", "food_store"], category: "cafe", placeType: "bakery" },
+  { name: "Burger Bár", city: "Szeged", primaryType: "corporate_office", types: ["corporate_office"], category: "office", placeType: "corporate_office" },
   // Nothing to go on: the AI is asked.
   { name: "Teszt munkahely", city: "Budapest", primaryType: null, types: [], category: "", placeType: null },
 ];

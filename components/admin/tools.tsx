@@ -47,7 +47,7 @@ export function RefreshPages() {
 }
 
 /** Admin override of a workplace's category; saved on change. */
-export function CategoryEditor({ id, category }: { id: string; category: string }) {
+export function CategoryEditor({ id, category, confirm = false }: { id: string; category: string; confirm?: boolean }) {
   const t = useTranslations("Admin");
   const router = useRouter();
   const [value, setValue] = useState(category);
@@ -69,6 +69,25 @@ export function CategoryEditor({ id, category }: { id: string; category: string 
         }}
         className={`rounded-xl border border-mist/60 bg-white px-3 py-2 text-sm outline-none focus:border-ink ${pending ? "opacity-60" : ""}`}
       />
+      {confirm && (
+        <button
+          type="button"
+          disabled={pending}
+          aria-busy={pending}
+          onClick={() =>
+            startTransition(async () => {
+              setError(false);
+              // Keeping the category as it is still marks it checked by an admin.
+              const result = await setLocationCategory(id, value);
+              if (result.error) return setError(true);
+              router.refresh();
+            })
+          }
+          className="rounded-xl border-2 border-ink px-3 py-1.5 text-sm font-black disabled:opacity-50"
+        >
+          {t("categoryOk")}
+        </button>
+      )}
       {error && <span className="text-sm font-black">{t("categoryError")}</span>}
     </div>
   );

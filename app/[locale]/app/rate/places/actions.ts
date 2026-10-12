@@ -6,11 +6,10 @@ import { isOsmId, osmAutocomplete } from "@/lib/osm";
 import { autocomplete, type PlaceDetails, placesProvider } from "@/lib/places";
 import { expireWorkplaces } from "@/lib/cache";
 import { isCategory } from "@/lib/categories";
-import { categorize } from "@/lib/categorize";
 import { searchLocations } from "@/lib/data";
 import { rateLimited } from "@/lib/rate-limit";
 import { caller, knownLocations, resolveArea } from "@/lib/place-search";
-import { createPlaceWorkplace, placeDetailsAny } from "@/lib/workplaces";
+import { aiCategoryFor, createPlaceWorkplace, placeDetailsAny } from "@/lib/workplaces";
 
 export type Suggestion = {
   placeId: string;
@@ -105,10 +104,18 @@ export async function choosePlace(
   if (rateLimited(`place-details:${key}`, isOsmId(placeId) ? 10 : 20)) return { error: "generic" };
   const place = await placeDetailsAny(placeId, await getLocale(), sessionToken).catch(() => null);
   if (!place) return { error: "generic" };
-  // Neither the map nor the name says it: a quick AI suggestion to preselect (marked as a suggestion).
-  if (!place.category) {
-    place.category = await categorize({ name: place.name, city: place.city, types: place.types });
-    place.categorySource = "ai";
+  // The rules don't decide: the AI (with Google's description and website for map places). Low
+  // confidence leaves the category empty, so the person has to choose it ("What kind of workplace?").
+  if (!place.category || place.confidence === "low") {
+    const guess = await aiCategoryFor(place);
+    if (guess.confidence === "low") {
+      place.category = null;
+      place.confidence = "low";
+    } else {
+      place.category = guess.category;
+      place.categorySource = "ai";
+      place.confidence = guess.confidence;
+    }
     place.certain = false;
   }
   return { place };

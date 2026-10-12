@@ -204,7 +204,9 @@
       "agriculture": "farm, winery",
       "events": "cinema, theatre, casino, events",
       "other": "anything else"
-    }
+    },
+    "whatKind": "What kind of workplace is this?",
+    "choose": "Choose…"
   },
   "Location": {
     "metaTitle": "Working at {company} ({location}) – reviews, pay, hours",
@@ -951,7 +953,12 @@
     "placeTypesDone": "{done} done, {left} left",
     "bulkCategory": "Workplaces in category…",
     "bulkAll": "All {count}",
-    "bulkMove": "Move {count} to this category"
+    "bulkMove": "Move {count} to this category",
+    "reviewTitle": "Categories to check ({count})",
+    "reviewHint": "Decided by the name or the AI, low confidence, or reported as wrong by a visitor. Pick the right category or press “OK as is”; either way it is marked as checked by an admin and nothing overwrites it.",
+    "reviewSource": "source: {source}, confidence: {confidence}",
+    "reviewReport": "Reported: should be {category}",
+    "categoryOk": "OK as is"
   },
   "Search": {
     "title": "Find a workplace",
@@ -1492,7 +1499,12 @@
     "save": "Save profile",
     "saved": "Saved",
     "invalid": "Check the texts: about up to 2000 characters, up to 12 benefits of 80 characters, a valid website.",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "categoryTitle": "Category",
+    "categoryHint": "The main category your workplace is listed under (city pages, search filters). Saved when you pick.",
+    "categoryLocked": "Our team set this category. If it's wrong, use “Wrong category? Tell us” on your public page.",
+    "categorySaved": "Saved.",
+    "categoryError": "Couldn't save it."
   },
   "Notifications": {
     "title": "Notifications",
@@ -2089,5 +2101,14 @@
     "proMore": "How the RateThatJob Index works",
     "heroLink": "See what a workplace page looks like",
     "employersLink": "See the sample workplace page"
+  },
+  "CategoryReport": {
+    "open": "Wrong category? Tell us",
+    "title": "What kind of workplace is this?",
+    "choose": "Choose…",
+    "note": "Anything else? (optional)",
+    "send": "Send",
+    "done": "Thanks – our team will check it.",
+    "error": "Couldn't send it. Try again later."
   }
 }

@@ -21,6 +21,25 @@ test("real Budapest and Szeged workplaces land in the right category with their 
   }
 });
 
+test("names never overrule a specific Google type, office words never point to food", () => {
+  // The live bug: a marketing agency became a café because of "Coffee" in its name.
+  const agency = classifyPlace({ name: "Creative Coffee Agency", types: ["point_of_interest", "establishment"] });
+  assert.equal(agency.category, "office");
+  assert.notEqual(agency.certain, true);
+  // A specific Google type wins over every word in the name.
+  assert.equal(classifyPlace({ name: "Burger Bár", primaryType: "corporate_office", types: [] }).category, "office");
+  assert.equal(classifyPlace({ name: "Kávé Kft", primaryType: "point_of_interest", types: ["lawyer"] }).category, "office");
+  // A specific type we don't know: no category from the name, the AI or a person decides.
+  const unknown = classifyPlace({ name: "Coffee Records", primaryType: "record_store", types: ["record_store"] });
+  assert.equal(unknown.category, null);
+  // Broad types are refined only within the same family.
+  assert.equal(classifyPlace({ name: "Lipóti Pékség", types: ["grocery_store"] }).category, "cafe");
+  assert.equal(classifyPlace({ name: "Kávé Ügynökség", types: ["food_store"] }).category, "supermarket");
+  // Unclear words stop food/beauty keywords.
+  assert.equal(classifyPlace({ name: "Burger Design Studio", types: [] }).category, null);
+  assert.equal(classifyPlace({ name: "Hair Design Studio", types: ["hair_salon"] }).category, "hair", "Google decides");
+});
+
 test("a barber is a barber, not beauty & wellness", () => {
   const c = classifyPlace({ name: "Barber Shop Budapest Agora", primaryType: "barber_shop", types: ["barber_shop", "hair_care"] });
   assert.equal(c.category, "hair");

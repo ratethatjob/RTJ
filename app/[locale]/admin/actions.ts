@@ -195,6 +195,7 @@ export async function backfillPlaceTypes(): Promise<{ ok?: true; error?: true; d
         place_type_hu: info?.hu ?? c?.placeTypeLabel.hu ?? null,
         // "none": checked but nothing found, so it isn't fetched again.
         category_source: source ?? "none",
+        category_confidence: chosen ? "high" : (c?.category ? c.confidence : named.confidence) ?? "low",
         ...(category && { category }),
       })
       .eq("id", l.id);

@@ -31,6 +31,8 @@ export type PlaceDetails = {
   categorySource: CategorySource | null;
   /** False: the category is a suggestion (shown with "check it" next to the dropdown). */
   certain: boolean;
+  /** How sure the rules (or the AI) are; null category or "low" = a person must choose. */
+  confidence: "high" | "medium" | "low" | null;
   /** Map types or tags ("restaurant", "shop=bakery"), a hint for the AI category guess. */
   types: string[];
 };
@@ -155,7 +157,23 @@ function classified(name: string, primaryType: string | undefined, types: string
     },
     categorySource: c.source,
     certain: c.certain,
+    confidence: c.confidence,
   };
+}
+
+/** Google's short description and website of a place: what the AI gets when the type and the name
+ *  don't decide. One extra call, only for those places. */
+export async function placeContext(placeId: string): Promise<{ summary: string | null; website: string | null }> {
+  const empty = { summary: null, website: null };
+  if (!KEY || !/^[\w-]{10,300}$/.test(placeId)) return empty;
+  await recordPlacesCall("google", "details");
+  const res = await fetch(`${BASE}/v1/places/${encodeURIComponent(placeId)}?languageCode=en`, {
+    headers: { "X-Goog-Api-Key": KEY, "X-Goog-FieldMask": "editorialSummary,websiteUri" },
+    cache: "no-store",
+  });
+  if (!res.ok) return empty;
+  const p = (await res.json()) as { editorialSummary?: { text: string }; websiteUri?: string };
+  return { summary: p.editorialSummary?.text ?? null, website: p.websiteUri ?? null };
 }
 
 /** Google's label of a place's primary type in one language (one extra call; only for types our

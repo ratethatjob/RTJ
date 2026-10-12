@@ -14,6 +14,7 @@ type Props = { initialName: string; defaultCountry: string; rateBase: string; cl
 export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim = false }: Props) {
   const t = useTranslations("NewWorkplace");
   const tn = useTranslations("Countries");
+  const tc = useTranslations("Categories");
   const [form, setForm] = useState({
     company: initialName,
     address: "",
@@ -76,8 +77,12 @@ export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim 
         </label>
       </div>
       <label className="flex flex-col gap-2">
-        <span className="font-black">{t("category")}</span>
+        <span className="font-black">{guess || picked ? t("category") : tc("whatKind")}</span>
         <CategorySelect
+          // Nothing in the name to go on: the person chooses (required, nothing preselected).
+          auto={false}
+          placeholder={tc("choose")}
+          required
           value={category}
           onChange={(next) => {
             setPicked(true);

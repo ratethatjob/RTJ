@@ -11,6 +11,7 @@ import {
 } from "@/components/admin/tools";
 import { CATEGORIES, isCategory } from "@/lib/categories";
 import { kindLabel } from "@/lib/place-types";
+import { adminClient } from "@/lib/supabase/admin";
 import { Decision } from "@/components/admin/decision";
 import { PurgeDemo } from "@/components/admin/purge-demo";
 import { BackLink } from "@/components/app/back-link";
@@ -502,6 +503,41 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
         ).data ?? []) as unknown as CompanyRow[])
       : [];
 
+  // Categories to check: decided by the name or the AI, low confidence, or reported as wrong.
+  const review =
+    tab === "workplaces"
+      ? await (async () => {
+          const db = adminClient();
+          if (!db) return null;
+          const [{ data: places }, { data: reports }] = await Promise.all([
+            db
+              .from("locations")
+              .select("id, name, address, city, category, category_source, category_confidence, place_type, place_type_en, place_type_hu")
+              .or("category_source.in.(name,ai,generic),category_confidence.eq.low,category_source.is.null")
+              .not("category_source", "in", "(admin,owner)")
+              .order("created_at", { ascending: false })
+              .limit(100),
+            db
+              .from("category_reports")
+              .select("location_id, suggested_category, note, created_at, locations(id, name, address, city, category, category_source, category_confidence, place_type, place_type_en, place_type_hu)")
+              .is("resolved_at", null)
+              .order("created_at", { ascending: false })
+              .limit(100),
+          ]);
+          type Row = NonNullable<typeof places>[number];
+          const rows = new Map<string, Row & { reports: { category: string; note: string | null }[] }>();
+          for (const r of reports ?? []) {
+            const l = r.locations as unknown as Row | null;
+            if (!l) continue;
+            const row = rows.get(l.id) ?? { ...l, reports: [] };
+            row.reports.push({ category: r.suggested_category as string, note: r.note });
+            rows.set(l.id, row);
+          }
+          for (const l of places ?? []) if (!rows.has(l.id)) rows.set(l.id, { ...l, reports: [] });
+          return [...rows.values()];
+        })()
+      : null;
+
   // Bulk fix: every workplace in one category (Workplaces tab, ?cat=).
   const tcat = await getTranslations("Categories");
   const byCategory =
@@ -724,6 +760,31 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
             <>
               <RefreshPages />
               <BackfillPlaceTypes />
+              {review && (
+                <section className="flex flex-col gap-3 rounded-3xl bg-white p-5">
+                  <h2 className="text-xl font-black">{t("reviewTitle", { count: review.length })}</h2>
+                  <p className="text-sm text-slate">{t("reviewHint")}</p>
+                  {review.length === 0 && <p className="text-slate">{t("empty")}</p>}
+                  <ul className="flex flex-col divide-y divide-[#E8E6E1]">
+                    {review.map((l) => (
+                      <li key={l.id} className="py-3">
+                        <p className="font-black">{l.name}</p>
+                        <p className="text-sm text-slate">
+                          {kindLabel({ type: l.place_type, en: l.place_type_en, hu: l.place_type_hu }, locale, tcat(l.category as string))} ·{" "}
+                          {l.address}, {l.city} · {t("reviewSource", { source: l.category_source ?? "–", confidence: l.category_confidence ?? "–" })}
+                        </p>
+                        {l.reports.map((r, i) => (
+                          <p key={i} className="mt-1 rounded-xl bg-paper px-3 py-1.5 text-sm">
+                            {t("reviewReport", { category: tcat(r.category) })}
+                            {r.note && ` – „${r.note}”`}
+                          </p>
+                        ))}
+                        <CategoryEditor id={l.id} category={l.category as string} confirm />
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
               <form className="flex gap-2">
                 <input type="hidden" name="tab" value="workplaces" />
                 <select

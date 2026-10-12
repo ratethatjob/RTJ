@@ -166,5 +166,6 @@ function osmClassified(name: string, key: string, value: string) {
     placeTypeLabel: { en: info?.en ?? null, hu: info?.hu ?? null },
     categorySource: c.source ?? (category ? ("osm" as const) : null),
     certain: false,
+    confidence: c.confidence ?? (category ? ("low" as const) : null),
   };
 }

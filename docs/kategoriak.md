@@ -2,7 +2,13 @@
 
 Fő kategória (~30, `lib/categories.ts`): szűrés, városoldalak. Pontos típus (`lib/place-types.ts`): a Google Places (New) típusa, vagy amire az OSM-címke / a név utal, magyar és angol felirattal – elöl látszik („Borbély · Fodrászat és borbély”).
 
-Döntési sorrend (`classifyPlace`): Google `primaryType` → a többi Google-típus → név-kulcsszavak (HU/EN, ékezet nélkül, egész szó, összetett szó vége pl. „szalámigyár”) → általános típus (store, food) → AI (Haiku). Csak a fő típusból jövő döntés biztos; minden más mellett „Javaslat – módosítsd, ha nem stimmel”.
+Döntési sorrend (`classifyPlace`):
+1. Google `primaryType` (biztos), 2. bármely más konkrét Google-típus – a név ezeket SOHA nem írja felül,
+3. tág típus (food_store, grocery_store, convenience_store, hair_care, beauty_salon, restaurant): a név csak azonos családon belül finomíthat (étel: étterem/kávézó/gyors/bár/szupermarket; ápolás: fodrász/kozmetika),
+4. OSM-címke, 5. ismeretlen konkrét Google-típus → nincs kategória (AI vagy ember),
+6. csak generikus típus (establishment, point_of_interest, store, food, service…) → név-kulcsszavak (HU/EN, ékezet nélkül, egész szó, összetett szó vége pl. „szalámigyár”): irodai szavak (agency, ügynökség, consulting, tanácsadó, marketing, media, software, iroda, group, holding, solutions…) csak irodai típust adhatnak és minden más kulcsszót letiltanak; bizonytalan szavak (studio, design, digital, creative) után a név nem dönt → általános típus → AI.
+AI (Haiku): név + Google-típusok + Google rövid leírás és weboldal (külön, csak ilyenkor lekérve) → kategória + bizonyosság (high/medium/low). Alacsony bizonyosságnál a legördülő üres és kötelező („Milyen munkahely ez?”); ahol nincs ember (térképes kattintás a keresőben), „Egyéb” + alacsony bizonyosság → admin „Ellenőrizendő besorolások”. Csak a fő típusból jövő döntés biztos; minden más mellett „Javaslat – módosítsd, ha nem stimmel”.
+Javítás: nyilvános oldalon „Rossz kategória? Jelezd” (bárki, `category_reports`), a cég a Profil oldalon módosíthatja (`set_my_location_category`, forrás `owner`), az admin mindent felülír (forrás `admin`, utána semmi nem írja át).
 
 Valós példák (Budapest/Szeged, a Google által adott típussal – a 47–53. sorok élő Google-keresési javaslatok 2026-10-12-ről; unit teszt: `lib/place-types.test.ts`, adatok: `lib/place-types.fixtures.ts`):
 
@@ -62,4 +68,15 @@ Valós példák (Budapest/Szeged, a Google által adott típussal – a 47–53.
 | 52 | Antique Cafe & Tea (Szeged) | cafe (javaslat) | Étterem és kávézó | Kávézó és pékség | Kávézó | Google típuslista |
 | 53 | OIL! Benzinkút (Szeged) | gas_station (javaslat) | Kiskereskedelem | Autószerviz és benzinkút | Benzinkút | Google típuslista |
 | 54 | Borbély Szalon (Szeged) | store | Kiskereskedelem | Fodrászat és borbély | Borbély | név |
-| 55 | Teszt munkahely (Budapest) | – | – (AI) | – (AI) | – | AI (haiku) |
+| 55 | Creative Coffee Agency (Budapest) | point_of_interest (javaslat) | – (AI) | Iroda és startup | Marketingügynökség | név |
+| 56 | Creative Coffee Agency (Budapest) | marketing_agency | – (AI) | Iroda és startup | Marketingügynökség | Google fő típus |
+| 57 | Pizza Hut Iroda (Budapest) | point_of_interest (javaslat) | – (AI) | Iroda és startup | Iroda | név |
+| 58 | Burger Design Studio (Budapest) | point_of_interest (javaslat) | – (AI) | – (AI) | – | AI (haiku) |
+| 59 | Bakery Software Kft (Szeged) | point_of_interest (javaslat) | – (AI) | IT és tech | Szoftvercég | név |
+| 60 | Barber Consulting (Budapest) | point_of_interest (javaslat) | – (AI) | Iroda és startup | Tanácsadó | név |
+| 61 | Coffee Media Group (Budapest) | point_of_interest (javaslat) | – (AI) | Iroda és startup | Marketingügynökség | név |
+| 62 | Kávé Ügynökség (Szeged) | – | – (AI) | Iroda és startup | Marketingügynökség | név |
+| 63 | Coffee Records (Budapest) | record_store | Kiskereskedelem | – (AI) | – | AI (haiku) |
+| 64 | Pékség utcai iroda (Szeged) | bakery | Étterem és kávézó | Kávézó és pékség | Pékség | Google fő típus |
+| 65 | Burger Bár (Szeged) | corporate_office | Iroda és startup | Iroda és startup | Iroda | Google fő típus |
+| 66 | Teszt munkahely (Budapest) | – | – (AI) | – (AI) | – | AI (haiku) |

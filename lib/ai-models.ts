@@ -14,7 +14,7 @@ export const AI_MAX_TOKENS = {
   // Up to 5 000 characters of text, in every locale.
   translate: 8000,
   moderate: 200,
-  categorize: 50,
+  categorize: 60,
   summary: 3000,
   followups: 1000,
   signals: 900,

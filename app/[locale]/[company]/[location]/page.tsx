@@ -28,6 +28,8 @@ import { locationPath } from "@/lib/format";
 import { locationMetadata } from "@/lib/location-meta";
 import { SITE_URL } from "@/lib/seo";
 import { kindLabel } from "@/lib/place-types";
+import { CATEGORIES } from "@/lib/categories";
+import { CategoryReport } from "@/components/location/category-report";
 
 type Props = PageProps<"/[locale]/[company]/[location]">;
 
@@ -59,6 +61,7 @@ export default async function LocationPage({ params }: Props) {
 
   const t = await getTranslations("Location");
   const tc = await getTranslations("Categories");
+  const tcr = await getTranslations("CategoryReport");
   const tr = await getTranslations("Reviews");
   const [{ reviews }, jobs, profile, nearby] = await Promise.all([
     getReviews(data.id),
@@ -143,6 +146,21 @@ export default async function LocationPage({ params }: Props) {
           </Link>
         </div>
       </section>
+      <div className="mt-3">
+        <CategoryReport
+          locationId={data.id}
+          options={CATEGORIES.map((c) => ({ value: c, label: tc(c) })).sort((x, y) => x.label.localeCompare(y.label, locale))}
+          labels={{
+            open: tcr("open"),
+            title: tcr("title"),
+            choose: tcr("choose"),
+            note: tcr("note"),
+            send: tcr("send"),
+            done: tcr("done"),
+            error: tcr("error"),
+          }}
+        />
+      </div>
 
       {!s && (
         <section className="mt-6 flex flex-col items-start gap-5 rounded-[2rem] bg-ink p-6 text-paper sm:p-10">

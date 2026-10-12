@@ -43,6 +43,7 @@ type Props = {
 /** One search field for picking a workplace: RateThatJob first, then the map, no duplicates. */
 export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, defaultCountry, manualBase }: Props) {
   const t = useTranslations("Places");
+  const tc = useTranslations("Categories");
   const locale = useLocale();
   const format = useFormatter();
   const router = useRouter();
@@ -138,6 +139,7 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
   }
 
   if (place) {
+    const mustChoose = place.category === null;
     return (
       <div className="flex flex-col gap-4 rounded-3xl bg-white p-5">
         <div>
@@ -149,13 +151,17 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
           </p>
         </div>
         <label className="flex flex-col gap-2">
-          <span className="font-black">{t("category")}</span>
+          {/* No sure guess: the person picks, nothing is preselected. */}
+          <span className="font-black">{mustChoose ? tc("whatKind") : t("category")}</span>
           <CategorySelect
             value={category}
             onChange={(next) => {
               setPicked(true);
               setCategory(next);
             }}
+            auto={false}
+            placeholder={mustChoose ? tc("choose") : undefined}
+            required={mustChoose}
             suggested={!picked && !place.certain}
             className="w-full rounded-2xl border border-mist/60 bg-white px-4 py-3 text-lg outline-none focus:border-ink"
           />
@@ -163,7 +169,7 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
         {error && <p className="font-black">{error}</p>}
         <button
           type="button"
-          disabled={pending} aria-busy={pending}
+          disabled={pending || (mustChoose && !category)} aria-busy={pending}
           onClick={confirm}
           className="rounded-2xl bg-ink px-5 py-3 text-base font-black text-paper disabled:opacity-50"
         >

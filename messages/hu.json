@@ -204,7 +204,9 @@
       "agriculture": "gazdaság, pincészet",
       "events": "mozi, színház, kaszinó, rendezvény",
       "other": "minden más"
-    }
+    },
+    "whatKind": "Milyen munkahely ez?",
+    "choose": "Válassz…"
   },
   "Location": {
     "metaTitle": "{company} ({location}) – értékelések, bér, beosztás",
@@ -951,7 +953,12 @@
     "placeTypesDone": "{done} kész, {left} van hátra",
     "bulkCategory": "Munkahelyek ebben a kategóriában…",
     "bulkAll": "Mind a {count}",
-    "bulkMove": "{count} áthelyezése ebbe a kategóriába"
+    "bulkMove": "{count} áthelyezése ebbe a kategóriába",
+    "reviewTitle": "Ellenőrizendő besorolások ({count})",
+    "reviewHint": "A név vagy az AI döntött, alacsony a bizonyosság, vagy egy látogató rossznak jelezte. Válaszd ki a jót, vagy nyomd meg a „Rendben” gombot; mindkettő admin által ellenőrzöttnek jelöli, és utána semmi nem írja felül.",
+    "reviewSource": "forrás: {source}, bizonyosság: {confidence}",
+    "reviewReport": "Jelezve: inkább {category}",
+    "categoryOk": "Rendben"
   },
   "Search": {
     "title": "Munkahely keresése",
@@ -1492,7 +1499,12 @@
     "save": "Profil mentése",
     "saved": "Mentve",
     "invalid": "Ellenőrizd a szövegeket: bemutatkozás legfeljebb 2000 karakter, legfeljebb 12 juttatás 80 karakterig, érvényes weboldal.",
-    "error": "Valami hiba történt. Próbáld újra."
+    "error": "Valami hiba történt. Próbáld újra.",
+    "categoryTitle": "Kategória",
+    "categoryHint": "A fő kategória, amelyben a munkahelyed szerepel (városoldalak, keresőszűrők). Választáskor mentjük.",
+    "categoryLocked": "Ezt a kategóriát a csapatunk állította be. Ha nem stimmel, jelezd a nyilvános oldalad „Rossz kategória? Jelezd” linkjével.",
+    "categorySaved": "Elmentve.",
+    "categoryError": "Nem sikerült menteni."
   },
   "Notifications": {
     "title": "Értesítések",
@@ -2089,5 +2101,14 @@
     "proMore": "Hogyan működik a RateThatJob Index",
     "heroLink": "Nézd meg, milyen egy céges adatlap",
     "employersLink": "Nézd meg a minta adatlapot"
+  },
+  "CategoryReport": {
+    "open": "Rossz kategória? Jelezd",
+    "title": "Milyen munkahely ez?",
+    "choose": "Válassz…",
+    "note": "Megjegyzés (nem kötelező)",
+    "send": "Küldés",
+    "done": "Köszönjük – a csapatunk megnézi.",
+    "error": "Nem sikerült elküldeni. Próbáld újra később."
   }
 }

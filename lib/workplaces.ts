@@ -1,10 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { isCategory } from "@/lib/categories";
+import { type Category, isCategory } from "@/lib/categories";
 import { categorize } from "@/lib/categorize";
 import { COUNTRIES } from "@/lib/countries";
 import { isOsmId, osmDetails } from "@/lib/osm";
 import { classifyPlace, placeTypeInfo } from "@/lib/place-types";
-import { placeDetails, primaryTypeLabel } from "@/lib/places";
+import { placeContext, placeDetails, primaryTypeLabel } from "@/lib/places";
 import { adminClient } from "@/lib/supabase/admin";
 
 // A workplace the reviewer picked or typed before signing in. It is created in the database only
@@ -51,22 +51,44 @@ export function parsePendingWorkplace(value: unknown): PendingWorkplace | null {
   return null;
 }
 
+type Decided = { category: Category; source: string; confidence: "high" | "medium" | "low" };
+
+/** The AI's guess for a workplace the rules couldn't place; map places also give it Google's short
+ *  description and website (one small extra call, only here). */
+export async function aiCategoryFor(place: { placeId?: string; name: string; city: string; types?: string[] }) {
+  const context =
+    place.placeId && !isOsmId(place.placeId) ? await placeContext(place.placeId).catch(() => null) : null;
+  return categorize({ name: place.name, city: place.city, types: place.types, ...context });
+}
+
+/** Category for a new workplace: a person's choice, else the rules, else the AI. A low-confidence
+ *  guess is saved as "Other" and marked for the admin's check list. */
+async function decide(
+  chosen: string,
+  rules: { category: Category | null; source: string | null; confidence: "high" | "medium" | "low" | null },
+  ai: () => Promise<{ category: Category; confidence: "high" | "medium" | "low" }>,
+): Promise<Decided> {
+  if (isCategory(chosen)) return { category: chosen, source: chosen === rules.category ? (rules.source ?? "user") : "user", confidence: "high" };
+  if (rules.category) return { category: rules.category, source: rules.source ?? "name", confidence: rules.confidence ?? "low" };
+  const guess = await ai();
+  return guess.confidence === "low"
+    ? { category: "other", source: "ai", confidence: "low" }
+    : { category: guess.category, source: "ai", confidence: guess.confidence };
+}
+
 /** Hand-entered workplace, as the signed-in user (create_workplace applies the per-user limits). */
 export async function createManualWorkplace(
   supabase: SupabaseClient,
   w: Extract<PendingWorkplace, { kind: "manual" }>,
 ): Promise<{ id?: string; error?: WorkplaceError }> {
-  // "Let us decide": name keywords, then Claude (Other without AI).
   const named = classifyPlace({ name: w.company });
-  const category = isCategory(w.category)
-    ? w.category
-    : (named.category ?? (await categorize({ name: w.company, city: w.city })));
+  const decided = await decide(w.category, named, () => aiCategoryFor({ name: w.company, city: w.city }));
   const { data, error } = await supabase.rpc("create_workplace", {
     p_company: w.company,
     p_address: w.address,
     p_city: w.city,
     p_country: w.country,
-    p_category: category,
+    p_category: decided.category,
   });
   if (error) return { error: errorFor(error.code) };
   const info = placeTypeInfo(named.placeType);
@@ -74,7 +96,7 @@ export async function createManualWorkplace(
     placeType: named.placeType,
     en: info?.en ?? null,
     hu: info?.hu ?? null,
-    source: category === named.category ? named.source : isCategory(w.category) ? "user" : "ai",
+    ...decided,
   });
   return { id: data as string };
 }
@@ -91,10 +113,11 @@ export async function createPlaceWorkplace(
   const place = await placeDetailsAny(w.placeId, locale, sessionToken).catch(() => null);
   if (!place || !place.name || !place.address || !place.city || !place.country) return { error: "invalid" };
   const osm = isOsmId(place.placeId);
-  // "Let us decide": the map type and the name, else Claude from the name and map types.
-  const category = isCategory(w.category)
-    ? w.category
-    : (place.category ?? (await categorize({ name: place.name, city: place.city, types: place.types })));
+  const decided = await decide(
+    w.category,
+    { category: place.category, source: place.categorySource, confidence: place.confidence },
+    () => aiCategoryFor(place),
+  );
   const { data, error } = await db.rpc(osm ? "workplace_from_osm" : "workplace_from_place", {
     p_user_id: userId,
     // OSM ids are stored without the "osm:" prefix.
@@ -103,7 +126,7 @@ export async function createPlaceWorkplace(
     p_address: place.address,
     p_city: place.city,
     p_country: place.country,
-    p_category: category,
+    p_category: decided.category,
     p_lat: place.lat,
     p_lng: place.lng,
   });
@@ -114,19 +137,15 @@ export async function createPlaceWorkplace(
     const missing = labels.hu ? "en" : labels.en ? "hu" : null;
     if (missing) labels[missing] = await primaryTypeLabel(place.placeId, missing).catch(() => null);
   }
-  await saveClassification(data as string, {
-    placeType: place.placeType,
-    ...labels,
-    source: category === place.category ? place.categorySource : isCategory(w.category) ? "user" : "ai",
-  });
+  await saveClassification(data as string, { placeType: place.placeType, ...labels, ...decided });
   return { id: data as string };
 }
 
-/** Exact type, its labels and where the category came from (service role). An admin's or a
- *  person's earlier choice of category is never overwritten here. */
+/** Exact type, its labels, where the category came from and how sure it is (service role). A
+ *  category an admin or the employer set is never overwritten here. */
 async function saveClassification(
   locationId: string,
-  c: { placeType: string | null; en: string | null; hu: string | null; source: string | null },
+  c: { placeType: string | null; en: string | null; hu: string | null; source: string; confidence: string },
 ) {
   const db = adminClient();
   if (!db) return;
@@ -134,5 +153,9 @@ async function saveClassification(
     .from("locations")
     .update({ place_type: c.placeType, place_type_en: c.en, place_type_hu: c.hu })
     .eq("id", locationId);
-  await db.from("locations").update({ category_source: c.source }).eq("id", locationId).is("category_source", null);
+  await db
+    .from("locations")
+    .update({ category_source: c.source, category_confidence: c.confidence })
+    .eq("id", locationId)
+    .or("category_source.is.null,category_source.not.in.(admin,owner)");
 }

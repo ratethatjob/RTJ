@@ -305,11 +305,21 @@ export const PLACE_TYPES: Record<string, TypeInfo> = {
   funeral_home: T("other", "Funeral home", "Temetkezési vállalat"),
 };
 
-/** Types that say little on their own: used only after the name keywords. Google gives bakeries
- *  only "food_store" and barbers "hair_care" in search suggestions, so the name decides there. */
+/** Types that say nothing about the business: they never decide, and never stop the name. */
 const GENERIC = new Set([
-  "store", "food", "food_store", "hair_care", "lodging", "establishment", "point_of_interest", "finance", "health", "service",
+  "store", "food", "lodging", "establishment", "point_of_interest", "finance", "health", "service", "premise",
 ]);
+
+/** Specific but broad types: the name may refine them, only within the same family ("food_store" +
+ *  "Pékség" → bakery; Google gives bakeries only "food_store" and barbers "hair_care"). */
+const WEAK = new Set(["food_store", "grocery_store", "convenience_store", "hair_care", "beauty_salon", "restaurant"]);
+
+/** Main categories close enough for the name to refine a weak type. */
+const FAMILY: Partial<Record<Category, string>> = {
+  restaurant: "food", cafe: "food", fast_food: "food", bar: "food", supermarket: "food",
+  hair: "care", beauty: "care",
+};
+const family = (c: Category) => FAMILY[c] ?? c;
 
 const NOT_A_TYPE = new Set(["establishment", "point_of_interest", "political", "premise", "street_address", "geocode"]);
 
@@ -333,6 +343,17 @@ export function placeTypeLabel(
 // the end of a compound ("*gyar" → "szalamigyar", never "magyar"). First match wins, so specific
 // words come first.
 // ---------------------------------------------------------------------------
+
+// Office words: they decide office types only, and stop every other name keyword ("Creative Coffee
+// Agency" is an agency, not a café). Checked before NAME_RULES.
+const OFFICE_RULES: [string, string[]][] = [
+  ["marketing_agency", ["agency", "ugynokseg*", "marketing", "media", "reklam*", "advertising"]],
+  ["consultant", ["consulting", "consultant*", "consultancy", "tanacsado*", "tanacsadas"]],
+  ["software_company", ["software", "szoftver*", "labs", "informatika*"]],
+  ["corporate_office", ["iroda", "irodaja", "office", "holding", "group", "solutions", "partners"]],
+];
+/** Words that make a name too unclear to decide by keywords (a design studio may be anything). */
+const UNCLEAR_WORDS = ["studio", "design", "digital", "creative", "kreativ"];
 
 const NAME_RULES: [string, string[]][] = [
   ["barber_shop", ["borbely*", "barber*", "barbershop"]],
@@ -444,9 +465,12 @@ function matches(name: string, key: string) {
   return name.includes(` ${word} `);
 }
 
-/** The place type a workplace name points to (e.g. "Barber Shop Budapest" → barber_shop). */
+/** The place type a workplace name points to (e.g. "Barber Shop Budapest" → barber_shop). Office
+ *  words win and decide only office types; unclear words ("studio", "design") stop the rest. */
 export function typeFromName(name: string): string | null {
   const n = normalizeName(name);
+  for (const [type, keys] of OFFICE_RULES) if (keys.some((k) => matches(n, k))) return type;
+  if (UNCLEAR_WORDS.some((k) => matches(n, k))) return null;
   for (const [type, keys] of NAME_RULES) if (keys.some((k) => matches(n, k))) return type;
   return null;
 }
@@ -503,7 +527,10 @@ export const typeFromOsm = (key: string, value: string): string | null => OSM_TY
 
 // ---------------------------------------------------------------------------
 
-export type CategorySource = "google_primary" | "google_types" | "osm" | "name" | "generic" | "ai" | "user" | "admin";
+export type CategorySource =
+  | "google_primary" | "google_types" | "osm" | "name" | "generic" | "ai" | "user" | "owner" | "admin";
+
+export type Confidence = "high" | "medium" | "low";
 
 export type Classification = {
   category: Category | null;
@@ -512,41 +539,53 @@ export type Classification = {
   source: CategorySource | null;
   /** Only the map's primary type is certain; everything else is shown as a suggestion. */
   certain: boolean;
+  confidence: Confidence | null;
 };
 
-/** Main category and exact type from map data and the name, in the documented order. */
+/** Main category and exact type from map data and the name. A specific Google type always beats
+ *  the name; the name decides only when Google gives nothing specific (or refines a broad type of
+ *  the same family). Unknown specific types and unclear names return no category: the AI or a
+ *  person decides. */
 export function classifyPlace(input: {
   name: string;
   primaryType?: string | null;
   types?: string[];
   osm?: { key: string; value: string } | null;
 }): Classification {
-  const types = (input.types ?? []).filter((t) => !NOT_A_TYPE.has(t));
+  const all = [input.primaryType, ...(input.types ?? [])].filter((t): t is string => Boolean(t) && !NOT_A_TYPE.has(t!));
   const primary = input.primaryType && !NOT_A_TYPE.has(input.primaryType) ? input.primaryType : null;
-  const known = (t: string | null | undefined) => (t && !GENERIC.has(t) ? placeTypeInfo(t) : null);
+  const strong = (t: string) => !GENERIC.has(t) && !WEAK.has(t) && placeTypeInfo(t) !== null;
+  const result = (category: Category | null, placeType: string | null, source: CategorySource | null, confidence: Confidence | null) =>
+    ({ category, placeType, source, certain: source === "google_primary", confidence });
 
-  // (a) Google's primary type.
-  if (primary && known(primary)) {
-    return { category: known(primary)!.category, placeType: primary, source: "google_primary", certain: true };
-  }
-  // (b) The other specific types (Google), or the OSM tag.
-  const other = types.find((t) => known(t));
-  if (other) return { category: known(other)!.category, placeType: other, source: "google_types", certain: false };
-  const osmType = input.osm ? typeFromOsm(input.osm.key, input.osm.value) : null;
-  if (osmType && placeTypeInfo(osmType)) {
-    return { category: placeTypeInfo(osmType)!.category, placeType: osmType, source: "osm", certain: false };
-  }
-  // (c) Words in the name.
+  // (a) Google's primary type, (b) any other specific Google type.
+  if (primary && strong(primary)) return result(placeTypeInfo(primary)!.category, primary, "google_primary", "high");
+  const other = all.find(strong);
+  if (other) return result(placeTypeInfo(other)!.category, other, "google_types", "medium");
+
   const named = typeFromName(input.name);
-  if (named) {
-    // A specific map type we have no label for stays the exact type; a generic one ("store") doesn't.
-    const placeType = primary && !GENERIC.has(primary) ? primary : named;
-    return { category: placeTypeInfo(named)!.category, placeType, source: "name", certain: false };
+  const namedCategory = named ? placeTypeInfo(named)!.category : null;
+
+  // (c) A broad Google type: the name may refine it within the same family.
+  const weak = all.find((t) => WEAK.has(t) && placeTypeInfo(t));
+  if (weak) {
+    const weakCategory = placeTypeInfo(weak)!.category;
+    if (named && namedCategory && family(namedCategory) === family(weakCategory)) return result(namedCategory, named, "name", "medium");
+    return result(weakCategory, weak, "google_types", "medium");
   }
-  // (d) Generic map types (shop, food, lodging), then the caller may ask the AI.
-  const generic = [primary, ...types].find((t) => t && placeTypeInfo(t));
-  if (generic) return { category: placeTypeInfo(generic)!.category, placeType: generic, source: "generic", certain: false };
-  return { category: null, placeType: primary, source: null, certain: false };
+  // (d) The OpenStreetMap tag.
+  const osmType = input.osm ? typeFromOsm(input.osm.key, input.osm.value) : null;
+  if (osmType && placeTypeInfo(osmType)) return result(placeTypeInfo(osmType)!.category, osmType, "osm", "medium");
+
+  // (e) A specific Google type we don't know: the name must not overrule it.
+  const unknown = all.find((t) => !GENERIC.has(t) && !placeTypeInfo(t));
+  if (unknown) return result(null, primary ?? unknown, null, null);
+
+  // (f) Only generic map data: the name, then the generic type ("store" → shop).
+  if (named) return result(namedCategory, named, "name", "low");
+  const generic = all.find((t) => placeTypeInfo(t));
+  if (generic) return result(placeTypeInfo(generic)!.category, generic, "generic", "low");
+  return result(null, primary, null, null);
 }
 
 /** "Barber shop · Hair & barber": the exact type first, then the main category (once, when the

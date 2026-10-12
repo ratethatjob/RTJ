@@ -2,6 +2,8 @@
 
 import { updateTag } from "next/cache";
 import { getUser } from "@/lib/auth";
+import { expireWorkplaces } from "@/lib/cache";
+import { isCategory } from "@/lib/categories";
 
 export type ProfileInput = { about: string; website: string; benefits: string; photos: string[] };
 
@@ -41,5 +43,15 @@ export async function saveProfile(
   );
   if (error) return { error: "generic" };
   updateTag(`profile:${locationId}`);
+  return { ok: true };
+}
+
+/** The employer's own choice of main category for its location (refused when an admin set it). */
+export async function setOwnCategory(locationId: string, category: string): Promise<{ ok?: true; error?: true }> {
+  if (!isCategory(category)) return { error: true };
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("set_my_location_category", { p_location_id: locationId, p_category: category });
+  if (error) return { error: true };
+  expireWorkplaces();
   return { ok: true };
 }
