@@ -11,11 +11,14 @@ export function SubscribePro({
   prices,
   invoicePending,
   align = "end",
+  note,
 }: {
   locationId: string;
   prices: { month: string; year: string };
   invoicePending: "month" | "year" | null;
   align?: "start" | "end";
+  /** "Billed in forints …" when the location's currency differs from the page language's. */
+  note?: string;
 }) {
   const t = useTranslations("Plan");
   const [error, setError] = useState(false);
@@ -47,6 +50,7 @@ export function SubscribePro({
           </button>
         ))}
       </span>
+      {note && <span className="text-sm text-slate">{note}</span>}
       <button type="button" onClick={() => setInvoice(true)} className="text-sm font-black underline underline-offset-4">
         {t("payByInvoice")}
       </button>

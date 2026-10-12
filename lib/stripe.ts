@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { adminClient } from "./supabase/admin";
 import { SITE_URL } from "./seo";
 import { invoiceFooter as footerFor, invoiceSeller, taxExemptFor } from "./invoice-tax";
-import { jobPricing, type JobTier, OPERATOR, PRICING, YEARLY_MONTHS } from "./site-config";
+import { jobPricing, type JobTier, OPERATOR, proPrice as listPrice } from "./site-config";
 
 
 export { taxExemptFor } from "./invoice-tax";
@@ -38,8 +38,7 @@ export function toMinor(amount: number, currency: BillingCurrency) {
 
 /** Pro price per location for one billing period, in whole units. */
 export function proPrice(currency: BillingCurrency, interval: Interval) {
-  const monthly = PRICING[currency === "huf" ? "hu" : "en"].monthly ?? 0;
-  return interval === "year" ? monthly * YEARLY_MONTHS : monthly;
+  return listPrice(currency === "huf" ? "HUF" : "EUR", interval) ?? 0;
 }
 
 /** Job ad price: the package, or the difference when moving up from `from`. */
@@ -54,7 +53,7 @@ const PRO_PRODUCT = "rtj_pro";
 const priceCache = new Map<string, string>();
 
 /** The recurring Pro price for this currency and interval (lookup_key includes the amount, so a
- *  price change in PRICING creates a new price; existing subscriptions keep theirs). */
+ *  price change in PRO_MONTHLY creates a new price; existing subscriptions keep theirs). */
 export async function proPriceId(s: Stripe, currency: BillingCurrency, interval: Interval) {
   const amount = proPrice(currency, interval);
   const key = `rtj_pro_${interval}_${currency}_${amount}`;

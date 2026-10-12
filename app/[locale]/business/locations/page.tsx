@@ -7,6 +7,7 @@ import { TrialBanner } from "@/components/business/trial-banner";
 import { daysLeft, getBusiness } from "@/lib/business";
 import { SUBSCRIBED_STATUSES } from "@/lib/billing-status";
 import { billingCurrency, proPrice } from "@/lib/stripe";
+import { countryCurrency, localeCurrency } from "@/lib/site-config";
 
 export const instant = false;
 
@@ -110,6 +111,11 @@ export default async function LocationsPage({ params, searchParams }: PageProps<
                         locationId={l.id}
                         prices={{ month: money(l.country, "month"), year: money(l.country, "year") }}
                         invoicePending={l.pendingOrder}
+                        note={
+                          countryCurrency(l.country) !== localeCurrency(locale)
+                            ? tp("currencyNote", { currency: countryCurrency(l.country) })
+                            : undefined
+                        }
                       />
                     ) : (
                       l.plan !== "pro" && <ActivatePro locationId={l.id} pending={l.pendingOrder} />

@@ -1442,7 +1442,8 @@
         "cv": "Az AI elolvassa az önéletrajzokat",
         "followups": "Az AI minden jelentkezőnek feltesz pár további kérdést",
         "featured": "Kiemelés az álláskeresés tetején"
-      }
+      },
+      "currencyNote": "A számlázás {currency, select, HUF {forintban} other {euróban}} történik, a telephely országa szerint."
     },
     "tools": {
       "call": "Hívás",
@@ -1666,7 +1667,7 @@
     "metaTitle": "Árak munkáltatóknak",
     "eyebrow": "Árak",
     "title": "Ingyenes hozzáférés. Pro, ha többre van szükséged.",
-    "intro": "Minden munkáltató ingyen hozzáférhet a telephelyeihez, és válaszolhat az értékelésekre. A Pro telephelyenként, az álláshirdetés hirdetésenként fizetendő. A magyarországi telephelyek forintban, a többiek euróban fizetnek.",
+    "intro": "Minden munkáltató ingyen hozzáférhet a telephelyeihez, és válaszolhat az értékelésekre. A Pro telephelyenként, az álláshirdetés hirdetésenként fizetendő.",
     "monthly": "Havi",
     "yearly": "Éves",
     "perMonth": "hó / telephely",
@@ -1731,8 +1732,7 @@
       "title": "Álláshirdetések",
       "intro": "Hirdetésenként fizetsz. Minden csomagban benne van a gyors vagy önéletrajzos jelentkezés, a saját kérdések, a jelöltek hívása és az üzenetküldés.",
       "cta": "Állás feladása"
-    },
-    "otherCurrency": "Magyarországon kívül: {price}"
+    }
   },
   "Thread": {
     "you": "Te",
@@ -1963,7 +1963,8 @@
     "billingAddress": "Cím",
     "billingTaxId": "Adószám",
     "billingUnavailable": "A számlázási adatokat most nem tudtuk betölteni.",
-    "billingEdit": "A számlázási adatokat a számlázási portálon módosíthatod, és ott töltheted le a számláidat is."
+    "billingEdit": "A számlázási adatokat a számlázási portálon módosíthatod, és ott töltheted le a számláidat is.",
+    "currencyNote": "A számlázás {currency, select, HUF {forintban} other {euróban}} történik, a telephely országa szerint."
   },
   "Demo": {
     "label": "Demó adat",

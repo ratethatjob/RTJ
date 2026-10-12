@@ -5,6 +5,7 @@ import { loadBillingData } from "@/lib/billing-data";
 import { billingView, yearlySavingPercent } from "@/lib/billing-status";
 import { getBusiness } from "@/lib/business";
 import { billingCurrency, proPrice } from "@/lib/stripe";
+import { localeCurrency } from "@/lib/site-config";
 
 export const instant = false;
 
@@ -17,6 +18,7 @@ export default async function BillingPage({ params, searchParams }: PageProps<"/
   const { org } = await getBusiness(locale, "/business/billing");
   if (!org) return null;
   const t = await getTranslations("BillingPage");
+  const tPlan = await getTranslations("Plan");
   const format = await getFormatter();
   const canManage = org.role === "owner" || org.role === "hr";
   const data = canManage
@@ -61,6 +63,9 @@ export default async function BillingPage({ params, searchParams }: PageProps<"/
               canManage={canManage}
               invoicePending={l.pendingOrder}
               prices={{ month: price("month"), year: price("year") }}
+              currencyNote={
+                currency.toUpperCase() !== localeCurrency(locale) ? tPlan("currencyNote", { currency: currency.toUpperCase() }) : undefined
+              }
               savingPercent={yearlySavingPercent(proPrice(currency, "month"), proPrice(currency, "year"))}
             />
           );

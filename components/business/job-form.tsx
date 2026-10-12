@@ -12,7 +12,7 @@ import { currencyFor } from "@/lib/currency";
 import type { JobQuestion } from "@/lib/data/types";
 import { MAX_QUESTIONS, PRESET_QUESTIONS } from "@/lib/job-questions";
 import { JOB_LANGUAGES, type JobLanguage, LANGUAGE_LEVELS, languageName, MAX_LANGUAGES } from "@/lib/languages";
-import { JOB_TIERS, type JobTier, jobPricing } from "@/lib/site-config";
+import { JOB_TIERS, type JobTier, jobPricing, localeCurrency } from "@/lib/site-config";
 
 type Location = { id: string; name: string; address: string; country: string };
 
@@ -505,10 +505,14 @@ function PackagePicker({
   const format = useFormatter();
   const pricing = jobPricing(country);
   const rank = (tier: JobTier) => JOB_TIERS.indexOf(tier);
+  const locale = useLocale();
 
   return (
     <fieldset className="flex flex-col gap-3">
       <legend className="mb-2 font-black">{t("packages.title")}</legend>
+      {pricing.currency !== localeCurrency(locale) && (
+        <p className="-mt-1 text-sm text-slate">{t("packages.currencyNote", { currency: pricing.currency })}</p>
+      )}
       <div className="grid gap-2 sm:grid-cols-3">
         {JOB_TIERS.map((tier, i) => {
           const active = value === tier;

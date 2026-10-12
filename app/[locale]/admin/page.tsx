@@ -19,7 +19,7 @@ import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { domainCheck } from "@/lib/claim-check";
-import { jobPricing, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
+import { countryCurrency, jobPricing, proPrice } from "@/lib/site-config";
 import { dashboardUrl } from "@/lib/stripe";
 import { StripeInvoiceCheck } from "@/components/admin/stripe-invoice-check";
 import { DuplicatePair, OsmImportRunner } from "@/components/admin/osm-tools";
@@ -420,9 +420,8 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
       </>
     );
     items = ((counts[6].data ?? []) as PlanOrderRow[]).map((o) => {
-      const price = PRICING[o.country === "HU" ? "hu" : "en"];
-      const amount =
-        price.monthly == null ? null : o.billing_interval === "year" ? price.monthly * YEARLY_MONTHS : price.monthly;
+      const price = { currency: countryCurrency(o.country) };
+      const amount = proPrice(price.currency, o.billing_interval === "year" ? "year" : "month");
       return {
         id: o.id,
         created_at: o.created_at,

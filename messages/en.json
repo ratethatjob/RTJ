@@ -1442,7 +1442,8 @@
         "cv": "AI reads the CVs",
         "followups": "AI asks every applicant a few follow-up questions",
         "featured": "Featured at the top of job search"
-      }
+      },
+      "currencyNote": "Billed in {currency, select, HUF {forints} other {euros}}, the currency of this workplace’s country."
     },
     "tools": {
       "call": "Call",
@@ -1666,7 +1667,7 @@
     "metaTitle": "Pricing for employers",
     "eyebrow": "Pricing",
     "title": "Free access. Pro when you need more.",
-    "intro": "Every employer gets free access to their locations and can reply to reviews. Pro is billed per location, job ads per ad. Workplaces in Hungary pay in forints, all others in euros.",
+    "intro": "Every employer gets free access to their locations and can reply to reviews. Pro is billed per location, job ads per ad.",
     "monthly": "Monthly",
     "yearly": "Yearly",
     "perMonth": "month per location",
@@ -1731,8 +1732,7 @@
       "title": "Job ads",
       "intro": "Pay per ad. Every package includes quick apply or CV, your own questions, and calling and messaging candidates.",
       "cta": "Post a job"
-    },
-    "otherCurrency": "Workplaces in Hungary: {price}"
+    }
   },
   "Thread": {
     "you": "You",
@@ -1963,7 +1963,8 @@
     "billingAddress": "Address",
     "billingTaxId": "Tax ID",
     "billingUnavailable": "We couldn't load your billing details right now.",
-    "billingEdit": "Change your billing details and download your invoices in the billing portal."
+    "billingEdit": "Change your billing details and download your invoices in the billing portal.",
+    "currencyNote": "Billed in {currency, select, HUF {forints} other {euros}}, the currency of this workplace’s country."
   },
   "Demo": {
     "label": "Demo data",

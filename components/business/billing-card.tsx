@@ -15,6 +15,8 @@ export type BillingCardProps = {
   invoicePending: "month" | "year" | null;
   /** Formatted list prices for this location's currency. */
   prices: { month: string; year: string };
+  /** "Billed in forints …" when the location's currency differs from the page language's. */
+  currencyNote?: string;
   savingPercent: number;
 };
 
@@ -27,7 +29,7 @@ const PILL: Record<BillingState, string> = {
   free: "border border-mist text-slate",
 };
 
-export async function BillingCard({ location, view, info, canManage, invoicePending, prices, savingPercent }: BillingCardProps) {
+export async function BillingCard({ location, view, info, canManage, invoicePending, prices, savingPercent, currencyNote }: BillingCardProps) {
   const t = await getTranslations("BillingPage");
   const format = await getFormatter();
   const date = (iso: string | null) => (iso ? format.dateTime(new Date(iso), { dateStyle: "long" }) : "–");
@@ -58,6 +60,7 @@ export async function BillingCard({ location, view, info, canManage, invoicePend
             ? t("plan", { price: money(info.amount, info.currency), interval: t(`intervals.${info.interval}`) })
             : t("planNone", { month: prices.month, year: prices.year })}
         </p>
+        {currencyNote && <p className="-mt-2 text-sm text-slate">{currencyNote}</p>}
 
         {state === "trial" && (
           <div className="flex flex-col gap-2">

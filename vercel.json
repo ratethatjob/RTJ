@@ -22,6 +22,10 @@
     {
       "path": "/api/cron/documents",
       "schedule": "7 3 * * *"
+    },
+    {
+      "path": "/api/revalidate",
+      "schedule": "13 6 * * *"
     }
   ]
 }
