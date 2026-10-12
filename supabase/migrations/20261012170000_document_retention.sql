@@ -33,8 +33,12 @@ create table if not exists public.document_records (
   deleted_at timestamptz not null default now()
 );
 alter table public.document_records enable row level security;
-create policy "Admins read document records" on public.document_records
-  for select to authenticated using (private.is_admin());
+do $$ begin
+  if not exists (select 1 from pg_policies where tablename = 'document_records' and policyname = 'Admins read document records') then
+    create policy "Admins read document records" on public.document_records
+      for select to authenticated using (private.is_admin());
+  end if;
+end $$;
 
 -- Every time an admin opens a document.
 create table if not exists public.document_access_log (
@@ -49,8 +53,12 @@ create table if not exists public.document_access_log (
 );
 create index if not exists document_access_log_source on public.document_access_log (kind, source_id, created_at desc);
 alter table public.document_access_log enable row level security;
-create policy "Admins read the document log" on public.document_access_log
-  for select to authenticated using (private.is_admin());
+do $$ begin
+  if not exists (select 1 from pg_policies where tablename = 'document_access_log' and policyname = 'Admins read the document log') then
+    create policy "Admins read the document log" on public.document_access_log
+      for select to authenticated using (private.is_admin());
+  end if;
+end $$;
 
 create or replace function public.admin_decide_claim(p_claim_id uuid, p_approve boolean)
 returns void
