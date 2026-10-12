@@ -9,6 +9,8 @@ import { locationPath, slugify } from "@/lib/format";
 import { getPathname } from "@/i18n/navigation";
 import { AREA_COOKIE, areaForCitySlug, isAreaId, parseGeo, SEARCH_AREAS } from "@/lib/search-areas";
 import { visitorArea } from "@/lib/visitor-area";
+import { comparePlaces } from "@/lib/place-match";
+import { adminClient } from "@/lib/supabase/admin";
 
 // Shared by the review finder (app/rate/places/actions.ts) and the main search (search/actions.ts).
 
@@ -27,6 +29,39 @@ export async function knownLocations(supabase: Awaited<ReturnType<typeof getUser
     ...((g.data ?? []) as { place_id: string; location_id: string }[]).map((r) => [r.place_id, r.location_id] as const),
     ...((o.data ?? []) as { osm_id: string; location_id: string }[]).map((r) => [`osm:${r.osm_id}`, r.location_id] as const),
   ]);
+}
+
+/** Search suggestions (no coordinates yet) that are workplaces we already have under another
+ *  source: the same name and street + house number. Returns placeId → location id. */
+export async function matchSuggestions(found: { placeId: string; main: string; secondary: string }[]) {
+  const out = new Map<string, string>();
+  const db = adminClient();
+  if (!db || !found.length) return out;
+  const { data } = await db.rpc("locations_like_names", {
+    p_items: found.slice(0, 20).map((f, i) => ({ i, name: f.main })),
+  });
+  const byItem = new Map<number, SuggestionCandidate[]>();
+  for (const c of (data ?? []) as (SuggestionCandidate & { i: number })[]) byItem.set(c.i, [...(byItem.get(c.i) ?? []), c]);
+  found.slice(0, 20).forEach((f, i) => {
+    const same = (byItem.get(i) ?? []).filter(
+      (c) => comparePlaces({ name: f.main, address: f.secondary }, { name: c.name, address: `${c.address}, ${c.city}` }).match === "same",
+    );
+    if (same.length === 1) out.set(f.placeId, same[0].id);
+  });
+  return out;
+}
+
+type SuggestionCandidate = { id: string; name: string; address: string; city: string };
+
+/** knownLocations() plus suggestions that match one of ours by name and address. */
+export async function knownOrMatched(
+  supabase: Awaited<ReturnType<typeof getUser>>["supabase"],
+  found: { placeId: string; main: string; secondary: string }[],
+) {
+  const known = await knownLocations(supabase, found.map((f) => f.placeId));
+  const rest = found.filter((f) => !known.has(f.placeId));
+  const matched = await matchSuggestions(rest).catch(() => new Map<string, string>());
+  return new Map([...known, ...matched]);
 }
 
 /** Signed-in user id, or the visitor's IP address, as the rate-limit key. */
@@ -96,7 +131,7 @@ export async function findMapPlaces(q: string, where: string, sessionToken: stri
     provider === "google"
       ? await autocomplete(input, locale, sessionToken, area)
       : await osmAutocomplete(input, locale, area);
-  const known = await knownLocations(supabase, found.map((f) => f.placeId));
+  const known = await knownOrMatched(supabase, found);
   return Promise.all(
     found.map(async (f) => {
       const locationId = known.get(f.placeId) ?? null;

@@ -15,10 +15,7 @@ export async function CityHub({ city, category, locale }: { city: string; catego
   const t = await getTranslations("City");
   const tc = await getTranslations("Categories");
   const ts = await getTranslations("Search");
-  const all = category ? (await getCity(city, null))!.locations : data.locations;
-  const present = (Object.keys(CATEGORY_SLUGS) as Category[]).filter((c) =>
-    all.some((l) => l.category === c),
-  );
+  const present = (Object.keys(CATEGORY_SLUGS) as Category[]).filter((c) => data.categories.includes(c));
 
   const crumbs: [string, string][] = [[t("title", { city: data.name }), `/city/${city}`]];
   if (category) crumbs.push([tc(`${category}Plural`), `/city/${city}/${CATEGORY_SLUGS[category]}`]);
@@ -34,7 +31,7 @@ export async function CityHub({ city, category, locale }: { city: string; catego
               ? t("titleCategory", { category: tc(`${category}Plural`), city: data.name })
               : t("title", { city: data.name })}
           </h1>
-          <p className="mt-2 text-lg text-slate">{t("count", { count: data.locations.length })}</p>
+          <p className="mt-2 text-lg text-slate">{t("count", { count: data.total })}</p>
         </div>
         {present.length > 1 && (
           <ul className="-mx-4 flex gap-2 overflow-x-auto px-4">

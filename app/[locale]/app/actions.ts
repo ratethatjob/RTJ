@@ -63,7 +63,7 @@ export async function submitReview(
     const created =
       pending.kind === "manual"
         ? await createManualWorkplace(supabase, pending)
-        : await createPlaceWorkplace(user.id, pending, await getLocale());
+        : await createPlaceWorkplace(user.id, pending, await getLocale(), undefined, { via: "rate" });
     if (created.error || !created.id) return { error: created.error ?? "generic" };
     input = { ...input, locationId: created.id };
     expireWorkplaces();

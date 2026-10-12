@@ -252,7 +252,8 @@
     "emptyCta": "Rate this job",
     "metaScore": "{company}, {address}: {score} out of 5 from {count, plural, one {# review} other {# reviews}}.",
     "metaPaid": "Paid on time {paidOnTime}%.",
-    "metaReplies": "Replies to {replyRate}% of applicants."
+    "metaReplies": "Replies to {replyRate}% of applicants.",
+    "osmAttribution": "Place data © <osm>OpenStreetMap contributors</osm> (ODbL)"
   },
   "Reviews": {
     "metaTitle": "{company} ({location}) reviews",
@@ -500,7 +501,7 @@
   "Company": {
     "metaTitle": "Working at {company} – reviews of every location",
     "locations": "{count, plural, one {# location} other {# locations}}",
-    "noScore": "No reviews yet",
+    "noScore": "No reviews yet – be the first",
     "metaDescription": "{company} on RateThatJob: {count, plural, one {# location} other {# locations}} and {reviews, plural, one {# review} other {# reviews}} from people who work or worked there.",
     "average": "{score} out of 5 · average of {count, plural, one {# review} other {# reviews}} across its workplaces"
   },
@@ -806,7 +807,9 @@
       "metrics": "Metrics",
       "orders": "Orders",
       "plans": "Subscriptions",
-      "demo": "Demo data"
+      "demo": "Demo data",
+      "osm": "OSM import",
+      "duplicates": "Possible duplicates"
     },
     "empty": "Nothing waiting.",
     "approve": "Approve",
@@ -875,7 +878,19 @@
       "placesNone": "No map search calls yet.",
       "placesProvider": "Service",
       "placesKind": "Call",
-      "placesCalls": "Calls"
+      "placesCalls": "Calls",
+      "newTitle": "New workplaces per day",
+      "day": "Day",
+      "via": {
+        "search": "Search",
+        "rate": "Review",
+        "claim": "Access request",
+        "jobs": "Jobs",
+        "osm_import": "OSM import",
+        "manual": "Typed in",
+        "admin_import": "CSV import",
+        "unknown": "Unknown"
+      }
     },
     "orderUpgrade": "upgrade from {from}",
     "markPaid": "Mark as paid",
@@ -960,7 +975,34 @@
     "reviewHint": "Decided by the name or the AI, low confidence, or reported as wrong by a visitor. Pick the right category or press “OK as is”; either way it is marked as checked by an admin and nothing overwrites it.",
     "reviewSource": "source: {source}, confidence: {confidence}",
     "reviewReport": "Reported: should be {category}",
-    "categoryOk": "OK as is"
+    "categoryOk": "OK as is",
+    "osm": {
+      "title": "OpenStreetMap import",
+      "hint": "Workplaces from OpenStreetMap for one city: named, open places with a street address in our categories, one tag group at a time. Ours already (same OSM id or a matching place within 75 m) are linked, not doubled. Places no longer on the map are marked closed; refreshed monthly by the daily cron. Overpass is often busy: a busy group can be run again later.",
+      "city": "City",
+      "run": "Import / refresh",
+      "running": "Importing…",
+      "busy": "Overpass is busy – try again later",
+      "failed": "Failed",
+      "line": "{fetched} from OSM · {created} new · {matched} linked · {known} known · {skipped} skipped · {gone} closed",
+      "imported": "Imported",
+      "unrated": "No reviews yet",
+      "gone": "Closed",
+      "lastRun": "Last seen",
+      "log": "Runs",
+      "unratedTitle": "Imported, no reviews yet: {city}",
+      "allCities": "all cities"
+    },
+    "duplicates": {
+      "hint": "Workplaces within 75 m with a similar name. Merging moves reviews, followers, jobs, claims and team rights to the one kept; the other's address redirects there.",
+      "meta": "{distance} m apart · name {similarity}% alike",
+      "reviews": "{count, plural, =0 {no reviews} one {# review} other {# reviews}}",
+      "keepA": "Merge, keep A",
+      "keepB": "Merge, keep B",
+      "notSame": "Not the same",
+      "managed": "The managed workplace (with a plan) must be the one kept.",
+      "error": "Something went wrong."
+    }
   },
   "Search": {
     "title": "Find a workplace",
@@ -1568,7 +1610,11 @@
     "reviews": "{count, plural, one {# review} other {# reviews}}",
     "fromMap": "Map",
     "addAndClaim": "Add and request access",
-    "clear": "Clear"
+    "clear": "Clear",
+    "didYouMean": "Did you mean this workplace?",
+    "yesThis": "Yes, this one",
+    "noNewPlace": "No, it's a different place",
+    "noReviewsYet": "No reviews yet"
   },
   "Footer": {
     "workers": "For workers",

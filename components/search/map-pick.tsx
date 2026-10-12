@@ -4,6 +4,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { openMapPlace } from "@/app/[locale]/search/actions";
+import { DidYouMean } from "@/components/did-you-mean";
+import type { PlaceCandidate } from "@/lib/place-ensure";
 import type { MapResult } from "@/lib/place-search";
 import { placeTypeLabel } from "@/lib/place-types";
 
@@ -15,18 +17,33 @@ export function MapPick({ results, sessionToken }: { results: MapResult[]; sessi
   const router = useRouter();
   const [opening, setOpening] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [, startTransition] = useTransition();
+  const [pending, startTransition] = useTransition();
+  const [ask, setAsk] = useState<{ result: MapResult; candidates: PlaceCandidate[] } | null>(null);
 
-  function open(r: MapResult) {
+  function open(r: MapResult, choice?: { confirm?: string; force?: boolean }) {
     setError(null);
     setOpening(r.placeId);
     if (r.href) return router.push(r.href);
     startTransition(async () => {
-      const result = await openMapPlace(r.placeId, sessionToken);
+      const result = await openMapPlace(r.placeId, sessionToken, choice);
       if (result.href) return router.push(result.href);
       setOpening(null);
+      if (result.candidates) return setAsk({ result: r, candidates: result.candidates });
       setError(result.error === "limit" ? tp("limit") : tp("error"));
     });
+  }
+
+  if (ask) {
+    return (
+      <DidYouMean
+        candidates={ask.candidates}
+        pending={pending || opening !== null}
+        error={error}
+        onYes={(id) => open(ask.result, { confirm: id })}
+        onNo={() => open(ask.result, { force: true })}
+        onBack={() => setAsk(null)}
+      />
+    );
   }
 
   return (

@@ -161,6 +161,17 @@ export default async function LocationPage({ params }: Props) {
             error: tcr("error"),
           }}
         />
+        {data.fromOsm && (
+          <p className="mt-2 text-xs text-slate">
+            {t.rich("osmAttribution", {
+              osm: (chunks) => (
+                <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" className="underline">
+                  {chunks}
+                </a>
+              ),
+            })}
+          </p>
+        )}
       </div>
 
       {!s && (

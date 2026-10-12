@@ -38,7 +38,7 @@ Later phase: job posting + easy, CV-free applying on the same platform (the appl
 | Moderation | LLM classifier + rules | Personal data, hate, threats; queue for manual review |
 | Email | Resend (or Postmark) | Invites, reminders, notifications |
 | Payments | Stripe Billing | Subscription per location (quantity-based), monthly / yearly |
-| Places data | Google Places API; OpenStreetMap (Photon + Nominatim) until a Google key is set | Location autocomplete, seeding, address normalization |
+| Places data | Google Places API; OpenStreetMap (Photon + Nominatim) until a Google key is set; OpenStreetMap Overpass for the bulk import | Location autocomplete, seeding, address normalization |
 | Search | Postgres full-text + `pg_trgm` | Move to Typesense/Meilisearch when needed |
 | Analytics | PostHog | Product analytics, funnels |
 | Error tracking | Sentry | |
@@ -68,6 +68,11 @@ Rules:
 - **Reserved words list** (cannot be a company slug): `app`, `business`, `employers`, `search`, `city`, `api`, `login`, `signup`, `about`, `privacy`, `terms`, `help`, `blog`, `hu`, `en`, `de`, all locale codes, etc.
 - Slug changes keep a **301 redirect** table (`slug_redirects`).
 - Locales: default English at root, other languages under prefix: `/hu/{company-slug}/{location-slug}`. Every page outputs `hreflang` alternates and a canonical URL.
+
+### Seeding from OpenStreetMap
+- Workplaces without reviews come from OpenStreetMap (ODbL, attribution on the page and in the imprint), not from Google (its terms allow storing only the place id). Budapest and the 10 largest cities first: named, open places with a street address in our categories; chains are one company with many locations (brand / brand:wikidata); no private persons, no contact data. Refreshed monthly; places OSM no longer has are marked closed (hidden while unreviewed). Imported pages stay noindex and out of the sitemaps until the first published review.
+- Google ↔ OSM matching: a picked Google place within 75 m of one of ours with a matching name or brand is the same workplace (the place id is added); unsure → "Did you mean …?". Search suggestions match ours by name + street and number. The admin merges remaining duplicates (reviews, followers, jobs, team rights move; the old URL redirects).
+- Picking a map place in any flow creates the workplace at once (or matches it), so abandoned reviews still leave a "No reviews yet" page.
 
 ### Search
 - `/search` shows workplaces already on RateThatJob first (with score), then map places (Google Places, OpenStreetMap fallback) under "Pick the one you mean", using "Where" as the place bias. Opening a map place that isn't on RateThatJob creates its workplace page on the click (one per place id, rate-limited). Empty search shows popular places nearby. Map API calls are counted per day for the monthly budget.

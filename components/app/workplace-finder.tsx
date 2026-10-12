@@ -2,15 +2,9 @@
 
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
-import {
-  choosePlace,
-  claimPlace,
-  findWorkplaces,
-  type OwnResult,
-  type Suggestion,
-} from "@/app/[locale]/app/rate/places/actions";
+import { findWorkplaces, type OwnResult, pickPlace, type Suggestion } from "@/app/[locale]/app/rate/places/actions";
 import { NewWorkplaceForm } from "@/components/app/new-workplace-form";
-import { CategorySelect } from "@/components/category-select";
+import { DidYouMean } from "@/components/did-you-mean";
 import { SearchIcon } from "@/components/icons";
 import { useRouter } from "@/i18n/navigation";
 import { locate, readArea, saveArea, subscribeArea } from "@/lib/area-client";
@@ -18,15 +12,7 @@ import { placeTypeLabel } from "@/lib/place-types";
 import type { PlacesProvider } from "@/lib/places";
 import { type AreaChoice, SEARCH_AREAS } from "@/lib/search-areas";
 
-type Place = {
-  placeId: string;
-  name: string;
-  address: string;
-  city: string;
-  category: string | null;
-  placeTypeLabel: { en: string | null; hu: string | null };
-  certain: boolean;
-};
+import type { PlaceCandidate } from "@/lib/place-ensure";
 
 type Props = {
   /** "rate": write a review (works signed out); "claim": employer claims the workplace. */
@@ -43,16 +29,14 @@ type Props = {
 /** One search field for picking a workplace: RateThatJob first, then the map, no duplicates. */
 export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, defaultCountry, manualBase }: Props) {
   const t = useTranslations("Places");
-  const tc = useTranslations("Categories");
   const locale = useLocale();
   const format = useFormatter();
   const router = useRouter();
   const base = mode === "claim" ? "/business/claim" : "/app/rate";
   const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<{ for: string; own: OwnResult[]; map: Suggestion[] } | null>(null);
-  const [place, setPlace] = useState<Place | null>(null);
-  const [category, setCategory] = useState("");
-  const [picked, setPicked] = useState(false);
+  // "Did you mean …?": a picked map place close to one of ours with a similar name.
+  const [ask, setAsk] = useState<{ placeId: string; candidates: PlaceCandidate[] } | null>(null);
   const [manual, setManual] = useState(false);
   const manualRef = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -103,82 +87,30 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
     );
   }
 
-  function pickMap(s: Suggestion) {
+  // Picking a map place creates the workplace right away (or opens the one we have), then the
+  // review or claim continues on its page.
+  function pickMap(s: Suggestion, choice?: { confirm?: string; force?: boolean }) {
     if (s.locationId) return router.push(`${base}/${s.locationId}`);
     startTransition(async () => {
-      const result = await choosePlace(s.placeId, session.current);
+      const result = await pickPlace(s.placeId, session.current, mode, choice);
+      if (result.candidates) return setAsk({ placeId: s.placeId, candidates: result.candidates });
       session.current = crypto.randomUUID();
       if (result.locationId) return router.push(`${base}/${result.locationId}`);
-      if (!result.place) return setError(t("error"));
-      setError(null);
-      setPlace(result.place);
-      setCategory(result.place.category ?? "");
-      setPicked(false);
+      setError(result.error === "limit" ? t("limit") : t("error"));
     });
   }
 
-  function confirm() {
-    if (!place) return;
-    if (mode === "rate") {
-      // Reviews: the workplace is created only when the review is sent (after signing in).
-      return router.push({
-        pathname: "/app/rate/pending",
-        query: {
-          place: place.placeId,
-          name: place.name,
-          address: [place.address, place.city].filter(Boolean).join(", "),
-          ...(category && { category }),
-        },
-      });
-    }
-    startTransition(async () => {
-      const result = await claimPlace(place.placeId, category);
-      if (!result.locationId) return setError(result.error === "limit" ? t("limit") : t("error"));
-      router.push(`/business/claim/${result.locationId}`);
-    });
-  }
-
-  if (place) {
-    const mustChoose = place.category === null;
+  if (ask) {
+    const s = { placeId: ask.placeId, main: "", secondary: "", locationId: null };
     return (
-      <div className="flex flex-col gap-4 rounded-3xl bg-white p-5">
-        <div>
-          <p className="text-xl font-black tracking-brand">{place.name}</p>
-          <p className="text-slate">
-            {[locale === "hu" ? place.placeTypeLabel.hu : place.placeTypeLabel.en, [place.address, place.city].filter(Boolean).join(", ")]
-              .filter(Boolean)
-              .join(" · ")}
-          </p>
-        </div>
-        <label className="flex flex-col gap-2">
-          {/* No sure guess: the person picks, nothing is preselected. */}
-          <span className="font-black">{mustChoose ? tc("whatKind") : t("category")}</span>
-          <CategorySelect
-            value={category}
-            onChange={(next) => {
-              setPicked(true);
-              setCategory(next);
-            }}
-            auto={false}
-            placeholder={mustChoose ? tc("choose") : undefined}
-            required={mustChoose}
-            suggested={!picked && !place.certain}
-            className="w-full rounded-2xl border border-mist/60 bg-white px-4 py-3 text-lg outline-none focus:border-ink"
-          />
-        </label>
-        {error && <p className="font-black">{error}</p>}
-        <button
-          type="button"
-          disabled={pending || (mustChoose && !category)} aria-busy={pending}
-          onClick={confirm}
-          className="rounded-2xl bg-ink px-5 py-3 text-base font-black text-paper disabled:opacity-50"
-        >
-          {t(mode === "claim" ? "addAndClaim" : "addAndRate")}
-        </button>
-        <button type="button" onClick={() => setPlace(null)} className="py-2 font-black underline underline-offset-4">
-          {t("back")}
-        </button>
-      </div>
+      <DidYouMean
+        candidates={ask.candidates}
+        pending={pending}
+        error={error}
+        onYes={(id) => pickMap(s, { confirm: id })}
+        onNo={() => pickMap(s, { force: true })}
+        onBack={() => setAsk(null)}
+      />
     );
   }
 
@@ -292,7 +224,7 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
                           <span className="mt-0.5 text-xs text-slate">{t("reviews", { count: o.reviewCount })}</span>
                         </>
                       ) : (
-                        <span className="rounded-lg bg-[#E8E6E1] px-2 py-1 text-xs font-black">{t("onRtj")}</span>
+                        <span className="rounded-lg bg-[#E8E6E1] px-2 py-1 text-xs font-black">{t("noReviewsYet")}</span>
                       )}
                     </span>
                   </button>

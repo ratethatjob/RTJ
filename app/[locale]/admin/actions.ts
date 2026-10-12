@@ -10,6 +10,8 @@ import { adminClient } from "@/lib/supabase/admin";
 import { osmDetails } from "@/lib/osm";
 import { classifyPlace, placeTypeInfo } from "@/lib/place-types";
 import { placeTypes } from "@/lib/places";
+import { type RunSummary, runOsmImport } from "@/lib/osm-import";
+import { osmCity, osmGroup } from "@/lib/osm-import-core";
 
 type Result = { ok?: true; error?: true };
 
@@ -308,4 +310,38 @@ export async function syncStripeInvoices(): Promise<{ rows?: InvoiceCheck[]; err
     console.error("syncStripeInvoices", e);
     return { error: true };
   }
+}
+
+async function isAdminUser() {
+  const { supabase, user } = await getUser();
+  if (!user) return false;
+  const { data } = await supabase.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
+  return Boolean(data);
+}
+
+/** One city + tag group of the OpenStreetMap import (the admin's "Import / refresh" runs every
+ *  group of a city one after the other). Overpass is often busy: then this one is "busy". */
+export async function osmImportGroup(city: string, group: string): Promise<RunSummary | { error: "busy" | "failed" }> {
+  if (!(await isAdminUser())) return { error: "failed" };
+  const c = osmCity(city);
+  const g = osmGroup(group);
+  if (!c || !g) return { error: "failed" };
+  const summary = await runOsmImport({ city: c, group: g, triggeredBy: "admin" });
+  if (summary.created || summary.matched || summary.gone) expireWorkplaces();
+  return summary;
+}
+
+/** Possible duplicates: keep one, the other's reviews, followers, jobs and team rights move over. */
+export async function mergeLocations(keep: string, drop: string): Promise<{ ok?: true; error?: "managed" | "generic" }> {
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("admin_merge_locations", { p_keep: keep, p_drop: drop });
+  if (error) return { error: error.message.includes("managed") ? "managed" : "generic" };
+  expireWorkplaces(["redirects"]);
+  return { ok: true };
+}
+
+export async function dismissDuplicate(a: string, b: string): Promise<Result> {
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("admin_dismiss_duplicate", { p_a: a, p_b: b });
+  return error ? { error: true } : { ok: true };
 }

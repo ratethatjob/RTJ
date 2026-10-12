@@ -85,7 +85,7 @@ export async function GET(request: Request) {
         title: category
           ? t("cityCategoryTitle", { category: tc(`${category}Plural`), city: city.name })
           : t("cityTitle", { city: city.name }),
-        sub: t("workplaces", { count: city.locations.length }),
+        sub: t("workplaces", { count: city.total }),
         score: score(avg),
         cta: avg ? undefined : t("beFirst"),
         tagline,

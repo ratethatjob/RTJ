@@ -22,11 +22,13 @@ import { domainCheck } from "@/lib/claim-check";
 import { jobPricing, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
 import { dashboardUrl } from "@/lib/stripe";
 import { StripeInvoiceCheck } from "@/components/admin/stripe-invoice-check";
+import { DuplicatePair, OsmImportRunner } from "@/components/admin/osm-tools";
+import { OSM_CITIES, OSM_GROUPS } from "@/lib/osm-import-core";
 
 export const instant = false;
 
 const TABS = ["claims", "moderation", "verifications", "disputes", "reports", "orders", "plans"] as const;
-const TOOLS = ["metrics", "workplaces", "entities", "import", "demo"] as const;
+const TOOLS = ["metrics", "workplaces", "duplicates", "osm", "entities", "import", "demo"] as const;
 type Queue = (typeof TABS)[number];
 type Tab = Queue | (typeof TOOLS)[number];
 
@@ -580,6 +582,69 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
     tab === "metrics"
       ? (((await supabase.rpc("admin_places_usage")).data ?? []) as { month: string; provider: string; kind: string; calls: number }[])
       : [];
+  // New workplaces per day and source (search, review, claim, OSM import…).
+  const newPlaces =
+    tab === "metrics"
+      ? (((await supabase.rpc("admin_new_locations", { p_days: 14 })).data ?? []) as { day: string; via: string; count: number }[])
+      : [];
+  const viaKeys = [...new Set(newPlaces.map((r) => r.via))].sort();
+  const newDays = [...new Set(newPlaces.map((r) => r.day))];
+  // OpenStreetMap import: per city, the run log, imported places without reviews (?city=).
+  const osmCityFilter = typeof (await searchParams).city === "string" ? String((await searchParams).city).slice(0, 60) : "";
+  const osm =
+    tab === "osm"
+      ? await Promise.all([
+          supabase.rpc("admin_osm_summary"),
+          supabase.rpc("admin_osm_runs", { p_limit: 40 }),
+          supabase.rpc("admin_osm_unrated", { p_city: osmCityFilter || null, p_limit: 100 }),
+        ]).then(([a, b, c]) => ({
+          summary: (a.data ?? []) as { city: string; imported: number; unrated: number; gone: number; last_run: string | null }[],
+          runs: (b.data ?? []) as {
+            id: string;
+            city: string;
+            grp: string;
+            started_at: string;
+            fetched: number;
+            created: number;
+            matched: number;
+            known: number;
+            skipped: number;
+            gone: number;
+            error: string | null;
+            triggered_by: string | null;
+          }[],
+          unrated: (c.data ?? []) as {
+            id: string;
+            company_slug: string;
+            slug: string;
+            name: string;
+            address: string;
+            city: string;
+            category: string;
+            place_type: string | null;
+            osm_id: string;
+          }[],
+        }))
+      : null;
+  const duplicates =
+    tab === "duplicates"
+      ? (((await supabase.rpc("admin_duplicate_pairs", { p_limit: 60 })).data ?? []) as {
+          a: string;
+          a_name: string;
+          a_address: string;
+          a_path: string;
+          a_reviews: number;
+          a_via: string | null;
+          b: string;
+          b_name: string;
+          b_address: string;
+          b_path: string;
+          b_reviews: number;
+          b_via: string | null;
+          distance_m: number;
+          similarity: number;
+        }[])
+      : null;
   const demo =
     tab === "demo"
       ? ((await supabase.rpc("admin_demo_summary")).data as Record<"companies" | "locations" | "reviews" | "jobs" | "users", number> | null)
@@ -694,8 +759,137 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
                 </table>
               )}
             </div>
+            <div className="overflow-x-auto rounded-3xl bg-white p-5">
+              <h2 className="mb-2 font-black">{t("metrics.newTitle")}</h2>
+              {newDays.length === 0 ? (
+                <p className="text-sm text-slate">{t("empty")}</p>
+              ) : (
+                <table className="w-full min-w-[420px] text-left">
+                  <thead className="text-sm text-slate">
+                    <tr>
+                      <th className="py-2 font-black">{t("metrics.day")}</th>
+                      {viaKeys.map((v) => (
+                        <th key={v} className="py-2 text-right font-black">
+                          {t.has(`metrics.via.${v}`) ? t(`metrics.via.${v}`) : v}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {newDays.map((d) => (
+                      <tr key={d} className="border-t border-[#E8E6E1]">
+                        <td className="py-2.5 font-black">{format.dateTime(new Date(`${d}T12:00:00Z`), { month: "short", day: "numeric" })}</td>
+                        {viaKeys.map((v) => (
+                          <td key={v} className="py-2.5 text-right">
+                            {newPlaces.find((r) => r.day === d && r.via === v)?.count ?? 0}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </section>
         )
+      ) : tab === "osm" && osm ? (
+        <section className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 rounded-3xl bg-white p-5">
+            <h2 className="text-xl font-black">{t("osm.title")}</h2>
+            <p className="text-sm text-slate">{t("osm.hint")}</p>
+            <OsmImportRunner cities={OSM_CITIES.map((c) => ({ slug: c.slug, name: c.name }))} groups={OSM_GROUPS.map((g) => g.key)} />
+          </div>
+          <div className="overflow-x-auto rounded-3xl bg-white p-5">
+            <table className="w-full min-w-[480px] text-left">
+              <thead className="text-sm text-slate">
+                <tr>
+                  <th className="py-2 font-black">{t("osm.city")}</th>
+                  <th className="py-2 text-right font-black">{t("osm.imported")}</th>
+                  <th className="py-2 text-right font-black">{t("osm.unrated")}</th>
+                  <th className="py-2 text-right font-black">{t("osm.gone")}</th>
+                  <th className="py-2 text-right font-black">{t("osm.lastRun")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {osm.summary.map((r) => (
+                  <tr key={r.city} className="border-t border-[#E8E6E1]">
+                    <td className="py-2.5 font-black">
+                      <Link href={{ pathname: "/admin", query: { tab: "osm", city: r.city } }} className="underline underline-offset-4">
+                        {r.city}
+                      </Link>
+                    </td>
+                    <td className="py-2.5 text-right">{r.imported}</td>
+                    <td className="py-2.5 text-right">{r.unrated}</td>
+                    <td className="py-2.5 text-right">{r.gone}</td>
+                    <td className="py-2.5 text-right">{r.last_run ? date(r.last_run) : "–"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex flex-col gap-2 rounded-3xl bg-white p-5">
+            <h2 className="font-black">{t("osm.log")}</h2>
+            <ul className="flex flex-col divide-y divide-[#E8E6E1] text-sm">
+              {osm.runs.map((r) => (
+                <li key={r.id} className="py-2">
+                  <span className="font-black">
+                    {r.city} · {r.grp}
+                  </span>{" "}
+                  · {format.dateTime(new Date(r.started_at), { dateStyle: "short", timeStyle: "short" })} · {r.triggered_by ?? ""} ·{" "}
+                  {r.error
+                    ? r.error
+                    : t("osm.line", { fetched: r.fetched, created: r.created, matched: r.matched, known: r.known, skipped: r.skipped, gone: r.gone })}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex flex-col gap-2 rounded-3xl bg-white p-5">
+            <h2 className="font-black">{t("osm.unratedTitle", { city: osmCityFilter || t("osm.allCities") })}</h2>
+            <ul className="flex flex-col divide-y divide-[#E8E6E1]">
+              {osm.unrated.map((l) => (
+                <li key={l.id} className="py-2">
+                  <Link href={`/${l.company_slug}/${l.slug}`} className="font-black underline underline-offset-4">
+                    {l.name}
+                  </Link>
+                  <span className="text-sm text-slate">
+                    {" "}
+                    · {kindLabel({ type: l.place_type, en: null, hu: null }, locale, tcat(l.category))} · {l.address}, {l.city} · {l.osm_id}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : tab === "duplicates" && duplicates ? (
+        <section className="flex flex-col gap-3">
+          <p className="text-sm text-slate">{t("duplicates.hint")}</p>
+          {duplicates.length === 0 && <p className="rounded-3xl bg-white p-5 text-slate">{t("empty")}</p>}
+          {duplicates.map((d) => (
+            <div key={`${d.a}-${d.b}`} className="rounded-3xl bg-white p-5">
+              <p className="text-sm text-slate">
+                {t("duplicates.meta", { distance: Math.round(d.distance_m), similarity: Math.round(d.similarity * 100) })}
+              </p>
+              {(
+                [
+                  ["A", d.a_name, d.a_address, d.a_path, d.a_reviews, d.a_via],
+                  ["B", d.b_name, d.b_address, d.b_path, d.b_reviews, d.b_via],
+                ] as const
+              ).map(([label, name, address, path, reviews, via]) => (
+                <p key={label} className="mt-1">
+                  <span className="font-black">{label}: </span>
+                  <Link href={path} className="font-black underline underline-offset-4">
+                    {name}
+                  </Link>
+                  <span className="text-sm text-slate">
+                    {" "}
+                    · {address} · {t("duplicates.reviews", { count: reviews })} · {via ?? "–"}
+                  </span>
+                </p>
+              ))}
+              <DuplicatePair a={d.a} b={d.b} />
+            </div>
+          ))}
+        </section>
       ) : tab === "demo" ? (
         <section className="flex flex-col gap-4 rounded-3xl bg-white p-6">
           <h2 className="text-2xl font-black tracking-brand">{t("demo.title")}</h2>

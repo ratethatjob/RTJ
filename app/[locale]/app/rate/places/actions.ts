@@ -1,15 +1,14 @@
 "use server";
 
 import { getLocale } from "next-intl/server";
-import { getUser } from "@/lib/auth";
-import { isOsmId, osmAutocomplete } from "@/lib/osm";
-import { autocomplete, type PlaceDetails, placesProvider } from "@/lib/places";
+import { osmAutocomplete } from "@/lib/osm";
+import { autocomplete, placesProvider } from "@/lib/places";
 import { expireWorkplaces } from "@/lib/cache";
-import { isCategory } from "@/lib/categories";
 import { searchLocations } from "@/lib/data";
 import { rateLimited } from "@/lib/rate-limit";
-import { caller, knownLocations, resolveArea } from "@/lib/place-search";
-import { aiCategoryFor, createPlaceWorkplace, placeDetailsAny } from "@/lib/workplaces";
+import { getLocationById } from "@/lib/data";
+import { ensureLocationFromPlace, type PlaceCandidate } from "@/lib/place-ensure";
+import { caller, knownOrMatched, resolveArea } from "@/lib/place-search";
 
 export type Suggestion = {
   placeId: string;
@@ -60,18 +59,19 @@ export async function findWorkplaces(
     const found = provider === "google"
       ? await autocomplete(text, locale, sessionToken, area)
       : await osmAutocomplete(text, locale, area);
-    const known = await knownLocations(supabase, found.map((f) => f.placeId));
+    const known = await knownOrMatched(supabase, found);
+    // A map place we already have (same place id, or the same name and address) shows as ours.
     const shown = new Set(own.map((o) => o.id));
+    for (const id of new Set(known.values())) {
+      if (shown.has(id)) continue;
+      const l = await getLocationById(id);
+      if (!l) continue;
+      shown.add(id);
+      own.push({ id, name: l.name, address: l.address, city: l.city, score: l.scores?.overall ?? null, reviewCount: l.scores?.reviewCount ?? 0 });
+    }
     const map = found
-      .map((f) => ({
-        placeId: f.placeId,
-        main: f.main,
-        secondary: f.secondary,
-        placeType: f.placeType ?? null,
-        locationId: known.get(f.placeId) ?? null,
-      }))
-      // A map place that is already on RateThatJob and in the list above appears only once.
-      .filter((m) => !m.locationId || !shown.has(m.locationId));
+      .filter((f) => !known.has(f.placeId))
+      .map((f) => ({ placeId: f.placeId, main: f.main, secondary: f.secondary, placeType: f.placeType ?? null, locationId: null }));
     return { own, map };
   } catch (e) {
     console.error("findWorkplaces", e);
@@ -79,44 +79,23 @@ export async function findWorkplaces(
   }
 }
 
-/** Employer claim flow: creates the picked map place right away and returns it for the claim form. */
-export async function claimPlace(
-  placeId: string,
-  category: string,
-): Promise<{ locationId?: string; error?: "invalid" | "limit" | "generic" }> {
-  if (category !== "" && !isCategory(category)) return { error: "invalid" };
-  const { user } = await getUser();
-  if (!user) return { error: "generic" };
-  const created = await createPlaceWorkplace(user.id, { kind: "place", placeId, category }, await getLocale());
-  if (!created.id) return { error: created.error ?? "generic" };
-  expireWorkplaces();
-  return { locationId: created.id };
-}
-
-/** Picks a suggestion: an existing workplace, or the place details to confirm. */
-export async function choosePlace(
+/** Picks a map suggestion in the finder: the workplace is created (or matched) right away, in the
+ *  review and the claim flow alike; close but unsure matches come back as candidates to ask about. */
+export async function pickPlace(
   placeId: string,
   sessionToken: string,
-): Promise<{ locationId?: string; place?: PlaceDetails; error?: "generic" }> {
-  const { supabase, key } = await caller();
-  const existing = (await knownLocations(supabase, [placeId])).get(placeId);
-  if (existing) return { locationId: existing };
-  if (rateLimited(`place-details:${key}`, isOsmId(placeId) ? 10 : 20)) return { error: "generic" };
-  const place = await placeDetailsAny(placeId, await getLocale(), sessionToken).catch(() => null);
-  if (!place) return { error: "generic" };
-  // The rules don't decide: the AI (with Google's description and website for map places). Low
-  // confidence leaves the category empty, so the person has to choose it ("What kind of workplace?").
-  if (!place.category || place.confidence === "low") {
-    const guess = await aiCategoryFor(place);
-    if (guess.confidence === "low") {
-      place.category = null;
-      place.confidence = "low";
-    } else {
-      place.category = guess.category;
-      place.categorySource = "ai";
-      place.confidence = guess.confidence;
-    }
-    place.certain = false;
-  }
-  return { place };
+  mode: "rate" | "claim",
+  choice?: { confirm?: string; force?: boolean },
+): Promise<{ locationId?: string; candidates?: PlaceCandidate[]; error?: "limit" | "generic" }> {
+  const result = await ensureLocationFromPlace(placeId, {
+    via: mode,
+    locale: await getLocale(),
+    sessionToken,
+    confirm: choice?.confirm,
+    force: choice?.force,
+  });
+  if ("candidates" in result) return { candidates: result.candidates };
+  if ("error" in result) return { error: result.error === "limit" ? "limit" : "generic" };
+  if (result.created) expireWorkplaces();
+  return { locationId: result.locationId };
 }

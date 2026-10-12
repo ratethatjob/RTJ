@@ -4,7 +4,7 @@ import { categorize } from "@/lib/categorize";
 import { COUNTRIES } from "@/lib/countries";
 import { isOsmId, osmDetails } from "@/lib/osm";
 import { classifyPlace, placeTypeInfo } from "@/lib/place-types";
-import { placeContext, placeDetails, primaryTypeLabel } from "@/lib/places";
+import { type PlaceDetails, placeContext, placeDetails, primaryTypeLabel } from "@/lib/places";
 import { adminClient } from "@/lib/supabase/admin";
 
 // A workplace the reviewer picked or typed before signing in. It is created in the database only
@@ -91,6 +91,7 @@ export async function createManualWorkplace(
     p_category: decided.category,
   });
   if (error) return { error: errorFor(error.code) };
+  await adminClient()?.from("locations").update({ created_via: "manual" }).eq("id", data as string).is("created_via", null);
   const info = placeTypeInfo(named.placeType);
   await saveClassification(data as string, {
     placeType: named.placeType,
@@ -107,10 +108,12 @@ export async function createPlaceWorkplace(
   w: Extract<PendingWorkplace, { kind: "place" }>,
   locale: string,
   sessionToken?: string,
+  /** Details already fetched (lib/place-ensure.ts) and where the pick happened. */
+  extra?: { place?: PlaceDetails; via?: string },
 ): Promise<{ id?: string; error?: WorkplaceError }> {
   const db = adminClient();
   if (!db) return { error: "generic" };
-  const place = await placeDetailsAny(w.placeId, locale, sessionToken).catch(() => null);
+  const place = extra?.place ?? (await placeDetailsAny(w.placeId, locale, sessionToken).catch(() => null));
   if (!place || !place.name || !place.address || !place.city || !place.country) return { error: "invalid" };
   const osm = isOsmId(place.placeId);
   const decided = await decide(
@@ -138,6 +141,9 @@ export async function createPlaceWorkplace(
     if (missing) labels[missing] = await primaryTypeLabel(place.placeId, missing).catch(() => null);
   }
   await saveClassification(data as string, { placeType: place.placeType, ...labels, ...decided });
+  if (extra?.via) {
+    await db.from("locations").update({ created_via: extra.via }).eq("id", data as string).is("created_via", null);
+  }
   return { id: data as string };
 }
 

@@ -1,8 +1,23 @@
 {
-  "regions": ["fra1"],
+  "regions": [
+    "fra1"
+  ],
   "crons": [
-    { "path": "/api/cron/translate", "schedule": "17 4 * * *" },
-    { "path": "/api/cron/signals", "schedule": "37 5 * * *" },
-    { "path": "/api/cron/emails", "schedule": "27 6 * * *" }
+    {
+      "path": "/api/cron/translate",
+      "schedule": "17 4 * * *"
+    },
+    {
+      "path": "/api/cron/signals",
+      "schedule": "37 5 * * *"
+    },
+    {
+      "path": "/api/cron/emails",
+      "schedule": "27 6 * * *"
+    },
+    {
+      "path": "/api/cron/osm",
+      "schedule": "47 2 * * *"
+    }
   ]
 }

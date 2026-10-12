@@ -252,7 +252,8 @@
     "emptyCta": "Értékelem",
     "metaScore": "{company}, {address}: {score} / 5, {count} értékelés alapján.",
     "metaPaid": "Időben fizet: {paidOnTime}%.",
-    "metaReplies": "A jelentkezők {replyRate}%-ának válaszol."
+    "metaReplies": "A jelentkezők {replyRate}%-ának válaszol.",
+    "osmAttribution": "Helyadatok: © <osm>OpenStreetMap-közreműködők</osm> (ODbL)"
   },
   "Reviews": {
     "metaTitle": "{company} ({location}) értékelések",
@@ -500,7 +501,7 @@
   "Company": {
     "metaTitle": "{company} – értékelések minden telephelyről",
     "locations": "{count} telephely",
-    "noScore": "Még nincs értékelés",
+    "noScore": "Még nincs értékelés – légy az első",
     "metaDescription": "{company} a RateThatJobon: {count} telephely és {reviews} értékelés azoktól, akik ott dolgoznak vagy dolgoztak.",
     "average": "{score} / 5 · {count} értékelés átlaga a munkahelyein"
   },
@@ -806,7 +807,9 @@
       "metrics": "Mutatók",
       "orders": "Rendelések",
       "plans": "Előfizetések",
-      "demo": "Demó adatok"
+      "demo": "Demó adatok",
+      "osm": "OSM-import",
+      "duplicates": "Lehetséges duplikátumok"
     },
     "empty": "Nincs teendő.",
     "approve": "Jóváhagyom",
@@ -875,7 +878,19 @@
       "placesNone": "Még nem volt térképes keresés.",
       "placesProvider": "Szolgáltatás",
       "placesKind": "Hívás",
-      "placesCalls": "Darab"
+      "placesCalls": "Darab",
+      "newTitle": "Új munkahelyek naponta",
+      "day": "Nap",
+      "via": {
+        "search": "Kereső",
+        "rate": "Értékelés",
+        "claim": "Hozzáférés-igénylés",
+        "jobs": "Állások",
+        "osm_import": "OSM-import",
+        "manual": "Kézzel beírt",
+        "admin_import": "CSV-import",
+        "unknown": "Ismeretlen"
+      }
     },
     "orderUpgrade": "bővítés erről: {from}",
     "markPaid": "Fizetve",
@@ -960,7 +975,34 @@
     "reviewHint": "A név vagy az AI döntött, alacsony a bizonyosság, vagy egy látogató rossznak jelezte. Válaszd ki a jót, vagy nyomd meg a „Rendben” gombot; mindkettő admin által ellenőrzöttnek jelöli, és utána semmi nem írja felül.",
     "reviewSource": "forrás: {source}, bizonyosság: {confidence}",
     "reviewReport": "Jelezve: inkább {category}",
-    "categoryOk": "Rendben"
+    "categoryOk": "Rendben",
+    "osm": {
+      "title": "OpenStreetMap-import",
+      "hint": "Munkahelyek az OpenStreetMapből egy városra: névvel és utcai címmel rendelkező, működő helyek a kategóriáinkban, címkecsoportonként. Ami már nálunk van (azonos OSM-azonosító vagy egyező hely 75 m-en belül), azt összekapcsolja, nem duplikálja. A térképről eltűnt helyeket megszűntnek jelöli; a napi cron havonta frissít. Az Overpass gyakran túlterhelt: a foglalt csoport később újra futtatható.",
+      "city": "Város",
+      "run": "Import / frissítés",
+      "running": "Importálás…",
+      "busy": "Az Overpass túlterhelt – próbáld később",
+      "failed": "Hiba",
+      "line": "{fetched} az OSM-ből · {created} új · {matched} összekapcsolva · {known} ismert · {skipped} kihagyva · {gone} megszűnt",
+      "imported": "Importálva",
+      "unrated": "Még nincs értékelés",
+      "gone": "Megszűnt",
+      "lastRun": "Utoljára látva",
+      "log": "Futások",
+      "unratedTitle": "Importált, még értékelés nélkül: {city}",
+      "allCities": "minden város"
+    },
+    "duplicates": {
+      "hint": "75 m-en belüli, hasonló nevű munkahelyek. Összevonáskor az értékelések, követők, állások, igénylések és csapatjogok a megmaradóhoz kerülnek; a másik címe oda irányít át.",
+      "meta": "{distance} m távolság · a név {similarity}%-ban egyezik",
+      "reviews": "{count} értékelés",
+      "keepA": "Összevonás, A marad",
+      "keepB": "Összevonás, B marad",
+      "notSame": "Nem ugyanaz",
+      "managed": "A kezelt (csomaggal rendelkező) munkahelynek kell megmaradnia.",
+      "error": "Valami hiba történt."
+    }
   },
   "Search": {
     "title": "Munkahely keresése",
@@ -1568,7 +1610,11 @@
     "reviews": "{count} értékelés",
     "fromMap": "Térkép",
     "addAndClaim": "Felveszem és hozzáférést kérek",
-    "clear": "Törlés"
+    "clear": "Törlés",
+    "didYouMean": "Erre a munkahelyre gondoltál?",
+    "yesThis": "Igen, erre",
+    "noNewPlace": "Nem, ez egy másik hely",
+    "noReviewsYet": "Még nincs értékelés"
   },
   "Footer": {
     "workers": "Munkavállalóknak",

@@ -51,6 +51,8 @@ export type LocationSummary = {
   category: Category;
   /** Exact place type ("barber_shop") with the labels stored from the map; lib/place-types.ts. */
   placeType?: { type: string | null; en: string | null; hu: string | null } | null;
+  /** Name and address come (also) from OpenStreetMap: the page shows the ODbL attribution. */
+  fromOsm?: boolean;
   legalEntityName: string | null;
   claimed: boolean;
   /** Rolling 12 months; null when there are no published reviews. */

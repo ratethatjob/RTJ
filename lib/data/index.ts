@@ -107,10 +107,11 @@ export async function getLocationPaths() {
   if (!useSupabase) {
     return sampleLocations.map((l) => ({ company: l.companySlug, location: l.slug }));
   }
-  // Prerender the most reviewed locations; the rest render on first visit.
+  // Prerender the most reviewed locations; the rest (all the unrated ones) render on first visit.
   const { data, error } = await publicClient()
     .from("public_locations")
     .select("company_slug, slug")
+    .gt("review_count", 0)
     .order("review_count", { ascending: false })
     .limit(1000);
   if (error) throw error;
@@ -213,28 +214,32 @@ export async function findLocations(
 export async function getCity(
   citySlug: string,
   category: Category | null,
-): Promise<{ name: string; locations: LocationSummary[] } | null> {
+): Promise<{ name: string; locations: LocationSummary[]; categories: Category[]; total: number } | null> {
   "use cache";
   cacheLife("hours");
   cacheTag("locations");
-  let locations: LocationSummary[];
   if (!useSupabase) {
-    locations = sampleLocations.filter((l) => l.citySlug === citySlug);
-  } else {
-    const { data, error } = await publicClient()
-      .from("public_locations")
-      .select("*")
-      .eq("city_slug", citySlug)
-      .order("review_count", { ascending: false })
-      .limit(500);
-    if (error) throw error;
-    locations = data.map(toLocation);
+    const all = sampleLocations.filter((l) => l.citySlug === citySlug);
+    if (!all.length) return null;
+    const locations = category ? all.filter((l) => l.category === category) : all;
+    return { name: all[0].city, locations, categories: [...new Set(all.map((l) => l.category))], total: locations.length };
   }
-  if (!locations.length) return null;
-  return {
-    name: locations[0].city,
-    locations: category ? locations.filter((l) => l.category === category) : locations,
-  };
+  // Rated first; a city can hold thousands of imported workplaces, so the list is capped and the
+  // category is filtered in the database.
+  let query = publicClient().from("public_locations").select("*").eq("city_slug", citySlug);
+  if (category) query = query.eq("category", category);
+  const [{ data, error }, cats] = await Promise.all([
+    query.order("review_count", { ascending: false }).order("name").limit(120),
+    publicClient().rpc("city_categories", { p_city_slug: citySlug }),
+  ]);
+  if (error) throw error;
+  const counts = (cats.data ?? []) as { category: Category; city: string; n: number }[];
+  const categories = counts.map((c) => c.category);
+  if (!data.length && !categories.length) return null;
+  const locations = data.map(toLocation);
+  const name = locations[0]?.city ?? counts[0]?.city ?? citySlug;
+  const total = counts.filter((c) => !category || c.category === category).reduce((n, c) => n + c.n, 0);
+  return { name, locations, categories, total: Math.max(total, locations.length) };
 }
 
 export type SitemapLocation = {

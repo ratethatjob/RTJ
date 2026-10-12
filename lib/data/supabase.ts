@@ -32,6 +32,7 @@ type LocationRow = {
   place_type?: string | null;
   place_type_en?: string | null;
   place_type_hu?: string | null;
+  from_osm?: boolean | null;
   claimed: boolean;
   legal_entity_name: string | null;
   overall: number | null;
@@ -66,6 +67,7 @@ export function toLocation(row: LocationRow): LocationSummary {
     citySlug: row.city_slug ?? slugify(row.city),
     country: row.country,
     category: row.category,
+    fromOsm: row.from_osm ?? false,
     placeType:
       row.place_type || row.place_type_en || row.place_type_hu
         ? { type: row.place_type ?? null, en: row.place_type_en ?? null, hu: row.place_type_hu ?? null }
