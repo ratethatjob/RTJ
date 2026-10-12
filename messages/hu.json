@@ -63,7 +63,7 @@
     "faqTitle": "Kérdések",
     "faq": {
       "anonymousQ": "Megtudja a munkáltatóm, hogy értékeltem?",
-      "anonymousA": "Nem. Csak a választott megjelenő neved látszik. A munkáltató soha nem látja, ki írta az értékelést, a kis munkahelyeken pedig véletlenszerű késleltetéssel jelennek meg az értékelések.",
+      "anonymousA": "Nem. Csak a választott megjelenő neved látszik. A munkáltató soha nem látja, ki írta az értékelést, és minden értékelés az elküldés után 3–12 nappal, véletlenszerű időpontban jelenik meg.",
       "verifiedQ": "Mit jelent az „igazolt”?",
       "verifiedA": "Az értékelő bérjegyzéket vagy szerződést mutatott, a munkáltató meghívójával jött, vagy a RateThatJobon jelentkezett oda. Az igazolt értékelések többet számítanak a pontszámban.",
       "employerQ": "Törölheti a munkáltató a rossz értékeléseket?",
@@ -421,12 +421,8 @@
     },
     "removeFile": "Törlés",
     "verifiedNote": "Csak a csapatunk látja, ellenőrzés után töröljük.",
-    "whenLive": "Mikor jelenjen meg?",
-    "publish": {
-      "now": "Amint lehet",
-      "delayed": "Pár hét múlva, véletlenszerű időpontban",
-      "after_leaving": "Csak miután eljöttem innen"
-    },
+    "whenLive": "Mikor jelenik meg?",
+    "goesLive": "Az elküldés után 3–12 nappal, véletlenszerű napon és időpontban. Mindenki értékelése ugyanígy vár, így az időzítésből nem derül ki, ki írta.",
     "shownAs": "Így látszol: <name></name>",
     "change": "Módosítás",
     "submit": "Értékelés közzététele",
@@ -453,7 +449,7 @@
       "verifyAndSend": "Megerősítem és beküldöm",
       "sending": "Küldés…"
     },
-    "signalsNote": "A munkáltató a megjelenés előtt névtelen, összesített témákat láthat, a szövegedet soha."
+    "signalsNote": "A munkáltató a megjelenés előtt névtelen, összesített témákat láthat az elmúlt 30 nap értékeléseiből, a szövegedet soha."
   },
   "NewWorkplace": {
     "title": "Munkahely felvétele",
@@ -491,8 +487,8 @@
     "anonymousBody": "A munkáltatód soha nem látja, ki mit írt, és azt sem, ki válaszolt.",
     "minuteTitle": "Egy perc",
     "minuteBody": "Néhány koppintás. Írni nem kötelező.",
-    "liveTitle": "Te döntöd el, mikor jelenik meg",
-    "liveBody": "Amint lehet, pár hét múlva, vagy csak miután eljöttél.",
+    "liveTitle": "Véletlenszerű időpontban jelenik meg",
+    "liveBody": "Az elküldés után 3–12 nappal, így az időzítés nem árul el.",
     "start": "Kezdjük",
     "footer": "A meghívásra írt értékelések jelölést kapnak.",
     "invalidTitle": "Ez a meghívólink nem működik",
@@ -754,10 +750,7 @@
       "rejected": "Nem jelent meg",
       "removed": "Eltávolítva"
     },
-    "waitingForLeave": "Miután eljöttél, megjelenik",
     "goesLiveOn": "Várhatóan {date} körül jelenik meg",
-    "leftJob": "Eljöttem innen",
-    "leftWhen": "Utolsó hónap ott",
     "save": "Mentés",
     "export": "Adataim letöltése",
     "exportHint": "A profilod, az értékeléseid, az álláspályázataid (üzenetekkel), a követéseid és az értesítéseid JSON-fájlban.",
@@ -1962,7 +1955,7 @@
   },
   "InviteEmail": {
     "subject": "A(z) {company} arra kér, értékeld a munkahelyedet",
-    "body": "Szia!\n\nA(z) {company} ({location}) arra kérte a csapatát, hogy értékeljék a munkahelyüket a RateThatJobon. Nagyjából egy perc, írni nem kötelező.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót. A meghívásra írt értékelések mindig néhány nap véletlenszerű késleltetéssel jelennek meg, vagy később, ha így döntesz: pár hét múlva, vagy csak miután eljöttél.\n\nÉrtékeld a munkahelyedet: {link}\n\nAzért kaptad ezt az e-mailt, mert a(z) {company} megadta a címedet. Legfeljebb egy emlékeztetőt küldünk, utána töröljük a címedet.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Tudd, mielőtt belépsz",
+    "body": "Szia!\n\nA(z) {company} ({location}) arra kérte a csapatát, hogy értékeljék a munkahelyüket a RateThatJobon. Nagyjából egy perc, írni nem kötelező.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót. A meghívásra írt értékelések együtt jelennek meg, az elküldés után 3–12 nappal, véletlenszerű időpontban.\n\nÉrtékeld a munkahelyedet: {link}\n\nAzért kaptad ezt az e-mailt, mert a(z) {company} megadta a címedet. Legfeljebb egy emlékeztetőt küldünk, utána töröljük a címedet.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Tudd, mielőtt belépsz",
     "reminderSubject": "Emlékeztető: értékeld a munkahelyedet ({company})",
     "reminderBody": "Szia!\n\nPár napja a(z) {company} ({location}) meghívott, hogy értékeld a munkahelyedet a RateThatJobon. Ha szeretnéd, nagyjából egy perc.\n\nA munkáltatód sosem látja, ki írt értékelést, és azt sem, ki használta ezt a meghívót.\n\nÉrtékeld a munkahelyedet: {link}\n\nEz az egyetlen emlékeztető. A címedet most töröljük.\nLeiratkozás: {unsubscribe}\n\nRateThatJob – Tudd, mielőtt belépsz"
   },
@@ -2070,10 +2063,8 @@
     "nextTitle": "Mi történik most?",
     "published": "Már megjelent a munkahely oldalán.",
     "held": "Megjelenés előtt egy munkatársunk átnézi.",
-    "afterLeaving": "Akkor jelenik meg, amikor a Fiókodban jelzed, hogy már nem dolgozol ott.",
     "soon": "Nagyjából egy órán belül megjelenik a munkahely oldalán.",
     "later": "Várhatóan {date} körül jelenik meg a munkahely oldalán.",
-    "laterChosen": "Ahogy kérted, késleltetve jelenik meg.",
     "laterAnonymity": "A késleltetés a névtelenségedet védi.",
     "textCheck": "A szöveget automatikusan is átnézzük. Ha valami nem stimmel, megjelenés előtt egy munkatársunk is megnézi.",
     "document": "A feltöltött dokumentumot egy munkatársunk nézi át. Ha rendben van, az értékelésed „Igazolt” jelölést kap.",
@@ -2112,7 +2103,7 @@
   },
   "EarlySignals": {
     "title": "Korai jelzések",
-    "intro": "Névtelen, összesített témák a még meg nem jelent és az elmúlt 60 nap értékeléseiből. Egyedi szöveget, pontszámot, dátumot és darabszámot nem mutatunk, és a megjelenést nem befolyásolják: értékelést nem lehet visszatartani vagy késleltetni. Naponta frissül.",
+    "intro": "Névtelen, összesített témák az elmúlt 30 nap összes értékeléséből, megjelentekből és még meg nem jelentekből. Egyedi szöveget, pontszámot, dátumot és darabszámot nem mutatunk, és a megjelenést nem befolyásolják: értékelést nem lehet visszatartani vagy késleltetni. Naponta frissül.",
     "locked": "Pro-val látod a korai jelzéseket: a témákat még az értékelések megjelenése előtt.",
     "lockedShort": "Pro-val itt látod a korai jelzéseket.",
     "cta": "Pro bekapcsolása",
@@ -2132,7 +2123,7 @@
   },
   "EarlySignalsEmail": {
     "subject": "Új korai jelzés – {location}",
-    "body": "Szia!\n\nÚj téma jelent meg a korai jelzések között itt: {location}. Ezek névtelen, összesített témák a még meg nem jelent és az elmúlt 60 nap értékeléseiből.\n\nNézd meg a céges felületen: {link}\n\nRateThatJob – Tudd, mielőtt belépsz"
+    "body": "Szia!\n\nÚj téma jelent meg a korai jelzések között itt: {location}. Ezek névtelen, összesített témák az elmúlt 30 nap összes értékeléséből.\n\nNézd meg a céges felületen: {link}\n\nRateThatJob – Tudd, mielőtt belépsz"
   },
   "Showcase": {
     "metaTitle": "Minta céges adatlap",

@@ -120,7 +120,7 @@ Main tables (all with `id uuid`, `created_at`, `updated_at`):
   - facts (nullable booleans): `paid_as_promised`, `paid_on_time`, `overtime_paid`, `hours_as_promised`, `would_return`
   - applicant facts: `got_reply` (bool), `reply_days` (int), `interview_rounds` (int)
   - `body` (optional, one field: "Anything others should know?"), `original_language`
-  - `publish_mode` (`now` | `delayed` | `after_leaving`), `publish_at`, `published_at`
+  - `publish_mode` (always `now`; the old `delayed` / `after_leaving` values are no longer accepted), `publish_at`, `published_at`
   - `verification_level` (`none` | `document` | `invited` | `application`)
   - `invite_id` (nullable; **never exposed to employer**)
   - `status` (`draft` | `pending_moderation` | `scheduled` | `published` | `rejected` | `removed`)
@@ -157,13 +157,12 @@ Main tables (all with `id uuid`, `created_at`, `updated_at`):
 1. Relationship, period, position, permanent/temporary.
 2. Ratings (5 categories) + would you work there again.
 3. Facts yes/no (+ applicant questions if relationship = applicant), optional text in any language.
-4. Verify (optional document upload) + publish timing (now / delayed / after I leave) + preview of display name.
+4. Verify (optional document upload) + preview of display name. No publish timing choice: the form says when it goes live (3–12 days after sending, random day and time).
 
 ### 5.4 Publishing pipeline (background job)
 1. Moderation (LLM + rules). Flag names, phone numbers, threats → manual queue.
 2. Language detection → translate into all active UI locales → `review_translations`.
-3. Anonymity guard: if location has < 5 published reviews or the review came from an invite batch, apply **random delay** (e.g. 2–14 days) and publish in groups.
-4. Respect `publish_mode`.
+3. Anonymity guard: every review goes live at a uniformly **random moment 3–12 days** after it is sent (random day and time); reviews from the same invite batch go live together at one moment in the same window.
 5. Recompute `location_scores`, revalidate ISR pages, notify followers.
 
 ---
@@ -188,10 +187,10 @@ Levels shown as badges: Not verified · Verified (document) · Verified (invited
 - **Overview:** score, verified count, applicant reply rate, reviews awaiting reply, early warnings, per-location table.
 - **Early warnings (Pro):** detect drops in a category score (e.g. −0.5 within 60 days) or recurring topics (LLM topic clustering on recent reviews) per location; email + dashboard alert.
 - **Early signals (Pro, part of early warnings):** before reviews go live, the employer sees anonymous, aggregated themes per location, so it can act – without weakening anonymity (the publishing delays stay as they are). Rules:
-  - Input: reviews waiting to go live (scheduled / pending moderation, not held) plus reviews published in the last 60 days. Reviews with publish mode "after I leave" never count.
-  - Nothing is shown below 5 reviews waiting to go live; no counts at all.
+  - Input: all reviews of the location sent in the last 30 days, waiting to go live or already published (held, rejected and removed ones out).
+  - Nothing is shown below 5 reviews in the last 30 days; no counts at all.
   - Themes: an LLM summary (cheap model) of the review texts, a theme only when at least 3 different reviewers mention it; it never quotes and has no names, job titles, dates or numbers (prompt + filter afterwards: 4-word overlap, digits, quotes, dates, reviewers' positions).
-  - Directions per rating category ("incoming reviews about pay point downward"), from the waiting reviews against the last 12 months published, without numbers (step 0.5, at least 3 ratings on both sides).
+  - Directions per rating category ("incoming reviews about pay point downward"), from the last 30 days' reviews against the reviews published in the 12 months before, without numbers (step 0.5, at least 3 ratings on both sides).
   - Publishing is never affected: the employer can't hold back or delay a review.
   - Refreshed daily by a cron, only re-summarized when the input changed; email to owners/HR when a new theme category appears, at most once a week.
   - Transparency: one sentence at the publish step of the review form; privacy policy section on early signals.
@@ -295,7 +294,7 @@ Goal: employers show their score on their careers page / job ads; every embed is
 
 **Phase 1 – MVP (validate supply of reviews)**
 - Public: home/search, company page, location page, reviews list with translation, city hubs.
-- Reviewer: one-tap auth, display name, 3-step review, document verification (manual), publish timing.
+- Reviewer: one-tap auth, display name, 3-step review, document verification (manual), random 3–12 day publishing delay.
 - Employer: free claim, replies, disputes, basic invites.
 - Admin: moderation queue, verification queue, entity linking, location seeding import (CSV + Google Places).
 - SEO: SSR/ISR, slugs, sitemaps, JSON-LD, hreflang, OG images.

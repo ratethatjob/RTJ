@@ -52,7 +52,6 @@ const empty = (locationId: string): ReviewInput => ({
   replyDays: "",
   interviewRounds: "",
   body: "",
-  publishMode: "now",
 });
 
 export function ReviewForm({
@@ -461,18 +460,10 @@ export function ReviewForm({
             <p className="mt-4 text-sm text-mist">{t("verifiedNote")}</p>
           </section>
 
-          <Field label={t("whenLive")}>
-            <div className="flex flex-col gap-3">
-              {(input.relationship === "current"
-                ? (["now", "delayed", "after_leaving"] as const)
-                : (["now", "delayed"] as const)
-              ).map((m) => (
-                <Choice key={m} selected={input.publishMode === m} onClick={() => set("publishMode", m)}>
-                  {t(`publish.${m}`)}
-                </Choice>
-              ))}
-            </div>
-          </Field>
+          <section className="mt-6 rounded-3xl bg-white p-5">
+            <h3 className="font-black">{t("whenLive")}</h3>
+            <p className="mt-1 text-slate">{t("goesLive")}</p>
+          </section>
           <p className="mt-3 text-sm text-slate">{t("signalsNote")}</p>
 
           {displayName === null ? (

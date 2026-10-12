@@ -57,7 +57,7 @@ export async function refreshEarlySignals() {
         continue;
       }
       // Anonymous labels per reviewer, in a fixed order that says nothing about who wrote first.
-      const texts = [...basis.pending, ...basis.recent].filter((r) => r.body?.trim());
+      const texts = basis.window.filter((r) => r.body?.trim());
       const labels = new Map<string, string>();
       for (const r of texts) {
         const who = r.userId ?? r.id;
@@ -106,7 +106,7 @@ async function loadReviews(db: Db, locationId: string, now: number): Promise<Sig
   const since = new Date(now - 366 * 24 * 3600 * 1000).toISOString();
   const { data } = await db
     .from("reviews")
-    .select("id, user_id, status, publish_mode, hold_reason, published_at, updated_at, body, position, overall, manager, pay, schedule, environment")
+    .select("id, user_id, status, hold_reason, created_at, published_at, updated_at, body, position, overall, manager, pay, schedule, environment")
     .eq("location_id", locationId)
     .or(`status.in.(scheduled,pending_moderation),and(status.eq.published,published_at.gt.${since})`)
     .limit(500);
@@ -114,8 +114,8 @@ async function loadReviews(db: Db, locationId: string, now: number): Promise<Sig
     id: r.id,
     userId: r.user_id,
     status: r.status,
-    publishMode: r.publish_mode,
     held: Boolean(r.hold_reason),
+    createdAt: r.created_at,
     publishedAt: r.published_at,
     updatedAt: r.updated_at,
     body: r.body,

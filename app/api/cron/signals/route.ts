@@ -1,6 +1,6 @@
 import { refreshEarlySignals } from "@/lib/early-signals-job";
 
-// Daily: early signals for Pro locations (anonymous themes from reviews not live yet).
+// Daily: early signals for Pro locations (anonymous themes from the last 30 days' reviews).
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
   if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {

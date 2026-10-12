@@ -5,12 +5,13 @@ import {
   basisKey,
   categoryDirections,
   filterTopics,
-  MIN_PENDING,
+  MIN_WINDOW,
   newCategories,
   type RawTopic,
   safeSummary,
   signalBasis,
   type SignalReview,
+  WINDOW_DAYS,
 } from "./early-signals.ts";
 
 const NOW = Date.parse("2026-10-12T12:00:00Z");
@@ -20,8 +21,8 @@ const review = (r: Partial<SignalReview>): SignalReview => ({
   id: `r${++seq}`,
   userId: `u${seq}`,
   status: "scheduled",
-  publishMode: "now",
   held: false,
+  createdAt: daysAgo(2),
   publishedAt: null,
   updatedAt: daysAgo(1),
   body: null,
@@ -31,30 +32,37 @@ const review = (r: Partial<SignalReview>): SignalReview => ({
 });
 const pending = (n: number, r: Partial<SignalReview> = {}) => Array.from({ length: n }, () => review(r));
 const published = (n: number, r: Partial<SignalReview> = {}) =>
-  Array.from({ length: n }, () => review({ status: "published", publishedAt: daysAgo(20), ...r }));
+  Array.from({ length: n }, () => review({ status: "published", createdAt: daysAgo(25), publishedAt: daysAgo(20), ...r }));
 
-test("nothing below 5 waiting reviews, something from 5", () => {
-  assert.equal(MIN_PENDING, 5);
+test("nothing below 5 reviews in the last 30 days, waiting and published together", () => {
+  assert.equal(MIN_WINDOW, 5);
+  assert.equal(WINDOW_DAYS, 30);
   assert.equal(signalBasis(pending(4), NOW), null);
-  assert.equal(signalBasis(pending(5), NOW)?.pending.length, 5);
-  // pending_moderation counts too, published ones don't.
+  assert.equal(signalBasis(pending(5), NOW)?.window.length, 5);
+  // Waiting and published reviews of the last 30 days both count.
+  assert.equal(signalBasis([...pending(3), ...published(2)], NOW)?.window.length, 5);
   assert.notEqual(signalBasis([...pending(3), ...pending(2, { status: "pending_moderation" })], NOW), null);
-  assert.equal(signalBasis([...pending(4), ...published(10)], NOW), null);
+  // Older ones don't fill the window.
+  assert.equal(signalBasis([...pending(4), ...published(10, { createdAt: daysAgo(40), publishedAt: daysAgo(35) })], NOW), null);
 });
 
-test("after_leaving and held reviews never count", () => {
-  assert.equal(signalBasis([...pending(4), ...pending(3, { publishMode: "after_leaving" })], NOW), null);
+test("held and rejected reviews never count", () => {
   assert.equal(signalBasis([...pending(4), review({ held: true })], NOW), null);
-  const basis = signalBasis([...pending(5), ...published(3, { publishMode: "after_leaving" })], NOW)!;
-  assert.equal(basis.recent.length, 0);
-  assert.equal(basis.baseline.length, 0);
-  assert.ok(basis.pending.every((r) => r.publishMode !== "after_leaving"));
+  assert.equal(signalBasis([...pending(4), review({ status: "rejected" }), review({ status: "removed" })], NOW), null);
 });
 
-test("recent = published in the last 60 days, baseline = last 12 months", () => {
-  const basis = signalBasis([...pending(5), ...published(2), ...published(3, { publishedAt: daysAgo(200) }), ...published(1, { publishedAt: daysAgo(400) })], NOW)!;
-  assert.equal(basis.recent.length, 2);
-  assert.equal(basis.baseline.length, 5);
+test("baseline = published in the 12 months before the window", () => {
+  const basis = signalBasis(
+    [
+      ...pending(5),
+      ...published(2),
+      ...published(3, { createdAt: daysAgo(210), publishedAt: daysAgo(200) }),
+      ...published(1, { createdAt: daysAgo(410), publishedAt: daysAgo(400) }),
+    ],
+    NOW,
+  )!;
+  assert.equal(basis.window.length, 7);
+  assert.equal(basis.baseline.length, 3);
 });
 
 test("a theme needs 3 different reviewers", () => {
@@ -87,10 +95,10 @@ test("themes never quote, count, date or name", () => {
 test("directions without numbers, only with enough ratings", () => {
   const basis = signalBasis([
     ...pending(5, { ratings: { pay: 2, manager: 4 } }),
-    ...published(3, { ratings: { pay: 4, manager: 4 } }),
+    ...published(3, { createdAt: daysAgo(100), publishedAt: daysAgo(90), ratings: { pay: 4, manager: 4 } }),
   ], NOW)!;
   assert.deepEqual(categoryDirections(basis), [{ category: "pay", direction: "worse" }]);
-  const thin = signalBasis([...pending(5, { ratings: { pay: 1 } }), ...published(2, { ratings: { pay: 5 } })], NOW)!;
+  const thin = signalBasis([...pending(5, { ratings: { pay: 1 } }), ...published(2, { createdAt: daysAgo(100), publishedAt: daysAgo(90), ratings: { pay: 5 } })], NOW)!;
   assert.deepEqual(categoryDirections(thin), []);
 });
 

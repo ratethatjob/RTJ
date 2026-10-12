@@ -20,7 +20,7 @@ RateThatJob shows reviews of workplaces, facts (pay on time, overtime, hours, re
 
 - Only review workplaces where you worked, had a trial shift or applied, and only describe your own experience.
 - Not allowed: names or personal details of other people, threats, hate, harassment, advertising, fake or paid reviews, and manipulating your own or a competitor's workplace.
-- Every review is checked automatically, and by a person when needed, before it goes live. To protect anonymity, publishing may be delayed.
+- Every review is checked automatically, and by a person when needed, before it goes live. To protect anonymity, every review goes live 3 to 12 days after it is sent, on a random day and time.
 - Verification documents are only used to check the review and are deleted after the decision. Verified reviews count more.
 - Reviews that break these rules are rejected or removed. Any signed-in user can flag a review with the "Report" button.
 - Review text is machine-translated into other languages; the original is always available.

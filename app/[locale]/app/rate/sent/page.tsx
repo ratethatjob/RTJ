@@ -22,7 +22,7 @@ export default async function ReviewSentPage({ params, searchParams }: PageProps
   const [{ data: review }, { count: documents }] = await Promise.all([
     supabase
       .from("reviews")
-      .select("status, publish_mode, publish_at, hold_reason, body, location_id")
+      .select("status, publish_at, hold_reason, body, location_id")
       .eq("id", id)
       .eq("user_id", user.id)
       .maybeSingle(),
@@ -41,11 +41,10 @@ export default async function ReviewSentPage({ params, searchParams }: PageProps
   const steps: string[] = [];
   if (review.status === "published") steps.push(t("published"));
   else if (review.status === "pending_moderation") steps.push(t("held"));
-  else if (review.status === "scheduled" && !review.publish_at) steps.push(t("afterLeaving"));
-  else if (review.status === "scheduled" && Date.parse(review.publish_at!) <= now) steps.push(t("soon"));
-  else if (review.status === "scheduled") {
-    steps.push(t("later", { date: format.dateTime(new Date(review.publish_at!), { dateStyle: "long" }) }));
-    steps.push(t(review.publish_mode === "delayed" ? "laterChosen" : "laterAnonymity"));
+  else if (review.status === "scheduled" && review.publish_at && Date.parse(review.publish_at) <= now) steps.push(t("soon"));
+  else if (review.status === "scheduled" && review.publish_at) {
+    steps.push(t("later", { date: format.dateTime(new Date(review.publish_at), { dateStyle: "long" }) }));
+    steps.push(t("laterAnonymity"));
   }
   if (review.body && review.status === "scheduled") steps.push(t("textCheck"));
   if (documents) steps.push(t("document"));

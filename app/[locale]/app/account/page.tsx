@@ -1,7 +1,7 @@
 import { AccountShell } from "@/components/app/account-shell";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { OrgCard } from "@/components/business-access";
-import { AccountActions, JobAlertsToggle, JobEndedForm } from "@/components/app/account-actions";
+import { AccountActions, JobAlertsToggle } from "@/components/app/account-actions";
 import { getPathname, Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { initials } from "@/lib/format";
@@ -13,7 +13,6 @@ type Row = {
   id: string;
   status: string;
   relationship: string;
-  publish_mode: string;
   publish_at: string | null;
   period_start: string;
   position: string;
@@ -30,7 +29,7 @@ export default async function AccountPage({ params }: PageProps<"/[locale]/app/a
     supabase.from("profiles").select("display_mode, generated_name, username, job_alerts").eq("user_id", user.id).single(),
     supabase
       .from("reviews")
-      .select("id, status, relationship, publish_mode, publish_at, period_start, position, overall, created_at, locations(name, address)")
+      .select("id, status, relationship, publish_at, period_start, position, overall, created_at, locations(name, address)")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false }),
     supabase.from("admins").select("user_id").eq("user_id", user.id).maybeSingle(),
@@ -101,7 +100,6 @@ export default async function AccountPage({ params }: PageProps<"/[locale]/app/a
         ) : (
           <ul className="flex flex-col gap-3">
             {reviews.map((r) => {
-              const waiting = r.status === "scheduled" && !r.publish_at;
               return (
                 <li key={r.id} className="rounded-3xl bg-white p-5">
                   <div className="flex items-start justify-between gap-3">
@@ -119,14 +117,10 @@ export default async function AccountPage({ params }: PageProps<"/[locale]/app/a
                       {t(`status.${r.status}`)}
                     </span>
                   </div>
-                  {waiting && <p className="mt-2 text-slate">{t("waitingForLeave")}</p>}
                   {r.status === "scheduled" && r.publish_at && (
                     <p className="mt-2 text-slate">
                       {t("goesLiveOn", { date: format.dateTime(new Date(r.publish_at), { dateStyle: "medium" }) })}
                     </p>
-                  )}
-                  {r.relationship === "current" && r.publish_mode === "after_leaving" && (
-                    <JobEndedForm reviewId={r.id} min={r.period_start.slice(0, 7)} />
                   )}
                 </li>
               );

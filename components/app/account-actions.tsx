@@ -1,11 +1,9 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { deleteAccount, markJobEnded, signOut } from "@/app/[locale]/app/account/actions";
+import { deleteAccount, signOut } from "@/app/[locale]/app/account/actions";
 import { setJobAlerts } from "@/app/[locale]/app/actions";
-import { MonthYearSelect } from "@/components/month-year-select";
 
 /** Emails about jobs near me: opt-in, off by default, switched off here any time. */
 export function JobAlertsToggle({ initial }: { initial: boolean }) {
@@ -41,46 +39,6 @@ export function JobAlertsToggle({ initial }: { initial: boolean }) {
       </label>
       {error && <p className="mt-2 text-sm font-black">{t("jobAlertsError")}</p>}
     </section>
-  );
-}
-
-export function JobEndedForm({ reviewId, min }: { reviewId: string; min: string }) {
-  const t = useTranslations("Account");
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [month, setMonth] = useState("");
-  const [error, setError] = useState(false);
-  const [pending, startTransition] = useTransition();
-
-  if (!open) {
-    return (
-      <button type="button" onClick={() => setOpen(true)} className="mt-3 font-black underline underline-offset-4">
-        {t("leftJob")}
-      </button>
-    );
-  }
-  return (
-    <div className="mt-3 flex flex-wrap items-end gap-3">
-      <div className="flex w-full max-w-xs flex-col gap-1">
-        <span className="text-sm font-black text-slate">{t("leftWhen")}</span>
-        <MonthYearSelect label={t("leftWhen")} value={month} min={min} onChange={setMonth} compact />
-      </div>
-      <button
-        type="button"
-        disabled={!month || pending}
-        onClick={() =>
-          startTransition(async () => {
-            const result = await markJobEnded(reviewId, month);
-            if (result.error) return setError(true);
-            router.refresh();
-          })
-        }
-        className="rounded-xl bg-ink px-4 py-2 font-black text-paper disabled:opacity-50"
-      >
-        {t("save")}
-      </button>
-      {error && <span className="font-black">{t("error")}</span>}
-    </div>
   );
 }
 

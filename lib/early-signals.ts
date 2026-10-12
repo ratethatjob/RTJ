@@ -2,18 +2,19 @@
 // early-signals.test.ts; the AI call is in early-signals-ai.ts and the daily job in
 // lib/early-signals-job.ts.
 //
-// - Reviews published "after I leave" never count, nor held ones (manual moderation queue).
-// - Nothing is shown below MIN_PENDING reviews waiting to go live.
+// - Input: every review written in the last WINDOW_DAYS days, waiting to go live or published;
+//   held ones (manual moderation queue) never count.
+// - Nothing is shown below MIN_WINDOW such reviews.
 // - A theme needs MIN_REVIEWERS different reviewers; it never quotes, names, dates or counts.
 // - Directions per category come from the ratings, without numbers.
 
-export const MIN_PENDING = 5;
+export const MIN_WINDOW = 5;
+export const WINDOW_DAYS = 30;
 export const MIN_REVIEWERS = 3;
 /** Ratings per category needed on both sides before a direction is shown. */
 export const MIN_RATED = 3;
 /** Average change (stars) that counts as a direction. */
 export const DIRECTION_STEP = 0.5;
-export const RECENT_DAYS = 60;
 export const BASELINE_DAYS = 365;
 
 export const SIGNAL_CATEGORIES = ["pay", "manager", "schedule", "environment", "overall"] as const;
@@ -27,8 +28,8 @@ export type SignalReview = {
   /** The reviewer (several reviews by one person count once). */
   userId: string | null;
   status: string;
-  publishMode: string;
   held: boolean;
+  createdAt: string;
   publishedAt: string | null;
   updatedAt: string;
   body: string | null;
@@ -36,33 +37,37 @@ export type SignalReview = {
   ratings: Partial<Record<SignalCategory, number | null>>;
 };
 
-export type SignalBasis = { pending: SignalReview[]; recent: SignalReview[]; baseline: SignalReview[] };
+/** window: the last WINDOW_DAYS days' reviews (waiting or published); baseline: published in the
+ *  last 12 months before that window. */
+export type SignalBasis = { window: SignalReview[]; baseline: SignalReview[] };
 export type Direction = { category: SignalCategory; direction: "worse" | "better" };
 export type Topic = { category: TopicCategory; en: string; hu: string };
 export type RawTopic = Topic & { reviewers: string[] };
 
 const DAY = 24 * 3600 * 1000;
-const isPending = (r: SignalReview) => r.status === "scheduled" || r.status === "pending_moderation";
+const counts = (r: SignalReview) => r.status === "scheduled" || r.status === "pending_moderation" || r.status === "published";
 
-/** The reviews a location's signals may use, or null when fewer than MIN_PENDING wait to go live. */
+/** The reviews a location's signals may use, or null below MIN_WINDOW reviews in the last 30 days. */
 export function signalBasis(reviews: SignalReview[], now = Date.now()): SignalBasis | null {
-  const usable = reviews.filter((r) => r.publishMode !== "after_leaving" && !r.held);
-  const pending = usable.filter(isPending);
-  if (pending.length < MIN_PENDING) return null;
-  const published = usable.filter((r) => r.status === "published" && r.publishedAt);
-  const since = (days: number) => published.filter((r) => Date.parse(r.publishedAt!) > now - days * DAY);
-  return { pending, recent: since(RECENT_DAYS), baseline: since(BASELINE_DAYS) };
+  const start = now - WINDOW_DAYS * DAY;
+  const usable = reviews.filter((r) => !r.held && counts(r));
+  const window = usable.filter((r) => Date.parse(r.createdAt) > start);
+  if (window.length < MIN_WINDOW) return null;
+  const baseline = usable.filter(
+    (r) => r.status === "published" && r.publishedAt && Date.parse(r.createdAt) <= start && Date.parse(r.publishedAt) > now - BASELINE_DAYS * DAY,
+  );
+  return { window, baseline };
 }
 
 const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
 
-/** "worse" / "better" per rating category: waiting reviews against the last 12 months published. */
+/** "worse" / "better" per rating category: the last 30 days against the 12 months before. */
 export function categoryDirections(basis: SignalBasis): Direction[] {
   const out: Direction[] = [];
   for (const category of SIGNAL_CATEGORIES) {
     const values = (rs: SignalReview[]) =>
       rs.map((r) => r.ratings[category]).filter((v): v is number => typeof v === "number");
-    const now = values(basis.pending);
+    const now = values(basis.window);
     const before = values(basis.baseline);
     if (now.length < MIN_RATED || before.length < MIN_RATED) continue;
     const delta = mean(now) - mean(before);
@@ -127,7 +132,7 @@ export function filterTopics(
 /** Stable key of the reviews behind a summary: the AI runs again only when this changes. */
 export function basisKey(basis: SignalBasis | null): string {
   if (!basis) return "none";
-  const ids = [...basis.pending, ...basis.baseline].map((r) => `${r.id}:${r.status}:${r.updatedAt}`).sort();
+  const ids = [...basis.window, ...basis.baseline].map((r) => `${r.id}:${r.status}:${r.updatedAt}`).sort();
   return ids.join("|");
 }
 

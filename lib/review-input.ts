@@ -3,7 +3,6 @@
 export const RELATIONSHIPS = ["applicant", "trial_shift", "current", "former"] as const;
 export const RATING_KEYS = ["overall", "manager", "pay", "schedule", "environment"] as const;
 export const FACT_KEYS = ["paid_as_promised", "paid_on_time", "overtime_paid", "hours_as_promised"] as const;
-export const PUBLISH_MODES = ["now", "delayed", "after_leaving"] as const;
 
 export type ReviewInput = {
   locationId: string;
@@ -19,7 +18,6 @@ export type ReviewInput = {
   replyDays: string;
   interviewRounds: string;
   body: string;
-  publishMode: (typeof PUBLISH_MODES)[number];
 };
 
 const month = /^\d{4}-(0[1-9]|1[0-2])$/;
@@ -40,8 +38,7 @@ export function parseReview(input: ReviewInput) {
     (needsEnd && !month.test(input.periodEnd)) ||
     !position ||
     position.length > 80 ||
-    !["permanent", "temporary"].includes(input.workType) ||
-    !PUBLISH_MODES.includes(input.publishMode)
+    !["permanent", "temporary"].includes(input.workType)
   ) {
     return { error: "required" as const };
   }
@@ -87,8 +84,8 @@ export function parseReview(input: ReviewInput) {
       reply_days: applicant && input.gotReply ? count(input.replyDays) : null,
       interview_rounds: applicant ? count(input.interviewRounds) : null,
       body,
-      // "After I leave" only makes sense while still working there.
-      publish_mode: input.publishMode === "after_leaving" && r !== "current" ? "now" : input.publishMode,
+      // Every review goes live 3–12 days after it is sent (private.review_publish_at, invite batches together); nobody picks a time.
+      publish_mode: "now" as const,
     },
   };
 }

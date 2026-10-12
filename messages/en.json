@@ -63,7 +63,7 @@
     "faqTitle": "Questions",
     "faq": {
       "anonymousQ": "Will my employer know I wrote a review?",
-      "anonymousA": "No. Only your chosen display name is shown. Employers never see who wrote a review, and reviews from small workplaces are published with a random delay.",
+      "anonymousA": "No. Only your chosen display name is shown. Employers never see who wrote a review, and every review goes live 3 to 12 days after it's sent, at a random time.",
       "verifiedQ": "What does “verified” mean?",
       "verifiedA": "The reviewer showed a payslip or contract, came through the employer's invite, or applied through RateThatJob. Verified reviews count more in the score.",
       "employerQ": "Can employers remove bad reviews?",
@@ -421,12 +421,8 @@
     },
     "removeFile": "Remove",
     "verifiedNote": "Only our team sees it. It is deleted after checking.",
-    "whenLive": "When should it go live?",
-    "publish": {
-      "now": "As soon as possible",
-      "delayed": "In a few weeks, at a random time",
-      "after_leaving": "Only after I leave this job"
-    },
+    "whenLive": "When does it go live?",
+    "goesLive": "3 to 12 days after you send it, on a random day and time. Everyone's review waits the same way, so the timing doesn't give away who wrote it.",
     "shownAs": "Shown as <name></name>",
     "change": "Change",
     "submit": "Publish review",
@@ -453,7 +449,7 @@
       "verifyAndSend": "Confirm and send review",
       "sending": "Sending…"
     },
-    "signalsNote": "Before your review goes live, the employer may see anonymous, aggregated themes – never your text."
+    "signalsNote": "Before it goes live, the employer may see anonymous, aggregated themes from the last 30 days' reviews – never your text."
   },
   "NewWorkplace": {
     "title": "Add a workplace",
@@ -491,8 +487,8 @@
     "anonymousBody": "Your employer never sees who wrote what, or who replied.",
     "minuteTitle": "One minute",
     "minuteBody": "A few taps. Writing is optional.",
-    "liveTitle": "You choose when it goes live",
-    "liveBody": "As soon as possible, in a few weeks, or only after you leave.",
+    "liveTitle": "It goes live at a random time",
+    "liveBody": "3 to 12 days after you send it, so the timing doesn't give you away.",
     "start": "Start my review",
     "footer": "Invited reviews are marked as invited.",
     "invalidTitle": "This invite link doesn't work",
@@ -754,10 +750,7 @@
       "rejected": "Not published",
       "removed": "Removed"
     },
-    "waitingForLeave": "Goes live after you leave",
     "goesLiveOn": "Goes live around {date}",
-    "leftJob": "I've left this job",
-    "leftWhen": "Last month there",
     "save": "Save",
     "export": "Download my data",
     "exportHint": "Your profile, reviews, job applications (with messages), follows and notifications as a JSON file.",
@@ -1962,7 +1955,7 @@
   },
   "InviteEmail": {
     "subject": "{company} asks you to rate your workplace",
-    "body": "Hi,\n\n{company} ({location}) invited its team to rate their workplace on RateThatJob. It takes about a minute, writing is optional.\n\nYour employer never sees who wrote a review or who used this invite. Invited reviews always go live after a random delay of a few days, or later if you choose: in a few weeks, or only after you leave.\n\nRate your workplace: {link}\n\nYou got this email because {company} added your address. We send one reminder at most, then delete your address.\nUnsubscribe: {unsubscribe}\n\nRateThatJob – Know before you go",
+    "body": "Hi,\n\n{company} ({location}) invited its team to rate their workplace on RateThatJob. It takes about a minute, writing is optional.\n\nYour employer never sees who wrote a review or who used this invite. Reviews from an invite go live together, at a random time 3 to 12 days after they're sent.\n\nRate your workplace: {link}\n\nYou got this email because {company} added your address. We send one reminder at most, then delete your address.\nUnsubscribe: {unsubscribe}\n\nRateThatJob – Know before you go",
     "reminderSubject": "Reminder: rate your workplace at {company}",
     "reminderBody": "Hi,\n\nA few days ago {company} ({location}) invited you to rate your workplace on RateThatJob. If you'd like to, it takes about a minute.\n\nYour employer never sees who wrote a review or who used this invite.\n\nRate your workplace: {link}\n\nThis is the only reminder. We're now deleting your address.\nUnsubscribe: {unsubscribe}\n\nRateThatJob – Know before you go"
   },
@@ -2070,10 +2063,8 @@
     "nextTitle": "What happens now",
     "published": "It's already live on the workplace page.",
     "held": "One of our team checks it before it goes live.",
-    "afterLeaving": "It goes live once you mark in your account that you've left this job.",
     "soon": "It goes live on the workplace page within about an hour.",
     "later": "It's due to go live on the workplace page around {date}.",
-    "laterChosen": "It's delayed, as you asked.",
     "laterAnonymity": "The delay protects your anonymity.",
     "textCheck": "Your text is also checked automatically. If something looks off, one of our team looks at it before it goes live.",
     "document": "One of our team checks the document you uploaded. If it's fine, your review gets the Verified badge.",
@@ -2112,7 +2103,7 @@
   },
   "EarlySignals": {
     "title": "Early signals",
-    "intro": "Anonymous, aggregated themes from reviews that haven't gone live yet and from the last 60 days. No review text, scores, dates or counts are shown, and they don't affect publishing: no review can be held back or delayed. Updated daily.",
+    "intro": "Anonymous, aggregated themes from all reviews of the last 30 days, live or not yet live. No review text, scores, dates or counts are shown, and they don't affect publishing: no review can be held back or delayed. Updated daily.",
     "locked": "With Pro you see early signals: themes from reviews before they go live.",
     "lockedShort": "With Pro you see early signals here.",
     "cta": "Get Pro",
@@ -2132,7 +2123,7 @@
   },
   "EarlySignalsEmail": {
     "subject": "New early signal – {location}",
-    "body": "Hi,\n\nA new theme has appeared in the early signals for {location}: anonymous, aggregated themes from reviews that aren't live yet and from the last 60 days.\n\nSee it in your business dashboard: {link}\n\nRateThatJob – Know before you go"
+    "body": "Hi,\n\nA new theme has appeared in the early signals for {location}: anonymous, aggregated themes from all reviews of the last 30 days.\n\nSee it in your business dashboard: {link}\n\nRateThatJob – Know before you go"
   },
   "Showcase": {
     "metaTitle": "Sample workplace page",

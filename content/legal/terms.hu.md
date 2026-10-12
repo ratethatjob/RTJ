@@ -20,7 +20,7 @@ A RateThatJob munkahelyekről szóló értékeléseket, tényeket (bérfizetés,
 
 - Csak olyan munkahelyet értékelj, ahol dolgoztál, próbanapon voltál vagy ahová jelentkeztél, és csak a saját tapasztalatodat írd le.
 - Tilos: mások nevének vagy személyes adatainak közzététele, fenyegetés, gyűlöletkeltés, zaklatás, reklám, hamis vagy megvásárolt értékelés, valamint saját vagy konkurens munkahely manipulálása.
-- Minden értékelés megjelenés előtt automatikus és szükség esetén kézi ellenőrzésen megy át. A névtelenség védelmében a megjelenés késleltetve is történhet.
+- Minden értékelés megjelenés előtt automatikus és szükség esetén kézi ellenőrzésen megy át. A névtelenség védelmében minden értékelés az elküldés után 3–12 nappal, véletlenszerű napon és időpontban jelenik meg.
 - Az igazoló dokumentumot csak ellenőrzésre használjuk, a döntés után töröljük. Az igazolt értékelések nagyobb súllyal számítanak.
 - A szabályokat sértő értékeléseket elutasítjuk vagy eltávolítjuk. Bármely bejelentkezett felhasználó jelezheti a problémás értékelést a „Jelentés” gombbal.
 - Az értékelés szövegét gépi fordítással más nyelveken is megjelenítjük, az eredeti mindig elérhető.

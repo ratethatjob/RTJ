@@ -8,9 +8,9 @@ Effective: 10 October 2026
 
 ## 2. The most important rule: anonymity
 
-Employers never learn who wrote a review or who responded to their invite. Public pages only show the display name you choose. Apart from the published reviews themselves, employers only see aggregate numbers; invite results and statistics only from 5 reviews.
+Employers never learn who wrote a review or who responded to their invite. Public pages only show the display name you choose. Every review goes live 3 to 12 days after it is sent, on a random day and time (reviews from the same invite go live together), so the timing doesn't reveal who wrote it. Apart from the published reviews themselves, employers only see aggregate numbers; invite results and statistics only from 5 reviews.
 
-**Early signals.** An employer with Pro (or a Pro trial) may see anonymous, aggregated themes from reviews that haven't gone live yet and from reviews published in the last 60 days (for example “incoming reviews about pay point downward”). This needs at least 5 reviews waiting to go live; a theme only shows when at least 3 different reviewers mention it; and the employer never sees the text, scores, dates or counts of single reviews. Reviews sent with “Only after I leave this job” are left out. It doesn't affect publishing: an employer can't hold back or delay any review.
+**Early signals.** An employer with Pro (or a Pro trial) may see anonymous, aggregated themes from all reviews of its location sent in the last 30 days, whether already live or still waiting to go live (for example “incoming reviews about pay point downward”). This needs at least 5 reviews in the last 30 days; a theme only shows when at least 3 different reviewers mention it; and the employer never sees the text, quotes, scores, dates or counts of single reviews. It doesn't affect publishing: an employer can't hold back or delay any review.
 
 ## 3. What we process and why
 

@@ -8,9 +8,9 @@ Hatályos: 2026. október 10.
 
 ## 2. A legfontosabb szabály: névtelenség
 
-A munkáltatók soha nem tudják meg, ki írt egy értékelést, és ki válaszolt a meghívójukra. A nyilvános oldalakon csak a választott megjelenő neved látszik. A megjelent értékeléseken túl a munkáltatók csak összesített számokat látnak; a meghívók eredményét és a statisztikát csak legalább 5 értékeléstől.
+A munkáltatók soha nem tudják meg, ki írt egy értékelést, és ki válaszolt a meghívójukra. A nyilvános oldalakon csak a választott megjelenő neved látszik. Minden értékelés az elküldés után 3–12 nappal, véletlenszerű napon és időpontban jelenik meg (az ugyanabból a meghívóból érkezők együtt), így az időzítésből nem derül ki, ki írta. A megjelent értékeléseken túl a munkáltatók csak összesített számokat látnak; a meghívók eredményét és a statisztikát csak legalább 5 értékeléstől.
 
-**Korai jelzések.** A Pro csomagot (vagy próbaidőt) használó munkáltató a még meg nem jelent és az elmúlt 60 napban megjelent értékelésekből névtelen, összesített témákat láthat (például „a fizetésről szóló beérkező értékelések romló irányt mutatnak”). Ehhez legalább 5 megjelenésre váró értékelés kell; egy téma csak akkor látszik, ha legalább 3 különböző értékelő említi; és a munkáltató soha nem lát egyedi szöveget, pontszámot, dátumot vagy darabszámot. A „Csak miután eljöttem innen” módon küldött értékelések kimaradnak. A megjelenést ez nem befolyásolja: a munkáltató egyetlen értékelést sem tud visszatartani vagy késleltetni.
+**Korai jelzések.** A Pro csomagot (vagy próbaidőt) használó munkáltató a telephelyére az elmúlt 30 napban beküldött összes értékelésből – a már megjelentekből és a megjelenésre várókból is – névtelen, összesített témákat láthat (például „a fizetésről szóló beérkező értékelések romló irányt mutatnak”). Ehhez legalább 5 értékelés kell az elmúlt 30 napból; egy téma csak akkor látszik, ha legalább 3 különböző értékelő említi; és a munkáltató soha nem lát egyedi szöveget, idézetet, pontszámot, dátumot vagy darabszámot. A megjelenést ez nem befolyásolja: a munkáltató egyetlen értékelést sem tud visszatartani vagy késleltetni.
 
 ## 3. Milyen adatokat kezelünk és miért
 
