@@ -4,6 +4,7 @@ import { ReviewForm } from "@/components/app/review-form";
 import { getPathname } from "@/i18n/navigation";
 import { getUser } from "@/lib/auth";
 import { parsePendingWorkplace } from "@/lib/workplaces";
+import { SiteHeader } from "@/components/site-header";
 
 export const instant = false;
 
@@ -49,6 +50,8 @@ export default async function PendingRatePage({ params, searchParams }: PageProp
   );
   const selfPath = getPathname({ href: { pathname: "/app/rate/pending", query }, locale });
   return (
+    <>
+    <SiteHeader />
     <ReviewForm
       userId={user?.id ?? null}
       location={{ id: null, name: name || "–", address }}
@@ -63,5 +66,6 @@ export default async function PendingRatePage({ params, searchParams }: PageProp
       welcomePath={getPathname({ href: "/app/welcome", locale })}
       sentPath={getPathname({ href: "/app/rate/sent", locale })}
     />
+    </>
   );
 }

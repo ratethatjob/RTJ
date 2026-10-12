@@ -732,7 +732,8 @@
         "billingBody": "Your Pro trial and plans."
       }
     },
-    "addWorkplace": "Add another workplace"
+    "addWorkplace": "Add another workplace",
+    "noAccessYet": "You don't have business access yet. Find your workplace and request access."
   },
   "Account": {
     "title": "Your account",
@@ -784,7 +785,8 @@
     "signInEmployee": "Sign in as an employee",
     "signInEmployeeHint": "Rate your workplace, your reviews",
     "signInEmployer": "Sign in as an employer",
-    "signInEmployerHint": "Business dashboard, replies, subscription"
+    "signInEmployerHint": "Business dashboard, replies, subscription",
+    "admin": "Admin"
   },
   "Admin": {
     "title": "Admin",
@@ -2031,7 +2033,8 @@
     "open": "Business dashboard",
     "pending": "Request in progress",
     "managing": "You manage: {org}",
-    "openDashboard": "Open business dashboard"
+    "openDashboard": "Open business dashboard",
+    "admin": "Admin"
   },
   "ClaimSent": {
     "title": "We've received your access request",

@@ -18,7 +18,7 @@ import { routing } from "@/i18n/routing";
 import { locationPath } from "@/lib/format";
 import { localeAlternates } from "@/lib/seo";
 import { kindLabel, placeTypeLabel } from "@/lib/place-types";
-import { SHOWCASE, SHOWCASE_PATH } from "@/lib/showcase";
+import { getShowcase, SHOWCASE_PATH } from "@/lib/showcase";
 import { DemoChip } from "@/components/demo-badge";
 import { ShowcaseLogo } from "@/components/showcase/illustrations";
 
@@ -52,7 +52,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     cityNames.set(l.citySlug, l.city);
   }
   const cities = [...cityCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
-  const example = SHOWCASE;
+  const { location: example, brand } = getShowcase(locale);
   const ts = await getTranslations("Showcase");
 
   return (
@@ -119,7 +119,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex min-w-0 items-start gap-4">
-                <ShowcaseLogo className="size-14 shrink-0" />
+                <ShowcaseLogo monogram={brand.monogram} className="size-14 shrink-0" />
                 <div className="min-w-0">
                   <p className="text-2xl font-black leading-tight tracking-brand">{example.name}</p>
                   <p className="mt-1 text-mist">

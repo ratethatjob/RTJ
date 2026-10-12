@@ -100,6 +100,11 @@ export function AccountMenu() {
                   </span>
                 </Link>
               )}
+              {status?.admin && (
+                <Link role="menuitem" href="/admin" className={`${item} mt-1 bg-paper`}>
+                  {t("admin")}
+                </Link>
+              )}
               <button
                 type="button"
                 role="menuitem"

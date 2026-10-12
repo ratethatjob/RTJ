@@ -5,6 +5,7 @@ import { getPathname } from "@/i18n/navigation";
 import { getUser } from "@/lib/auth";
 import { getLocationById } from "@/lib/data";
 import { locationPath } from "@/lib/format";
+import { SiteHeader } from "@/components/site-header";
 
 export const instant = false;
 
@@ -32,6 +33,8 @@ export default async function RatePage({ params, searchParams }: PageProps<"/[lo
 
   const selfPath = getPathname({ href: self, locale });
   return (
+    <>
+    <SiteHeader />
     <ReviewForm
       userId={user?.id ?? null}
       inviteToken={inviteToken}
@@ -46,5 +49,6 @@ export default async function RatePage({ params, searchParams }: PageProps<"/[lo
       welcomePath={getPathname({ href: "/app/welcome", locale })}
       sentPath={getPathname({ href: "/app/rate/sent", locale })}
     />
+    </>
   );
 }

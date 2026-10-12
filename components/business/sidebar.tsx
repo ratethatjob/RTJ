@@ -24,7 +24,7 @@ export function BusinessSidebar({ orgName, role, awaiting }: Props) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex shrink-0 flex-col bg-ink p-4 text-paper lg:min-h-dvh lg:w-64 lg:p-4">
+    <aside className="flex shrink-0 flex-col bg-ink p-4 text-paper lg:min-h-[calc(100dvh-4rem)] lg:w-64 lg:p-4">
       <div className="flex items-center justify-between gap-4 lg:block">
         <Link href="/business" className="flex items-center gap-2.5">
           <BrandIcon className="h-6 w-auto" />

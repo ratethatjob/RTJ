@@ -49,9 +49,16 @@ export function HeaderBusinessLink() {
 export function MenuBusinessLink() {
   const t = useTranslations("BusinessAccess");
   const status = useBusinessStatus();
-  if (!status?.org && !status?.pendingClaim) return null;
+  const admin = status?.admin ? (
+    <Link href="/admin" className="flex items-center gap-3 rounded-xl border-2 border-white/30 px-4 py-3 text-lg font-black">
+      {t("admin")}
+    </Link>
+  ) : null;
+  if (!status?.org && !status?.pendingClaim) return admin;
   const member = Boolean(status.org);
   return (
+    <>
+    {admin}
     <Link
       href="/business"
       className={`flex items-center gap-3 rounded-xl px-4 py-3 text-lg font-black ${
@@ -61,6 +68,7 @@ export function MenuBusinessLink() {
       {member ? <BriefcaseIcon className="size-6" /> : <ClockIcon className="size-6" />}
       {t(member ? "open" : "pending")}
     </Link>
+    </>
   );
 }
 

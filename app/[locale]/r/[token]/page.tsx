@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Logo } from "@/components/logo";
 import { Link } from "@/i18n/navigation";
 import { getLocationById } from "@/lib/data";
 import { publicClient } from "@/lib/data/supabase";
 import { supabaseKey, supabaseUrl } from "@/lib/supabase/env";
+import { SiteHeader } from "@/components/site-header";
 
 export const instant = false;
 export const metadata: Metadata = { robots: { index: false, follow: false } };
@@ -28,14 +28,13 @@ export default async function InvitePage({ params }: PageProps<"/[locale]/r/[tok
   ] as const;
 
   return (
-    <div className="flex min-h-dvh flex-1 flex-col bg-ink text-paper">
+    <>
+    <SiteHeader />
+    <div className="flex flex-1 flex-col bg-ink text-paper">
       <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-6">
-        <Link href="/" className="self-start">
-          <Logo dark />
-        </Link>
         {location ? (
           <>
-            <p className="mt-12 text-sm font-black uppercase tracking-tagline text-mist">
+            <p className="mt-6 text-sm font-black uppercase tracking-tagline text-mist">
               {t("eyebrow")}
             </p>
             <h1 className="mt-4 text-4xl font-black leading-[1.05] tracking-brand">
@@ -67,7 +66,7 @@ export default async function InvitePage({ params }: PageProps<"/[locale]/r/[tok
           </>
         ) : (
           <>
-            <h1 className="mt-12 text-4xl font-black tracking-brand">{t("invalidTitle")}</h1>
+            <h1 className="mt-6 text-4xl font-black tracking-brand">{t("invalidTitle")}</h1>
             <p className="mt-4 text-lg text-mist">{t("invalidBody")}</p>
             <Link
               href="/app/rate"
@@ -79,5 +78,6 @@ export default async function InvitePage({ params }: PageProps<"/[locale]/r/[tok
         )}
       </main>
     </div>
+    </>
   );
 }

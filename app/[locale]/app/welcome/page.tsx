@@ -5,6 +5,7 @@ import { getPathname } from "@/i18n/navigation";
 import { BackLink } from "@/components/app/back-link";
 import { DisplayNameForm } from "@/components/app/display-name-form";
 import { requireUser, safeNext } from "@/lib/auth";
+import { isAdmin } from "@/lib/membership";
 
 export const instant = false;
 
@@ -12,15 +13,18 @@ export default async function WelcomePage({ params, searchParams }: PageProps<"/
   const { locale } = await params;
   setRequestLocale(locale);
   const query = await searchParams;
-  const next = safeNext(query.next, getPathname({ href: "/", locale }));
+  const home = getPathname({ href: "/", locale });
+  const requested = safeNext(query.next, home);
   const editing = query.edit === "1";
   // Arrived right after sending a review written before signing in.
   const sent = query.sent === "1";
 
   const { supabase, user } = await requireUser(
     locale,
-    `/app/welcome?next=${encodeURIComponent(next)}${editing ? "&edit=1" : ""}`,
+    `/app/welcome?next=${encodeURIComponent(requested)}${editing ? "&edit=1" : ""}`,
   );
+  // Signing in with nowhere particular to go: admins land on the admin.
+  const next = requested === home && (await isAdmin()) ? getPathname({ href: "/admin", locale }) : requested;
   const { data: profile } = await supabase
     .from("profiles")
     .select("display_mode, generated_name, username, name_confirmed_at")

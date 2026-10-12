@@ -6,6 +6,7 @@ import { jobPath } from "@/components/jobs/job-card";
 import { getPathname, Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { getJob } from "@/lib/data/jobs";
+import { SiteHeader } from "@/components/site-header";
 
 export const instant = false;
 
@@ -37,6 +38,8 @@ export default async function ApplyPage({ params, searchParams }: PageProps<"/[l
     : { data: null };
 
   return (
+    <>
+    <SiteHeader />
     <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 pb-12 pt-6 lg:max-w-2xl">
       <BackLink href={getPathname({ href: job ? jobPath(job) : "/jobs", locale })} />
       {!job ? (
@@ -74,5 +77,6 @@ export default async function ApplyPage({ params, searchParams }: PageProps<"/[l
         </>
       )}
     </main>
+    </>
   );
 }

@@ -6,6 +6,7 @@ import { BusinessSidebar } from "@/components/business/sidebar";
 import { getUser } from "@/lib/auth";
 import { getBusiness } from "@/lib/business";
 import { pickMessages, SHARED_CLIENT_NAMESPACES } from "@/lib/client-messages";
+import { SiteHeader } from "@/components/site-header";
 
 // The employer dashboard is never indexed and always needs a session.
 export const metadata: Metadata = { robots: { index: false, follow: false } };
@@ -17,13 +18,19 @@ export default async function BusinessLayout({ children, params }: LayoutProps<"
   const messages = await pickMessages([...SHARED_CLIENT_NAMESPACES, "Business", "Index", "Team", "BusinessJobs", "Profile", "Thread", "Plan", "NewWorkplace", "Categories", "Countries", "Places", "BillingPage"]);
   // Signed out: every page sends to sign-in with its own path (invite links, email links).
   if (!(await getUser()).user) {
-    return <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>;
+    return (
+      <NextIntlClientProvider messages={messages}>
+        <SiteHeader />
+        {children}
+      </NextIntlClientProvider>
+    );
   }
   const { supabase, org } = await getBusiness(locale, "/business");
 
   if (!org) {
     return (
       <NextIntlClientProvider messages={messages}>
+        <SiteHeader />
         <div className="mx-auto flex w-full max-w-xl flex-1 flex-col px-4 pt-4">
           <BusinessBack hasOrg={false} />
           {children}
@@ -43,6 +50,7 @@ export default async function BusinessLayout({ children, params }: LayoutProps<"
 
   return (
     <NextIntlClientProvider messages={messages}>
+      <SiteHeader />
       <div className="flex flex-1 flex-col lg:flex-row">
         <BusinessSidebar orgName={org.name} role={org.role} awaiting={count ?? 0} />
         <div className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">

@@ -9,7 +9,7 @@ import { Link } from "@/i18n/navigation";
 import { kindLabel } from "@/lib/place-types";
 import { localeAlternates } from "@/lib/seo";
 import { showcaseBadges } from "@/lib/showcase-badges";
-import { SHOWCASE, SHOWCASE_JOBS, SHOWCASE_PATH, SHOWCASE_PROFILE, SHOWCASE_REVIEWS } from "@/lib/showcase";
+import { getShowcase, SHOWCASE_PATH } from "@/lib/showcase";
 
 // The sample workplace page: a made-up bakery showing what a workplace page with Pro shows. Built
 // from the same parts as the real location page, with data from lib/showcase.ts; never indexed.
@@ -30,12 +30,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SampleWorkplacePage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const lang = locale === "hu" ? "hu" : "en";
   const t = await getTranslations("Location");
   const ts = await getTranslations("Showcase");
   const tc = await getTranslations("Categories");
+  const { brand, location: SHOWCASE, reviews, jobs, profile } = getShowcase(locale);
   const s = SHOWCASE.scores!;
-  const profile = SHOWCASE_PROFILE[lang];
   const svgs = await showcaseBadges(locale);
   const badges = [
     { label: ts("badgeWide"), svg: svgs.wide },
@@ -82,7 +81,7 @@ export default async function SampleWorkplacePage({ params }: Props) {
           </div>
           <div className="hidden gap-3 lg:flex">
             <Link href="/app/rate" className="rounded-xl bg-ink px-5 py-2.5 text-base font-black text-paper">
-              {t("rateThisJob")}
+              {ts("ctaWorker")}
             </Link>
           </div>
         </section>
@@ -122,13 +121,13 @@ export default async function SampleWorkplacePage({ params }: Props) {
           <div className="flex min-w-0 flex-col gap-6 lg:order-1">
             <section className="flex flex-col gap-4 rounded-3xl bg-white p-6">
               <div className="flex items-center gap-4">
-                <ShowcaseLogo className="size-16 shrink-0" />
+                <ShowcaseLogo monogram={brand.monogram} className="size-16 shrink-0" />
                 <h2 className="text-sm font-black uppercase tracking-tagline text-slate">{t("fromEmployer")}</h2>
               </div>
               <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6">
-                {[ShowcaseStorefront, ShowcaseCounter, ShowcaseCoffee].map((Photo, i) => (
-                  <Photo key={i} className="aspect-[4/3] h-44 w-auto shrink-0 snap-start rounded-2xl" />
-                ))}
+                <ShowcaseStorefront sign={brand.sign} className="aspect-[4/3] h-44 w-auto shrink-0 snap-start rounded-2xl" />
+                <ShowcaseCounter className="aspect-[4/3] h-44 w-auto shrink-0 snap-start rounded-2xl" />
+                <ShowcaseCoffee className="aspect-[4/3] h-44 w-auto shrink-0 snap-start rounded-2xl" />
               </div>
               <p className="whitespace-pre-line text-lg leading-relaxed">{profile.about}</p>
               <ul className="flex flex-wrap gap-2">
@@ -142,16 +141,16 @@ export default async function SampleWorkplacePage({ params }: Props) {
 
             <section id="jobs" className="flex flex-col gap-3">
               <h2 className="text-sm font-black uppercase tracking-tagline text-slate">{t("openJobs")}</h2>
-              {SHOWCASE_JOBS[lang].map((j) => (
+              {jobs.map((j) => (
                 <JobCard key={j.id} job={j} showPlace={false} linked={false} />
               ))}
             </section>
 
             <section id="reviews" className="flex flex-col gap-4">
               <h2 className="text-sm font-black uppercase tracking-tagline text-slate">
-                {t("reviewCount", { count: SHOWCASE_REVIEWS.length })}
+                {t("reviewCount", { count: reviews.length })}
               </h2>
-              {SHOWCASE_REVIEWS.map((r) => (
+              {reviews.map((r) => (
                 <ReviewCard key={r.id} review={r} companyName={SHOWCASE.companyName} />
               ))}
             </section>

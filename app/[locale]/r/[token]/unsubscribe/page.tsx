@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Logo } from "@/components/logo";
-import { Link, redirect } from "@/i18n/navigation";
+import { redirect } from "@/i18n/navigation";
 import { publicClient } from "@/lib/data/supabase";
+import { SiteHeader } from "@/components/site-header";
 
 export const instant = false;
 export const metadata: Metadata = { robots: { index: false, follow: false } };
@@ -25,12 +25,11 @@ export default async function UnsubscribePage({ params, searchParams }: PageProp
   }
 
   return (
-    <div className="flex min-h-dvh flex-1 flex-col bg-ink text-paper">
+    <>
+    <SiteHeader />
+    <div className="flex flex-1 flex-col bg-ink text-paper">
       <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-8 pt-6">
-        <Link href="/" className="self-start">
-          <Logo dark />
-        </Link>
-        <h1 className="mt-12 text-4xl font-black leading-[1.05] tracking-brand">{t(done ? "doneTitle" : failed ? "failedTitle" : "title")}</h1>
+        <h1 className="mt-6 text-4xl font-black leading-[1.05] tracking-brand">{t(done ? "doneTitle" : failed ? "failedTitle" : "title")}</h1>
         <p className="mt-4 text-lg text-mist">{t(done ? "doneBody" : failed ? "failedBody" : "body")}</p>
         {!done && !failed && (
           <form action={unsubscribe} className="mt-8">
@@ -41,5 +40,6 @@ export default async function UnsubscribePage({ params, searchParams }: PageProp
         )}
       </main>
     </div>
+    </>
   );
 }

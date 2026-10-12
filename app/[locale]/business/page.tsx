@@ -6,6 +6,7 @@ import { PendingClaims } from "@/components/business/pending-claims";
 import { PlanBadge } from "@/components/business/plan-badge";
 import { TrialBanner } from "@/components/business/trial-banner";
 import { Link, redirect } from "@/i18n/navigation";
+import { isAdmin } from "@/lib/membership";
 import { getBusiness, pickLocation } from "@/lib/business";
 
 export const instant = false;
@@ -26,7 +27,8 @@ export default async function BusinessOverviewPage({ params, searchParams }: Pag
       .select("id", { count: "exact", head: true })
       .eq("user_id", user.id)
       .eq("status", "open");
-    if (!open) redirect({ href: "/business/claim", locale });
+    // A RateThatJob admin who signed in "as an employer" without a company goes to the admin.
+    if (!open) redirect({ href: (await isAdmin()) ? "/admin" : "/business/claim", locale });
     return (
       <main className="w-full py-12">
         <h1 className="text-4xl font-black tracking-brand">{t("noOrgTitle")}</h1>

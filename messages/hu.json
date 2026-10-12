@@ -732,7 +732,8 @@
         "billingBody": "A Pro próbaidőd és a csomagok."
       }
     },
-    "addWorkplace": "Másik munkahely hozzáadása"
+    "addWorkplace": "Másik munkahely hozzáadása",
+    "noAccessYet": "Még nincs céges hozzáférésed. Keresd meg a munkahelyedet és igényeld."
   },
   "Account": {
     "title": "Fiókod",
@@ -784,7 +785,8 @@
     "signInEmployee": "Belépés munkavállalóként",
     "signInEmployeeHint": "Értékelés írása, saját értékeléseid",
     "signInEmployer": "Belépés munkáltatóként",
-    "signInEmployerHint": "Céges felület, válaszok, előfizetés"
+    "signInEmployerHint": "Céges felület, válaszok, előfizetés",
+    "admin": "Admin"
   },
   "Admin": {
     "title": "Admin",
@@ -2031,7 +2033,8 @@
     "open": "Céges felület",
     "pending": "Igénylés folyamatban",
     "managing": "Te kezeled: {org}",
-    "openDashboard": "Céges felület megnyitása"
+    "openDashboard": "Céges felület megnyitása",
+    "admin": "Admin"
   },
   "ClaimSent": {
     "title": "Megkaptuk a hozzáférés-igénylésedet",

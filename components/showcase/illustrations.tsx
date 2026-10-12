@@ -6,23 +6,23 @@ const DOUGH = "#F3D9A4";
 const WALL = "#EDE3D3";
 const INK = "#14161A";
 
-/** Round logo: a croissant over "K&K". */
-export function ShowcaseLogo({ className = "" }: { className?: string }) {
+/** Round logo: a croissant over the brand's monogram. */
+export function ShowcaseLogo({ monogram, className = "" }: { monogram: string; className?: string }) {
   return (
-    <svg viewBox="0 0 120 120" className={className} role="img" aria-label="Kávé & Kovász">
+    <svg viewBox="0 0 120 120" className={className} role="img" aria-label={monogram}>
       <circle cx="60" cy="60" r="58" fill={INK} />
       <circle cx="60" cy="60" r="50" fill="none" stroke={DOUGH} strokeWidth="2" strokeDasharray="3 5" />
       <path d="M30 58c6-16 22-24 30-24s24 8 30 24c-8-4-14-4-18-2-3-6-8-9-12-9s-9 3-12 9c-4-2-10-2-18 2z" fill={CRUST} />
       <path d="M44 52c4-6 10-9 16-9s12 3 16 9" fill="none" stroke={DOUGH} strokeWidth="2.5" strokeLinecap="round" />
       <text x="60" y="88" textAnchor="middle" fontFamily="Archivo, Arial, sans-serif" fontWeight="900" fontSize="20" fill={DOUGH}>
-        K&amp;K
+        {monogram}
       </text>
     </svg>
   );
 }
 
 /** Shop front with an awning. */
-export function ShowcaseStorefront({ className = "" }: { className?: string }) {
+export function ShowcaseStorefront({ sign, className = "" }: { sign: string; className?: string }) {
   return (
     <svg viewBox="0 0 400 300" className={className} role="img" aria-hidden="true">
       <rect width="400" height="300" fill="#F7EFE2" />
@@ -37,7 +37,7 @@ export function ShowcaseStorefront({ className = "" }: { className?: string }) {
       <rect x="252" y="150" width="88" height="150" rx="6" fill={INK} />
       <circle cx="326" cy="228" r="5" fill={DOUGH} />
       <text x="200" y="98" textAnchor="middle" fontFamily="Archivo, Arial, sans-serif" fontWeight="900" fontSize="22" fill={DOUGH}>
-        KÁVÉ &amp; KOVÁSZ
+        {sign}
       </text>
     </svg>
   );

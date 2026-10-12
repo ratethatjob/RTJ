@@ -112,12 +112,6 @@ const REVIEWS: Rated[] = [
   }),
 ];
 
-export const SHOWCASE_REVIEWS: Review[] = REVIEWS.map((r) => {
-  const copy: Partial<Rated> = { ...r };
-  delete copy.ratings;
-  return copy as Review;
-});
-
 /** Scores as the database would compute them: verified reviews count 1.0, unverified 0.5;
  *  applicant reviews feed the reply rate, not the job facts. */
 function scores(): LocationScores {
@@ -150,27 +144,68 @@ function scores(): LocationScores {
 /** Reply rate from applications on RateThatJob (shown once 5 are decided). */
 export const SHOWCASE_GHOSTING = { replyRate: 94, avgReplyDays: 2, applications: 31 };
 
-export const SHOWCASE: LocationSummary = {
-  id: SHOWCASE_ID,
-  companySlug: "sample-workplace",
-  companyName: "Kávé & Kovász Pékség",
-  slug: "",
-  name: "Kávé & Kovász Pékség",
-  address: "Minta utca 12.",
-  city: "Budapest",
-  citySlug: "budapest",
-  country: "HU",
-  category: "cafe",
-  placeType: { type: "bakery", en: null, hu: null },
-  legalEntityName: "Kávé & Kovász Minta Kft.",
-  claimed: true,
-  scores: scores(),
-  ghosting: SHOWCASE_GHOSTING,
-  indexActive: true,
+type Lang = "hu" | "en";
+
+/** A made-up brand per language (real workplace names are never translated; this is only the sample). */
+export const SHOWCASE_BRAND = {
+  hu: { name: "Kávé & Kovász Pékség", address: "Minta utca 12.", entity: "Kávé & Kovász Minta Kft.", monogram: "K&K", sign: "KÁVÉ & KOVÁSZ" },
+  en: { name: "Crust & Crema Bakery", address: "12 Sample Street", entity: "Crust & Crema Sample Ltd.", monogram: "C&C", sign: "CRUST & CREMA" },
 };
 
+// English generated names and job titles for the sample's reviewers.
+const NAMES_EN: Record<string, string> = {
+  "Csendes Tölgy 42": "Quiet Oak 42", "Fürge Mókus 7": "Swift Squirrel 7", "Napos Fenyő 15": "Sunny Pine 15",
+  "Bátor Hold 23": "Brave Moon 23", "Vidám Fűz 8": "Merry Willow 8", "Halk Patak 31": "Soft Brook 31",
+  "Kék Szirom 12": "Blue Petal 12", "Erős Szikla 5": "Steady Rock 5", "Szelíd Felhő 19": "Gentle Cloud 19",
+  "Gyors Nyúl 27": "Quick Hare 27", "Tiszta Forrás 3": "Clear Spring 3", "Zöld Lomb 44": "Green Leaf 44",
+};
+const POSITIONS_EN: Record<string, string> = {
+  Pék: "Baker", Barista: "Barista", Eladó: "Sales assistant", Cukrász: "Pastry chef", Kiszállító: "Delivery driver",
+  "Pékségvezető-helyettes": "Assistant bakery manager", Takarító: "Cleaner",
+};
+
+/** The text in one language as its original (the sample is written in each language). */
+const own = (t: Review["body"], lang: Lang) =>
+  t && { original: lang === "hu" ? t.original : (t.translations.en ?? t.original), language: lang, translations: {} };
+
+function reviewsIn(lang: Lang): Review[] {
+  return REVIEWS.map((r) => {
+    const copy: Partial<Rated> = {
+      ...r,
+      displayName: lang === "hu" ? r.displayName : (NAMES_EN[r.displayName] ?? r.displayName),
+      position: lang === "hu" ? r.position : (POSITIONS_EN[r.position] ?? r.position),
+      body: own(r.body, lang),
+      reply: r.reply && { body: own(r.reply.body, lang)! },
+    };
+    delete copy.ratings;
+    return copy as Review;
+  });
+}
+
+function locationIn(lang: Lang): LocationSummary {
+  const b = SHOWCASE_BRAND[lang];
+  return {
+    id: SHOWCASE_ID,
+    companySlug: "sample-workplace",
+    companyName: b.name,
+    slug: "",
+    name: b.name,
+    address: b.address,
+    city: "Budapest",
+    citySlug: "budapest",
+    country: "HU",
+    category: "cafe",
+    placeType: { type: "bakery", en: null, hu: null },
+    legalEntityName: b.entity,
+    claimed: true,
+    scores: scores(),
+    ghosting: SHOWCASE_GHOSTING,
+    indexActive: true,
+  };
+}
+
 /** "From the employer": text and perks per language (photos are illustrations in the page). */
-export const SHOWCASE_PROFILE = {
+const PROFILE = {
   hu: {
     about:
       "Kovászos kenyér, kézzel hajtogatott croissant és specialty kávé a ház földszintjén. 14-en dolgozunk két műszakban: a pékség hajnali 4-kor indul, a kávézó 7-től 19-ig van nyitva. Új kollégát mindig betanítunk, a próbanapot kifizetjük.",
@@ -183,46 +218,59 @@ export const SHOWCASE_PROFILE = {
   },
 };
 
-const job = (j: Partial<Job> & Pick<Job, "id" | "title" | "schedule" | "applyMode" | "featured">): Job => ({
-  workType: "permanent",
-  payMin: null,
-  payMax: null,
-  payCurrency: "HUF",
-  payPeriod: "hour",
-  description: "",
-  question: null,
-  questions: [],
-  adLanguage: "hu",
-  languages: [],
-  responsibilities: [],
-  requirements: [],
-  offers: [],
-  publishedAt: "2026-09-20T09:00:00Z",
-  closesAt: null,
-  updatedAt: "2026-09-20T09:00:00Z",
-  location: {
-    id: SHOWCASE_ID,
-    slug: "",
-    name: SHOWCASE.name,
-    address: SHOWCASE.address,
-    city: SHOWCASE.city,
-    citySlug: SHOWCASE.citySlug,
-    country: "HU",
-    category: "cafe",
-    companySlug: "sample-workplace",
-    companyName: SHOWCASE.companyName,
-  },
-  ...j,
-});
+function jobsIn(lang: Lang): Job[] {
+  const place = locationIn(lang);
+  const job = (j: Partial<Job> & Pick<Job, "id" | "title" | "schedule" | "applyMode" | "featured">): Job => ({
+    workType: "permanent",
+    payMin: null,
+    payMax: null,
+    payCurrency: "HUF",
+    payPeriod: "hour",
+    description: "",
+    question: null,
+    questions: [],
+    adLanguage: lang,
+    languages: [],
+    responsibilities: [],
+    requirements: [],
+    offers: [],
+    publishedAt: "2026-09-20T09:00:00Z",
+    closesAt: null,
+    updatedAt: "2026-09-20T09:00:00Z",
+    location: {
+      id: SHOWCASE_ID,
+      slug: "",
+      name: place.name,
+      address: place.address,
+      city: place.city,
+      citySlug: place.citySlug,
+      country: "HU",
+      category: "cafe",
+      companySlug: "sample-workplace",
+      companyName: place.companyName,
+    },
+    ...j,
+  });
+  // One Pro (featured) ad with quick apply, one standard CV ad.
+  return lang === "hu"
+    ? [
+        job({ id: "s1", title: "Pék – hajnali műszak", schedule: "shifts", applyMode: "quick", featured: true, payMin: 2600, payMax: 3000 }),
+        job({ id: "s2", title: "Barista (részmunkaidő)", schedule: "part_time", applyMode: "cv", featured: false, payMin: 2200, payMax: 2400 }),
+      ]
+    : [
+        job({ id: "s1", title: "Baker – early shift", schedule: "shifts", applyMode: "quick", featured: true, payMin: 2600, payMax: 3000 }),
+        job({ id: "s2", title: "Barista (part-time)", schedule: "part_time", applyMode: "cv", featured: false, payMin: 2200, payMax: 2400 }),
+      ];
+}
 
-/** Open jobs per language: one Pro (featured) ad with quick apply, one standard CV ad. */
-export const SHOWCASE_JOBS = {
-  hu: [
-    job({ id: "s1", title: "Pék – hajnali műszak", schedule: "shifts", applyMode: "quick", featured: true, payMin: 2600, payMax: 3000 }),
-    job({ id: "s2", title: "Barista (részmunkaidő)", schedule: "part_time", applyMode: "cv", featured: false, payMin: 2200, payMax: 2400 }),
-  ],
-  en: [
-    job({ id: "s1", title: "Baker – early shift", schedule: "shifts", applyMode: "quick", featured: true, payMin: 2600, payMax: 3000 }),
-    job({ id: "s2", title: "Barista (part-time)", schedule: "part_time", applyMode: "cv", featured: false, payMin: 2200, payMax: 2400 }),
-  ],
-};
+/** Everything the sample page shows, in the page language. */
+export function getShowcase(locale: string) {
+  const lang: Lang = locale === "hu" ? "hu" : "en";
+  return {
+    brand: SHOWCASE_BRAND[lang],
+    location: locationIn(lang),
+    reviews: reviewsIn(lang),
+    jobs: jobsIn(lang),
+    profile: PROFILE[lang],
+  };
+}
