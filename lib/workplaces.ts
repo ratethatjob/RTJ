@@ -3,7 +3,8 @@ import { isCategory } from "@/lib/categories";
 import { categorize } from "@/lib/categorize";
 import { COUNTRIES } from "@/lib/countries";
 import { isOsmId, osmDetails } from "@/lib/osm";
-import { placeDetails } from "@/lib/places";
+import { classifyPlace, placeTypeInfo } from "@/lib/place-types";
+import { placeDetails, primaryTypeLabel } from "@/lib/places";
 import { adminClient } from "@/lib/supabase/admin";
 
 // A workplace the reviewer picked or typed before signing in. It is created in the database only
@@ -55,15 +56,26 @@ export async function createManualWorkplace(
   supabase: SupabaseClient,
   w: Extract<PendingWorkplace, { kind: "manual" }>,
 ): Promise<{ id?: string; error?: WorkplaceError }> {
+  // "Let us decide": name keywords, then Claude (Other without AI).
+  const named = classifyPlace({ name: w.company });
+  const category = isCategory(w.category)
+    ? w.category
+    : (named.category ?? (await categorize({ name: w.company, city: w.city })));
   const { data, error } = await supabase.rpc("create_workplace", {
     p_company: w.company,
     p_address: w.address,
     p_city: w.city,
     p_country: w.country,
-    // "Let us decide": Claude picks from the name (Other without AI).
-    p_category: isCategory(w.category) ? w.category : await categorize({ name: w.company, city: w.city }),
+    p_category: category,
   });
   if (error) return { error: errorFor(error.code) };
+  const info = placeTypeInfo(named.placeType);
+  await saveClassification(data as string, {
+    placeType: named.placeType,
+    en: info?.en ?? null,
+    hu: info?.hu ?? null,
+    source: category === named.category ? named.source : isCategory(w.category) ? "user" : "ai",
+  });
   return { id: data as string };
 }
 
@@ -79,6 +91,10 @@ export async function createPlaceWorkplace(
   const place = await placeDetailsAny(w.placeId, locale, sessionToken).catch(() => null);
   if (!place || !place.name || !place.address || !place.city || !place.country) return { error: "invalid" };
   const osm = isOsmId(place.placeId);
+  // "Let us decide": the map type and the name, else Claude from the name and map types.
+  const category = isCategory(w.category)
+    ? w.category
+    : (place.category ?? (await categorize({ name: place.name, city: place.city, types: place.types })));
   const { data, error } = await db.rpc(osm ? "workplace_from_osm" : "workplace_from_place", {
     p_user_id: userId,
     // OSM ids are stored without the "osm:" prefix.
@@ -87,13 +103,36 @@ export async function createPlaceWorkplace(
     p_address: place.address,
     p_city: place.city,
     p_country: place.country,
-    // "Let us decide": the map type, else Claude from the name and map types.
-    p_category: isCategory(w.category)
-      ? w.category
-      : (place.category ?? (await categorize({ name: place.name, city: place.city, types: place.types }))),
+    p_category: category,
     p_lat: place.lat,
     p_lng: place.lng,
   });
   if (error) return { error: errorFor(error.code) };
+  // The map's label for a type our table doesn't know, in the other language too (one small call).
+  const labels = { ...place.placeTypeLabel };
+  if (!osm && place.placeType && !placeTypeInfo(place.placeType)) {
+    const missing = labels.hu ? "en" : labels.en ? "hu" : null;
+    if (missing) labels[missing] = await primaryTypeLabel(place.placeId, missing).catch(() => null);
+  }
+  await saveClassification(data as string, {
+    placeType: place.placeType,
+    ...labels,
+    source: category === place.category ? place.categorySource : isCategory(w.category) ? "user" : "ai",
+  });
   return { id: data as string };
+}
+
+/** Exact type, its labels and where the category came from (service role). An admin's or a
+ *  person's earlier choice of category is never overwritten here. */
+async function saveClassification(
+  locationId: string,
+  c: { placeType: string | null; en: string | null; hu: string | null; source: string | null },
+) {
+  const db = adminClient();
+  if (!db) return;
+  await db
+    .from("locations")
+    .update({ place_type: c.placeType, place_type_en: c.en, place_type_hu: c.hu })
+    .eq("id", locationId);
+  await db.from("locations").update({ category_source: c.source }).eq("id", locationId).is("category_source", null);
 }

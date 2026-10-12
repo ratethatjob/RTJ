@@ -9,6 +9,7 @@ import { getCompany, getLocationPaths } from "@/lib/data";
 import { locationPath } from "@/lib/format";
 import { findRedirect } from "@/lib/data/redirects";
 import { localeAlternates } from "@/lib/seo";
+import { kindLabel } from "@/lib/place-types";
 
 type Props = PageProps<"/[locale]/[company]">;
 
@@ -68,7 +69,7 @@ export default async function CompanyPage({ params }: Props) {
                   <span>
                     <span className="block text-2xl font-black tracking-brand">{l.address}</span>
                     <span className="text-slate">
-                      {l.city} · {tc(l.category)}
+                      {l.city} · {kindLabel(l.placeType, locale, tc(l.category))}
                     </span>
                   </span>
                   {l.scores ? (

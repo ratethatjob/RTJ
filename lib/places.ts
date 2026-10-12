@@ -1,5 +1,5 @@
 import type { Category } from "@/lib/data/types";
-import { categoryFromGoogle } from "@/lib/categories";
+import { type CategorySource, classifyPlace, placeTypeInfo } from "@/lib/place-types";
 import { recordPlacesCall } from "@/lib/places-usage";
 
 // Google Places API (New), server side only. Off until GOOGLE_PLACES_API_KEY is set.
@@ -8,7 +8,14 @@ const BASE = process.env.PLACES_API_BASE ?? "https://places.googleapis.com";
 
 export const placesConfigured = Boolean(KEY);
 
-export type PlaceSuggestion = { placeId: string; main: string; secondary: string; country?: string };
+export type PlaceSuggestion = {
+  placeId: string;
+  main: string;
+  secondary: string;
+  country?: string;
+  /** Exact type key for the label in the list ("barber_shop"), when the map gives one. */
+  placeType?: string | null;
+};
 export type PlaceDetails = {
   placeId: string;
   name: string;
@@ -18,6 +25,12 @@ export type PlaceDetails = {
   lat: number | null;
   lng: number | null;
   category: Category | null;
+  /** Exact type and its labels (our table, else the map's own label in the request language). */
+  placeType: string | null;
+  placeTypeLabel: { en: string | null; hu: string | null };
+  categorySource: CategorySource | null;
+  /** False: the category is a suggestion (shown with "check it" next to the dropdown). */
+  certain: boolean;
   /** Map types or tags ("restaurant", "shop=bakery"), a hint for the AI category guess. */
   types: string[];
 };
@@ -45,6 +58,7 @@ export async function autocomplete(
     suggestions?: {
       placePrediction?: {
         placeId: string;
+        types?: string[];
         text?: { text: string };
         structuredFormat?: { mainText?: { text: string }; secondaryText?: { text: string } };
       };
@@ -57,6 +71,7 @@ export async function autocomplete(
       placeId: p.placeId,
       main: p.structuredFormat?.mainText?.text ?? p.text?.text ?? "",
       secondary: p.structuredFormat?.secondaryText?.text ?? "",
+      placeType: p.types?.find((t) => placeTypeInfo(t) && !["store", "food", "point_of_interest", "establishment"].includes(t)) ?? null,
     }));
 }
 
@@ -72,7 +87,7 @@ export async function placeDetails(placeId: string, locale: string, sessionToken
   const res = await fetch(`${BASE}/v1/places/${encodeURIComponent(placeId)}?${qs}`, {
     headers: {
       "X-Goog-Api-Key": KEY,
-      "X-Goog-FieldMask": "id,displayName,formattedAddress,addressComponents,location,types,primaryType",
+      "X-Goog-FieldMask": "id,displayName,formattedAddress,addressComponents,location,types,primaryType,primaryTypeDisplayName",
     },
     cache: "no-store",
   });
@@ -85,6 +100,7 @@ export async function placeDetails(placeId: string, locale: string, sessionToken
     location?: { latitude: number; longitude: number };
     types?: string[];
     primaryType?: string;
+    primaryTypeDisplayName?: { text: string; languageCode?: string };
   };
   const part = (type: string, short = false) => {
     const c = p.addressComponents?.find((x) => x.types.includes(type));
@@ -105,7 +121,7 @@ export async function placeDetails(placeId: string, locale: string, sessionToken
     country,
     lat: p.location?.latitude ?? null,
     lng: p.location?.longitude ?? null,
-    category: categoryFromGoogle(p.types ?? [], p.primaryType),
+    ...classified(p.displayName?.text ?? "", p.primaryType, p.types ?? [], p.primaryTypeDisplayName?.text ?? null, locale),
     types: p.types ?? [],
   };
 }
@@ -118,4 +134,49 @@ export async function placesProvider(): Promise<PlacesProvider | null> {
   const { adminClient } = await import("@/lib/supabase/admin");
   if (adminClient() === null) return null;
   return placesConfigured ? "google" : "osm";
+}
+
+/** Category and exact type from Google's types and the name (lib/place-types.ts). */
+function classified(name: string, primaryType: string | undefined, types: string[], mapLabel: string | null, locale: string) {
+  const c = classifyPlace({ name, primaryType, types });
+  const info = placeTypeInfo(c.placeType);
+  // Our own labels for known types; for others Google's label, in the language we asked for.
+  const ownLabel = c.placeType === (primaryType ?? null) ? mapLabel : null;
+  return {
+    category: c.category,
+    placeType: c.placeType,
+    placeTypeLabel: {
+      en: info?.en ?? (locale === "en" ? ownLabel : null),
+      hu: info?.hu ?? (locale === "hu" ? ownLabel : null),
+    },
+    categorySource: c.source,
+    certain: c.certain,
+  };
+}
+
+/** Google's label of a place's primary type in one language (one extra call; only for types our
+ *  table doesn't know, when the workplace is saved). */
+export async function primaryTypeLabel(placeId: string, locale: string): Promise<string | null> {
+  if (!KEY || !/^[\w-]{10,300}$/.test(placeId)) return null;
+  await recordPlacesCall("google", "details");
+  const res = await fetch(`${BASE}/v1/places/${encodeURIComponent(placeId)}?languageCode=${locale}`, {
+    headers: { "X-Goog-Api-Key": KEY, "X-Goog-FieldMask": "primaryTypeDisplayName" },
+    cache: "no-store",
+  });
+  if (!res.ok) return null;
+  const p = (await res.json()) as { primaryTypeDisplayName?: { text: string } };
+  return p.primaryTypeDisplayName?.text ?? null;
+}
+
+/** Fresh map data for an existing workplace (admin backfill): types only, no address fields. */
+export async function placeTypes(placeId: string, name: string, locale: string) {
+  if (!KEY || !/^[\w-]{10,300}$/.test(placeId)) return null;
+  await recordPlacesCall("google", "details");
+  const res = await fetch(`${BASE}/v1/places/${encodeURIComponent(placeId)}?languageCode=${locale}`, {
+    headers: { "X-Goog-Api-Key": KEY, "X-Goog-FieldMask": "types,primaryType,primaryTypeDisplayName" },
+    cache: "no-store",
+  });
+  if (!res.ok) return null;
+  const p = (await res.json()) as { types?: string[]; primaryType?: string; primaryTypeDisplayName?: { text: string } };
+  return classified(name, p.primaryType, p.types ?? [], p.primaryTypeDisplayName?.text ?? null, locale);
 }

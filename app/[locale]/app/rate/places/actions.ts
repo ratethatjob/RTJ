@@ -6,12 +6,19 @@ import { isOsmId, osmAutocomplete } from "@/lib/osm";
 import { autocomplete, type PlaceDetails, placesProvider } from "@/lib/places";
 import { expireWorkplaces } from "@/lib/cache";
 import { isCategory } from "@/lib/categories";
+import { categorize } from "@/lib/categorize";
 import { searchLocations } from "@/lib/data";
 import { rateLimited } from "@/lib/rate-limit";
 import { caller, knownLocations, resolveArea } from "@/lib/place-search";
 import { createPlaceWorkplace, placeDetailsAny } from "@/lib/workplaces";
 
-export type Suggestion = { placeId: string; main: string; secondary: string; locationId: string | null };
+export type Suggestion = {
+  placeId: string;
+  main: string;
+  secondary: string;
+  locationId: string | null;
+  placeType?: string | null;
+};
 
 export type OwnResult = {
   id: string;
@@ -57,7 +64,13 @@ export async function findWorkplaces(
     const known = await knownLocations(supabase, found.map((f) => f.placeId));
     const shown = new Set(own.map((o) => o.id));
     const map = found
-      .map((f) => ({ placeId: f.placeId, main: f.main, secondary: f.secondary, locationId: known.get(f.placeId) ?? null }))
+      .map((f) => ({
+        placeId: f.placeId,
+        main: f.main,
+        secondary: f.secondary,
+        placeType: f.placeType ?? null,
+        locationId: known.get(f.placeId) ?? null,
+      }))
       // A map place that is already on RateThatJob and in the list above appears only once.
       .filter((m) => !m.locationId || !shown.has(m.locationId));
     return { own, map };
@@ -91,5 +104,12 @@ export async function choosePlace(
   if (existing) return { locationId: existing };
   if (rateLimited(`place-details:${key}`, isOsmId(placeId) ? 10 : 20)) return { error: "generic" };
   const place = await placeDetailsAny(placeId, await getLocale(), sessionToken).catch(() => null);
-  return place ? { place } : { error: "generic" };
+  if (!place) return { error: "generic" };
+  // Neither the map nor the name says it: a quick AI suggestion to preselect (marked as a suggestion).
+  if (!place.category) {
+    place.category = await categorize({ name: place.name, city: place.city, types: place.types });
+    place.categorySource = "ai";
+    place.certain = false;
+  }
+  return { place };
 }

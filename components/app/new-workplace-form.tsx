@@ -6,6 +6,7 @@ import { useState, useTransition } from "react";
 import { createWorkplace } from "@/app/[locale]/app/actions";
 import { CategorySelect } from "@/components/category-select";
 import { COUNTRIES } from "@/lib/countries";
+import { classifyPlace } from "@/lib/place-types";
 
 /** `claim`: employer flow – the new workplace goes straight to the claim form. */
 type Props = { initialName: string; defaultCountry: string; rateBase: string; claim?: boolean };
@@ -20,6 +21,10 @@ export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim 
     country: defaultCountry,
     category: "",
   });
+  // Until a category is picked, the name suggests one ("Kovács Borbély" → Hair & barber).
+  const [picked, setPicked] = useState(false);
+  const guess = picked ? null : classifyPlace({ name: form.company }).category;
+  const category = picked ? form.category : (guess ?? "");
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
@@ -31,11 +36,11 @@ export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim 
     setError(null);
     if (!claim) {
       // Reviewers: the workplace is created only when the review is sent (after signing in).
-      const query = new URLSearchParams(Object.entries(form).filter(([, v]) => v.trim()));
+      const query = new URLSearchParams(Object.entries({ ...form, category }).filter(([, v]) => v.trim()));
       return router.push(`${rateBase}/pending?${query}`);
     }
     startTransition(async () => {
-      const result = await createWorkplace(form);
+      const result = await createWorkplace({ ...form, category });
       if (result.error || !result.id) return setError(t(`errors.${result.error ?? "generic"}`));
       router.push(`${rateBase}/${result.id}`);
     });
@@ -73,8 +78,12 @@ export function NewWorkplaceForm({ initialName, defaultCountry, rateBase, claim 
       <label className="flex flex-col gap-2">
         <span className="font-black">{t("category")}</span>
         <CategorySelect
-          value={form.category}
-          onChange={(category) => setForm((f) => ({ ...f, category }))}
+          value={category}
+          onChange={(next) => {
+            setPicked(true);
+            setForm((f) => ({ ...f, category: next }));
+          }}
+          suggested={!picked && Boolean(guess)}
           className={input}
         />
       </label>

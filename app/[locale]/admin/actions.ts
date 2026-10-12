@@ -7,6 +7,9 @@ import { isCategory } from "@/lib/categories";
 import { sendClaimEmail } from "@/lib/claim-emails";
 import { type InvoiceCheck, stripe, syncAllInvoiceSetups } from "@/lib/stripe";
 import { adminClient } from "@/lib/supabase/admin";
+import { osmDetails } from "@/lib/osm";
+import { classifyPlace, placeTypeInfo } from "@/lib/place-types";
+import { placeTypes } from "@/lib/places";
 
 type Result = { ok?: true; error?: true };
 
@@ -141,6 +144,69 @@ export async function setLocationCategory(id: string, category: string): Promise
   if (error) return { error: true };
   expireWorkplaces();
   return { ok: true };
+}
+
+/** Bulk fix on the Workplaces tab: several workplaces into one main category. */
+export async function bulkSetCategory(ids: string[], category: string): Promise<Result> {
+  if (!isCategory(category) || !ids.length || ids.length > 200) return { error: true };
+  const { supabase } = await getUser();
+  for (const id of ids) {
+    const { error } = await supabase.rpc("admin_set_location_category", { p_location_id: id, p_category: category });
+    if (error) return { error: true };
+  }
+  expireWorkplaces();
+  return { ok: true };
+}
+
+/** Fills the exact place type (and the category, unless a person chose it) from map data: Google
+ *  Places for workplaces with a place id (one small details call each), OpenStreetMap for OSM ones,
+ *  the name for the rest. 40 per click, oldest first; admins only. */
+export async function backfillPlaceTypes(): Promise<{ ok?: true; error?: true; done?: number; left?: number }> {
+  const { supabase, user } = await getUser();
+  if (!user) return { error: true };
+  const { data: admin } = await supabase.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
+  const db = adminClient();
+  if (!admin || !db) return { error: true };
+  const { data: rows } = await db
+    .from("locations")
+    .select("id, name, google_place_id, osm_id, category_source")
+    .is("place_type", null)
+    .or("category_source.is.null,category_source.neq.none")
+    .order("created_at")
+    .limit(40);
+  let done = 0;
+  for (const l of rows ?? []) {
+    const c = l.google_place_id
+      ? await placeTypes(l.google_place_id, l.name, "hu").catch(() => null)
+      : l.osm_id
+        ? await osmDetails(`osm:${l.osm_id}`, "hu").catch(() => null)
+        : null;
+    const named = classifyPlace({ name: l.name });
+    const info = placeTypeInfo(c?.placeType ?? named.placeType);
+    // A person's or an admin's choice stays; map data only fills the exact type then.
+    const chosen = l.category_source === "user" || l.category_source === "admin";
+    const category = chosen ? null : (c?.category ?? named.category);
+    const source = chosen ? l.category_source : c?.category ? c.categorySource : named.source;
+    await db
+      .from("locations")
+      .update({
+        place_type: c?.placeType ?? named.placeType,
+        place_type_en: info?.en ?? c?.placeTypeLabel.en ?? null,
+        place_type_hu: info?.hu ?? c?.placeTypeLabel.hu ?? null,
+        // "none": checked but nothing found, so it isn't fetched again.
+        category_source: source ?? "none",
+        ...(category && { category }),
+      })
+      .eq("id", l.id);
+    done += 1;
+  }
+  const { count } = await db
+    .from("locations")
+    .select("id", { count: "exact", head: true })
+    .is("place_type", null)
+    .or("category_source.is.null,category_source.neq.none");
+  if (done) expireWorkplaces();
+  return { ok: true, done, left: count ?? 0 };
 }
 
 /** After data changed outside the app (a migration, SQL): every public workplace and job page

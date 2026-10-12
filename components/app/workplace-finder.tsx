@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import {
   choosePlace,
@@ -14,10 +14,19 @@ import { CategorySelect } from "@/components/category-select";
 import { SearchIcon } from "@/components/icons";
 import { useRouter } from "@/i18n/navigation";
 import { locate, readArea, saveArea, subscribeArea } from "@/lib/area-client";
+import { placeTypeLabel } from "@/lib/place-types";
 import type { PlacesProvider } from "@/lib/places";
 import { type AreaChoice, SEARCH_AREAS } from "@/lib/search-areas";
 
-type Place = { placeId: string; name: string; address: string; city: string; category: string | null };
+type Place = {
+  placeId: string;
+  name: string;
+  address: string;
+  city: string;
+  category: string | null;
+  placeTypeLabel: { en: string | null; hu: string | null };
+  certain: boolean;
+};
 
 type Props = {
   /** "rate": write a review (works signed out); "claim": employer claims the workplace. */
@@ -34,6 +43,7 @@ type Props = {
 /** One search field for picking a workplace: RateThatJob first, then the map, no duplicates. */
 export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, defaultCountry, manualBase }: Props) {
   const t = useTranslations("Places");
+  const locale = useLocale();
   const format = useFormatter();
   const router = useRouter();
   const base = mode === "claim" ? "/business/claim" : "/app/rate";
@@ -41,6 +51,7 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
   const [results, setResults] = useState<{ for: string; own: OwnResult[]; map: Suggestion[] } | null>(null);
   const [place, setPlace] = useState<Place | null>(null);
   const [category, setCategory] = useState("");
+  const [picked, setPicked] = useState(false);
   const [manual, setManual] = useState(false);
   const manualRef = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -101,6 +112,7 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
       setError(null);
       setPlace(result.place);
       setCategory(result.place.category ?? "");
+      setPicked(false);
     });
   }
 
@@ -130,13 +142,21 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
       <div className="flex flex-col gap-4 rounded-3xl bg-white p-5">
         <div>
           <p className="text-xl font-black tracking-brand">{place.name}</p>
-          <p className="text-slate">{[place.address, place.city].filter(Boolean).join(", ")}</p>
+          <p className="text-slate">
+            {[locale === "hu" ? place.placeTypeLabel.hu : place.placeTypeLabel.en, [place.address, place.city].filter(Boolean).join(", ")]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
         </div>
         <label className="flex flex-col gap-2">
           <span className="font-black">{t("category")}</span>
           <CategorySelect
             value={category}
-            onChange={setCategory}
+            onChange={(next) => {
+              setPicked(true);
+              setCategory(next);
+            }}
+            suggested={!picked && !place.certain}
             className="w-full rounded-2xl border border-mist/60 bg-white px-4 py-3 text-lg outline-none focus:border-ink"
           />
         </label>
@@ -282,7 +302,9 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
                   >
                     <span className="min-w-0">
                       <span className="block font-black">{s.main}</span>
-                      <span className="block text-sm text-slate">{s.secondary}</span>
+                      <span className="block text-sm text-slate">
+                        {[placeTypeLabel(s.placeType, locale), s.secondary].filter(Boolean).join(" · ")}
+                      </span>
                     </span>
                     {s.locationId ? (
                       <span className="shrink-0 rounded-lg bg-[#E8E6E1] px-2 py-1 text-xs font-black">{t("onRtj")}</span>

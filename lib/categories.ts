@@ -4,6 +4,7 @@
 
 export const CATEGORIES = [
   "restaurant",
+  "cafe",
   "fast_food",
   "bar",
   "hotel",
@@ -17,6 +18,8 @@ export const CATEGORIES = [
   "healthcare",
   "dental",
   "pharmacy",
+  "veterinary",
+  "hair",
   "beauty",
   "fitness",
   "education",
@@ -49,6 +52,7 @@ export const MAIN_CATEGORIES: Category[] = [
 
 export const CATEGORY_SLUGS: Record<Category, string> = {
   restaurant: "restaurants",
+  cafe: "cafes",
   fast_food: "fast-food",
   bar: "bars",
   hotel: "hotels",
@@ -62,6 +66,8 @@ export const CATEGORY_SLUGS: Record<Category, string> = {
   healthcare: "healthcare",
   dental: "dental",
   pharmacy: "pharmacies",
+  veterinary: "veterinary",
+  hair: "hair-and-barber",
   beauty: "beauty",
   fitness: "fitness",
   education: "education",
@@ -85,56 +91,17 @@ export function categoryFromSlug(slug: string): Category | null {
   return (Object.entries(CATEGORY_SLUGS).find(([, s]) => s === slug)?.[0] as Category) ?? null;
 }
 
-// ---------------------------------------------------------------------------
-// Google Places (API New) types → category. Checked in this order: specific before general.
-// ---------------------------------------------------------------------------
-
-const GOOGLE: [Category, string[], string?][] = [
-  ["dental", ["dentist", "dental_clinic"]],
-  ["pharmacy", ["pharmacy", "drugstore"]],
-  ["healthcare", ["hospital", "doctor", "medical_lab", "medical_clinic", "physiotherapist", "chiropractor", "general_hospital", "health"]],
-  ["elderly_care", ["nursing_home", "assisted_living_facility", "senior_citizen_center"]],
-  ["childcare", ["preschool", "child_care_agency", "day_care_center", "kindergarten"]],
-  ["education", ["school", "primary_school", "secondary_school", "university", "educational_institution", "library"]],
-  ["fast_food", ["fast_food_restaurant", "hamburger_restaurant", "meal_takeaway", "sandwich_shop"]],
-  ["bar", ["bar", "pub", "night_club", "wine_bar", "cocktail_bar", "karaoke", "bar_and_grill"]],
-  ["restaurant", ["restaurant", "cafe", "coffee_shop", "bakery", "food_court", "ice_cream_shop", "tea_house", "dessert_shop", "meal_delivery", "food"], "_restaurant"],
-  ["hotel", ["hotel", "lodging", "motel", "hostel", "resort_hotel", "bed_and_breakfast", "guest_house", "extended_stay_hotel", "inn"]],
-  ["supermarket", ["supermarket", "grocery_store", "convenience_store", "food_store", "hypermarket", "market", "wholesaler"]],
-  ["automotive", ["car_repair", "car_dealer", "car_wash", "auto_parts_store", "tire_shop", "car_rental"]],
-  ["beauty", ["beauty_salon", "hair_salon", "hair_care", "nail_salon", "spa", "barber_shop", "beautician", "massage", "sauna", "skin_care_clinic", "wellness_center"]],
-  ["fitness", ["gym", "fitness_center", "yoga_studio", "sports_club", "swimming_pool", "sports_complex", "sports_activity_location"]],
-  ["events", ["movie_theater", "amusement_park", "event_venue", "stadium", "casino", "bowling_alley", "concert_hall", "performing_arts_theater", "museum", "zoo", "banquet_hall", "wedding_venue"]],
-  ["public_sector", ["city_hall", "local_government_office", "courthouse", "police", "fire_station", "post_office", "embassy", "government_office"]],
-  ["finance", ["bank", "accounting", "insurance_agency", "finance", "atm"]],
-  ["warehouse", ["storage", "warehouse_store", "logistics_service", "warehouse"]],
-  ["delivery", ["courier_service", "moving_company", "taxi_service", "transit_station", "bus_station", "train_station", "truck_stop"]],
-  ["construction", ["general_contractor", "electrician", "plumber", "roofing_contractor", "painter", "construction_company"]],
-  ["cleaning", ["laundry", "dry_cleaner", "cleaning_service"]],
-  ["agriculture", ["farm", "ranch"]],
-  ["factory", ["manufacturer", "factory", "industrial_area"]],
-  ["office", ["corporate_office", "lawyer", "real_estate_agency", "consultant", "travel_agency", "employment_agency", "office"]],
-  ["retail", ["store", "shopping_mall", "department_store", "gas_station"], "_store"],
-];
-
-/** Best guess from Google place types (primaryType first); null when nothing matches. */
-export function categoryFromGoogle(types: string[], primaryType?: string | null): Category | null {
-  const ordered = primaryType ? [primaryType, ...types.filter((t) => t !== primaryType)] : types;
-  // The primary type decides when it maps; otherwise any of the types.
-  for (const list of [ordered.slice(0, 1), ordered]) {
-    for (const [category, names, suffix] of GOOGLE) {
-      if (list.some((t) => names.includes(t) || (suffix && t.endsWith(suffix)))) return category;
-    }
-  }
-  return null;
-}
+// Google Places types, OpenStreetMap tags and name keywords → category and exact place type:
+// lib/place-types.ts (classifyPlace).
 
 // ---------------------------------------------------------------------------
 // OpenStreetMap tags (key=value) → category.
 // ---------------------------------------------------------------------------
 
 const OSM_VALUES: Record<string, Category> = {
-  restaurant: "restaurant", cafe: "restaurant", food_court: "restaurant", ice_cream: "restaurant", biergarten: "restaurant", bakery: "restaurant", pastry: "restaurant",
+  restaurant: "restaurant", food_court: "fast_food", biergarten: "bar",
+  cafe: "cafe", ice_cream: "cafe", bakery: "cafe", pastry: "cafe",
+  veterinary: "veterinary",
   fast_food: "fast_food",
   bar: "bar", pub: "bar", nightclub: "bar",
   pharmacy: "pharmacy",
@@ -144,13 +111,13 @@ const OSM_VALUES: Record<string, Category> = {
   school: "education", college: "education", university: "education", language_school: "education", driving_school: "education",
   nursing_home: "elderly_care", social_facility: "elderly_care",
   bank: "finance", bureau_de_change: "finance",
-  fuel: "retail",
+  fuel: "automotive", parking: "automotive",
   car_wash: "automotive", car_rental: "automotive", car: "automotive", car_repair: "automotive", car_parts: "automotive", tyres: "automotive",
   police: "public_sector", fire_station: "public_sector", townhall: "public_sector", courthouse: "public_sector", post_office: "public_sector",
   cinema: "events", theatre: "events", arts_centre: "events", events_venue: "events", casino: "events",
   post_depot: "delivery", taxi: "delivery", bus_station: "delivery",
   supermarket: "supermarket", marketplace: "supermarket", convenience: "supermarket", greengrocer: "supermarket", butcher: "supermarket",
-  hairdresser: "beauty", beauty: "beauty", cosmetics: "beauty", massage: "beauty",
+  hairdresser: "hair", barber: "hair", beauty: "beauty", cosmetics: "retail", massage: "beauty",
   hotel: "hotel", motel: "hotel", hostel: "hotel", guest_house: "hotel", apartment: "hotel",
   fitness_centre: "fitness", sports_centre: "fitness", swimming_pool: "fitness",
   warehouse: "warehouse", logistics: "warehouse",

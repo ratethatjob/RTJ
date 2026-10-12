@@ -49,6 +49,8 @@ export type LocationSummary = {
   citySlug: string;
   country: string;
   category: Category;
+  /** Exact place type ("barber_shop") with the labels stored from the map; lib/place-types.ts. */
+  placeType?: { type: string | null; en: string | null; hu: string | null } | null;
   legalEntityName: string | null;
   claimed: boolean;
   /** Rolling 12 months; null when there are no published reviews. */

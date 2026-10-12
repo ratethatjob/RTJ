@@ -56,7 +56,15 @@ export async function resolveArea(choice: string, locale: string): Promise<Searc
 }
 
 
-export type MapResult = { placeId: string; main: string; secondary: string; locationId: string | null; href: string | null };
+export type MapResult = {
+  placeId: string;
+  main: string;
+  secondary: string;
+  locationId: string | null;
+  href: string | null;
+  /** Exact type key from the map ("barber_shop"), shown in front of the address. */
+  placeType: string | null;
+};
 
 /** The workplace page of a known location, in the page language. */
 export async function locationHref(locationId: string) {
@@ -92,7 +100,14 @@ export async function findMapPlaces(q: string, where: string, sessionToken: stri
   return Promise.all(
     found.map(async (f) => {
       const locationId = known.get(f.placeId) ?? null;
-      return { placeId: f.placeId, main: f.main, secondary: f.secondary, locationId, href: locationId ? await locationHref(locationId) : null };
+      return {
+        placeId: f.placeId,
+        main: f.main,
+        secondary: f.secondary,
+        locationId,
+        href: locationId ? await locationHref(locationId) : null,
+        placeType: f.placeType ?? null,
+      };
     }),
   );
 }

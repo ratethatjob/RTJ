@@ -3,7 +3,17 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { type ImportRow, importLocations, linkEntity, refreshPublicPages, setLocationCategory, setSlug, unverifyEntity } from "@/app/[locale]/admin/actions";
+import {
+  backfillPlaceTypes,
+  bulkSetCategory,
+  type ImportRow,
+  importLocations,
+  linkEntity,
+  refreshPublicPages,
+  setLocationCategory,
+  setSlug,
+  unverifyEntity,
+} from "@/app/[locale]/admin/actions";
 import { CategorySelect } from "@/components/category-select";
 
 /** After a migration or SQL change: every public workplace and job page is rendered fresh. */
@@ -266,5 +276,95 @@ export function UnverifyEntity({ linkId }: { linkId: string }) {
     >
       {t("entityUnlink")}
     </button>
+  );
+}
+
+/** Fills exact place types from map data, 40 workplaces per click (Google details calls). */
+export function BackfillPlaceTypes() {
+  const t = useTranslations("Admin");
+  const [result, setResult] = useState<{ done?: number; left?: number; error?: true } | null>(null);
+  const [pending, startTransition] = useTransition();
+  return (
+    <div className="flex flex-wrap items-center gap-3 rounded-3xl bg-white p-5">
+      <p className="min-w-0 flex-1 text-sm text-slate">{t("placeTypesHint")}</p>
+      <button
+        type="button"
+        disabled={pending} aria-busy={pending}
+        onClick={() => startTransition(async () => setResult(await backfillPlaceTypes()))}
+        className="rounded-xl bg-ink px-4 py-2 text-sm font-black text-paper disabled:opacity-40"
+      >
+        {t("placeTypesButton")}
+      </button>
+      {result && (
+        <span role="status" className="text-sm font-black">
+          {result.error ? t("refreshPagesError") : t("placeTypesDone", { done: result.done ?? 0, left: result.left ?? 0 })}
+        </span>
+      )}
+    </div>
+  );
+}
+
+/** Bulk fix: tick workplaces of one category and move them to another. */
+export function BulkCategory({ rows }: { rows: { id: string; name: string; address: string; city: string; kind: string }[] }) {
+  const t = useTranslations("Admin");
+  const router = useRouter();
+  const [selected, setSelected] = useState<string[]>([]);
+  const [target, setTarget] = useState("");
+  const [error, setError] = useState(false);
+  const [pending, startTransition] = useTransition();
+  if (!rows.length) return <p className="rounded-3xl bg-white p-5 text-slate">{t("empty")}</p>;
+  const toggle = (id: string) => setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
+  return (
+    <div className="flex flex-col gap-3 rounded-3xl bg-white p-5">
+      <label className="flex items-center gap-2 text-sm font-black">
+        <input
+          type="checkbox"
+          checked={selected.length === rows.length}
+          onChange={(e) => setSelected(e.target.checked ? rows.map((r) => r.id) : [])}
+        />
+        {t("bulkAll", { count: rows.length })}
+      </label>
+      <ul className="flex flex-col divide-y divide-[#E8E6E1]">
+        {rows.map((r) => (
+          <li key={r.id}>
+            <label className="flex items-start gap-3 py-2">
+              <input type="checkbox" className="mt-1" checked={selected.includes(r.id)} onChange={() => toggle(r.id)} />
+              <span>
+                <span className="block font-black">{r.name}</span>
+                <span className="text-sm text-slate">
+                  {r.kind} · {r.address}, {r.city}
+                </span>
+              </span>
+            </label>
+          </li>
+        ))}
+      </ul>
+      <div className="flex flex-col gap-2 border-t border-[#E8E6E1] pt-3 sm:flex-row sm:items-center">
+        <CategorySelect
+          auto={false}
+          value={target}
+          onChange={setTarget}
+          className="min-w-0 flex-1 rounded-xl border border-mist/60 bg-white px-3 py-2"
+        />
+        <button
+          type="button"
+          disabled={pending || !selected.length || !target}
+          aria-busy={pending}
+          onClick={() =>
+            startTransition(async () => {
+              setError(false);
+              const result = await bulkSetCategory(selected, target);
+              if (result.error) return setError(true);
+              setSelected([]);
+              router.refresh();
+            })
+          }
+          className="rounded-xl bg-ink px-4 py-2 text-sm font-black text-paper disabled:opacity-40"
+        >
+          {t("bulkMove", { count: selected.length })}
+        </button>
+      </div>
+      {error && <p className="text-sm font-black">{t("error")}</p>}
+    </div>
   );
 }

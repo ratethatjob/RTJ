@@ -27,6 +27,7 @@ import type { LocationSummary } from "@/lib/data/types";
 import { locationPath } from "@/lib/format";
 import { locationMetadata } from "@/lib/location-meta";
 import { SITE_URL } from "@/lib/seo";
+import { kindLabel } from "@/lib/place-types";
 
 type Props = PageProps<"/[locale]/[company]/[location]">;
 
@@ -90,7 +91,7 @@ export default async function LocationPage({ params }: Props) {
               <Link href={`/city/${data.citySlug}`} className="underline-offset-4 hover:underline">
                 {data.city}
               </Link>{" "}
-              · {tc(data.category)}
+              · {kindLabel(data.placeType, locale, tc(data.category))}
               {data.legalEntityName && (
                 <>
                   <span className="lg:hidden">
@@ -285,7 +286,7 @@ export default async function LocationPage({ params }: Props) {
                     <span className="min-w-0">
                       <span className="block text-lg font-black leading-tight">{l.name}</span>
                       <span className="text-sm text-slate">
-                        {l.address} · {tc(l.category)}
+                        {l.address} · {kindLabel(l.placeType, locale, tc(l.category))}
                       </span>
                     </span>
                     {l.scores && (

@@ -18,6 +18,7 @@ import { getPathname, Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { locationPath } from "@/lib/format";
 import { localeAlternates } from "@/lib/seo";
+import { kindLabel } from "@/lib/place-types";
 
 export async function generateMetadata({
   params,
@@ -124,7 +125,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                     </span>
                   )}
                   <p className="text-mist">
-                    {example.address} · {tc(example.category)} ·{" "}
+                    {example.address} · {kindLabel(example.placeType, locale, tc(example.category))} ·{" "}
                     {tl("verifiedCount", {
                       count: example.scores.verifiedCount,
                     })}
@@ -186,7 +187,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                           {l.name}
                         </p>
                         <p className="text-slate">
-                          {l.address} · {tc(l.category)}
+                          {l.address} · {kindLabel(l.placeType, locale, tc(l.category))}
                         </p>
                         {l.scores && (l.scores.facts.paid_on_time != null || l.scores.replyRate != null) && (
                           <p className="font-black">

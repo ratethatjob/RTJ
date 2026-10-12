@@ -1,5 +1,16 @@
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
-import { CategoryEditor, CsvImport, RefreshPages, EntityForm, SlugEditor, UnverifyEntity } from "@/components/admin/tools";
+import {
+  BackfillPlaceTypes,
+  BulkCategory,
+  CategoryEditor,
+  CsvImport,
+  EntityForm,
+  RefreshPages,
+  SlugEditor,
+  UnverifyEntity,
+} from "@/components/admin/tools";
+import { CATEGORIES, isCategory } from "@/lib/categories";
+import { kindLabel } from "@/lib/place-types";
 import { Decision } from "@/components/admin/decision";
 import { PurgeDemo } from "@/components/admin/purge-demo";
 import { BackLink } from "@/components/app/back-link";
@@ -76,7 +87,8 @@ type ReviewRow = {
 export default async function AdminPage({ params, searchParams }: PageProps<"/[locale]/admin">) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { tab: rawTab, q: rawQ } = await searchParams;
+  const { tab: rawTab, q: rawQ, cat: rawCat } = await searchParams;
+  const cat = isCategory(rawCat) ? rawCat : null;
   const tab: Tab = [...TABS, ...TOOLS].includes(rawTab as Tab) ? (rawTab as Tab) : "claims";
   const q = typeof rawQ === "string" ? rawQ.trim().slice(0, 80) : "";
   const { supabase, user } = await requireUser(locale, "/admin");
@@ -490,6 +502,32 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
         ).data ?? []) as unknown as CompanyRow[])
       : [];
 
+  // Bulk fix: every workplace in one category (Workplaces tab, ?cat=).
+  const tcat = await getTranslations("Categories");
+  const byCategory =
+    tab === "workplaces" && cat
+      ? (
+          (
+            await supabase
+              .from("locations")
+              .select("id, name, address, city, category, place_type, place_type_en, place_type_hu")
+              .eq("category", cat)
+              .order("name")
+              .limit(200)
+          ).data ?? []
+        ).map((l) => ({
+          id: l.id as string,
+          name: l.name as string,
+          address: l.address as string,
+          city: l.city as string,
+          kind: kindLabel(
+            { type: l.place_type, en: l.place_type_en, hu: l.place_type_hu },
+            locale,
+            tcat(l.category as string),
+          ),
+        }))
+      : null;
+
   type Metrics = {
     months: { month: string; reviews: number; verified: number; users: number; applications: number }[];
     locations: number;
@@ -682,7 +720,30 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
                 </div>
               )),
             )}
-          {tab === "workplaces" && <RefreshPages />}
+          {tab === "workplaces" && (
+            <>
+              <RefreshPages />
+              <BackfillPlaceTypes />
+              <form className="flex gap-2">
+                <input type="hidden" name="tab" value="workplaces" />
+                <select
+                  name="cat"
+                  defaultValue={cat ?? ""}
+                  aria-label={t("bulkCategory")}
+                  className="min-w-0 flex-1 rounded-2xl border border-mist/60 bg-white px-4 py-3"
+                >
+                  <option value="">{t("bulkCategory")}</option>
+                  {CATEGORIES.map((c) => (
+                    <option key={c} value={c}>
+                      {tcat(c)}
+                    </option>
+                  ))}
+                </select>
+                <button className="rounded-2xl bg-ink px-5 py-3 font-black text-paper">{t("search")}</button>
+              </form>
+              {byCategory && <BulkCategory rows={byCategory} />}
+            </>
+          )}
           {tab === "workplaces" && companies.map((c) => (
             <div key={c.id} className="rounded-3xl bg-white p-5">
               <p className="text-lg font-black">{c.name}</p>

@@ -1,13 +1,15 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { LocationSummary } from "@/lib/data/types";
 import { locationPath } from "@/lib/format";
 import { DemoChip } from "./demo-badge";
 import { formatScore } from "./scores";
+import { kindLabel } from "@/lib/place-types";
 
 /** Workplace rows with score tile, used by search and city hubs. */
 export async function LocationList({ locations }: { locations: LocationSummary[] }) {
   const tc = await getTranslations("Categories");
+  const locale = await getLocale();
   const tl = await getTranslations("Company");
 
   return (
@@ -23,7 +25,7 @@ export async function LocationList({ locations }: { locations: LocationSummary[]
                 {l.isDemo && <DemoChip />}
                 <span className="block text-2xl font-black tracking-brand">{l.name}</span>
                 <span className="text-slate">
-                  {l.address}, {l.city} · {tc(l.category)}
+                  {l.address}, {l.city} · {kindLabel(l.placeType, locale, tc(l.category))}
                 </span>
               </span>
               {l.scores ? (

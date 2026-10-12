@@ -1,15 +1,17 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { openMapPlace } from "@/app/[locale]/search/actions";
 import type { MapResult } from "@/lib/place-search";
+import { placeTypeLabel } from "@/lib/place-types";
 
 /** Map places to pick from; a new one becomes a workplace page on the click. */
 export function MapPick({ results, sessionToken }: { results: MapResult[]; sessionToken: string }) {
   const t = useTranslations("Search");
   const tp = useTranslations("Places");
+  const locale = useLocale();
   const router = useRouter();
   const [opening, setOpening] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +42,9 @@ export function MapPick({ results, sessionToken }: { results: MapResult[]; sessi
             >
               <span className="min-w-0">
                 <span className="block font-black">{r.main}</span>
-                <span className="block text-sm text-slate">{r.secondary}</span>
+                <span className="block text-sm text-slate" data-place-type={r.placeType ?? undefined}>
+                  {[placeTypeLabel(r.placeType, locale), r.secondary].filter(Boolean).join(" · ")}
+                </span>
               </span>
               <span className="shrink-0 text-sm font-black">
                 {opening === r.placeId ? t("opening") : r.locationId ? tp("onRtj") : "›"}

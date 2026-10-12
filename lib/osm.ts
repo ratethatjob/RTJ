@@ -1,5 +1,6 @@
 import { cacheLife } from "next/cache";
 import { categoryFromOsm } from "@/lib/categories";
+import { classifyPlace, placeTypeInfo, typeFromOsm } from "@/lib/place-types";
 import { regionName } from "@/lib/intl-names";
 import { recordPlacesCall } from "@/lib/places-usage";
 import type { PlaceDetails, PlaceSuggestion } from "@/lib/places";
@@ -56,7 +57,7 @@ export function suggestionsFromPhoton(data: { features?: PhotonFeature[] }, loca
     seen.add(id);
     const street = streetLine(p.street, p.housenumber, p.countrycode);
     const city = [p.postcode, p.city ?? p.district].filter(Boolean).join(" ");
-    out.push({ placeId: id, main: p.name, secondary: [street, city, countryName(p.countrycode, p.country)].filter(Boolean).join(", "), country: p.countrycode?.toUpperCase() });
+    out.push({ placeId: id, main: p.name, secondary: [street, city, countryName(p.countrycode, p.country)].filter(Boolean).join(", "), country: p.countrycode?.toUpperCase(), placeType: typeFromOsm(p.osm_key ?? "", p.osm_value ?? "") });
   }
   return out;
 }
@@ -121,7 +122,7 @@ export function detailsFromNominatim(p: NominatimPlace): PlaceDetails | null {
     country,
     lat: Number.isFinite(lat) ? lat : null,
     lng: Number.isFinite(lng) ? lng : null,
-    category: categoryFromOsm(p.category ?? "", p.type ?? ""),
+    ...osmClassified(name, p.category ?? "", p.type ?? ""),
     types: p.category && p.type ? [`${p.category}=${p.type}`] : [],
   };
 }
@@ -152,4 +153,18 @@ function streetLine(street?: string, number?: string, country?: string) {
   if (!street) return "";
   const parts = NUMBER_FIRST.has((country ?? "").toUpperCase()) ? [number, street] : [street, number];
   return parts.filter(Boolean).join(" ");
+}
+
+/** Category and exact type from the OSM tag and the name; broad tags (any shop) as a last resort. */
+function osmClassified(name: string, key: string, value: string) {
+  const c = classifyPlace({ name, osm: { key, value } });
+  const info = placeTypeInfo(c.placeType);
+  const category = c.category ?? categoryFromOsm(key, value);
+  return {
+    category,
+    placeType: c.placeType,
+    placeTypeLabel: { en: info?.en ?? null, hu: info?.hu ?? null },
+    categorySource: c.source ?? (category ? ("osm" as const) : null),
+    certain: false,
+  };
 }
