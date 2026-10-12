@@ -58,6 +58,14 @@ export const PLACE_EXAMPLES: PlaceExample[] = [
   { name: "Szeged 1 posta", city: "Szeged", primaryType: "post_office", types: ["post_office"], category: "public_sector", placeType: "post_office" },
   { name: "Life1 Fitness", city: "Budapest", primaryType: "gym", types: ["gym", "fitness_center"], category: "fitness", placeType: "gym" },
   { name: "Idősek Otthona", city: "Szeged", primaryType: "nursing_home", types: ["nursing_home", "health"], category: "elderly_care", placeType: "nursing_home" },
+  // Real search suggestions (Google autocomplete types, live 2026-10-12): weak types, the name decides.
+  { name: "Favorit Pékség — Kukovetz Nana utcai mintabolt", city: "Szeged", primaryType: null, types: ["food_store", "store", "food", "point_of_interest", "establishment"], category: "cafe", placeType: "bakery" },
+  { name: "Félegyházi Pékség", city: "Szeged", primaryType: null, types: ["food_store", "store", "food"], category: "cafe", placeType: "bakery" },
+  { name: "Barber Shop Budapest Astoria", city: "Budapest", primaryType: null, types: ["hair_care", "point_of_interest", "establishment"], category: "hair", placeType: "barber_shop" },
+  { name: "Barber Shop Budapest/Dob", city: "Budapest", primaryType: null, types: ["barber_shop", "hair_care"], category: "hair", placeType: "barber_shop" },
+  { name: "Fodrászat", city: "Budapest", primaryType: null, types: ["hair_care", "point_of_interest", "establishment"], category: "hair", placeType: "hair_salon" },
+  { name: "Antique Cafe & Tea", city: "Szeged", primaryType: null, types: ["cafe", "food", "point_of_interest", "establishment"], category: "cafe", placeType: "cafe" },
+  { name: "OIL! Benzinkút", city: "Szeged", primaryType: null, types: ["gas_station", "point_of_interest", "establishment"], category: "automotive", placeType: "gas_station" },
   // Map data says only "shop": the name decides before the generic type.
   { name: "Borbély Szalon", city: "Szeged", primaryType: "store", types: ["store"], category: "hair", placeType: "barber_shop" },
   // Nothing to go on: the AI is asked.

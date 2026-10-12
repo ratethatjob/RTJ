@@ -305,8 +305,11 @@ export const PLACE_TYPES: Record<string, TypeInfo> = {
   funeral_home: T("other", "Funeral home", "Temetkezési vállalat"),
 };
 
-/** Types that say little on their own: used only after the name keywords. */
-const GENERIC = new Set(["store", "food", "lodging", "establishment", "point_of_interest", "finance", "health", "service"]);
+/** Types that say little on their own: used only after the name keywords. Google gives bakeries
+ *  only "food_store" and barbers "hair_care" in search suggestions, so the name decides there. */
+const GENERIC = new Set([
+  "store", "food", "food_store", "hair_care", "lodging", "establishment", "point_of_interest", "finance", "health", "service",
+]);
 
 const NOT_A_TYPE = new Set(["establishment", "point_of_interest", "political", "premise", "street_address", "geocode"]);
 

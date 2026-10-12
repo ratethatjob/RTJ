@@ -71,7 +71,11 @@ export async function autocomplete(
       placeId: p.placeId,
       main: p.structuredFormat?.mainText?.text ?? p.text?.text ?? "",
       secondary: p.structuredFormat?.secondaryText?.text ?? "",
-      placeType: p.types?.find((t) => placeTypeInfo(t) && !["store", "food", "point_of_interest", "establishment"].includes(t)) ?? null,
+      // Suggestions carry no primary type: the types and the name decide (bakeries are only "food_store").
+      placeType: classifyPlace({
+        name: p.structuredFormat?.mainText?.text ?? p.text?.text ?? "",
+        types: p.types ?? [],
+      }).placeType,
     }));
 }
 

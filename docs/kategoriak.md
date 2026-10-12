@@ -4,7 +4,7 @@ Fő kategória (~30, `lib/categories.ts`): szűrés, városoldalak. Pontos típu
 
 Döntési sorrend (`classifyPlace`): Google `primaryType` → a többi Google-típus → név-kulcsszavak (HU/EN, ékezet nélkül, egész szó, összetett szó vége pl. „szalámigyár”) → általános típus (store, food) → AI (Haiku). Csak a fő típusból jövő döntés biztos; minden más mellett „Javaslat – módosítsd, ha nem stimmel”.
 
-Valós példák (Budapest/Szeged, a Google által adott típussal; unit teszt: `lib/place-types.test.ts`, adatok: `lib/place-types.fixtures.ts`):
+Valós példák (Budapest/Szeged, a Google által adott típussal – a 47–53. sorok élő Google-keresési javaslatok 2026-10-12-ről; unit teszt: `lib/place-types.test.ts`, adatok: `lib/place-types.fixtures.ts`):
 
 | # | Név (város) | Google típus | Régi kategória | Új kategória | Pontos típus | Forrás |
 |---|---|---|---|---|---|---|
@@ -42,7 +42,7 @@ Valós példák (Budapest/Szeged, a Google által adott típussal; unit teszt: `
 | 32 | Kézi Autómosó (Szeged) | – | – (AI) | Autószerviz és benzinkút | Autómosó | név |
 | 33 | GLS Depó (Szeged) | courier_service | Futárszolgálat és szállítás | Futárszolgálat és szállítás | Futárszolgálat | Google fő típus |
 | 34 | Szegedi Raktárbázis (Szeged) | storage | Raktár és logisztika | Raktár és logisztika | Raktár | Google fő típus |
-| 35 | Pick szalámigyár (Szeged) | – | – (AI) | Gyár és termelés | Gyár | név |
+| 35 | Pick szalámigyár (Szeged) | point_of_interest (javaslat) | – (AI) | Gyár és termelés | Gyár | név |
 | 36 | Semmelweis Egyetem Fogászati Klinika (Budapest) | dental_clinic | Fogászat | Fogászat | Fogászat | Google fő típus |
 | 37 | Szent János Kórház (Budapest) | hospital | Egészségügy | Egészségügy | Kórház | Google fő típus |
 | 38 | Tisza Állatorvosi Rendelő (Szeged) | veterinary_care | – (AI) | Állatorvos és állatgondozás | Állatorvos | Google fő típus |
@@ -54,5 +54,12 @@ Valós példák (Budapest/Szeged, a Google által adott típussal; unit teszt: `
 | 44 | Szeged 1 posta (Szeged) | post_office | Közszféra | Közszféra | Posta | Google fő típus |
 | 45 | Life1 Fitness (Budapest) | gym | Fitnesz és sport | Fitnesz és sport | Edzőterem | Google fő típus |
 | 46 | Idősek Otthona (Szeged) | nursing_home | Idősgondozás és szociális ellátás | Idősgondozás és szociális ellátás | Idősek otthona | Google fő típus |
-| 47 | Borbély Szalon (Szeged) | store | Kiskereskedelem | Fodrászat és borbély | Borbély | név |
-| 48 | Teszt munkahely (Budapest) | – | – (AI) | – (AI) | – | AI (haiku) |
+| 47 | Favorit Pékség — Kukovetz Nana utcai mintabolt (Szeged) | food_store (javaslat) | Szupermarket és élelmiszerbolt | Kávézó és pékség | Pékség | név |
+| 48 | Félegyházi Pékség (Szeged) | food_store (javaslat) | Szupermarket és élelmiszerbolt | Kávézó és pékség | Pékség | név |
+| 49 | Barber Shop Budapest Astoria (Budapest) | hair_care (javaslat) | Szépség és wellness | Fodrászat és borbély | Borbély | név |
+| 50 | Barber Shop Budapest/Dob (Budapest) | barber_shop (javaslat) | Szépség és wellness | Fodrászat és borbély | Borbély | Google típuslista |
+| 51 | Fodrászat (Budapest) | hair_care (javaslat) | Szépség és wellness | Fodrászat és borbély | Fodrászat | név |
+| 52 | Antique Cafe & Tea (Szeged) | cafe (javaslat) | Étterem és kávézó | Kávézó és pékség | Kávézó | Google típuslista |
+| 53 | OIL! Benzinkút (Szeged) | gas_station (javaslat) | Kiskereskedelem | Autószerviz és benzinkút | Benzinkút | Google típuslista |
+| 54 | Borbély Szalon (Szeged) | store | Kiskereskedelem | Fodrászat és borbély | Borbély | név |
+| 55 | Teszt munkahely (Budapest) | – | – (AI) | – (AI) | – | AI (haiku) |
