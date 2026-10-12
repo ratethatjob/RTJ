@@ -1696,7 +1696,7 @@
       "everythingFree": "Everything in Free, plus:",
       "features": {
         "warnings": "Early warnings when a score starts dropping",
-        "signals": "Early signals from reviews that aren't live yet",
+        "signals": "Early signals from the last 30 days’ reviews, including those not live yet",
         "stats": "Statistics and trends per location",
         "index": "RateThatJob Index badge and widget"
       },

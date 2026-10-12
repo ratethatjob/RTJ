@@ -1696,7 +1696,7 @@
       "everythingFree": "Minden, ami az ingyenesben, plusz:",
       "features": {
         "warnings": "Korai figyelmeztetés, ha romlik egy pontszám",
-        "signals": "Korai jelzések a még meg nem jelent értékelésekből",
+        "signals": "Korai jelzések az elmúlt 30 nap értékeléseiből, a még meg nem jelentekkel együtt",
         "stats": "Statisztika és trendek telephelyenként",
         "index": "RateThatJob Index jelvény és widget"
       },
