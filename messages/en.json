@@ -7,7 +7,6 @@
   "Nav": {
     "findWorkplaces": "Find workplaces",
     "forEmployers": "For employers",
-    "signIn": "Sign in",
     "rateAJob": "Rate a job",
     "searchWorkplaces": "Search workplaces",
     "switchLanguage": "Switch language",
@@ -292,8 +291,8 @@
     "businessSubtitle": "Sign in or create your employer account with your work email address. We'll email you a sign-in code – no password needed.",
     "businessEmail": "Work email",
     "businessPlaceholder": "you@yourcompany.com",
-    "notEmployer": "Looking for your own worker account?",
-    "workerSignIn": "Sign in here",
+    "notEmployer": "Looking for your own account as an employee?",
+    "workerSignIn": "Sign in as an employee",
     "employeeEyebrow": "For employees"
   },
   "Welcome": {

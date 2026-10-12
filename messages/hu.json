@@ -7,7 +7,6 @@
   "Nav": {
     "findWorkplaces": "Munkahelyek",
     "forEmployers": "Munkáltatóknak",
-    "signIn": "Belépés",
     "rateAJob": "Értékelj",
     "searchWorkplaces": "Munkahely keresése",
     "switchLanguage": "Nyelv váltása",
@@ -293,7 +292,7 @@
     "businessEmail": "Céges e-mail",
     "businessPlaceholder": "nev@cegneved.hu",
     "notEmployer": "A saját munkavállalói fiókodat keresed?",
-    "workerSignIn": "Belépés itt",
+    "workerSignIn": "Belépés munkavállalóként",
     "employeeEyebrow": "Munkavállalóknak"
   },
   "Welcome": {
