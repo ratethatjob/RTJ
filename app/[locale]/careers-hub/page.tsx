@@ -4,19 +4,20 @@ import { Faq } from "@/components/faq";
 import { JobsWidgetExample } from "@/components/marketing/jobs-widget-example";
 import { SiteHeader } from "@/components/site-header";
 import { Link } from "@/i18n/navigation";
-import { localeAlternates, SITE_URL } from "@/lib/seo";
+import { ogImage, pageMeta, SITE_URL } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/careers-hub">;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "CareersHub" });
-  return {
+  return pageMeta({
+    locale,
+    path: "/careers-hub",
     title: `${t("metaTitle")} | RateThatJob`,
     description: t("metaDescription"),
-    alternates: localeAlternates("/careers-hub", locale),
-    openGraph: { title: t("metaTitle"), description: t("metaDescription"), type: "website" },
-  };
+    image: ogImage("careers", locale),
+  });
 }
 
 const FEATURES = ["oneSnippet", "auto", "trust", "scope", "looks", "featured"] as const;

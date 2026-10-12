@@ -14,7 +14,7 @@ import type { Job } from "@/lib/data/types";
 import { locationPath } from "@/lib/format";
 import { findRedirect } from "@/lib/data/redirects";
 import { languageName } from "@/lib/languages";
-import { localeAlternates, SITE_URL } from "@/lib/seo";
+import { breadcrumbLd, localePath, ogImage, pageMeta, SITE_URL } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/[company]/[location]/jobs/[job]">;
 
@@ -46,13 +46,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     address: `${job.location.address}, ${job.location.city}`,
     pay: formatPay(job, locale, t) ?? t("payNotListed"),
   });
-  return {
+  return pageMeta({
+    locale,
+    path: path(job),
     title: `${title} | RateThatJob`,
+    shareTitle: title,
     description,
-    alternates: localeAlternates(path(job), locale),
-    openGraph: { title, description, type: "website" },
-    ...(job.isDemo && { robots: { index: false } }),
-  };
+    image: ogImage("job", locale, { id: job.id }),
+    noindex: job.isDemo,
+  });
 }
 
 export default async function JobPage({ params }: Props) {
@@ -245,7 +247,6 @@ const UNIT: Record<NonNullable<Job["payPeriod"]>, string> = {
 
 // Google for Jobs (schema.org JobPosting).
 function JsonLd({ job, locale }: { job: Job; locale: string }) {
-  const prefix = locale === "en" ? "" : `/${locale}`;
   const hasPay = job.payCurrency && job.payPeriod && (job.payMin != null || job.payMax != null);
   const data = {
     "@context": "https://schema.org",
@@ -261,7 +262,6 @@ function JsonLd({ job, locale }: { job: Job; locale: string }) {
     hiringOrganization: {
       "@type": "Organization",
       name: job.location.companyName,
-      sameAs: `${SITE_URL}${prefix}/${job.location.companySlug}`,
     },
     jobLocation: {
       "@type": "Place",
@@ -293,12 +293,19 @@ function JsonLd({ job, locale }: { job: Job; locale: string }) {
       skills: job.languages.map((l) => `${languageName(l.code, "en")} (${l.level})`).join(", "),
     }),
     directApply: true,
-    url: `${SITE_URL}${prefix}${path(job)}`,
+    url: `${SITE_URL}${localePath(path(job), locale)}`,
   };
+  const crumbs = breadcrumbLd(locale, [
+    [job.location.companyName, `/${job.location.companySlug}`],
+    [`${job.location.name} (${job.location.address})`, `/${job.location.companySlug}/${job.location.slug}`],
+    [job.title, path(job)],
+  ]);
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }}
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify([data, { "@context": "https://schema.org", ...crumbs }]).replace(/</g, "\\u003c"),
+      }}
     />
   );
 }

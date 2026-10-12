@@ -10,7 +10,7 @@ import { NavigationProgress } from "@/components/navigation-progress";
 import { SiteFooter } from "@/components/site-footer";
 import { routing } from "@/i18n/routing";
 import { pickMessages, SHARED_CLIENT_NAMESPACES } from "@/lib/client-messages";
-import { SITE_URL } from "@/lib/seo";
+import { ogImage, pageMeta, SITE_URL } from "@/lib/seo";
 import "../globals.css";
 
 const archivo = Archivo({
@@ -29,10 +29,20 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   const t = await getTranslations({ locale, namespace: "Metadata" });
+  // Defaults for pages without their own: share image, Open Graph and the large Twitter card.
+  const { openGraph, twitter } = pageMeta({
+    locale,
+    path: "/",
+    title: t("title"),
+    description: t("description"),
+    image: ogImage("home", locale),
+  });
   return {
     metadataBase: new URL(SITE_URL),
     title: t("title"),
     description: t("description"),
+    openGraph: { ...openGraph, url: undefined },
+    twitter,
   };
 }
 

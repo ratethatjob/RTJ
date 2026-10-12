@@ -77,9 +77,9 @@ Rules:
 - `<title>`: `Working at {Company} ({Location}) – reviews, pay, hours | RateThatJob`
 - Meta description generated from facts: score, % paid on time, reply rate.
 - **Structured data (JSON-LD):** `EmployerAggregateRating` (schema.org, supported by Google for employer ratings) with `itemReviewed` = Organization/LocalBusiness, `ratingValue`, `ratingCount`. Validate with Google Rich Results Test. Breadcrumbs (`BreadcrumbList`).
-- Dynamic OG image per location (score + facts) via `next/og`.
-- XML sitemaps split by type and chunked (companies, locations, cities), plus sitemap index. Include `lastmod`.
-- Empty / thin pages (0 reviews): indexable only if they have useful seeded data (address, category, facts placeholder + "Be the first to rate"); otherwise `noindex` until first review.
+- Dynamic OG images via `next/og` (one route, `/api/og`): base (tagline), employers, Index, Careers Hub, jobs, job (title, company, city, pay), location (score + facts), company and city hub (name + score, else "Be the first to rate"), sample page; EN/HU. Every public page has og:* tags and `twitter:card=summary_large_image`.
+- XML sitemaps split by type and chunked (companies, locations, cities, open jobs), plus sitemap index. Include `lastmod` and `xhtml:link` hreflang pairs. A location, company or city page is in the sitemap (and indexable) with a published review or an employer-filled profile.
+- Empty / thin pages (0 reviews): `noindex` until the first published review, unless the employer filled the profile (about, benefits or photos).
 - Core Web Vitals budget: LCP < 2.0s on mobile.
 - Internal linking: city hubs → locations, company page → all locations, "similar workplaces nearby".
 

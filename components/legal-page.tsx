@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Markdown, readLegal } from "@/lib/markdown";
-import { localeAlternates } from "@/lib/seo";
+import { ogImage, pageMeta } from "@/lib/seo";
 import { SiteHeader } from "./site-header";
 
 export type LegalSlug = "terms" | "privacy" | "cookies" | "imprint";
 
 export async function legalMetadata(slug: LegalSlug, locale: string): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: "Footer" });
-  return { title: `${t(slug)} | RateThatJob`, alternates: localeAlternates(`/${slug}`, locale) };
+  const tm = await getTranslations({ locale, namespace: "Metadata" });
+  return pageMeta({
+    locale,
+    path: `/${slug}`,
+    title: `${t(slug)} | RateThatJob`,
+    description: tm("description"),
+    image: ogImage("home", locale),
+  });
 }
 
 export async function LegalPage({ slug, locale }: { slug: LegalSlug; locale: string }) {

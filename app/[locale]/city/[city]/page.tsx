@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { getSitemapLocations } from "@/lib/data";
-import { localeAlternates } from "@/lib/seo";
 import { CityHub, cityMetadata } from "./city-hub";
 
 type Props = PageProps<"/[locale]/city/[city]">;
@@ -16,17 +15,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, city } = await params;
-  const meta = await cityMetadata(locale, city, null);
-  if (!meta) return {};
-  return {
-    title: `${meta.title} | RateThatJob`,
-    alternates: localeAlternates(`/city/${city}`, locale),
-    ...(!meta.rated && { robots: { index: false } }),
-  };
+  return cityMetadata(locale, city, null);
 }
 
 export default async function CityPage({ params }: Props) {
   const { locale, city } = await params;
   setRequestLocale(locale);
-  return <CityHub city={city} category={null} />;
+  return <CityHub city={city} category={null} locale={locale} />;
 }

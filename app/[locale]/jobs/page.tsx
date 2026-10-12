@@ -8,7 +8,7 @@ import { getPathname, Link } from "@/i18n/navigation";
 import { isCategory } from "@/lib/data";
 import { findJobs } from "@/lib/data/jobs";
 import { isLanguageCode, JOB_LANGUAGES, languageName } from "@/lib/languages";
-import { localeAlternates } from "@/lib/seo";
+import { ogImage, pageMeta } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/jobs">;
 
@@ -19,13 +19,15 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const sp = await searchParams;
   const t = await getTranslations({ locale, namespace: "Jobs" });
   const filtered = Boolean(sp.q || sp.where || sp.category || sp.quick || sp.lang);
-  return {
+  // The unfiltered list is the landing page; filtered results are not indexed.
+  return pageMeta({
+    locale,
+    path: "/jobs",
     title: `${t("metaTitle")} | RateThatJob`,
     description: t("metaDescription"),
-    alternates: localeAlternates("/jobs", locale),
-    // The unfiltered list is the landing page; filtered results are not indexed.
-    ...(filtered && { robots: { index: false, follow: true } }),
-  };
+    image: ogImage("jobs", locale),
+    noindex: filtered,
+  });
 }
 
 export default async function JobsPage({ params, searchParams }: Props) {

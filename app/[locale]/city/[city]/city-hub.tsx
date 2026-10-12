@@ -3,11 +3,13 @@ import { getTranslations } from "next-intl/server";
 import { LocationList } from "@/components/location-list";
 import { SiteHeader } from "@/components/site-header";
 import { Link } from "@/i18n/navigation";
-import { getCity } from "@/lib/data";
+import type { Metadata } from "next";
+import { getCity, getProfiledLocationIds } from "@/lib/data";
 import type { Category } from "@/lib/data/types";
 import { CATEGORY_SLUGS } from "@/lib/format";
+import { breadcrumbLd, ldJson, ogImage, pageMeta } from "@/lib/seo";
 
-export async function CityHub({ city, category }: { city: string; category: Category | null }) {
+export async function CityHub({ city, category, locale }: { city: string; category: Category | null; locale: string }) {
   const data = await getCity(city, category);
   if (!data || !data.locations.length) notFound();
   const t = await getTranslations("City");
@@ -18,8 +20,12 @@ export async function CityHub({ city, category }: { city: string; category: Cate
     all.some((l) => l.category === c),
   );
 
+  const crumbs: [string, string][] = [[t("title", { city: data.name }), `/city/${city}`]];
+  if (category) crumbs.push([tc(`${category}Plural`), `/city/${city}/${CATEGORY_SLUGS[category]}`]);
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(breadcrumbLd(locale, crumbs)) }} />
       <SiteHeader withSearch />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-8 pt-6 sm:px-6 lg:pt-10">
         <div>
@@ -53,15 +59,24 @@ export async function CityHub({ city, category }: { city: string; category: Cate
   );
 }
 
-export async function cityMetadata(locale: string, city: string, category: Category | null) {
+export async function cityMetadata(locale: string, city: string, category: Category | null): Promise<Metadata> {
   const data = await getCity(city, category);
-  if (!data || !data.locations.length) return null;
+  if (!data || !data.locations.length) return {};
   const t = await getTranslations({ locale, namespace: "City" });
   const tc = await getTranslations({ locale, namespace: "Categories" });
-  return {
-    title: category
-      ? t("metaTitleCategory", { category: tc(`${category}Plural`), city: data.name })
-      : t("metaTitle", { city: data.name }),
-    rated: data.locations.some((l) => l.scores && !l.isDemo),
-  };
+  const profiled = await getProfiledLocationIds();
+  const name = category ? tc(`${category}Plural`) : null;
+  return pageMeta({
+    locale,
+    path: category ? `/city/${city}/${CATEGORY_SLUGS[category]}` : `/city/${city}`,
+    title: `${
+      name ? t("metaTitleCategory", { category: name, city: data.name }) : t("metaTitle", { city: data.name })
+    } | RateThatJob`,
+    description: name
+      ? t("metaDescriptionCategory", { category: name, city: data.name })
+      : t("metaDescription", { city: data.name }),
+    image: ogImage("city", locale, { city, ...(category && { cat: CATEGORY_SLUGS[category] }) }),
+    // Indexed when a workplace there has a published review or a filled employer profile.
+    noindex: !data.locations.some((l) => !l.isDemo && (l.scores || profiled.has(l.id))),
+  });
 }

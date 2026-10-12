@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { getFormatter, getTranslations } from "next-intl/server";
 import type { LocationSummary } from "./data/types";
-import { localeAlternates } from "./seo";
+import { ogImage, pageMeta } from "./seo";
 
 export async function locationMetadata(
   location: LocationSummary,
   locale: string,
   path: string,
+  noindex: boolean,
 ): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: "Location" });
   const format = await getFormatter({ locale });
@@ -31,10 +32,13 @@ export async function locationMetadata(
         address: `${location.address}, ${location.city}`,
       });
 
-  return {
+  return pageMeta({
+    locale,
+    path,
     title: `${title} | RateThatJob`,
+    shareTitle: title,
     description,
-    alternates: localeAlternates(path, locale),
-    openGraph: { title, description, type: "website" },
-  };
+    image: ogImage("location", locale, { id: location.id }),
+    noindex,
+  });
 }

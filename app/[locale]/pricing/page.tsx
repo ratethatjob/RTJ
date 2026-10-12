@@ -3,7 +3,7 @@ import { getFormatter, getTranslations, setRequestLocale } from "next-intl/serve
 import { SiteHeader } from "@/components/site-header";
 import { Link } from "@/i18n/navigation";
 import { JOB_TIERS, jobPricing, OPERATOR, PRICING, YEARLY_MONTHS } from "@/lib/site-config";
-import { localeAlternates } from "@/lib/seo";
+import { ogImage, pageMeta } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/pricing">;
 
@@ -12,7 +12,13 @@ export const instant = false;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Pricing" });
-  return { title: `${t("metaTitle")} | RateThatJob`, description: t("intro"), alternates: localeAlternates("/pricing", locale) };
+  return pageMeta({
+    locale,
+    path: "/pricing",
+    title: `${t("metaTitle")} | RateThatJob`,
+    description: t("intro"),
+    image: ogImage("employers", locale),
+  });
 }
 
 const FREE = ["claim", "reply", "dispute", "inviteLink", "invites", "profile", "careersHub", "jobs", "profileBasic"] as const;

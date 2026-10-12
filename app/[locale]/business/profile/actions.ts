@@ -43,6 +43,7 @@ export async function saveProfile(
   );
   if (error) return { error: "generic" };
   updateTag(`profile:${locationId}`);
+  updateTag("profiles");
   return { ok: true };
 }
 

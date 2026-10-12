@@ -5,16 +5,18 @@ import { SiteHeader } from "@/components/site-header";
 import { Faq } from "@/components/faq";
 import { getPathname, Link } from "@/i18n/navigation";
 import { SHOWCASE_PATH } from "@/lib/showcase";
-import { localeAlternates } from "@/lib/seo";
+import { ogImage, pageMeta } from "@/lib/seo";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/employers">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Employers" });
-  return {
+  return pageMeta({
+    locale,
+    path: "/employers",
     title: t("metaTitle"),
     description: t("metaDescription"),
-    alternates: localeAlternates("/employers", locale),
-  };
+    image: ogImage("employers", locale),
+  });
 }
 
 export default async function EmployersPage({ params }: PageProps<"/[locale]/employers">) {

@@ -3,12 +3,18 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Link } from "@/i18n/navigation";
 import { OPERATOR } from "@/lib/site-config";
-import { localeAlternates } from "@/lib/seo";
+import { ogImage, pageMeta } from "@/lib/seo";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/about">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "About" });
-  return { title: `${t("metaTitle")} | RateThatJob`, description: t("intro"), alternates: localeAlternates("/about", locale) };
+  return pageMeta({
+    locale,
+    path: "/about",
+    title: `${t("metaTitle")} | RateThatJob`,
+    description: t("intro"),
+    image: ogImage("home", locale),
+  });
 }
 
 const PRINCIPLES = ["anonymous", "verified", "facts", "fair"] as const;

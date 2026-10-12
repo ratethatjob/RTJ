@@ -16,7 +16,8 @@ import { getAllJobs } from "@/lib/data/jobs";
 import { getPathname, Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { locationPath } from "@/lib/format";
-import { localeAlternates } from "@/lib/seo";
+import { ldJson, ogImage, pageMeta, SITE_NAME, SITE_URL } from "@/lib/seo";
+import { OPERATOR } from "@/lib/site-config";
 import { kindLabel, placeTypeLabel } from "@/lib/place-types";
 import { getShowcase, SHOWCASE_PATH } from "@/lib/showcase";
 import { DemoChip } from "@/components/demo-badge";
@@ -27,7 +28,8 @@ export async function generateMetadata({
 }: PageProps<"/[locale]">): Promise<Metadata> {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
-  return { alternates: localeAlternates("/", locale) };
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  return pageMeta({ locale, path: "/", title: t("title"), description: t("description"), image: ogImage("home", locale) });
 }
 
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
@@ -57,6 +59,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
   return (
     <>
+      <HomeJsonLd locale={locale} />
       <SiteHeader />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-8 pt-6 sm:px-6 lg:gap-12 lg:pb-8 lg:pt-8">
         <ManagedOrgCard />
@@ -305,4 +308,33 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       </div>
     </>
   );
+}
+
+// Organization + WebSite with the sitelinks search box (SearchAction → /search?q=).
+async function HomeJsonLd({ locale }: { locale: string }) {
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  const home = `${SITE_URL}${getPathname({ href: "/", locale })}`.replace(/\/$/, "") || SITE_URL;
+  const organization = {
+    "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: `${SITE_URL}/icons/icon-512.png`,
+    email: OPERATOR.email,
+    slogan: t("tagline"),
+  };
+  const website = {
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    name: SITE_NAME,
+    url: home,
+    inLanguage: locale,
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}${getPathname({ href: "/search", locale })}?q={search_term_string}` },
+      "query-input": "required name=search_term_string",
+    },
+  };
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(organization, website) }} />;
 }

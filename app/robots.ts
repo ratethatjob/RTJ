@@ -7,7 +7,8 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/",
+      // Share images live under /api/og: crawlers of social sites must be able to fetch them.
+      allow: ["/", "/api/og"],
       disallow: [...pages, ...pages.map((p) => `/hu${p}`), "/embed/", "/api/"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,

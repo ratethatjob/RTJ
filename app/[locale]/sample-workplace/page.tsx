@@ -7,7 +7,7 @@ import { ShowcaseCoffee, ShowcaseCounter, ShowcaseLogo, ShowcaseStorefront } fro
 import { SiteHeader } from "@/components/site-header";
 import { Link } from "@/i18n/navigation";
 import { kindLabel } from "@/lib/place-types";
-import { localeAlternates } from "@/lib/seo";
+import { ogImage, pageMeta } from "@/lib/seo";
 import { showcaseBadges } from "@/lib/showcase-badges";
 import { getShowcase, SHOWCASE_PATH } from "@/lib/showcase";
 
@@ -19,12 +19,14 @@ type Props = PageProps<"/[locale]/sample-workplace">;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Showcase" });
-  return {
+  return pageMeta({
+    locale,
+    path: SHOWCASE_PATH,
     title: `${t("metaTitle")} | RateThatJob`,
     description: t("banner"),
-    alternates: localeAlternates(SHOWCASE_PATH, locale),
-    robots: { index: false, follow: true },
-  };
+    image: ogImage("sample", locale),
+    noindex: true,
+  });
 }
 
 export default async function SampleWorkplacePage({ params }: Props) {

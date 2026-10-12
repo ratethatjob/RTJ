@@ -10,7 +10,7 @@ import { getLocation, getLocationPaths, getReviews, REVIEWS_PER_PAGE } from "@/l
 import type { ReviewFilter } from "@/lib/data/types";
 import { locationPath } from "@/lib/format";
 import { findRedirect } from "@/lib/data/redirects";
-import { localeAlternates } from "@/lib/seo";
+import { breadcrumbLd, ldJson, ogImage, pageMeta } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/[company]/[location]/reviews">;
 
@@ -25,12 +25,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await getLocation(company, location);
   if (!data) return {};
   const t = await getTranslations({ locale, namespace: "Reviews" });
-  return {
+  return pageMeta({
+    locale,
+    path: `${locationPath(data)}/reviews`,
     title: `${t("metaTitle", { company: data.companyName, location: data.address })} | RateThatJob`,
-    alternates: localeAlternates(`${locationPath(data)}/reviews`, locale),
-    // Like the location page: no index without reviews (or for demo data).
-    ...((data.isDemo || !data.scores) && { robots: { index: false } }),
-  };
+    description: t("metaDescription", { company: data.companyName, address: `${data.address}, ${data.city}` }),
+    image: ogImage("location", locale, { id: data.id }),
+    // No index without reviews (or for demo data).
+    noindex: data.isDemo || !data.scores,
+  });
 }
 
 // Blocking (not streamed) so unknown slugs get a real 404 status.
@@ -68,6 +71,20 @@ export default async function ReviewsPage({ params, searchParams }: Props) {
 
   return (
     <>
+    {!data.isDemo && (
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: ldJson(
+            breadcrumbLd(locale, [
+              [data.companyName, `/${data.companySlug}`],
+              [`${data.name} (${data.address})`, locationPath(data)],
+              [t("filters.all"), `${locationPath(data)}/reviews`],
+            ]),
+          ),
+        }}
+      />
+    )}
     <div className="hidden lg:block">
       <SiteHeader withSearch />
     </div>

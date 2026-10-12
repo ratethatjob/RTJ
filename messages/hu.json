@@ -268,7 +268,8 @@
     "empty": "Ehhez a szűrőhöz még nincs értékelés.",
     "previous": "Előző",
     "next": "Következő",
-    "pageOf": "{page}. oldal / {pages}"
+    "pageOf": "{page}. oldal / {pages}",
+    "metaDescription": "{company}, {address}: minden értékelés olyanoktól, akik ott dolgoztak vagy jelentkeztek – bér, beosztás, vezetők."
   },
   "Review": {
     "verified": "Igazolt",
@@ -500,7 +501,8 @@
     "metaTitle": "{company} – értékelések minden telephelyről",
     "locations": "{count} telephely",
     "noScore": "Még nincs értékelés",
-    "metaDescription": "{company} a RateThatJobon: {count} telephely és {reviews} értékelés azoktól, akik ott dolgoznak vagy dolgoztak."
+    "metaDescription": "{company} a RateThatJobon: {count} telephely és {reviews} értékelés azoktól, akik ott dolgoznak vagy dolgoztak.",
+    "average": "{score} / 5 · {count} értékelés átlaga a munkahelyein"
   },
   "Employers": {
     "metaTitle": "RateThatJob munkáltatóknak – ingyenes hozzáférés a munkahelyed profiljához",
@@ -977,7 +979,9 @@
     "metaTitleCategory": "{category} – {city}: értékelések, bér, beosztás",
     "title": "Munkahelyek – {city}",
     "titleCategory": "{category} – {city}",
-    "count": "{count} munkahely"
+    "count": "{count} munkahely",
+    "metaDescription": "{city} munkahelyeinek értékelései olyanoktól, akik ott dolgoztak vagy jelentkeztek: bér, beosztás, vezetők, válasz a jelentkezőknek.",
+    "metaDescriptionCategory": "{category} – {city}: értékelések olyanoktól, akik ott dolgoztak vagy jelentkeztek – bér, beosztás, vezetők, válasz a jelentkezőknek."
   },
   "Index": {
     "title": "RateThatJob Index",
@@ -2110,5 +2114,24 @@
     "send": "Küldés",
     "done": "Köszönjük – a csapatunk megnézi.",
     "error": "Nem sikerült elküldeni. Próbáld újra később."
+  },
+  "Og": {
+    "homeSub": "Munkahelyek értékelései olyanoktól, akik ott dolgoztak vagy jelentkeztek: bér, beosztás, vezetők.",
+    "employersEyebrow": "Munkáltatóknak",
+    "employersTitle": "Ingyenes hozzáférés a munkahelyed profiljához",
+    "employersSub": "Válaszolj az értékelésekre, hívd meg a csapatod, adj fel állásokat.",
+    "indexTitle": "RateThatJob Index",
+    "indexSub": "A munkahelyed pontszáma a karrieroldaladon és a hirdetéseidben.",
+    "careersTitle": "RateThatJob Careers Hub",
+    "careersSub": "Az állásaid a saját weboldaladon. Mellettük az Indexed.",
+    "jobsTitle": "Állások",
+    "jobsSub": "Értékelésekkel olyanoktól, akik ott dolgoztak.",
+    "cityTitle": "Munkahelyek – {city}",
+    "cityCategoryTitle": "{category} – {city}",
+    "workplaces": "{count} munkahely",
+    "fromReviews": "{count} értékelés alapján",
+    "beFirst": "Légy te az első értékelő",
+    "sampleEyebrow": "Minta céges adatlap",
+    "sampleSub": "Kitalált adatok: ezt mutatja egy munkahely adatlapja Pro csomaggal."
   }
 }

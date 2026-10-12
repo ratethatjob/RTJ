@@ -10,7 +10,7 @@ import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
 import { findLocations, isCategory } from "@/lib/data";
 import { placesProvider } from "@/lib/places";
-import { localeAlternates } from "@/lib/seo";
+import { ogImage, pageMeta } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/search">;
 
@@ -19,12 +19,16 @@ export const instant = false;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Search" });
+  const tm = await getTranslations({ locale, namespace: "Metadata" });
   // Result pages are thin duplicates of location pages: crawl links, don't index.
-  return {
+  return pageMeta({
+    locale,
+    path: "/search",
     title: `${t("metaTitle")} | RateThatJob`,
-    alternates: localeAlternates("/search", locale),
-    robots: { index: false, follow: true },
-  };
+    description: tm("description"),
+    image: ogImage("home", locale),
+    noindex: true,
+  });
 }
 
 export default async function SearchPage({ params, searchParams }: Props) {

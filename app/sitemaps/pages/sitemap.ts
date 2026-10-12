@@ -1,12 +1,14 @@
 import type { MetadataRoute } from "next";
-import { getSitemapLocations, type SitemapLocation } from "@/lib/data";
+import { getProfiledLocationIds, getSitemapLocations, type SitemapLocation } from "@/lib/data";
 import { getAllJobs } from "@/lib/data/jobs";
 import { CATEGORY_SLUGS } from "@/lib/format";
 import { entry } from "@/lib/sitemap";
 
-// Home, employers, jobs, company pages and city hubs that have at least one rated workplace.
+// Home, marketing pages, open jobs, and company pages and city hubs with at least one indexable
+// workplace (a published review or an employer-filled profile).
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const rated = (await getSitemapLocations()).filter((l) => l.reviewCount > 0);
+  const profiled = await getProfiledLocationIds();
+  const rated = (await getSitemapLocations()).filter((l) => l.reviewCount > 0 || profiled.has(l.id));
   const latest = (key: (l: SitemapLocation) => string) => {
     const map = new Map<string, string>();
     for (const l of rated) {
@@ -15,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
     return [...map];
   };
+  // public_jobs holds open jobs only: closed ones and ads past their closing day are left out.
   const jobs = (await getAllJobs()).filter((j) => !j.isDemo);
   return [
     entry("/"),

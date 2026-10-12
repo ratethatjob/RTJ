@@ -5,10 +5,11 @@ import { formatScore } from "@/components/scores";
 import { DemoBanner } from "@/components/demo-badge";
 import { SiteHeader } from "@/components/site-header";
 import { getPathname, Link } from "@/i18n/navigation";
-import { getCompany, getLocationPaths } from "@/lib/data";
+import { getCompany, getLocationPaths, getProfiledLocationIds } from "@/lib/data";
+import type { LocationSummary } from "@/lib/data/types";
 import { locationPath } from "@/lib/format";
 import { findRedirect } from "@/lib/data/redirects";
-import { localeAlternates } from "@/lib/seo";
+import { breadcrumbLd, ldJson, ogImage, pageMeta, RATING_LD_MIN_REVIEWS, SITE_URL, localePath } from "@/lib/seo";
 import { kindLabel } from "@/lib/place-types";
 
 type Props = PageProps<"/[locale]/[company]">;
@@ -26,17 +27,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await getCompany(company);
   if (!data) return {};
   const t = await getTranslations({ locale, namespace: "Company" });
-  const rated = data.locations.some((l) => l.scores && !l.isDemo);
-  return {
+  const profiled = await getProfiledLocationIds();
+  // Indexed when a workplace has a published review or a filled employer profile.
+  const indexable = data.locations.some((l) => !l.isDemo && (l.scores || profiled.has(l.id)));
+  return pageMeta({
+    locale,
+    path: `/${data.slug}`,
     title: `${t("metaTitle", { company: data.name })} | RateThatJob`,
     description: t("metaDescription", {
       company: data.name,
       count: data.locations.length,
       reviews: data.locations.reduce((n, l) => n + (l.scores?.reviewCount ?? 0), 0),
     }),
-    alternates: localeAlternates(`/${data.slug}`, locale),
-    ...(!rated && { robots: { index: false } }),
-  };
+    image: ogImage("company", locale, { slug: data.slug }),
+    noindex: !indexable,
+  });
 }
 
 export default async function CompanyPage({ params }: Props) {
@@ -50,14 +55,20 @@ export default async function CompanyPage({ params }: Props) {
   }
   const t = await getTranslations("Company");
   const tc = await getTranslations("Categories");
+  const avg = companyAverage(data.locations);
+  const demo = data.locations.every((l) => l.isDemo);
 
   return (
     <>
+      {!demo && <CompanyJsonLd name={data.name} slug={data.slug} locale={locale} avg={avg} />}
       <SiteHeader withSearch />
       <main className="mx-auto w-full max-w-6xl px-4 pb-8 pt-6 sm:px-6 lg:pt-10">
-        {data.locations.every((l) => l.isDemo) && <DemoBanner />}
+        {demo && <DemoBanner />}
         <h1 className="text-4xl font-black tracking-brand lg:text-6xl">{data.name}</h1>
         <p className="mt-2 text-lg text-slate">{t("locations", { count: data.locations.length })}</p>
+        {avg && data.locations.length > 1 && (
+          <p className="mt-1 font-black">{t("average", { score: await formatScore(avg.value), count: avg.count })}</p>
+        )}
         <ul className="mt-8 grid gap-3 lg:grid-cols-2">
           {await Promise.all(
             data.locations.map(async (l) => (
@@ -91,4 +102,38 @@ export default async function CompanyPage({ params }: Props) {
       </main>
     </>
   );
+}
+
+/** Review-weighted average of the company's rated, non-demo workplaces. */
+function companyAverage(locations: LocationSummary[]) {
+  const rated = locations.filter((l) => l.scores && !l.isDemo);
+  const count = rated.reduce((n, l) => n + l.scores!.reviewCount, 0);
+  if (!count) return null;
+  return { value: rated.reduce((n, l) => n + l.scores!.overall * l.scores!.reviewCount, 0) / count, count };
+}
+
+function CompanyJsonLd({
+  name,
+  slug,
+  locale,
+  avg,
+}: {
+  name: string;
+  slug: string;
+  locale: string;
+  avg: { value: number; count: number } | null;
+}) {
+  const graph: object[] = [breadcrumbLd(locale, [[name, `/${slug}`]])];
+  // The same average is shown on the page (or, with one workplace, its own score).
+  if (avg && avg.count >= RATING_LD_MIN_REVIEWS) {
+    graph.push({
+      "@type": "EmployerAggregateRating",
+      itemReviewed: { "@type": "Organization", name, url: `${SITE_URL}${localePath(`/${slug}`, locale)}` },
+      ratingValue: Math.round(avg.value * 10) / 10,
+      ratingCount: avg.count,
+      bestRating: 5,
+      worstRating: 1,
+    });
+  }
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(...graph) }} />;
 }

@@ -4,19 +4,20 @@ import { Faq } from "@/components/faq";
 import { SiteHeader } from "@/components/site-header";
 import { Link } from "@/i18n/navigation";
 import { exampleBadges } from "@/lib/marketing-examples";
-import { localeAlternates } from "@/lib/seo";
+import { ogImage, pageMeta } from "@/lib/seo";
 
 type Props = PageProps<"/[locale]/ratethatjob-index">;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "IndexPage" });
-  return {
+  return pageMeta({
+    locale,
+    path: "/ratethatjob-index",
     title: `${t("metaTitle")} | RateThatJob`,
     description: t("metaDescription"),
-    alternates: localeAlternates("/ratethatjob-index", locale),
-    openGraph: { title: t("metaTitle"), description: t("metaDescription"), type: "website" },
-  };
+    image: ogImage("index", locale),
+  });
 }
 
 const HOW = ["window", "categories", "facts", "verified", "threshold"] as const;

@@ -268,7 +268,8 @@
     "empty": "No reviews match this filter yet.",
     "previous": "Previous",
     "next": "Next",
-    "pageOf": "Page {page} of {pages}"
+    "pageOf": "Page {page} of {pages}",
+    "metaDescription": "Every review of {company}, {address} from people who worked or applied there: pay, hours, managers."
   },
   "Review": {
     "verified": "Verified",
@@ -500,7 +501,8 @@
     "metaTitle": "Working at {company} – reviews of every location",
     "locations": "{count, plural, one {# location} other {# locations}}",
     "noScore": "No reviews yet",
-    "metaDescription": "{company} on RateThatJob: {count, plural, one {# location} other {# locations}} and {reviews, plural, one {# review} other {# reviews}} from people who work or worked there."
+    "metaDescription": "{company} on RateThatJob: {count, plural, one {# location} other {# locations}} and {reviews, plural, one {# review} other {# reviews}} from people who work or worked there.",
+    "average": "{score} out of 5 · average of {count, plural, one {# review} other {# reviews}} across its workplaces"
   },
   "Employers": {
     "metaTitle": "RateThatJob for employers – free access to your workplace profile",
@@ -977,7 +979,9 @@
     "metaTitleCategory": "{category} in {city} – reviews, pay, hours",
     "title": "Workplaces in {city}",
     "titleCategory": "{category} in {city}",
-    "count": "{count, plural, one {# workplace} other {# workplaces}}"
+    "count": "{count, plural, one {# workplace} other {# workplaces}}",
+    "metaDescription": "Reviews of workplaces in {city} from people who worked or applied there: pay, hours, managers and replies to applicants.",
+    "metaDescriptionCategory": "{category} in {city}: reviews from people who worked or applied there – pay, hours, managers and replies to applicants."
   },
   "Index": {
     "title": "RateThatJob Index",
@@ -2110,5 +2114,24 @@
     "send": "Send",
     "done": "Thanks – our team will check it.",
     "error": "Couldn't send it. Try again later."
+  },
+  "Og": {
+    "homeSub": "Workplace reviews from people who worked or applied there: pay, hours, managers.",
+    "employersEyebrow": "For employers",
+    "employersTitle": "Free access to your workplace profile",
+    "employersSub": "Reply to reviews, invite your team, post jobs.",
+    "indexTitle": "RateThatJob Index",
+    "indexSub": "Your workplace score on your careers page and job ads.",
+    "careersTitle": "RateThatJob Careers Hub",
+    "careersSub": "Your jobs, on your website. Backed by your Index.",
+    "jobsTitle": "Jobs",
+    "jobsSub": "With reviews from people who worked there.",
+    "cityTitle": "Workplaces in {city}",
+    "cityCategoryTitle": "{category} in {city}",
+    "workplaces": "{count, plural, one {# workplace} other {# workplaces}}",
+    "fromReviews": "{count, plural, one {from # review} other {from # reviews}}",
+    "beFirst": "Be the first to rate",
+    "sampleEyebrow": "Sample workplace page",
+    "sampleSub": "Made-up data: this is what a workplace page with Pro shows."
   }
 }

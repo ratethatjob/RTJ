@@ -238,6 +238,7 @@ export async function getCity(
 }
 
 export type SitemapLocation = {
+  id: string;
   companySlug: string;
   slug: string;
   city: string;
@@ -255,6 +256,7 @@ export async function getSitemapLocations(): Promise<SitemapLocation[]> {
   cacheTag("locations");
   if (!useSupabase) {
     return sampleLocations.map((l) => ({
+      id: l.id,
       companySlug: l.companySlug,
       slug: l.slug,
       city: l.city,
@@ -277,6 +279,7 @@ export async function getSitemapLocations(): Promise<SitemapLocation[]> {
       // Demo data stays out of sitemaps.
       if (r.is_demo) continue;
       rows.push({
+        id: r.id,
         companySlug: r.company_slug,
         slug: r.slug,
         city: r.city,
@@ -317,6 +320,32 @@ export async function getLocationProfile(locationId: string): Promise<LocationPr
       (p) => `${supabaseUrl}/storage/v1/object/public/profile-photos/${p}`,
     ),
   };
+}
+
+/** A profile counts as filled with an about text, a benefit or a photo. */
+export function profileFilled(p: Pick<LocationProfile, "about" | "benefits" | "photos"> | null) {
+  return Boolean(p && (p.about?.trim() || p.benefits.length || p.photos.length));
+}
+
+/** Locations whose employer filled the profile: indexable (and in the sitemaps) even before a review. */
+export async function getProfiledLocationIds(): Promise<Set<string>> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("profiles");
+  if (!useSupabase) return new Set();
+  const ids = new Set<string>();
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await publicClient()
+      .from("location_profiles")
+      .select("location_id, about, benefits, photos")
+      .order("location_id")
+      .range(from, from + 999);
+    if (error) throw error;
+    for (const r of data) {
+      if (profileFilled({ about: r.about, benefits: r.benefits ?? [], photos: r.photos ?? [] })) ids.add(r.location_id);
+    }
+    if (data.length < 1000) return ids;
+  }
 }
 
 /** Similar workplaces in the same city: same category first, best rated first. */

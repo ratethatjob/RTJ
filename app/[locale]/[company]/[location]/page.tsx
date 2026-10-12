@@ -18,6 +18,7 @@ import {
   getLocation,
   getLocationPaths,
   getLocationProfile,
+  profileFilled,
   getNearbyLocations,
   getReviews,
 } from "@/lib/data";
@@ -26,7 +27,7 @@ import { findRedirect } from "@/lib/data/redirects";
 import type { LocationSummary } from "@/lib/data/types";
 import { locationPath } from "@/lib/format";
 import { locationMetadata } from "@/lib/location-meta";
-import { SITE_URL } from "@/lib/seo";
+import { breadcrumbLd, ldJson, localePath, RATING_LD_MIN_REVIEWS, SITE_URL } from "@/lib/seo";
 import { kindLabel } from "@/lib/place-types";
 import { CATEGORIES } from "@/lib/categories";
 import { CategoryReport } from "@/components/location/category-report";
@@ -41,9 +42,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, company, location } = await params;
   const data = await getLocation(company, location);
   if (!data) return {};
-  const meta = await locationMetadata(data, locale, locationPath(data));
-  // Thin pages without reviews or seeded data stay out of the index.
-  return data.scores && !data.isDemo ? meta : { ...meta, robots: { index: false } };
+  // Indexed with a published review or an employer-filled profile; empty and demo pages are not.
+  const indexable = !data.isDemo && Boolean(data.scores || profileFilled(await getLocationProfile(data.id)));
+  return locationMetadata(data, locale, locationPath(data), !indexable);
 }
 
 // Blocking (not streamed) so unknown slugs get a real 404 status.
@@ -346,19 +347,15 @@ export default async function LocationPage({ params }: Props) {
 }
 
 function JsonLd({ location, locale }: { location: LocationSummary; locale: string }) {
-  const prefix = locale === "en" ? "" : `/${locale}`;
-  const url = `${SITE_URL}${prefix}${locationPath(location)}`;
+  const url = `${SITE_URL}${localePath(locationPath(location), locale)}`;
   const graph: object[] = [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "RateThatJob", item: `${SITE_URL}${prefix || "/"}` },
-        { "@type": "ListItem", position: 2, name: location.companyName, item: `${SITE_URL}${prefix}/${location.companySlug}` },
-        { "@type": "ListItem", position: 3, name: `${location.name} (${location.address})`, item: url },
-      ],
-    },
+    breadcrumbLd(locale, [
+      [location.companyName, `/${location.companySlug}`],
+      [`${location.name} (${location.address})`, locationPath(location)],
+    ]),
   ];
-  if (location.scores) {
+  // Rating rich results only with enough published reviews; written by workers, not the employer.
+  if (location.scores && location.scores.reviewCount >= RATING_LD_MIN_REVIEWS) {
     graph.push({
       "@type": "EmployerAggregateRating",
       itemReviewed: {
@@ -379,15 +376,5 @@ function JsonLd({ location, locale }: { location: LocationSummary; locale: strin
       worstRating: 1,
     });
   }
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(
-          /</g,
-          "\\u003c",
-        ),
-      }}
-    />
-  );
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(...graph) }} />;
 }

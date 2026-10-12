@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { getSitemapLocations } from "@/lib/data";
 import { CATEGORY_SLUGS, categoryFromSlug } from "@/lib/format";
-import { localeAlternates } from "@/lib/seo";
 import { CityHub, cityMetadata } from "../city-hub";
 
 type Props = PageProps<"/[locale]/city/[city]/[category]">;
@@ -24,13 +23,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, city, category } = await params;
   const cat = categoryFromSlug(category);
-  const meta = cat && (await cityMetadata(locale, city, cat));
-  if (!meta) return {};
-  return {
-    title: `${meta.title} | RateThatJob`,
-    alternates: localeAlternates(`/city/${city}/${category}`, locale),
-    ...(!meta.rated && { robots: { index: false } }),
-  };
+  return cat ? cityMetadata(locale, city, cat) : {};
 }
 
 export default async function CityCategoryPage({ params }: Props) {
@@ -38,5 +31,5 @@ export default async function CityCategoryPage({ params }: Props) {
   setRequestLocale(locale);
   const cat = categoryFromSlug(category);
   if (!cat) notFound();
-  return <CityHub city={city} category={cat} />;
+  return <CityHub city={city} category={cat} locale={locale} />;
 }
