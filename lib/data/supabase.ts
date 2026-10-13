@@ -117,6 +117,8 @@ type ReviewRow = {
   period_start: string;
   period_end: string | null;
   overall: number | null;
+  /** The review's score: the average of the overall stars and the four categories. */
+  score?: number | null;
   verification_level: Review["verification"];
   got_reply: boolean | null;
   reply_days: number | null;
@@ -147,7 +149,7 @@ export function toReview(row: ReviewRow): Review {
     relationship: row.relationship,
     periodStart: row.period_start,
     periodEnd: row.period_end,
-    overall: row.overall ?? 0,
+    overall: Number(row.score ?? row.overall ?? 0),
     verification: row.verification_level,
     facts: Object.fromEntries(
       FACTS.filter((k) => row[k] != null).map((k) => [k, row[k]]),

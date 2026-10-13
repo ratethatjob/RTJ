@@ -3,11 +3,15 @@
 // city hubs, lists, sitemaps or statistics, and no data cleanup (demo purge, reset) touches it.
 
 import type { Job, LocationScores, LocationSummary, Review } from "./data/types";
+import { reviewScore } from "./review-score";
 
 export const SHOWCASE_PATH = "/sample-workplace";
 export const SHOWCASE_ID = "00000000-0000-4000-8000-00000000c0de";
 
 type Rated = Review & { ratings: { manager: number; pay: number; schedule: number; environment: number } };
+
+// Applicants answer only "Overall" in the real form, so their categories don't count here either.
+const scoreOf = (r: Rated) => (r.relationship === "applicant" ? r.overall : (reviewScore({ overall: r.overall, ...r.ratings }) ?? r.overall));
 
 const text = (hu: string, en: string) => ({ original: hu, language: "hu", translations: { en } });
 
@@ -123,7 +127,8 @@ function scores(): LocationScores {
     return answered.length ? Math.round((answered.filter((r) => r.facts[k]).length / answered.length) * 100) : null;
   };
   return {
-    overall: avg((r) => r.overall),
+    // Every answer counts (reviewScore), as in the database.
+    overall: avg(scoreOf),
     manager: avg((r) => r.ratings.manager),
     pay: avg((r) => r.ratings.pay),
     schedule: avg((r) => r.ratings.schedule),
@@ -172,6 +177,7 @@ function reviewsIn(lang: Lang): Review[] {
   return REVIEWS.map((r) => {
     const copy: Partial<Rated> = {
       ...r,
+      overall: Math.round(scoreOf(r) * 10) / 10,
       displayName: lang === "hu" ? r.displayName : (NAMES_EN[r.displayName] ?? r.displayName),
       position: lang === "hu" ? r.position : (POSITIONS_EN[r.position] ?? r.position),
       body: own(r.body, lang),

@@ -175,6 +175,7 @@ Levels shown as badges: Not verified · Verified (document) · Verified (invited
 - Document upload: payslip, contract, employment letter. UI asks to cover everything except company name and date.
 - Check: manual admin queue in MVP; later LLM/OCR extracts legal entity name + date.
 - Legal entity from the document feeds `location_entity_links` (the "Joe's Pizzeria = Example Trade LLC" problem). Unknown entity → review stays pending until a second source confirms or an admin approves.
+- A review's score is the average of all its answers: the overall stars and the four categories (an applicant answers only overall). The location score averages review scores.
 - Score weighting: verified reviews weight 1.0, unverified 0.5 (tunable).
 
 ### Fraud signals
