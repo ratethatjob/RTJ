@@ -111,6 +111,19 @@ export async function placeDetails(placeId: string, locale: string, sessionToken
   let { address, city, country } = parsed;
   const lat = p.location?.latitude ?? null;
   const lng = p.location?.longitude ?? null;
+  const gaps = addressFrom !== "street" || !p.addressComponents?.some((c) => c.types.includes("locality"));
+  if (gaps) {
+    // What Google gave, for the log: which parts were missing and what we used instead.
+    console.log(
+      JSON.stringify({
+        event: "place_address_gaps",
+        placeId: p.id,
+        formatted: p.formattedAddress ?? null,
+        components: (p.addressComponents ?? []).map((c) => `${c.types[0]}=${c.longText}`),
+        parsed: { address, city, country, addressFrom },
+      }),
+    );
+  }
   if ((addressFrom !== "street" || !city || !country) && lat != null && lng != null) {
     const { reverseAddress } = await import("@/lib/geocode");
     const rev = await reverseAddress(lat, lng, locale);
