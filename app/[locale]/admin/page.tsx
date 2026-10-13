@@ -23,13 +23,14 @@ import { domainCheck } from "@/lib/claim-check";
 import { countryCurrency, jobPricing, proPrice } from "@/lib/site-config";
 import { dashboardUrl } from "@/lib/stripe";
 import { StripeInvoiceCheck } from "@/components/admin/stripe-invoice-check";
+import { ManualActions } from "@/components/admin/manual-tools";
 import { DuplicatePair, OsmImportRunner } from "@/components/admin/osm-tools";
 import { OSM_CITIES, OSM_GROUPS } from "@/lib/osm-import-core";
 
 export const instant = false;
 
 const TABS = ["claims", "moderation", "verifications", "disputes", "reports", "orders", "plans"] as const;
-const TOOLS = ["overview", "metrics", "workplaces", "duplicates", "osm", "entities", "import", "demo"] as const;
+const TOOLS = ["overview", "metrics", "workplaces", "manual", "duplicates", "osm", "entities", "import", "demo"] as const;
 type Queue = (typeof TABS)[number];
 type Tab = Queue | (typeof TOOLS)[number];
 
@@ -626,6 +627,33 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
           }[],
         }))
       : null;
+  // New hand-entered workplaces (and the hidden ones), each with its closest possible duplicate.
+  type ManualRow = {
+    id: string;
+    name: string;
+    address: string;
+    city: string;
+    category: string;
+    path: string;
+    created_at: string;
+    created_by_email: string | null;
+    geocode_status: "ok" | "not_found" | null;
+    has_position: boolean;
+    hidden_at: string | null;
+    reviews: number;
+    dup_id: string | null;
+    dup_name: string | null;
+    dup_address: string | null;
+    dup_path: string | null;
+    dup_distance_m: number | null;
+  };
+  const manual =
+    tab === "manual"
+      ? await Promise.all([
+          supabase.rpc("admin_manual_locations", { p_hidden: false, p_limit: 100 }),
+          supabase.rpc("admin_manual_locations", { p_hidden: true, p_limit: 100 }),
+        ]).then(([a, b]) => ({ fresh: (a.data ?? []) as ManualRow[], hidden: (b.data ?? []) as ManualRow[] }))
+      : null;
   const duplicates =
     tab === "duplicates"
       ? (((await supabase.rpc("admin_duplicate_pairs", { p_limit: 60 })).data ?? []) as {
@@ -868,6 +896,57 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
               ))}
             </ul>
           </div>
+        </section>
+      ) : tab === "manual" && manual ? (
+        <section className="flex flex-col gap-3">
+          <p className="text-sm text-slate">{t("manual.hint")}</p>
+          {([["fresh", manual.fresh], ["hidden", manual.hidden]] as const).map(([group, rows]) =>
+            group === "hidden" && rows.length === 0 ? null : (
+              <div key={group} className="flex flex-col gap-3">
+                <h2 className="text-xl font-black">{t(`manual.${group}`, { count: rows.length })}</h2>
+                {rows.length === 0 && <p className="rounded-3xl bg-white p-5 text-slate">{t("empty")}</p>}
+                {rows.map((l) => (
+                  <div key={l.id} className="rounded-3xl bg-white p-5">
+                    <Link href={l.path} className="font-black underline underline-offset-4">
+                      {l.name}
+                    </Link>
+                    <p className="text-sm text-slate">
+                      {l.address}, {l.city} · {tcat(l.category)} · {t("duplicates.reviews", { count: l.reviews })}
+                    </p>
+                    <p className="text-sm text-slate">
+                      {t("manual.added", { email: l.created_by_email ?? "–", date: date(l.created_at) })} ·{" "}
+                      <span className={l.geocode_status === "not_found" ? "font-black text-[#C8323C]" : ""}>
+                        {t(`manual.geocode.${l.has_position ? "ok" : (l.geocode_status ?? "pending")}`)}
+                      </span>
+                    </p>
+                    {l.dup_id && (
+                      <div className="mt-2 rounded-2xl bg-paper p-3">
+                        <p className="text-sm font-black text-[#C8323C]">
+                          {l.dup_distance_m != null
+                            ? t("manual.dupNear", { distance: Math.round(l.dup_distance_m) })
+                            : t("manual.dupCity")}
+                        </p>
+                        <p className="text-sm">
+                          <span className="font-black">A: </span>
+                          {l.name} · {l.address}
+                        </p>
+                        <p className="text-sm">
+                          <span className="font-black">B: </span>
+                          <Link href={l.dup_path ?? "/"} className="font-black underline underline-offset-4">
+                            {l.dup_name}
+                          </Link>{" "}
+                          · {l.dup_address}
+                        </p>
+                        <DuplicatePair a={l.id} b={l.dup_id} />
+                      </div>
+                    )}
+                    <ManualActions id={l.id} name={l.name} address={l.address} city={l.city} hidden={!!l.hidden_at} />
+                    <CategoryEditor id={l.id} category={l.category} />
+                  </div>
+                ))}
+              </div>
+            ),
+          )}
         </section>
       ) : tab === "duplicates" && duplicates ? (
         <section className="flex flex-col gap-3">

@@ -11,9 +11,9 @@ import type { PlaceDetails, PlaceSuggestion } from "@/lib/places";
 // Both identify us with a User-Agent, are cached and only receive the typed text and the search area.
 // Suggestion ids are "osm:node/123" so the actions can tell them from Google place ids.
 
-const PHOTON = process.env.PHOTON_API_BASE ?? "https://photon.komoot.io";
-const NOMINATIM = process.env.NOMINATIM_API_BASE ?? "https://nominatim.openstreetmap.org";
-const HEADERS = { "User-Agent": "RateThatJob/1.0 (+https://ratethatjob.com)" };
+export const PHOTON = process.env.PHOTON_API_BASE ?? "https://photon.komoot.io";
+export const NOMINATIM = process.env.NOMINATIM_API_BASE ?? "https://nominatim.openstreetmap.org";
+export const HEADERS = { "User-Agent": "RateThatJob/1.0 (+https://ratethatjob.com)" };
 
 export const OSM_PREFIX = "osm:";
 const TYPES: Record<string, "node" | "way" | "relation"> = { N: "node", W: "way", R: "relation" };
@@ -88,7 +88,7 @@ export async function osmAutocomplete(input: string, locale: string, area: Searc
 
 // Nominatim allows one request per second; spaced out per server instance (lookups are rare and cached).
 let nextSlot = 0;
-async function nominatimSlot() {
+export async function nominatimSlot() {
   const now = Date.now();
   const wait = Math.max(0, nextSlot - now);
   nextSlot = Math.max(now, nextSlot) + 1100;

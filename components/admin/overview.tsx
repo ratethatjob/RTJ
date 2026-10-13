@@ -36,7 +36,7 @@ export type Overview = {
     expired: number;
     orders_30: { amount: number | null; currency: string | null; tier: JobTier; previous_tier: JobTier | null; country: string }[];
   };
-  todo: Record<"moderation" | "claims" | "verifications" | "reports" | "disputes" | "categories" | "duplicates", number>;
+  todo: Record<"moderation" | "claims" | "verifications" | "reports" | "disputes" | "categories" | "duplicates" | "manual", number>;
   trend: { day: string; reviews: number; workplaces: number }[];
 };
 
@@ -51,6 +51,7 @@ const TODO_TABS = {
   disputes: "disputes",
   categories: "workplaces",
   duplicates: "duplicates",
+  manual: "manual",
 } as const;
 
 function Card({ title, stats }: { title: string; stats: Stat[] }) {

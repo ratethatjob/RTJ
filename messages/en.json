@@ -803,7 +803,8 @@
       "demo": "Demo data",
       "osm": "OSM import",
       "duplicates": "Possible duplicates",
-      "overview": "Overview"
+      "overview": "Overview",
+      "manual": "Hand-entered"
     },
     "empty": "Nothing waiting.",
     "approve": "Approve",
@@ -1024,7 +1025,8 @@
         "reports": "Reports",
         "disputes": "Disputes",
         "categories": "Categories to check",
-        "duplicates": "Possible duplicates"
+        "duplicates": "Possible duplicates",
+        "manual": "Hand-entered places"
       },
       "reviews": {
         "title": "Reviews",
@@ -1085,6 +1087,32 @@
         "admin_import": "CSV import",
         "unknown": "Unknown"
       }
+    },
+    "manual": {
+      "hint": "Workplaces people typed in by hand (review, access request). OK = checked; Edit = name, address, city (the changed fields are locked for the employer, a new address is looked up again); Merge = keep A or B with the duplicate tool; Hide = not public, nothing is deleted.",
+      "fresh": "New hand-entered workplaces ({count})",
+      "hidden": "Hidden ({count})",
+      "added": "Added by {email} · {date}",
+      "geocode": {
+        "ok": "Has coordinates",
+        "not_found": "Address not found on OpenStreetMap: no coordinates",
+        "pending": "Coordinates not looked up yet"
+      },
+      "dupNear": "Possible duplicate {distance} m away",
+      "dupCity": "Possible duplicate in the same city (no coordinates)",
+      "ok": "OK",
+      "show": "Show again",
+      "edit": "Edit",
+      "hide": "Hide",
+      "save": "Save",
+      "cancel": "Cancel",
+      "editHint": "The fields you change are locked: the employer can't change them later.",
+      "fields": {
+        "name": "Name",
+        "address": "Street and number",
+        "city": "City"
+      },
+      "error": "Something went wrong."
     }
   },
   "Search": {
@@ -1634,7 +1662,17 @@
     "categoryHint": "The main category your workplace is listed under (city pages, search filters). Saved when you pick.",
     "categoryLocked": "Our team set this category. If it's wrong, use “Wrong category? Tell us” on your public page.",
     "categorySaved": "Saved.",
-    "categoryError": "Couldn't save it."
+    "categoryError": "Couldn't save it.",
+    "detailsTitle": "Name and address",
+    "detailsHint": "How your workplace appears on its public page. When you change the address, we look up its location again.",
+    "details": {
+      "name": "Workplace name",
+      "address": "Street and number",
+      "city": "City"
+    },
+    "detailsSave": "Save",
+    "detailsLocked": "Our team set this, so it can't be changed here.",
+    "detailsInvalid": "Fill in all three: name 2–100, address 2–150, city 2–80 characters."
   },
   "Notifications": {
     "title": "Notifications",

@@ -803,7 +803,8 @@
       "demo": "Demó adatok",
       "osm": "OSM-import",
       "duplicates": "Lehetséges duplikátumok",
-      "overview": "Áttekintés"
+      "overview": "Áttekintés",
+      "manual": "Kézi helyek"
     },
     "empty": "Nincs teendő.",
     "approve": "Jóváhagyom",
@@ -1024,7 +1025,8 @@
         "reports": "Jelentések",
         "disputes": "Vitatások",
         "categories": "Ellenőrizendő kategóriák",
-        "duplicates": "Lehetséges duplikátumok"
+        "duplicates": "Lehetséges duplikátumok",
+        "manual": "Kézi új helyek"
       },
       "reviews": {
         "title": "Értékelések",
@@ -1085,6 +1087,32 @@
         "admin_import": "CSV-import",
         "unknown": "Ismeretlen"
       }
+    },
+    "manual": {
+      "hint": "Kézzel beírt munkahelyek (értékelés, hozzáférés-igénylés). Rendben = átnézve; Szerkesztés = név, cím, város (a módosított mezőket a cég nem írhatja felül, az új címet újra megkeressük); Összevonás = A vagy B megtartása a duplikátum-eszközzel; Elrejtés = nem nyilvános, semmi nem törlődik.",
+      "fresh": "Kézzel felvett új helyek ({count})",
+      "hidden": "Elrejtve ({count})",
+      "added": "Felvette: {email} · {date}",
+      "geocode": {
+        "ok": "Van koordinátája",
+        "not_found": "A cím nincs meg az OpenStreetMapen: nincs koordináta",
+        "pending": "Koordináta még nincs lekérve"
+      },
+      "dupNear": "Lehetséges duplikátum {distance} m-re",
+      "dupCity": "Lehetséges duplikátum ugyanabban a városban (koordináta nélkül)",
+      "ok": "Rendben",
+      "show": "Újra látható",
+      "edit": "Szerkesztés",
+      "hide": "Elrejtés",
+      "save": "Mentés",
+      "cancel": "Mégse",
+      "editHint": "A módosított mezők zárolva lesznek: a cég később nem írhatja át őket.",
+      "fields": {
+        "name": "Név",
+        "address": "Utca és házszám",
+        "city": "Város"
+      },
+      "error": "Valami hiba történt."
     }
   },
   "Search": {
@@ -1634,7 +1662,17 @@
     "categoryHint": "A fő kategória, amelyben a munkahelyed szerepel (városoldalak, keresőszűrők). Választáskor mentjük.",
     "categoryLocked": "Ezt a kategóriát a csapatunk állította be. Ha nem stimmel, jelezd a nyilvános oldalad „Rossz kategória? Jelezd” linkjével.",
     "categorySaved": "Elmentve.",
-    "categoryError": "Nem sikerült menteni."
+    "categoryError": "Nem sikerült menteni.",
+    "detailsTitle": "Név és cím",
+    "detailsHint": "Így jelenik meg a munkahelyed a nyilvános oldalán. Ha módosítod a címet, a helyét újra megkeressük.",
+    "details": {
+      "name": "A munkahely neve",
+      "address": "Utca és házszám",
+      "city": "Város"
+    },
+    "detailsSave": "Mentés",
+    "detailsLocked": "Ezt a csapatunk állította be, itt nem módosítható.",
+    "detailsInvalid": "Töltsd ki mind a hármat: név 2–100, cím 2–150, város 2–80 karakter."
   },
   "Notifications": {
     "title": "Értesítések",

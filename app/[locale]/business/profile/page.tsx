@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { LocationSelect } from "@/components/business/location-select";
 import { OwnCategory } from "@/components/business/own-category";
+import { OwnDetails } from "@/components/business/own-details";
 import { ProfileForm } from "@/components/business/profile-form";
 import { Link } from "@/i18n/navigation";
 import { getBusiness, pickLocation } from "@/lib/business";
@@ -23,7 +24,7 @@ export default async function ProfilePage({ params, searchParams }: PageProps<"/
     .maybeSingle();
   const { data: place } = await supabase
     .from("locations")
-    .select("category, category_source")
+    .select("name, address, city, category, category_source, locked_fields")
     .eq("id", location.id)
     .maybeSingle();
 
@@ -41,6 +42,12 @@ export default async function ProfilePage({ params, searchParams }: PageProps<"/
       {org.locations.length > 1 && (
         <LocationSelect locations={org.locations} selected={location.id} allowAll={false} />
       )}
+      <OwnDetails
+        key={`details-${location.id}`}
+        locationId={location.id}
+        initial={{ name: place?.name ?? "", address: place?.address ?? "", city: place?.city ?? "" }}
+        locked={place?.locked_fields ?? []}
+      />
       <OwnCategory
         key={`category-${location.id}`}
         locationId={location.id}

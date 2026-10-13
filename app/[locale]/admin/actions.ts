@@ -7,6 +7,7 @@ import { isCategory } from "@/lib/categories";
 import { sendClaimEmail } from "@/lib/claim-emails";
 import { type InvoiceCheck, stripe, syncAllInvoiceSetups } from "@/lib/stripe";
 import { adminClient } from "@/lib/supabase/admin";
+import { geocodeLocation } from "@/lib/geocode";
 import { osmDetails } from "@/lib/osm";
 import { classifyPlace, placeTypeInfo } from "@/lib/place-types";
 import { placeTypes } from "@/lib/places";
@@ -340,4 +341,29 @@ export async function dismissDuplicate(a: string, b: string): Promise<Result> {
   const { supabase } = await getUser();
   const { error } = await supabase.rpc("admin_dismiss_duplicate", { p_a: a, p_b: b });
   return error ? { error: true } : { ok: true };
+}
+
+/** New hand-entered workplaces: "ok" (checked, also shows a hidden one again) or "hide" (not public). */
+export async function reviewManual(id: string, action: "ok" | "hide"): Promise<Result> {
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("admin_review_manual", { p_location_id: id, p_action: action });
+  if (error) return { error: true };
+  expireWorkplaces();
+  return { ok: true };
+}
+
+/** Admin edit of name, address and city (the changed fields are locked for the employer); a new
+ *  address is geocoded again. */
+export async function editLocation(id: string, name: string, address: string, city: string): Promise<Result> {
+  const { supabase } = await getUser();
+  const { data: moved, error } = await supabase.rpc("admin_edit_location", {
+    p_location_id: id,
+    p_name: name,
+    p_address: address,
+    p_city: city,
+  });
+  if (error) return { error: true };
+  if (moved) await geocodeLocation(id);
+  expireWorkplaces();
+  return { ok: true };
 }

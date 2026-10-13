@@ -1,7 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { after } from "next/server";
 import { type Category, isCategory } from "@/lib/categories";
 import { categorize } from "@/lib/categorize";
 import { COUNTRIES } from "@/lib/countries";
+import { geocodeLocation } from "@/lib/geocode";
 import { isOsmId, osmDetails } from "@/lib/osm";
 import { classifyPlace, placeTypeInfo } from "@/lib/place-types";
 import { type PlaceDetails, placeContext, placeDetails, primaryTypeLabel } from "@/lib/places";
@@ -98,6 +100,11 @@ export async function createManualWorkplace(
     en: info?.en ?? null,
     hu: info?.hu ?? null,
     ...decided,
+  });
+  // Coordinates for the typed address (OSM), after the response; a reused workplace keeps its own.
+  after(async () => {
+    const { data: place } = (await adminClient()?.from("locations").select("lat").eq("id", data as string).maybeSingle()) ?? {};
+    if (place && place.lat == null) await geocodeLocation(data as string);
   });
   return { id: data as string };
 }
