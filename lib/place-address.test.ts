@@ -76,3 +76,30 @@ test("components without types or texts (Google, Budapest districts) don't break
   assert.equal(r.city, "Budapest");
   assert.equal(r.address, "Üllői út 661");
 });
+
+test("the district as the locality (Lidl, Üllői út 379-381) is Budapest", () => {
+  const r = parseGoogleAddress({
+    formattedAddress: "XVIII, XVIII. kerület, Üllői út 379-381, Magyarország",
+    addressComponents: [c("379-381", "street_number"), c("Üllői út", "route"), c("XVIII. kerület", "sublocality_level_1"), c("XVIII", "locality", "political"), HU],
+  });
+  assert.equal(r.city, "Budapest");
+  assert.equal(r.address, "Üllői út 379-381");
+});
+
+test("a component without types (Láng, Csepel): the formatted address is used", () => {
+  const r = parseGoogleAddress({
+    formattedAddress: "Budapest, Szikratávíró u. hrsz. 210012/11., 1211 Magyarország",
+    addressComponents: [{ longText: "Szikratávíró u. hrsz. 210012/11." }, c("Budapest", "locality"), c("XXI. kerület", "sublocality_level_1"), HU, c("1211", "postal_code")],
+  });
+  assert.equal(r.city, "Budapest");
+  assert.equal(r.address, "Szikratávíró u. hrsz. 210012/11.");
+  assert.equal(r.addressFrom, "formatted");
+});
+
+test("a route that already holds the house number isn't doubled", () => {
+  const r = parseGoogleAddress({
+    addressComponents: [c("83", "street_number"), c("Margó Tivadar utca 83.", "route"), c("XVIII", "locality"), HU],
+  });
+  assert.equal(r.address, "Margó Tivadar utca 83");
+  assert.equal(r.city, "Budapest");
+});

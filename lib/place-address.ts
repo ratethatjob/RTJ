@@ -24,6 +24,9 @@ const fold = (s: string) =>
 
 export function streetLine(route: string, number: string, country: string) {
   if (!route) return "";
+  // The route already ends with the number ("Margó Tivadar utca 83." + "83").
+  const tail = route.match(/\s(\d+[a-z]?(?:[-/]\d+[a-z]?)?)\.?$/i)?.[1];
+  if (number && tail && tail.toLowerCase() === number.toLowerCase()) return route.replace(/\.$/, "").trim();
   return (NUMBER_FIRST.has(country) ? [number, route] : [route, number]).filter(Boolean).join(" ").trim();
 }
 
@@ -55,6 +58,8 @@ export function parseGoogleAddress(p: { formattedAddress?: string; addressCompon
   // City: the locality, else the postal town, else (Hungary) Budapest when the place sits in a
   // Budapest district or the Budapest region, else the smaller then the bigger administrative area.
   let city = part("locality") || part("postal_town");
+  // Google sometimes gives the district as the locality ("XVIII").
+  if (country === "HU" && city && BUDAPEST_DISTRICT.test(city)) city = "Budapest";
   if (!city && country === "HU" && (fold(admin1) === "budapest" || districtLike)) city = "Budapest";
   if (!city) city = part("administrative_area_level_3") || part("administrative_area_level_2") || admin1;
 
