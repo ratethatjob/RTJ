@@ -1,5 +1,6 @@
 import type { Category } from "@/lib/data/types";
 import { type CategorySource, classifyPlace, placeTypeInfo } from "@/lib/place-types";
+import { parseGoogleAddress } from "@/lib/place-address";
 import { recordPlacesCall } from "@/lib/places-usage";
 
 // Google Places API (New), server side only. Off until GOOGLE_PLACES_API_KEY is set.
@@ -81,11 +82,6 @@ export async function autocomplete(
     }));
 }
 
-type Component = { longText: string; shortText: string; types: string[] };
-
-// Countries that write the house number first ("350 5th Ave").
-const NUMBER_FIRST = new Set(["US", "CA", "GB", "IE", "AU", "NZ", "FR"]);
-
 export async function placeDetails(placeId: string, locale: string, sessionToken?: string): Promise<PlaceDetails | null> {
   if (!KEY || !/^[\w-]{10,300}$/.test(placeId)) return null;
   const qs = new URLSearchParams({ languageCode: locale, ...(sessionToken && { sessionToken }) });
@@ -102,31 +98,37 @@ export async function placeDetails(placeId: string, locale: string, sessionToken
     id: string;
     displayName?: { text: string };
     formattedAddress?: string;
-    addressComponents?: Component[];
+    addressComponents?: { longText: string; shortText: string; types: string[] }[];
     location?: { latitude: number; longitude: number };
     types?: string[];
     primaryType?: string;
     primaryTypeDisplayName?: { text: string; languageCode?: string };
   };
-  const part = (type: string, short = false) => {
-    const c = p.addressComponents?.find((x) => x.types.includes(type));
-    return c ? (short ? c.shortText : c.longText) : "";
-  };
-  const country = part("country", true).toUpperCase();
-  const route = part("route");
-  const number = part("street_number");
-  const street = route
-    ? (NUMBER_FIRST.has(country) ? [number, route] : [route, number]).filter(Boolean).join(" ")
-    : (p.formattedAddress?.split(",")[0] ?? "");
-  const city = part("locality") || part("postal_town") || part("administrative_area_level_2");
+  // Gaps in Google's address (no locality, no street) are filled from the components, then from
+  // OpenStreetMap at the place's position (lib/place-address.ts, reverseAddress).
+  const parsed = parseGoogleAddress(p);
+  const { addressFrom } = parsed;
+  let { address, city, country } = parsed;
+  const lat = p.location?.latitude ?? null;
+  const lng = p.location?.longitude ?? null;
+  if ((addressFrom !== "street" || !city || !country) && lat != null && lng != null) {
+    const { reverseAddress } = await import("@/lib/geocode");
+    const rev = await reverseAddress(lat, lng, locale);
+    if (rev) {
+      const sameStreet = rev.street && address && rev.street.toLowerCase().startsWith(address.toLowerCase());
+      if (rev.street && (addressFrom === "formatted" || addressFrom === "area" || addressFrom === null || sameStreet)) address = rev.street;
+      if (!city) city = rev.city;
+      if (!country) country = rev.country;
+    }
+  }
   return {
     placeId: p.id,
     name: p.displayName?.text ?? "",
-    address: street.trim(),
+    address,
     city,
     country,
-    lat: p.location?.latitude ?? null,
-    lng: p.location?.longitude ?? null,
+    lat,
+    lng,
     ...classified(p.displayName?.text ?? "", p.primaryType, p.types ?? [], p.primaryTypeDisplayName?.text ?? null, locale),
     types: p.types ?? [],
   };

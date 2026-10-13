@@ -2,7 +2,8 @@ import { getUser } from "@/lib/auth";
 import { isOsmId } from "@/lib/osm";
 import { caller, knownLocations } from "@/lib/place-search";
 import { pickMatch } from "@/lib/place-match";
-import { rateLimited } from "@/lib/rate-limit";
+import { requestPartner } from "@/lib/partner-key";
+import { rateLimitedDb } from "@/lib/rate-limit";
 import { adminClient } from "@/lib/supabase/admin";
 import { createPlaceWorkplace, placeDetailsAny } from "@/lib/workplaces";
 
@@ -13,11 +14,14 @@ import { createPlaceWorkplace, placeDetailsAny } from "@/lib/workplaces";
 // are fetched here, never taken from the browser); 30 new workplaces an hour per person or IP.
 
 export type PlaceVia = "search" | "rate" | "claim" | "jobs";
+/** Why a place can't become a workplace: unknown id, no name, or no location data at all. */
+export type InvalidReason = "not_found" | "no_name" | "no_address";
 export type PlaceCandidate = { id: string; name: string; address: string; city: string };
 export type EnsureResult =
   | { locationId: string; created?: boolean }
   | { candidates: PlaceCandidate[] }
-  | { error: "limit" | "invalid" | "generic" };
+  | { error: "limit" | "generic" }
+  | { error: "invalid"; reason: InvalidReason; name?: string };
 
 type Nearby = PlaceCandidate & {
   lat: number;
@@ -61,16 +65,45 @@ export async function ensureLocationFromPlace(
     force?: boolean;
   },
 ): Promise<EnsureResult> {
-  if (!PLACE_ID.test(placeId)) return { error: "invalid" };
+  if (!PLACE_ID.test(placeId)) return { error: "invalid", reason: "not_found" };
   const { supabase, key } = await caller();
   const existing = (await knownLocations(supabase, [placeId])).get(placeId);
   if (existing) return { locationId: existing };
   const db = adminClient();
   if (!db) return { error: "generic" };
 
-  if (rateLimited(`place-details:${key}`, 120, 3600_000)) return { error: "limit" };
-  const place = await placeDetailsAny(placeId, opts.locale, opts.sessionToken).catch(() => null);
-  if (!place || !place.name || !place.address || !place.city || !place.country) return { error: "invalid" };
+  const partner = await requestPartner();
+  if (partner) {
+    if (await rateLimitedDb(`partner:${partner.id}`, partner.hourlyLimit, 3600_000)) return { error: "limit" };
+  } else if (await rateLimitedDb(`place-details:${key}`, 120, 3600_000)) {
+    return { error: "limit" };
+  }
+  const place = await placeDetailsAny(placeId, opts.locale, opts.sessionToken).catch((e) => {
+    console.error("place details", placeId, e);
+    return null;
+  });
+  const reason: InvalidReason | null = !place
+    ? "not_found"
+    : !place.name.trim()
+      ? "no_name"
+      : !place.address || !place.city || !place.country
+        ? "no_address"
+        : null;
+  if (!place || reason) {
+    console.log(
+      JSON.stringify({
+        event: "place_invalid",
+        placeId,
+        reason,
+        name: place?.name ?? null,
+        address: place?.address ?? null,
+        city: place?.city ?? null,
+        country: place?.country ?? null,
+        hasPosition: place?.lat != null,
+      }),
+    );
+    return { error: "invalid", reason: reason ?? "not_found", name: place?.name || undefined };
+  }
   const osm = isOsmId(placeId);
 
   if (place.lat != null && place.lng != null) {
@@ -88,10 +121,11 @@ export async function ensureLocationFromPlace(
     }
   }
 
-  // New workplace. Against abuse: per person or IP, and a ceiling for all visitors together.
-  if (rateLimited(`place-create:${key}`, 30, 3600_000)) return { error: "limit" };
+  // New workplace. Against abuse: per person or IP, and a ceiling for all visitors together
+  // (a partner key has its own ceiling, checked above).
+  if (!partner && (await rateLimitedDb(`place-create:${key}`, 30, 3600_000))) return { error: "limit" };
   const { user } = await getUser();
-  if (!user) {
+  if (!user && !partner) {
     const { count } = await db
       .from("locations")
       .select("id", { count: "exact", head: true })
@@ -105,7 +139,12 @@ export async function ensureLocationFromPlace(
     { kind: "place", placeId, category: "" },
     opts.locale,
     opts.sessionToken,
-    { place, via: opts.via },
+    { place, via: partner ? "partner" : opts.via, partnerKeyId: partner?.id },
   );
-  return created.id ? { locationId: created.id, created: true } : { error: created.error ?? "generic" };
+  if (created.id) return { locationId: created.id, created: true };
+  if (created.error === "invalid") {
+    console.log(JSON.stringify({ event: "place_invalid", placeId, reason: "db", name: place.name, address: place.address, city: place.city, country: place.country }));
+    return { error: "invalid", reason: "no_address", name: place.name };
+  }
+  return { error: created.error ?? "generic" };
 }

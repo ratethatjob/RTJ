@@ -86,7 +86,7 @@ export async function pickPlace(
   sessionToken: string,
   mode: "rate" | "claim",
   choice?: { confirm?: string; force?: boolean },
-): Promise<{ locationId?: string; candidates?: PlaceCandidate[]; error?: "limit" | "generic" }> {
+): Promise<{ locationId?: string; candidates?: PlaceCandidate[]; error?: "limit" | "noAddress" | "generic"; name?: string }> {
   const result = await ensureLocationFromPlace(placeId, {
     via: mode,
     locale: await getLocale(),
@@ -95,7 +95,10 @@ export async function pickPlace(
     force: choice?.force,
   });
   if ("candidates" in result) return { candidates: result.candidates };
-  if ("error" in result) return { error: result.error === "limit" ? "limit" : "generic" };
+  if ("error" in result) {
+    if (result.error === "invalid") return { error: result.reason === "not_found" ? "generic" : "noAddress", name: result.name };
+    return { error: result.error };
+  }
   if (result.created) expireWorkplaces();
   return { locationId: result.locationId };
 }

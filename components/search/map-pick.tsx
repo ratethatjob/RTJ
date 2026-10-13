@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { openMapPlace } from "@/app/[locale]/search/actions";
 import { DidYouMean } from "@/components/did-you-mean";
+import { Link } from "@/i18n/navigation";
 import type { PlaceCandidate } from "@/lib/place-ensure";
 import type { MapResult } from "@/lib/place-search";
 import { placeTypeLabel } from "@/lib/place-types";
@@ -17,6 +18,8 @@ export function MapPick({ results, sessionToken }: { results: MapResult[]; sessi
   const router = useRouter();
   const [opening, setOpening] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // A map place without an address: the manual form, prefilled with its name.
+  const [manualName, setManualName] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [ask, setAsk] = useState<{ result: MapResult; candidates: PlaceCandidate[] } | null>(null);
 
@@ -29,6 +32,11 @@ export function MapPick({ results, sessionToken }: { results: MapResult[]; sessi
       if (result.href) return router.push(result.href);
       setOpening(null);
       if (result.candidates) return setAsk({ result: r, candidates: result.candidates });
+      if (result.error === "noAddress") {
+        setManualName(result.name || r.main);
+        return setError(tp("noAddress"));
+      }
+      setManualName(null);
       setError(result.error === "limit" ? tp("limit") : tp("error"));
     });
   }
@@ -74,6 +82,14 @@ export function MapPick({ results, sessionToken }: { results: MapResult[]; sessi
         <p role="alert" className="font-black">
           {error}
         </p>
+      )}
+      {error && manualName !== null && (
+        <Link
+          href={{ pathname: "/app/rate/new", query: { q: manualName, manual: "1" } }}
+          className="self-start rounded-2xl bg-ink px-5 py-3 text-base font-black text-paper"
+        >
+          {tp("noAddressManual")}
+        </Link>
       )}
     </>
   );

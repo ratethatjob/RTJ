@@ -1,4 +1,5 @@
 import { type GeocodeInput, type Position, fromNominatim, fromPhoton, nominatimQuery, photonQuery } from "@/lib/geocode-core";
+import { addressFromReverse } from "@/lib/osm-import-core";
 import { HEADERS, NOMINATIM, PHOTON, nominatimSlot } from "@/lib/osm";
 import { rateLimited } from "@/lib/rate-limit";
 import { adminClient } from "@/lib/supabase/admin";
@@ -53,4 +54,25 @@ export async function geocodeMissing(limit = 25, budgetMs = 60_000) {
     counts[await geocodeLocation(row.id)] += 1;
   }
   return counts;
+}
+
+/** Street ("street number" or the street alone), city and country at a position (Nominatim
+ *  reverse): fills what a map place lacks. Null when OSM can't be asked or has nothing there. */
+export async function reverseAddress(lat: number, lng: number, locale = "hu") {
+  if (rateLimited("geocode", 60)) return null;
+  try {
+    await nominatimSlot();
+    const qs = new URLSearchParams({ lat: String(lat), lon: String(lng), format: "jsonv2", addressdetails: "1", zoom: "18", "accept-language": locale });
+    const res = await fetch(`${NOMINATIM}/reverse?${qs}`, { headers: HEADERS, signal: AbortSignal.timeout(6000) });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { address?: Record<string, string> };
+    const a = data.address ?? {};
+    return {
+      street: addressFromReverse(data),
+      city: a.city || a.town || a.village || a.municipality || "",
+      country: (a.country_code ?? "").toUpperCase(),
+    };
+  } catch {
+    return null;
+  }
 }

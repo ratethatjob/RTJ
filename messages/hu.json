@@ -804,7 +804,8 @@
       "osm": "OSM-import",
       "duplicates": "Lehetséges duplikátumok",
       "overview": "Áttekintés",
-      "manual": "Kézi helyek"
+      "manual": "Kézi helyek",
+      "partners": "Partnerkulcsok"
     },
     "empty": "Nincs teendő.",
     "approve": "Jóváhagyom",
@@ -1091,7 +1092,8 @@
         "osm_import": "OSM-import",
         "manual": "Kézzel beírt",
         "admin_import": "CSV-import",
-        "unknown": "Ismeretlen"
+        "unknown": "Ismeretlen",
+        "partner": "Partnerkulcs"
       }
     },
     "manual": {
@@ -1119,6 +1121,23 @@
         "city": "Város"
       },
       "error": "Valami hiba történt."
+    },
+    "partners": {
+      "title": "Partnerkulcsok",
+      "hint": "Megbízható importálónak (például egy botnak, amely az értékelési folyamaton keresztül vesz fel munkahelyeket). A kulcsot minden kérésnél az X-RTJ-Partner-Key fejlécben küldi; érvényes kulccsal a térképes hely kiválasztására nem vonatkozik az IP-nkénti korlát (óránként 30 új munkahely) és az összes látogatóra vonatkozó korlát (óránként 300), csak a kulcs saját óránkénti korlátja. Az általa felvett helyek partnerként vannak jelölve. A kulcsból csak egy ujjlenyomatot tárolunk: a kulcs egyszer, létrehozáskor látszik.",
+      "name": "Név (ki használja)",
+      "hourly": "Új munkahely / óra",
+      "create": "Kulcs létrehozása",
+      "onceTitle": "A kulcs – most másold ki",
+      "onceBody": "Többet nem jelenik meg. Add át az importálónak: minden kérésnél az X-RTJ-Partner-Key fejlécben küldje (böngészős botnál extra HTTP-fejlécként minden kérésre).",
+      "copy": "Másolás",
+      "copied": "Kimásolva",
+      "done": "Kész",
+      "error": "Nem sikerült létrehozni (név 2–80 karakter, korlát 1–100 000).",
+      "revoke": "Visszavonás",
+      "revokeConfirm": "Visszavonod ezt a kulcsot? Az ezzel érkező kéréseket ezután bármely látogatóéként kezeljük.",
+      "revoked": "visszavonva: {date}",
+      "meta": "Létrehozva {created} · utoljára használva {used} · {uses} használat · {workplaces} felvett munkahely · korlát {limit}/óra"
     }
   },
   "Search": {
@@ -1742,7 +1761,9 @@
     "didYouMean": "Erre a munkahelyre gondoltál?",
     "yesThis": "Igen, erre",
     "noNewPlace": "Nem, ez egy másik hely",
-    "noReviewsYet": "Még nincs értékelés"
+    "noReviewsYet": "Még nincs értékelés",
+    "noAddress": "Ehhez a helyhez a térkép nem ad címet – add meg kézzel.",
+    "noAddressManual": "Megadom kézzel"
   },
   "Footer": {
     "workers": "Munkavállalóknak",

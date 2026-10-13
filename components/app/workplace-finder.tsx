@@ -24,10 +24,12 @@ type Props = {
   defaultCountry: string;
   /** Localized base for the manual form: /app/rate or /business/claim. */
   manualBase: string;
+  /** Open the manual form right away (?manual=1, from "the map gives no address"). */
+  initialManual?: boolean;
 };
 
 /** One search field for picking a workplace: RateThatJob first, then the map, no duplicates. */
-export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, defaultCountry, manualBase }: Props) {
+export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, defaultCountry, manualBase, initialManual = false }: Props) {
   const t = useTranslations("Places");
   const locale = useLocale();
   const format = useFormatter();
@@ -37,7 +39,9 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
   const [results, setResults] = useState<{ for: string; own: OwnResult[]; map: Suggestion[] } | null>(null);
   // "Did you mean …?": a picked map place close to one of ours with a similar name.
   const [ask, setAsk] = useState<{ placeId: string; candidates: PlaceCandidate[] } | null>(null);
-  const [manual, setManual] = useState(false);
+  const [manual, setManual] = useState(initialManual);
+  // A map place without an address: its name prefills the manual form.
+  const [noAddress, setNoAddress] = useState<string | null>(null);
   const manualRef = useRef<HTMLElement>(null);
   useEffect(() => {
     if (manual) manualRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -96,6 +100,10 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
       if (result.candidates) return setAsk({ placeId: s.placeId, candidates: result.candidates });
       session.current = crypto.randomUUID();
       if (result.locationId) return router.push(`${base}/${result.locationId}`);
+      if (result.error === "noAddress") {
+        setNoAddress(result.name || s.main || text);
+        return setError(t("noAddress"));
+      }
       setError(result.error === "limit" ? t("limit") : t("error"));
     });
   }
@@ -197,7 +205,19 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
           {t("searching")}
         </p>
       )}
-      {error && <p className="mt-4 font-black">{error}</p>}
+      {error && <p role="alert" className="mt-4 font-black">{error}</p>}
+      {noAddress !== null && error && !manual && (
+        <button
+          type="button"
+          onClick={() => {
+            setError(null);
+            setManual(true);
+          }}
+          className="mt-3 self-start rounded-2xl bg-ink px-5 py-3 text-base font-black text-paper"
+        >
+          {t("noAddressManual")}
+        </button>
+      )}
 
       {current && (
         <div className="mt-5 flex flex-col gap-2">
@@ -287,8 +307,8 @@ export function WorkplaceFinder({ mode, provider, initialQuery = "", autoArea, d
         <section ref={manualRef} className="mt-6 border-t border-mist/60 pt-6">
           <h2 className="text-2xl font-black tracking-brand">{t("manualTitle")}</h2>
           <NewWorkplaceForm
-            key={text}
-            initialName={text}
+            key={noAddress ?? text}
+            initialName={noAddress ?? text}
             defaultCountry={defaultCountry}
             rateBase={manualBase}
             claim={mode === "claim"}

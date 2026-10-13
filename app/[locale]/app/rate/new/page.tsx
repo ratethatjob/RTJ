@@ -11,7 +11,7 @@ export const instant = false;
 export default async function NewWorkplacePage({ params, searchParams }: PageProps<"/[locale]/app/rate/new">) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { q } = await searchParams;
+  const { q, manual } = await searchParams;
   const t = await getTranslations("NewWorkplace");
   const tp = await getTranslations("RatePicker");
   const [provider, autoArea] = await Promise.all([placesProvider(), autoAreaName(locale)]);
@@ -31,6 +31,7 @@ export default async function NewWorkplacePage({ params, searchParams }: PagePro
           autoArea={autoArea}
           defaultCountry={locale === "hu" ? "HU" : "US"}
           manualBase={getPathname({ href: "/app/rate", locale })}
+          initialManual={manual === "1"}
         />
       </div>
       </main>

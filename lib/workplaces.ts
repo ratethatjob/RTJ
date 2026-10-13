@@ -116,7 +116,7 @@ export async function createPlaceWorkplace(
   locale: string,
   sessionToken?: string,
   /** Details already fetched (lib/place-ensure.ts) and where the pick happened. */
-  extra?: { place?: PlaceDetails; via?: string },
+  extra?: { place?: PlaceDetails; via?: string; partnerKeyId?: string },
 ): Promise<{ id?: string; error?: WorkplaceError }> {
   const db = adminClient();
   if (!db) return { error: "generic" };
@@ -132,9 +132,9 @@ export async function createPlaceWorkplace(
     p_user_id: userId,
     // OSM ids are stored without the "osm:" prefix.
     ...(osm ? { p_osm_id: place.placeId.slice(4) } : { p_place_id: place.placeId }),
-    p_name: place.name,
-    p_address: place.address,
-    p_city: place.city,
+    p_name: place.name.trim().slice(0, 100),
+    p_address: place.address.trim().slice(0, 150),
+    p_city: place.city.trim().slice(0, 80),
     p_country: place.country,
     p_category: decided.category,
     p_lat: place.lat,
@@ -149,7 +149,11 @@ export async function createPlaceWorkplace(
   }
   await saveClassification(data as string, { placeType: place.placeType, ...labels, ...decided });
   if (extra?.via) {
-    await db.from("locations").update({ created_via: extra.via }).eq("id", data as string).is("created_via", null);
+    await db
+      .from("locations")
+      .update({ created_via: extra.via, ...(extra.partnerKeyId && { partner_key_id: extra.partnerKeyId }) })
+      .eq("id", data as string)
+      .is("created_via", null);
   }
   return { id: data as string };
 }

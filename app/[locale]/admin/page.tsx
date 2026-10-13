@@ -24,13 +24,14 @@ import { countryCurrency, jobPricing, proPrice } from "@/lib/site-config";
 import { dashboardUrl } from "@/lib/stripe";
 import { StripeInvoiceCheck } from "@/components/admin/stripe-invoice-check";
 import { ManualActions } from "@/components/admin/manual-tools";
+import { NewPartnerKey, RevokePartnerKey } from "@/components/admin/partner-keys";
 import { DuplicatePair, FillOsmAddresses, OsmImportRunner } from "@/components/admin/osm-tools";
 import { OSM_CITIES, OSM_GROUPS } from "@/lib/osm-import-core";
 
 export const instant = false;
 
 const TABS = ["claims", "moderation", "verifications", "disputes", "reports", "orders", "plans"] as const;
-const TOOLS = ["overview", "metrics", "workplaces", "manual", "duplicates", "osm", "entities", "import", "demo"] as const;
+const TOOLS = ["overview", "metrics", "workplaces", "manual", "duplicates", "osm", "entities", "import", "partners", "demo"] as const;
 type Queue = (typeof TABS)[number];
 type Tab = Queue | (typeof TOOLS)[number];
 
@@ -656,6 +657,19 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
           supabase.rpc("admin_manual_locations", { p_hidden: true, p_limit: 100 }),
         ]).then(([a, b]) => ({ fresh: (a.data ?? []) as ManualRow[], hidden: (b.data ?? []) as ManualRow[] }))
       : null;
+  const partnerKeys =
+    tab === "partners"
+      ? (((await supabase.rpc("admin_partner_keys")).data ?? []) as {
+          id: string;
+          name: string;
+          hourly_limit: number;
+          created_at: string;
+          revoked_at: string | null;
+          last_used_at: string | null;
+          uses: number;
+          workplaces: number;
+        }[])
+      : null;
   const duplicates =
     tab === "duplicates"
       ? (((await supabase.rpc("admin_duplicate_pairs", { p_limit: 60 })).data ?? []) as {
@@ -964,6 +978,34 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
               </div>
             ),
           )}
+        </section>
+      ) : tab === "partners" && partnerKeys ? (
+        <section className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 rounded-3xl bg-white p-5">
+            <h2 className="text-xl font-black">{t("partners.title")}</h2>
+            <p className="text-sm text-slate">{t("partners.hint")}</p>
+            <NewPartnerKey />
+          </div>
+          {partnerKeys.length === 0 && <p className="rounded-3xl bg-white p-5 text-slate">{t("empty")}</p>}
+          {partnerKeys.map((k) => (
+            <div key={k.id} className="flex flex-wrap items-center justify-between gap-3 rounded-3xl bg-white p-5">
+              <div className="min-w-0">
+                <p className="font-black">
+                  {k.name} {k.revoked_at && <span className="text-sm text-[#C8323C]">· {t("partners.revoked", { date: date(k.revoked_at) })}</span>}
+                </p>
+                <p className="text-sm text-slate">
+                  {t("partners.meta", {
+                    created: date(k.created_at),
+                    used: k.last_used_at ? date(k.last_used_at) : "–",
+                    uses: k.uses,
+                    workplaces: k.workplaces,
+                    limit: k.hourly_limit,
+                  })}
+                </p>
+              </div>
+              {!k.revoked_at && <RevokePartnerKey id={k.id} />}
+            </div>
+          ))}
         </section>
       ) : tab === "duplicates" && duplicates ? (
         <section className="flex flex-col gap-3">

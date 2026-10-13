@@ -15,7 +15,7 @@ export async function openMapPlace(
   placeId: string,
   sessionToken?: string,
   choice?: { confirm?: string; force?: boolean },
-): Promise<{ href?: string; candidates?: PlaceCandidate[]; error?: "limit" | "generic" }> {
+): Promise<{ href?: string; candidates?: PlaceCandidate[]; error?: "limit" | "noAddress" | "generic"; name?: string }> {
   const result = await ensureLocationFromPlace(placeId, {
     via: "search",
     locale: await getLocale(),
@@ -24,7 +24,10 @@ export async function openMapPlace(
     force: choice?.force,
   });
   if ("candidates" in result) return { candidates: result.candidates };
-  if ("error" in result) return { error: result.error === "limit" ? "limit" : "generic" };
+  if ("error" in result) {
+    if (result.error === "invalid") return { error: result.reason === "not_found" ? "generic" : "noAddress", name: result.name };
+    return { error: result.error };
+  }
   if (result.created) expireWorkplaces();
   const href = await locationHref(result.locationId);
   return href ? { href } : { error: "generic" };

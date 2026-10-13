@@ -804,7 +804,8 @@
       "osm": "OSM import",
       "duplicates": "Possible duplicates",
       "overview": "Overview",
-      "manual": "Hand-entered"
+      "manual": "Hand-entered",
+      "partners": "Partner keys"
     },
     "empty": "Nothing waiting.",
     "approve": "Approve",
@@ -1091,7 +1092,8 @@
         "osm_import": "OSM import",
         "manual": "Typed in",
         "admin_import": "CSV import",
-        "unknown": "Unknown"
+        "unknown": "Unknown",
+        "partner": "Partner key"
       }
     },
     "manual": {
@@ -1119,6 +1121,23 @@
         "city": "City"
       },
       "error": "Something went wrong."
+    },
+    "partners": {
+      "title": "Partner keys",
+      "hint": "For a trusted importer (e.g. a bot that adds workplaces through the review flow). It sends the key in the X-RTJ-Partner-Key header with every request; with an active key, picking a map place skips the per-IP limit (30 new workplaces an hour) and the all-visitors limit (300 an hour), only the key's own hourly limit applies. Workplaces it adds are marked as partner. Only a fingerprint of the key is stored: the key is shown once, when you create it.",
+      "name": "Name (who uses it)",
+      "hourly": "New workplaces / hour",
+      "create": "Create key",
+      "onceTitle": "The key – copy it now",
+      "onceBody": "It won't be shown again. Give it to the importer: send it in the X-RTJ-Partner-Key header with every request (for a browser bot, as an extra HTTP header on all requests).",
+      "copy": "Copy",
+      "copied": "Copied",
+      "done": "Done",
+      "error": "Couldn't create it (name 2–80 characters, limit 1–100 000).",
+      "revoke": "Revoke",
+      "revokeConfirm": "Revoke this key? Requests with it will be treated like any visitor's.",
+      "revoked": "revoked {date}",
+      "meta": "Created {created} · last used {used} · {uses} uses · {workplaces} workplaces added · limit {limit}/hour"
     }
   },
   "Search": {
@@ -1742,7 +1761,9 @@
     "didYouMean": "Did you mean this workplace?",
     "yesThis": "Yes, this one",
     "noNewPlace": "No, it's a different place",
-    "noReviewsYet": "No reviews yet"
+    "noReviewsYet": "No reviews yet",
+    "noAddress": "The map has no address for this place – add it by hand.",
+    "noAddressManual": "Add it by hand"
   },
   "Footer": {
     "workers": "For workers",

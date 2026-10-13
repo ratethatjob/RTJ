@@ -1,5 +1,6 @@
 "use server";
 
+import { randomBytes } from "node:crypto";
 import { updateTag } from "next/cache";
 import { expireWorkplaces } from "@/lib/cache";
 import { getUser } from "@/lib/auth";
@@ -8,6 +9,7 @@ import { sendClaimEmail } from "@/lib/claim-emails";
 import { type InvoiceCheck, stripe, syncAllInvoiceSetups } from "@/lib/stripe";
 import { adminClient } from "@/lib/supabase/admin";
 import { geocodeLocation } from "@/lib/geocode";
+import { hashPartnerKey } from "@/lib/partner-key";
 import { osmDetails } from "@/lib/osm";
 import { classifyPlace, placeTypeInfo } from "@/lib/place-types";
 import { placeTypes } from "@/lib/places";
@@ -374,4 +376,22 @@ export async function fillOsmAddresses(): Promise<Awaited<ReturnType<typeof fill
   const result = await fillAddresses(200_000);
   if (result.created || result.matched) expireWorkplaces();
   return result;
+}
+
+/** A new partner key: made here, only its hash is stored; the key itself is returned once. */
+export async function createPartnerKey(name: string, hourlyLimit: number): Promise<{ key?: string; error?: true }> {
+  const label = name.trim();
+  if (label.length < 2 || label.length > 80 || !Number.isInteger(hourlyLimit) || hourlyLimit < 1 || hourlyLimit > 100000) {
+    return { error: true };
+  }
+  const key = `rtjp_${randomBytes(32).toString("base64url")}`;
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("admin_create_partner_key", { p_name: label, p_hash: hashPartnerKey(key), p_hourly_limit: hourlyLimit });
+  return error ? { error: true } : { key };
+}
+
+export async function revokePartnerKey(id: string): Promise<Result> {
+  const { supabase } = await getUser();
+  const { error } = await supabase.rpc("admin_revoke_partner_key", { p_id: id });
+  return error ? { error: true } : { ok: true };
 }
