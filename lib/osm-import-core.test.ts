@@ -12,12 +12,14 @@ import {
   overpassQuery,
   rowFromElement,
   rowsFromElements,
+  addressFromReverse,
   type OsmElement,
 } from "./osm-import-core.ts";
 import { typeFromOsm } from "./place-types.ts";
 
 const szeged = osmCity("szeged")!;
 const food = osmGroup("food")!;
+const retail = osmGroup("retail")!;
 const grocery = osmGroup("grocery")!;
 const node = (id: number, tags: Record<string, string>, lat = 46.2525, lon = 20.1486): OsmElement => ({ type: "node", id, lat, lon, tags });
 
@@ -107,4 +109,29 @@ test("boundary rings are joined from ways, reversed where needed", () => {
   assert.equal(rings.length, 1);
   assert.ok(insideRings(rings, 5, 5));
   assert.ok(!insideRings(rings, 15, 5));
+});
+
+test("descriptions are not names; unaddressed places kept only on request", () => {
+  const addr = { "addr:street": "Fő utca", "addr:housenumber": "1" };
+  assert.equal(rowFromElement(node(20, { shop: "optician", name: "magán szemészeti központ", ...addr }), retail, szeged, null), "no_name");
+  assert.ok(typeof rowFromElement(node(21, { shop: "bicycle", name: "ebikeshop", ...addr }), retail, szeged, null) !== "string");
+  const kept = rowFromElement(node(22, { amenity: "cafe", name: "Cím nélkül" }), food, szeged, null, true);
+  assert.ok(typeof kept !== "string" && kept.address === "");
+  const { rows, unaddressed, skipped } = rowsFromElements(
+    [node(23, { amenity: "cafe", name: "Van címe", ...addr }), node(24, { amenity: "cafe", name: "Nincs címe" }, 46.26, 20.15)],
+    food,
+    szeged,
+    null,
+    true,
+  );
+  assert.equal(rows.length, 1);
+  assert.equal(unaddressed.length, 1);
+  assert.equal(skipped.no_address, 1);
+});
+
+test("address from a reverse geocoding answer", () => {
+  assert.equal(addressFromReverse({ address: { road: "Kárász utca", house_number: "9" } }), "Kárász utca 9");
+  assert.equal(addressFromReverse({ address: { pedestrian: "Klauzál tér" } }), "Klauzál tér");
+  assert.equal(addressFromReverse({ address: { suburb: "Belváros", city: "Szeged" } }), null);
+  assert.equal(addressFromReverse(null), null);
 });

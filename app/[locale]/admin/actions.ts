@@ -11,7 +11,7 @@ import { geocodeLocation } from "@/lib/geocode";
 import { osmDetails } from "@/lib/osm";
 import { classifyPlace, placeTypeInfo } from "@/lib/place-types";
 import { placeTypes } from "@/lib/places";
-import { type RunSummary, runOsmImport } from "@/lib/osm-import";
+import { fillAddresses, type RunSummary, runOsmImport } from "@/lib/osm-import";
 import { osmCity, osmGroup } from "@/lib/osm-import-core";
 
 type Result = { ok?: true; error?: true };
@@ -366,4 +366,12 @@ export async function editLocation(id: string, name: string, address: string, ci
   if (moved) await geocodeLocation(id);
   expireWorkplaces();
   return { ok: true };
+}
+
+/** OSM places without a street address: look up the next batch now (Nominatim reverse, 1/s). */
+export async function fillOsmAddresses(): Promise<Awaited<ReturnType<typeof fillAddresses>> | { error: true }> {
+  if (!(await isAdminUser())) return { error: true };
+  const result = await fillAddresses(200_000);
+  if (result.created || result.matched) expireWorkplaces();
+  return result;
 }

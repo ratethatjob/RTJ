@@ -1,6 +1,6 @@
 // OpenStreetMap import, the parts without I/O: which cities and tags, the Overpass queries, turning
 // OSM objects into workplace rows (named, open, with a street address, no private persons), the
-// city boundary test. Used by lib/osm-import.ts (server) and scripts/osm-import.ts (CLI); only
+// address from a Nominatim reverse answer for places without one, the city boundary test. Used by lib/osm-import.ts (server) and scripts/osm-import.ts (CLI); only
 // relative imports so the script runs with plain Node. Unit-tested in lib/osm-import-core.test.ts.
 
 import type { Category } from "./categories.ts";
@@ -153,10 +153,15 @@ export function rowFromElement(
   group: OsmGroup,
   city: OsmCity,
   rings: Ring[] | null,
+  /** Keep a place without addr:street + addr:housenumber as a row with an empty address (its
+   *  address then comes from Nominatim reverse geocoding, lib/osm-import.ts). */
+  keepUnaddressed = false,
 ): OsmRow | Skip {
   const t = e.tags ?? {};
   const name = (t.name ?? "").trim().replace(/\s+/g, " ");
   if (name.length < 2 || name.length > 100) return "no_name";
+  // A description, not a name ("magán szemészeti központ"): several words, no capital letter.
+  if (name === name.toLowerCase() && /\s/.test(name)) return "no_name";
   if (
     Object.keys(t).some((k) => CLOSED_PREFIX.test(k)) ||
     ["yes"].includes(t.disused ?? "") ||
@@ -171,7 +176,7 @@ export function rowFromElement(
 
   const street = (t["addr:street"] ?? t["addr:place"] ?? "").trim();
   const number = (t["addr:housenumber"] ?? "").trim();
-  if (!street || !number) return "no_address";
+  if ((!street || !number) && !keepUnaddressed) return "no_address";
 
   const lat = e.lat ?? e.center?.lat;
   const lng = e.lon ?? e.center?.lon;
@@ -195,7 +200,7 @@ export function rowFromElement(
     brand_wikidata: wikidata,
     chain: Boolean(brandName),
     brand: wikidata ?? (brandName ? normalizeBusinessName(brandName) : null),
-    address: `${street} ${number}`.slice(0, 150),
+    address: street && number ? `${street} ${number}`.slice(0, 150) : "",
     city: city.name,
     country: "HU",
     lat,
@@ -210,14 +215,22 @@ export function rowFromElement(
 
 /** Rows for a group's Overpass answer: the same object once, the same named place once (a shop
  *  drawn both as a point and as a building), with a count of what was skipped and why. */
-export function rowsFromElements(elements: OsmElement[], group: OsmGroup, city: OsmCity, rings: Ring[] | null) {
+export function rowsFromElements(
+  elements: OsmElement[],
+  group: OsmGroup,
+  city: OsmCity,
+  rings: Ring[] | null,
+  keepUnaddressed = false,
+) {
   const rows: OsmRow[] = [];
+  /** Places without a street address (with keepUnaddressed): also counted as no_address. */
+  const unaddressed: OsmRow[] = [];
   const skipped: Partial<Record<Skip, number>> = {};
   const seen = new Set<string>();
   const near = new Map<string, OsmRow[]>();
   const cell = (lat: number, lng: number) => `${Math.round(lat * 2000)}:${Math.round(lng * 1400)}`;
   for (const e of elements) {
-    const r = rowFromElement(e, group, city, rings);
+    const r = rowFromElement(e, group, city, rings, keepUnaddressed);
     let reason: Skip | null = typeof r === "string" ? r : null;
     if (typeof r !== "string") {
       const key = `${normalizeBusinessName(r.name)}|${cell(r.lat, r.lng)}`;
@@ -225,10 +238,24 @@ export function rowsFromElements(elements: OsmElement[], group: OsmGroup, city: 
       else {
         seen.add(r.osm_id);
         near.set(key, [r]);
-        rows.push(r);
+        if (r.address) rows.push(r);
+        else {
+          unaddressed.push(r);
+          reason = "no_address";
+        }
       }
     }
     if (reason) skipped[reason] = (skipped[reason] ?? 0) + 1;
   }
-  return { rows, skipped };
+  return { rows, unaddressed, skipped };
+}
+
+/** Street address from a Nominatim reverse answer: "street number", or the street alone; null
+ *  when there is no street (a field, a park, a whole district). */
+export function addressFromReverse(data: { address?: Record<string, string> } | null): string | null {
+  const a = data?.address ?? {};
+  const street = (a.road ?? a.pedestrian ?? a.square ?? a.footway ?? "").trim();
+  if (!street) return null;
+  const number = (a.house_number ?? "").trim();
+  return (number ? `${street} ${number}` : street).slice(0, 150);
 }

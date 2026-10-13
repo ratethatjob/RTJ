@@ -973,7 +973,7 @@
     "categoryOk": "OK as is",
     "osm": {
       "title": "OpenStreetMap import",
-      "hint": "Workplaces from OpenStreetMap for one city: named, open places with a street address in our categories, one tag group at a time. Ours already (same OSM id or a matching place within 75 m) are linked, not doubled. Places no longer on the map are marked closed; refreshed monthly by the daily cron. Overpass is often busy: a busy group can be run again later.",
+      "hint": "Workplaces from OpenStreetMap for one city: named, open places with a street address (or one found from their position, see below) in our categories, one tag group at a time. Ours already (same OSM id or a matching place within 75 m) are linked, not doubled. Places no longer on the map are marked closed; refreshed monthly by the daily cron. Overpass is often busy: several mirrors are tried with growing pauses; a busy group can be run again later, the cron also retries it.",
       "city": "City",
       "run": "Import / refresh",
       "running": "Importing…",
@@ -986,7 +986,13 @@
       "lastRun": "Last seen",
       "log": "Runs",
       "unratedTitle": "Imported, no reviews yet: {city}",
-      "allCities": "all cities"
+      "allCities": "all cities",
+      "addressTitle": "Places without a street address",
+      "addressHint": "OpenStreetMap places with no street and house number wait here. For each one, the street at its position is looked up (Nominatim, one request a second); with a street (house number if there is one) it is added like any imported place, without one it stays out. Runs four times a day by itself; the button does the next batch now (about 3 minutes).",
+      "addressCounts": "waiting {pending} · added with a found address {found} · no street {none}",
+      "addressRun": "Look up the next batch",
+      "addressRunning": "Looking up…",
+      "addressResult": "Checked {checked}: street found {found} (new {created}, linked {matched}), no street {noAddress}. Still waiting: {left}."
     },
     "duplicates": {
       "hint": "Workplaces within 75 m with a similar name. Merging moves reviews, followers, jobs, claims and team rights to the one kept; the other's address redirects there.",

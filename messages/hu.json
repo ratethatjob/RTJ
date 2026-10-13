@@ -973,7 +973,7 @@
     "categoryOk": "Rendben",
     "osm": {
       "title": "OpenStreetMap-import",
-      "hint": "Munkahelyek az OpenStreetMapből egy városra: névvel és utcai címmel rendelkező, működő helyek a kategóriáinkban, címkecsoportonként. Ami már nálunk van (azonos OSM-azonosító vagy egyező hely 75 m-en belül), azt összekapcsolja, nem duplikálja. A térképről eltűnt helyeket megszűntnek jelöli; a napi cron havonta frissít. Az Overpass gyakran túlterhelt: a foglalt csoport később újra futtatható.",
+      "hint": "Munkahelyek az OpenStreetMapből egy városra: névvel és utcai címmel (vagy a pozíciójukból talált címmel, lásd lent) rendelkező, működő helyek a kategóriáinkban, címkecsoportonként. Ami már nálunk van (azonos OSM-azonosító vagy egyező hely 75 m-en belül), azt összekapcsolja, nem duplikálja. A térképről eltűnt helyeket megszűntnek jelöli; a napi cron havonta frissít. Az Overpass gyakran túlterhelt: több tükörszervert próbálunk, egyre hosszabb szünetekkel; a foglalt csoport később újra futtatható, a cron is újrapróbálja.",
       "city": "Város",
       "run": "Import / frissítés",
       "running": "Importálás…",
@@ -986,7 +986,13 @@
       "lastRun": "Utoljára látva",
       "log": "Futások",
       "unratedTitle": "Importált, még értékelés nélkül: {city}",
-      "allCities": "minden város"
+      "allCities": "minden város",
+      "addressTitle": "Cím nélküli helyek",
+      "addressHint": "Az utca és házszám nélküli OpenStreetMap-helyek itt várnak. Mindegyiknél lekérjük a pozíciójához tartozó utcát (Nominatim, másodpercenként egy kérés); ha van utca (és ha van, házszám), a hely bekerül, mint bármelyik importált hely, ha nincs, kimarad. Naponta négyszer magától fut; a gomb most futtatja a következő adagot (kb. 3 perc).",
+      "addressCounts": "vár {pending} · bekerült talált címmel {found} · nincs utca {none}",
+      "addressRun": "Következő adag lekérése",
+      "addressRunning": "Lekérés…",
+      "addressResult": "Ellenőrizve {checked}: utca megvan {found} (új {created}, összekapcsolva {matched}), nincs utca {noAddress}. Még vár: {left}."
     },
     "duplicates": {
       "hint": "75 m-en belüli, hasonló nevű munkahelyek. Összevonáskor az értékelések, követők, állások, igénylések és csapatjogok a megmaradóhoz kerülnek; a másik címe oda irányít át.",

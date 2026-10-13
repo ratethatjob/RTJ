@@ -15,7 +15,12 @@ import { boundaryQuery, OSM_CITIES, OSM_GROUPS, osmCity, overpassQuery } from ".
 const BASE = process.env.OSM_IMPORT_URL ?? "https://ratethatjob.com";
 const TOKEN = process.env.OSM_IMPORT_TOKEN ?? "";
 const SAVE = process.env.OSM_SAVE_DIR ?? "";
-const HOSTS = ["https://overpass-api.de/api/interpreter", "https://overpass.private.coffee/api/interpreter"];
+const HOSTS = [
+  "https://overpass-api.de/api/interpreter",
+  "https://overpass.private.coffee/api/interpreter",
+  "https://overpass.kumi.systems/api/interpreter",
+  "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+];
 const UA = "RateThatJob/1.0 (https://ratethatjob.com; dev@ratethatjob.com)";
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

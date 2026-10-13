@@ -26,6 +26,22 @@
     {
       "path": "/api/revalidate",
       "schedule": "13 6 * * *"
+    },
+    {
+      "path": "/api/cron/osm-address?run=1",
+      "schedule": "23 3 * * *"
+    },
+    {
+      "path": "/api/cron/osm-address?run=2",
+      "schedule": "23 9 * * *"
+    },
+    {
+      "path": "/api/cron/osm-address?run=3",
+      "schedule": "23 15 * * *"
+    },
+    {
+      "path": "/api/cron/osm-address?run=4",
+      "schedule": "23 21 * * *"
     }
   ]
 }

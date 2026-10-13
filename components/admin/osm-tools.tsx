@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { dismissDuplicate, mergeLocations, osmImportGroup } from "@/app/[locale]/admin/actions";
+import { dismissDuplicate, fillOsmAddresses, mergeLocations, osmImportGroup } from "@/app/[locale]/admin/actions";
 
 type Line = { group: string; text: string };
 
@@ -101,6 +101,34 @@ export function DuplicatePair({ a, b }: { a: string; b: string }) {
         {t("notSame")}
       </button>
       {error && <p className="w-full text-sm font-black">{error}</p>}
+    </div>
+  );
+}
+
+/** "Look up missing addresses": the next batch of the reverse geocoding queue (about 3 minutes). */
+export function FillOsmAddresses() {
+  const t = useTranslations("Admin.osm");
+  const router = useRouter();
+  const [line, setLine] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+  return (
+    <div className="flex flex-col gap-2">
+      <button
+        type="button"
+        disabled={pending}
+        aria-busy={pending}
+        onClick={() =>
+          startTransition(async () => {
+            const r = await fillOsmAddresses().catch(() => ({ error: true as const }));
+            setLine("error" in r ? t("failed") : t("addressResult", r));
+            router.refresh();
+          })
+        }
+        className="self-start rounded-2xl bg-ink px-5 py-3 font-black text-paper disabled:opacity-50"
+      >
+        {pending ? t("addressRunning") : t("addressRun")}
+      </button>
+      {line && <p className="text-sm">{line}</p>}
     </div>
   );
 }

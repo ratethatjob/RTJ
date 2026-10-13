@@ -24,7 +24,7 @@ import { countryCurrency, jobPricing, proPrice } from "@/lib/site-config";
 import { dashboardUrl } from "@/lib/stripe";
 import { StripeInvoiceCheck } from "@/components/admin/stripe-invoice-check";
 import { ManualActions } from "@/components/admin/manual-tools";
-import { DuplicatePair, OsmImportRunner } from "@/components/admin/osm-tools";
+import { DuplicatePair, FillOsmAddresses, OsmImportRunner } from "@/components/admin/osm-tools";
 import { OSM_CITIES, OSM_GROUPS } from "@/lib/osm-import-core";
 
 export const instant = false;
@@ -598,7 +598,9 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
           supabase.rpc("admin_osm_summary"),
           supabase.rpc("admin_osm_runs", { p_limit: 40 }),
           supabase.rpc("admin_osm_unrated", { p_city: osmCityFilter || null, p_limit: 100 }),
-        ]).then(([a, b, c]) => ({
+          supabase.rpc("admin_osm_address_summary"),
+        ]).then(([a, b, c, d]) => ({
+          addresses: (d.data ?? []) as { city: string; pending: number; found: number; no_address: number }[],
           summary: (a.data ?? []) as { city: string; imported: number; unrated: number; gone: number; last_run: string | null }[],
           runs: (b.data ?? []) as {
             id: string;
@@ -863,6 +865,21 @@ export default async function AdminPage({ params, searchParams }: PageProps<"/[l
                 ))}
               </tbody>
             </table>
+          </div>
+          <div className="flex flex-col gap-3 rounded-3xl bg-white p-5">
+            <h2 className="font-black">{t("osm.addressTitle")}</h2>
+            <p className="text-sm text-slate">{t("osm.addressHint")}</p>
+            {osm.addresses.length > 0 && (
+              <ul className="flex flex-col gap-1 text-sm">
+                {osm.addresses.map((r) => (
+                  <li key={r.city}>
+                    <span className="font-black">{r.city}</span> ·{" "}
+                    {t("osm.addressCounts", { pending: r.pending, found: r.found, none: r.no_address })}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <FillOsmAddresses />
           </div>
           <div className="flex flex-col gap-2 rounded-3xl bg-white p-5">
             <h2 className="font-black">{t("osm.log")}</h2>
