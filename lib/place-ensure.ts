@@ -73,6 +73,9 @@ export async function ensureLocationFromPlace(
   if (!db) return { error: "generic" };
 
   const partner = await requestPartner();
+  // Partner API requests log each step with its time (for tracing slow or stuck requests).
+  const t0 = Date.now();
+  const step = (name: string) => partner && console.log(JSON.stringify({ event: "partner_step", placeId, step: name, ms: Date.now() - t0 }));
   if (partner) {
     if (await rateLimitedDb(`partner:${partner.id}`, partner.hourlyLimit, 3600_000)) return { error: "limit" };
   } else if (await rateLimitedDb(`place-details:${key}`, 120, 3600_000)) {
@@ -105,10 +108,12 @@ export async function ensureLocationFromPlace(
     return { error: "invalid", reason: reason ?? "not_found", name: place?.name || undefined };
   }
   const osm = isOsmId(placeId);
+  step("details");
 
   if (place.lat != null && place.lng != null) {
     // Ours already, under another source's id: link instead of creating a duplicate.
     const free = (await nearby(place.lat, place.lng)).filter((c) => (osm ? !c.osm_id : !c.google_place_id));
+    step("nearby");
     if (opts.confirm) {
       const chosen = free.find((c) => c.id === opts.confirm);
       if (chosen && (await attach(chosen.id, placeId))) return { locationId: chosen.id };
@@ -125,6 +130,7 @@ export async function ensureLocationFromPlace(
   // (a partner key has its own ceiling, checked above).
   if (!partner && (await rateLimitedDb(`place-create:${key}`, 30, 3600_000))) return { error: "limit" };
   const { user } = await getUser();
+  step("user");
   if (!user && !partner) {
     const { count } = await db
       .from("locations")
@@ -141,6 +147,7 @@ export async function ensureLocationFromPlace(
     opts.sessionToken,
     { place, via: partner ? "partner" : opts.via, partnerKeyId: partner?.id },
   );
+  step("created");
   if (created.id) return { locationId: created.id, created: true };
   if (created.error === "invalid") {
     console.log(JSON.stringify({ event: "place_invalid", placeId, reason: "db", name: place.name, address: place.address, city: place.city, country: place.country }));

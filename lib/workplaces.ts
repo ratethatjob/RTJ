@@ -123,6 +123,9 @@ export async function createPlaceWorkplace(
   const place = extra?.place ?? (await placeDetailsAny(w.placeId, locale, sessionToken).catch(() => null));
   if (!place || !place.name || !place.address || !place.city || !place.country) return { error: "invalid" };
   const osm = isOsmId(place.placeId);
+  const trace = (name: string) =>
+    extra?.partnerKeyId && console.log(JSON.stringify({ event: "partner_step", placeId: place.placeId, step: name }));
+  trace("decide");
   const decided = await decide(
     w.category,
     { category: place.category, source: place.categorySource, confidence: place.confidence },
@@ -140,6 +143,7 @@ export async function createPlaceWorkplace(
     p_lat: place.lat,
     p_lng: place.lng,
   });
+  trace("saved");
   if (error) return { error: errorFor(error.code) };
   // The map's label for a type our table doesn't know, in the other language too (one small call).
   const labels = { ...place.placeTypeLabel };
