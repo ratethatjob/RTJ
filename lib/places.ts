@@ -98,7 +98,7 @@ export async function placeDetails(placeId: string, locale: string, sessionToken
     id: string;
     displayName?: { text: string };
     formattedAddress?: string;
-    addressComponents?: { longText: string; shortText: string; types: string[] }[];
+    addressComponents?: { longText?: string; shortText?: string; types?: string[] }[];
     location?: { latitude: number; longitude: number };
     types?: string[];
     primaryType?: string;
@@ -111,7 +111,7 @@ export async function placeDetails(placeId: string, locale: string, sessionToken
   let { address, city, country } = parsed;
   const lat = p.location?.latitude ?? null;
   const lng = p.location?.longitude ?? null;
-  const gaps = addressFrom !== "street" || !p.addressComponents?.some((c) => c.types.includes("locality"));
+  const gaps = addressFrom !== "street" || !p.addressComponents?.some((c) => c.types?.includes("locality"));
   if (gaps) {
     // What Google gave, for the log: which parts were missing and what we used instead.
     console.log(
@@ -119,7 +119,7 @@ export async function placeDetails(placeId: string, locale: string, sessionToken
         event: "place_address_gaps",
         placeId: p.id,
         formatted: p.formattedAddress ?? null,
-        components: (p.addressComponents ?? []).map((c) => `${c.types[0]}=${c.longText}`),
+        components: (p.addressComponents ?? []).map((c) => `${c.types?.[0] ?? "?"}=${c.longText ?? ""}`),
         parsed: { address, city, country, addressFrom },
       }),
     );

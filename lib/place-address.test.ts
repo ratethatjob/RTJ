@@ -60,3 +60,19 @@ test("house number first in the US; smaller admin area as the city", () => {
 test("nothing usable", () => {
   assert.deepEqual(parseGoogleAddress({}), { address: "", city: "", country: "", addressFrom: null });
 });
+
+test("components without types or texts (Google, Budapest districts) don't break the parsing", () => {
+  const r = parseGoogleAddress({
+    formattedAddress: "Budapest, Üllői út 661, 1181 Magyarország",
+    addressComponents: [
+      c("661", "street_number"),
+      c("Üllői út", "route"),
+      { longText: "XVIII. kerület" } as Component,
+      { types: ["political"] } as Component,
+      c("Budapest", "administrative_area_level_1"),
+      HU,
+    ],
+  });
+  assert.equal(r.city, "Budapest");
+  assert.equal(r.address, "Üllői út 661");
+});

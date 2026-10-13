@@ -5,7 +5,9 @@
 // coordinates) for whatever is still missing, and a place is refused only without a name or any
 // usable location data.
 
-export type Component = { longText: string; shortText: string; types: string[] };
+// Google sometimes leaves out a component's types or texts (seen on Budapest district parts):
+// every field is optional and read defensively.
+export type Component = { longText?: string; shortText?: string; types?: string[] };
 
 // Countries that write the house number first ("350 5th Ave").
 const NUMBER_FIRST = new Set(["US", "CA", "GB", "IE", "AU", "NZ", "FR"]);
@@ -34,16 +36,20 @@ export type ParsedAddress = {
 };
 
 export function parseGoogleAddress(p: { formattedAddress?: string; addressComponents?: Component[] }): ParsedAddress {
-  const comps = p.addressComponents ?? [];
+  const comps = (p.addressComponents ?? []).map((c) => ({
+    longText: (c.longText ?? c.shortText ?? "").trim(),
+    shortText: (c.shortText ?? c.longText ?? "").trim(),
+    types: Array.isArray(c.types) ? c.types : [],
+  }));
   const part = (type: string, short = false) => {
     const c = comps.find((x) => x.types.includes(type));
-    return c ? (short ? c.shortText : c.longText).trim() : "";
+    return c ? (short ? c.shortText : c.longText) : "";
   };
   const country = part("country", true).toUpperCase();
   const countryName = part("country");
   const admin1 = part("administrative_area_level_1");
   const districtLike = comps.some(
-    (c) => c.types.some((t) => t.startsWith("sublocality") || t === "administrative_area_level_2") && BUDAPEST_DISTRICT.test(c.longText.trim()),
+    (c) => (c.types.length === 0 || c.types.some((t) => t.startsWith("sublocality") || t === "administrative_area_level_2")) && BUDAPEST_DISTRICT.test(c.longText),
   );
 
   // City: the locality, else the postal town, else (Hungary) Budapest when the place sits in a
